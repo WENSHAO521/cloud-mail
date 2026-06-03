@@ -21,9 +21,10 @@
         <el-tooltip v-for="item in navItems" :key="item.name"
                     :content="$t(item.labelKey)" placement="right"
                     :disabled="!uiStore.asideCollapsed">
-          <el-menu-item @click="router.push({name: item.name})" :index="item.name"
-                        :class="route.meta.name === item.name ? 'choose-item' : ''"
-                        v-perm="item.perm || true">
+          <el-menu-item
+            v-if="!item.perm || hasPerm(item.perm)"
+            @click="router.push({name: item.name})" :index="item.name"
+            :class="route.meta.name === item.name ? 'choose-item' : ''">
             <Icon :icon="item.icon" width="20" height="20" />
             <span class="menu-name" v-if="!uiStore.asideCollapsed">{{$t(item.labelKey)}}</span>
           </el-menu-item>

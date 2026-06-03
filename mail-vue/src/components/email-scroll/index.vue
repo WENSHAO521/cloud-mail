@@ -1558,9 +1558,9 @@ function loadData() {
   gap: 12px;
   padding: 0 14px;
   height: 38px;
-  /* No grey table-header feel — just a thin separator */
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  background: var(--el-bg-color);
+  /* Subtle tint — distinguishable but not a heavy grey table header */
+  border-bottom: 1px solid var(--light-border-color);
+  background: var(--extra-light-fill);
 
   .header-left {
     display: flex;
