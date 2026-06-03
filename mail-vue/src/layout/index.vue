@@ -37,15 +37,24 @@ const handleResize = () => {
   uiStore.asideShow = window.innerWidth > 1024;
 }
 
+function handleKeydown(e) {
+  const tag = e.target.tagName
+  if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable) return
+  if (e.ctrlKey || e.metaKey || e.altKey) return
+  if (e.key === 'c') uiStore.writerRef?.open?.()
+}
+
 onMounted(() => {
   uiStore.writerRef = writerRef
 
   window.addEventListener('resize', handleResize)
+  window.addEventListener('keydown', handleKeydown)
   handleResize()
 })
 
 onBeforeUnmount(() => {
   window.removeEventListener('resize', handleResize)
+  window.removeEventListener('keydown', handleKeydown)
 })
 </script>
 

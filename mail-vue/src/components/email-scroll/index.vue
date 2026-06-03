@@ -21,10 +21,26 @@
       </div>
 
       <div class="header-right">
-        <span class="email-count" v-if="total">{{ $t('emailCount', {total: total}) }}</span>
+        <span class="email-count" v-if="total && !searchActive">{{ $t('emailCount', {total: total}) }}</span>
+        <span class="email-count" v-if="searchActive && searchQuery">{{ $t('searchResultCount', {count: searchResultCount}) }}</span>
+        <Icon class="icon search-toggle" :class="{ 'search-toggle-active': searchActive }"
+              width="17" height="17" icon="iconoir:search" @click="toggleSearch"/>
         <Icon v-if="showAccountIcon" class="more-icon icon" width="16" height="16" icon="akar-icons:dot-grid-fill"
               @click="changeAccountShow"/>
       </div>
+    </div>
+
+    <div class="search-bar" v-show="searchActive">
+      <Icon icon="iconoir:search" width="14" height="14" class="search-bar-icon"/>
+      <input
+        ref="searchInputRef"
+        v-model="searchQuery"
+        class="search-input"
+        :placeholder="$t('searchPlaceholder')"
+        @keydown.esc="clearSearch"
+      />
+      <Icon v-if="searchQuery" icon="material-symbols:close-rounded" width="16" height="16"
+            class="search-clear-icon" @click="searchQuery = ''"/>
     </div>
 
     <div ref="scroll" class="scroll">
@@ -139,6 +155,9 @@
                        :type="type"/>
       <div class="empty" v-if="noLoading && emailList.length === 0 && !loading">
         <el-empty :image-size="isMobile ? 120 : null" :description="$t('noMessagesFound')"/>
+      </div>
+      <div class="empty" v-if="searchQuery.trim() && searchResultCount === 0 && emailList.length > 0 && !loading">
+        <el-empty :image-size="isMobile ? 120 : null" :description="$t('noSearchResults')"/>
       </div>
     </div>
     <el-dropdown
@@ -324,6 +343,9 @@ const dropdownRef = ref(null);
 const dropdownCloseLock = ref(false);
 const dropdownShow = ref(false);
 const rightClickEmail = ref({});
+const searchQuery = ref('');
+const searchActive = ref(false);
+const searchInputRef = ref(null);
 const checkedEmailCount = ref(0);
 let timer = null
 const position = ref(
@@ -389,7 +411,23 @@ const { arrivedState } = useScroll(scrollbarRef, {
 })
 
 
+const searchResultCount = computed(() => {
+  if (!searchQuery.value.trim()) return emailList.length
+  const q = searchQuery.value.toLowerCase()
+  return emailList.filter(e =>
+    e.name?.toLowerCase().includes(q) ||
+    e.subject?.toLowerCase().includes(q)
+  ).length
+})
+
 const list = computed(() => {
+  if (searchQuery.value.trim()) {
+    const q = searchQuery.value.toLowerCase()
+    return emailList.filter(e =>
+      e.name?.toLowerCase().includes(q) ||
+      e.subject?.toLowerCase().includes(q)
+    )
+  }
   return [...emailList, ...expandList]
 })
 
@@ -904,7 +942,23 @@ function refresh() {
 function refreshList() {
   checkAll.value = false;
   isIndeterminate.value = false;
+  searchQuery.value = '';
+  searchActive.value = false;
   getEmailList(true);
+}
+
+function toggleSearch() {
+  searchActive.value = !searchActive.value;
+  if (searchActive.value) {
+    nextTick(() => searchInputRef.value?.focus());
+  } else {
+    searchQuery.value = '';
+  }
+}
+
+function clearSearch() {
+  searchQuery.value = '';
+  searchActive.value = false;
 }
 
 function loadData() {
@@ -916,12 +970,51 @@ function loadData() {
 
 .email-container {
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto auto 1fr;
   padding: 0;
   font-size: 14px;
   color: var(--el-text-color-primary);
   overflow: hidden;
   height: 100%;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--light-border-color);
+  background: var(--el-bg-color);
+
+  .search-bar-icon {
+    color: var(--secondary-text-color);
+    flex-shrink: 0;
+  }
+
+  .search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 13px;
+    color: var(--el-text-color-primary);
+    &::placeholder { color: var(--secondary-text-color); }
+  }
+
+  .search-clear-icon {
+    color: var(--secondary-text-color);
+    cursor: pointer;
+    flex-shrink: 0;
+    &:hover { color: var(--el-text-color-primary); }
+  }
+}
+
+.search-toggle {
+  &:hover { color: var(--el-text-color-primary) !important; }
+}
+
+.search-toggle-active {
+  color: #CC0000 !important;
 }
 
 .scroll {
