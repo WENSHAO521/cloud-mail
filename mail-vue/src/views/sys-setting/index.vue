@@ -409,10 +409,10 @@
               <div class="concerning-item">
                 <span>{{ $t('community') }} : </span>
                 <div class="community">
-                  <el-button @click="jump('https://github.com/maillab/cloud-mail')">
-                    Github
+                  <el-button @click="jump('https://panorama-sg.com')">
+                    PSG
                     <template #icon>
-                      <Icon icon="codicon:github-inverted" width="22" height="22"/>
+                      <img src="/favicon.svg" width="20" height="20" style="display:block;border-radius:2px;"/>
                     </template>
                   </el-button>
                   <el-button @click="jump('https://t.me/cloud_mail_tg')">
