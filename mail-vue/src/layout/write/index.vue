@@ -632,7 +632,7 @@ function close() {
     width: min(1200px, calc(100% - 48px));
     box-shadow: 0 16px 60px rgba(0, 0, 0, 0.3);
     border: 1px solid #E8E8E8;
-    border-top: 3px solid #E61919;
+    border-top: 3px solid #CC0000;
     transition: none;
     padding: 0;
     border-radius: 0;
@@ -644,7 +644,7 @@ function close() {
       width: 100%;
       height: 100%;
       border: 0;
-      border-top: 3px solid #E61919;
+      border-top: 3px solid #CC0000;
     }
 
     @media (min-width: 1025px) {
@@ -715,7 +715,7 @@ function close() {
           padding: 6px;
           transition: color 0.12s;
 
-          &:hover { color: #E61919; }
+          &:hover { color: #CC0000; }
         }
 
         .att-clear { margin-left: 4px; }
@@ -789,6 +789,20 @@ function close() {
   pointer-events: none;
 }
 
+/* Uniform border for both recipient and subject fields */
+:deep(.el-input__wrapper),
+:deep(.el-input-tag) {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border-bottom: 1px solid #E8E8E8 !important;
+  background: transparent !important;
+  padding-left: 0 !important;
+}
+:deep(.el-input__wrapper.is-focus),
+:deep(.el-input-tag.is-focus) {
+  box-shadow: none !important;
+  border-bottom-color: #CC0000 !important;
+}
 :deep(.el-input-tag__suffix) {
   padding-right: 4px;
 }

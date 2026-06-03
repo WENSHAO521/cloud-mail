@@ -644,7 +644,7 @@ function submitRegister() {
   justify-content: center;
   width: 450px;
   height: 100%;
-  border-left: 3px solid #E61919;
+  border-left: 4px solid #CC0000;
   box-shadow: -24px 0 60px rgba(0, 0, 0, 0.5);
   @media (max-width: 1024px) {
     padding: 20px 18px;
@@ -665,9 +665,11 @@ function submitRegister() {
   .btn {
     height: 38px;
     width: 100%;
-    border-radius: 8px;
-    font-weight: 600;
-    letter-spacing: 0.01em;
+    border-radius: 2px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 13px;
   }
 
   .form-desc {
@@ -696,12 +698,12 @@ function submitRegister() {
   }
 
   :deep(.el-input__wrapper) {
-    border-radius: 8px;
+    border-radius: 3px;
     background: var(--el-bg-color);
   }
 
   .email-input :deep(.el-input__wrapper) {
-    border-radius: 8px 0 0 8px;
+    border-radius: 3px 0 0 3px;
     background: var(--el-bg-color);
   }
 
@@ -768,11 +770,10 @@ function submitRegister() {
 }
 
 :deep(.el-input-group__append) {
-  padding: 0 !important;
-  padding-left: 8px !important;
-  padding-right: 4px !important;
+  padding: 0 8px 0 10px !important;
   background: var(--el-bg-color);
-  border-radius: 0 8px 8px 0;
+  border-radius: 0 3px 3px 0 !important;
+  border-left: 1px solid var(--base-border-color) !important;
 }
 
 :deep(.el-button+.el-button) {
@@ -860,14 +861,14 @@ function submitRegister() {
     text-transform: uppercase;
 
     &.muted { color: rgba(255, 255, 255, 0.42); }
-    &.accent { color: #E61919; }
+    &.accent { color: #CC0000; }
   }
 }
 
 .brand-divider {
   width: 36px;
   height: 2px;
-  background: #E61919;
+  background: #CC0000;
   margin-bottom: 20px;
 }
 
@@ -890,42 +891,26 @@ function submitRegister() {
     font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.2em;
-    color: #E61919;
+    color: #CC0000;
     display: block;
     text-transform: uppercase;
   }
 }
 
-/* ── German red primary button ── */
 :deep(.el-button--primary) {
-  background: #E61919 !important;
-  border-color: #E61919 !important;
+  background: #CC0000 !important;
+  border-color: #CC0000 !important;
   color: #ffffff !important;
   font-weight: 700 !important;
   border-radius: 2px !important;
+  letter-spacing: 0.04em !important;
 
   &:hover, &:focus {
-    background: #B80000 !important;
-    border-color: #B80000 !important;
-  }
-}
-
-/* ── Gold primary button in login form ── */
-:deep(.el-button--primary) {
-  background: linear-gradient(135deg, #E61919, #E61919) !important;
-  border-color: #E61919 !important;
-  color: #0c1c3a !important;
-  font-weight: 700 !important;
-
-  &:hover,
-  &:focus {
-    background: linear-gradient(135deg, #d4a420, #f0c84e) !important;
-    border-color: #d4a420 !important;
+    background: #A00000 !important;
+    border-color: #A00000 !important;
   }
 
-  &.is-loading {
-    opacity: 0.75;
-  }
+  &.is-loading { opacity: 0.75; }
 }
 
 </style>
