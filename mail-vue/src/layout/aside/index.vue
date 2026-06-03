@@ -122,9 +122,9 @@ function openCompose() {
   border-bottom: 2px solid #CC0000;
 
   .psg-logo {
-    height: 52px;
+    height: 32px;
     width: auto;
-    max-width: 220px;
+    max-width: 180px;
     display: block;
     object-fit: contain;
     filter: invert(1);
