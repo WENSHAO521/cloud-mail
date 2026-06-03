@@ -351,28 +351,28 @@ function submitPwd() {
    PAGE SHELL
 ═══════════════════════════════════════ */
 .settings-page {
-  max-width: 900px;
-  padding: 52px 64px 96px;
+  max-width: 860px;
+  padding: 36px 48px 64px;
 
   @media (max-width: 960px) {
-    padding: 36px 36px 72px;
+    padding: 28px 28px 48px;
   }
   @media (max-width: 640px) {
-    padding: 24px 20px 60px;
+    padding: 20px 16px 40px;
   }
 }
 
 /* ── Page heading ── */
 .page-head {
-  padding-bottom: 24px;
+  padding-bottom: 18px;
   margin-bottom: 0;
   border-bottom: 2px solid var(--el-text-color-primary);
 }
 
 .page-h1 {
-  font-size: 34px;
+  font-size: 28px;
   font-weight: 900;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.04em;
   text-transform: uppercase;
   color: var(--el-text-color-primary);
   line-height: 1;
@@ -383,17 +383,17 @@ function submitPwd() {
 ═══════════════════════════════════════ */
 .setting-row {
   display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 56px;
-  padding: 44px 0;
+  grid-template-columns: 180px 1fr;
+  gap: 40px;
+  padding: 28px 0;
   border-bottom: 1px solid var(--light-border-color);
 
   &.danger-row { border-bottom: none; }
 
   @media (max-width: 760px) {
     grid-template-columns: 1fr;
-    gap: 20px;
-    padding: 32px 0;
+    gap: 14px;
+    padding: 24px 0;
   }
 }
 
@@ -424,7 +424,7 @@ function submitPwd() {
 .row-body {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 14px;
   min-width: 0;
 }
 
