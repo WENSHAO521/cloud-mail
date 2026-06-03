@@ -387,12 +387,12 @@ button, input, select, textarea {
     overflow: hidden !important;
 }
 .el-dialog__header {
-    border-bottom: 2px solid #111111 !important;
+    border-bottom: 1px solid #EEEEEE !important;
     padding: 16px 24px 14px !important;
     background: #FAFAFA !important;
 }
 .dark .el-dialog__header {
-    border-bottom-color: #CC0000 !important;
+    border-bottom-color: #2a2a2a !important;
     background: #181818 !important;
 }
 .el-dialog__title {
