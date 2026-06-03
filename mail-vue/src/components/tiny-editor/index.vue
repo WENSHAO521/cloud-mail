@@ -135,11 +135,8 @@ function initEditor() {
       'Courier New=Courier New,Courier,monospace',
     ].join('; '),
     plugins: 'link image advlist lists emoticons fullscreen table preview code',
-    toolbar: [
-      'fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright alignjustify',
-      'outdent indent | bullist numlist | blockquote | link image emoticons | table code preview fullscreen'
-    ],
-    toolbar_mode: 'wrap',
+    toolbar: 'fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright alignjustify | outdent indent | bullist numlist | blockquote | link image emoticons | table code preview fullscreen',
+    toolbar_mode: 'scrolling',
     font_size_formats: '10px 11px 12px 14px 16px 18px 20px 24px 28px 32px 36px 48px',
     emoticons_search: false,
     language: language.value,
