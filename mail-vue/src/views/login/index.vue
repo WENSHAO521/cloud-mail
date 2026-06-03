@@ -12,7 +12,7 @@
     <!-- Left branding panel — desktop only -->
     <div class="brand-panel">
       <div class="brand-content">
-        <img class="brand-compass" src="/image/psg-logo.svg" alt="Panorama Scholarly Group" />
+        <img class="brand-compass" src="/image/psg-logo.png" alt="Panorama Scholarly Group" />
         <div class="brand-org">Panorama Scholarly Group</div>
         <div class="brand-product">Internal Mail System</div>
         <div class="brand-rule"></div>
@@ -27,7 +27,7 @@
     <div class="form-wrapper">
       <div class="container">
         <div class="form-badge">
-          <img src="/image/psg-logo.svg" alt="Panorama Scholarly Group" />
+          <img src="/image/psg-logo.png" alt="Panorama Scholarly Group" />
         </div>
         <span class="form-title">{{ settingStore.settings.title }}</span>
         <span class="form-desc" v-if="show === 'login'">{{ $t('loginTitle') }}</span>

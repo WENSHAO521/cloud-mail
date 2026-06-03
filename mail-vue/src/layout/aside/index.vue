@@ -2,7 +2,7 @@
   <el-scrollbar class="scroll">
     <div>
       <div class="title">
-        <img class="psg-logo" src="/image/psg-logo.svg" alt="Panorama Scholarly Group" />
+        <img class="psg-logo" src="/image/psg-logo.png" alt="Panorama Scholarly Group" />
       </div>
       <el-menu :collapse="false" text-color="#fff" active-text-color="#fff" style="margin-top: 10px">
         <el-menu-item @click="router.push({name: 'email'})" index="email"
