@@ -72,14 +72,16 @@
     <div class="section">
       <div class="section-label">{{ $t('signature') }}</div>
       <div class="signature-area">
-        <el-input
-          v-model="signatureText"
-          type="textarea"
-          :rows="5"
-          :placeholder="$t('signaturePlaceholder')"
-          resize="none"
-          class="signature-input"
-        />
+        <div class="signature-editor-wrap">
+          <tinyEditor
+            ref="signatureEditorRef"
+            :def-value="signatureText"
+            editor-id="signature-editor"
+            toolbar="bold italic underline | forecolor | link | code"
+            height="160px"
+            @change="onSignatureChange"
+          />
+        </div>
         <el-button type="primary" size="small" :loading="signatureLoading" @click="saveSignature">
           {{ $t('save') }}
         </el-button>
@@ -121,6 +123,7 @@ import { useAccountStore } from "@/store/account.js"
 import { useI18n } from "vue-i18n"
 import { useSettingStore } from "@/store/setting.js"
 import { Icon } from "@iconify/vue"
+import tinyEditor from "@/components/tiny-editor/index.vue"
 
 const { t } = useI18n()
 const accountStore = useAccountStore()
@@ -135,6 +138,7 @@ const pwdShow = ref(false)
 const form = reactive({ password: '', newPwd: '' })
 const signatureText = ref('')
 const signatureLoading = ref(false)
+const signatureEditorRef = ref(null)
 
 defineOptions({ name: 'setting' })
 
@@ -205,10 +209,15 @@ function setName() {
   }).catch(() => { userStore.user.name = name })
 }
 
+function onSignatureChange(html) {
+  signatureText.value = html
+}
+
 async function saveSignature() {
   signatureLoading.value = true
   try {
-    await userStore.saveSignature(signatureText.value)
+    const html = signatureEditorRef.value?.getContent?.() ?? signatureText.value
+    await userStore.saveSignature(html)
     ElMessage({ message: t('signatureSaved'), type: 'success', plain: true })
   } finally {
     signatureLoading.value = false
@@ -479,12 +488,13 @@ function submitPwd() {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-width: 520px;
+  max-width: 600px;
 
-  .signature-input :deep(textarea) {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 13px;
-    line-height: 1.6;
+  .signature-editor-wrap {
+    height: 160px;
+    border: 1px solid var(--light-border-color);
+    border-radius: 2px;
+    overflow: hidden;
   }
 
   .el-button {

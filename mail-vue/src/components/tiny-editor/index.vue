@@ -26,6 +26,14 @@ const props = defineProps({
   editorId: {
     type: String,
     default: () => `editor-${Date.now()}`
+  },
+  toolbar: {
+    type: String,
+    default: null
+  },
+  height: {
+    type: String,
+    default: '100%'
   }
 });
 
@@ -89,7 +97,7 @@ function initEditor() {
   window.tinymce.init({
     selector: `#${props.editorId}`,
     statusbar: false,
-    height: "100%",
+    height: props.height,
     auto_focus: true,
     //relative_urls: false,  //阻止 img标签域名和网站域名相同 自动把链接转换相对路径
     //remove_script_host: false, // 阻止删除 URL 中的域名
@@ -135,7 +143,7 @@ function initEditor() {
       'Courier New=Courier New,Courier,monospace',
     ].join('; '),
     plugins: 'link image advlist lists emoticons fullscreen table preview code',
-    toolbar: 'fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright alignjustify | outdent indent | bullist numlist | blockquote | link image emoticons | table code preview fullscreen',
+    toolbar: props.toolbar ?? 'fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright alignjustify | outdent indent | bullist numlist | blockquote | link image emoticons | table code preview fullscreen',
     toolbar_mode: 'scrolling',
     font_size_formats: '10px 11px 12px 14px 16px 18px 20px 24px 28px 32px 36px 48px',
     emoticons_search: false,

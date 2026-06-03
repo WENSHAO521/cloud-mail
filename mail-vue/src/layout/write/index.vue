@@ -588,7 +588,7 @@ function open() {
   }
   const sig = userStore.user.signature
   defValue.value = sig
-    ? `<p><br></p><p><br></p><p style="color:#999;border-top:1px solid #e0e0e0;padding-top:8px;margin-top:0">-- </p><p>${sig.replace(/\n/g, '<br>')}</p>`
+    ? `<p><br></p><p><br></p><p style="color:#999;border-top:1px solid #e0e0e0;padding-top:8px;margin-top:0">-- </p>${sig}`
     : ''
   show.value = true;
   editor.value.focus()
