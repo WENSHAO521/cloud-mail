@@ -1,19 +1,19 @@
 <template>
-  <el-scrollbar class="scroll" :class="{ collapsed: uiStore.asideCollapsed }">
-    <div class="sidebar-inner" :class="{ collapsed: uiStore.asideCollapsed }">
+  <el-scrollbar class="scroll" :class="{ collapsed }">
+    <div class="sidebar-inner" :class="{ collapsed }">
       <!-- Logo + collapse toggle -->
-      <div class="title" :class="{ collapsed: uiStore.asideCollapsed }">
-        <img v-if="!uiStore.asideCollapsed" class="psg-logo" src="/image/psg-logo.png" alt="Panorama Scholarly Group" />
-        <button class="collapse-btn" @click="uiStore.asideCollapsed = !uiStore.asideCollapsed" :title="uiStore.asideCollapsed ? $t('expand') : $t('collapse')">
-          <Icon :icon="uiStore.asideCollapsed ? 'material-symbols:chevron-right-rounded' : 'material-symbols:chevron-left-rounded'" width="18" height="18"/>
+      <div class="title" :class="{ collapsed }">
+        <img v-if="!collapsed" class="psg-logo" src="/image/psg-logo.png" alt="Panorama Scholarly Group" />
+        <button class="collapse-btn" @click="uiStore.asideCollapsed = !uiStore.asideCollapsed" :title="collapsed ? $t('expand') : $t('collapse')">
+          <Icon :icon="collapsed ? 'material-symbols:chevron-right-rounded' : 'material-symbols:chevron-left-rounded'" width="18" height="18"/>
         </button>
       </div>
 
       <!-- Compose FAB -->
-      <el-tooltip :content="$t('compose')" placement="right" :disabled="!uiStore.asideCollapsed">
-        <div class="compose-btn" v-if="canSend" @click="openCompose" :class="{ 'compose-icon-only': uiStore.asideCollapsed }">
+      <el-tooltip :content="$t('compose')" placement="right" :disabled="!collapsed">
+        <div class="compose-btn" v-if="canSend" @click="openCompose" :class="{ 'compose-icon-only': collapsed }">
           <Icon icon="material-symbols:edit-outline-rounded" width="20" height="20" class="compose-icon"/>
-          <span class="compose-text" v-if="!uiStore.asideCollapsed">{{ $t('compose') }}</span>
+          <span class="compose-text" v-if="!collapsed">{{ $t('compose') }}</span>
         </div>
       </el-tooltip>
 
@@ -26,7 +26,7 @@
             @click="router.push({name: item.name})" :index="item.name"
             :class="route.meta.name === item.name ? 'choose-item' : ''">
             <Icon :icon="item.icon" width="20" height="20" />
-            <span class="menu-name" v-if="!uiStore.asideCollapsed">{{$t(item.labelKey)}}</span>
+            <span class="menu-name" v-if="!collapsed">{{$t(item.labelKey)}}</span>
           </el-menu-item>
         </el-tooltip>
 
@@ -81,6 +81,11 @@ const route = useRoute();
 const uiStore = useUiStore();
 
 const canSend = computed(() => hasPerm('email:send'));
+
+// On mobile the sidebar overlays full-width — never apply the icon-only collapsed state
+const isMobile = ref(window.innerWidth < 1025)
+window.addEventListener('resize', () => { isMobile.value = window.innerWidth < 1025 })
+const collapsed = computed(() => uiStore.asideCollapsed && !isMobile.value)
 
 const navItems = [
   { name: 'email',     labelKey: 'inbox',         icon: 'hugeicons:mailbox-01' },
@@ -161,6 +166,11 @@ function openCompose() {
   justify-content: center;
   flex-shrink: 0;
   transition: background 0.12s, color 0.12s;
+
+  /* Hide on mobile — sidebar is a full overlay there, no collapse needed */
+  @media (max-width: 1024px) {
+    display: none;
+  }
 
   &:hover {
     background: rgba(255,255,255,0.08);
