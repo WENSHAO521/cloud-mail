@@ -33,6 +33,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",
     "less": "^4.2.2",
+    "puppeteer": "^25.1.0",
     "sass": "^1.82.0",
     "terser": "^5.39.0",
     "unplugin-auto-import": "^19.3.0",

@@ -527,8 +527,8 @@ path[fill="#ffdda1"] {
 </style>
 <style scoped lang="scss">
 .account-box {
-  border-right: 1px solid #E8E6E1;
-  background: #F4F4F0;
+  border-right: 1px solid var(--light-border-color);
+  background: var(--extra-light-fill);
   height: 100%;
   overflow: hidden;
 
@@ -537,26 +537,26 @@ path[fill="#ffdda1"] {
     display: flex;
     align-items: center;
     height: 40px;
-    border-bottom: 1px solid #E8E6E1;
+    border-bottom: 1px solid var(--light-border-color);
     padding: 0 10px;
     gap: 2px;
-    background: #F4F4F0;
+    background: var(--extra-light-fill);
 
     .icon {
       cursor: pointer;
       width: 30px;
       height: 30px;
-      border-radius: 4px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #888888;
-      transition: background 0.12s, color 0.12s;
+      color: var(--secondary-text-color);
+      transition: background 0.15s, color 0.15s;
 
       @media (hover: hover) {
         &:hover {
-          background: #E8E6E1;
-          color: #111111;
+          background: var(--base-fill);
+          color: var(--el-text-color-primary);
         }
       }
     }
@@ -600,33 +600,33 @@ path[fill="#ffdda1"] {
     gap: 10px;
     padding: 10px 12px;
     margin: 6px 8px;
-    border-radius: 6px;
+    border-radius: 10px;
     cursor: pointer;
-    background: #ffffff;
-    border: 1px solid #E8E6E1;
+    background: var(--el-bg-color);
+    border: 1px solid var(--light-border-color);
     border-left: 2px solid transparent;
-    transition: border-color 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
+    transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
 
     &:first-child { margin-top: 10px; }
     &:last-child  { margin-bottom: 10px; }
 
     @media (hover: hover) {
       &:hover:not(.item-choose) {
-        border-color: #D0CEC9;
-        border-left-color: #D0CEC9;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        border-color: var(--dark-border);
+        border-left-color: var(--dark-border);
+        box-shadow: var(--card-shadow);
       }
     }
   }
 
-  /* ── Avatar: monogram square ── */
+  /* ── Avatar: monogram rounded ── */
   .item-avatar {
     flex-shrink: 0;
-    width: 34px;
-    height: 34px;
-    border-radius: 4px;
-    background: #111111;
-    color: #ffffff;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--el-text-color-primary);
+    color: var(--el-bg-color);
     font-family: 'IBM Plex Mono', monospace;
     font-weight: 700;
     font-size: 14px;
@@ -635,7 +635,7 @@ path[fill="#ffdda1"] {
     align-items: center;
     justify-content: center;
     user-select: none;
-    transition: background 0.12s;
+    transition: background 0.15s;
   }
 
   /* ── Text info ── */
@@ -650,7 +650,7 @@ path[fill="#ffdda1"] {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      color: #111111;
+      color: var(--el-text-color-primary);
       letter-spacing: 0.01em;
     }
 
@@ -659,7 +659,7 @@ path[fill="#ffdda1"] {
       font-weight: 600;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: #AAAAAA;
+      color: var(--secondary-text-color);
       margin-top: 2px;
       overflow: hidden;
       white-space: nowrap;
@@ -667,7 +667,7 @@ path[fill="#ffdda1"] {
     }
   }
 
-  /* ── Action icons: all monochrome ── */
+  /* ── Action icons ── */
   .item-actions {
     flex-shrink: 0;
     display: flex;
@@ -676,45 +676,45 @@ path[fill="#ffdda1"] {
 
     .action-icon {
       cursor: pointer;
-      color: #BBBBBB;
+      color: var(--dark-border);
       display: flex;
       align-items: center;
       padding: 3px;
-      border-radius: 3px;
-      transition: color 0.12s, background 0.12s;
+      border-radius: 6px;
+      transition: color 0.15s, background 0.15s;
 
       @media (hover: hover) {
         &:hover {
-          color: #111111;
-          background: #F0EEE9;
+          color: var(--el-text-color-primary);
+          background: var(--base-fill);
         }
       }
     }
 
     .action-active {
-      color: #E61919;
+      color: #c8970a;
     }
   }
 
-  /* ── Selected: left red border, white card ── */
+  /* ── Selected: left navy+gold accent ── */
   .item-choose {
-    background: #ffffff !important;
-    border-color: #E8E6E1 !important;
-    border-left-color: #E61919 !important;
-    box-shadow: 0 1px 6px rgba(0,0,0,0.08) !important;
+    background: var(--el-bg-color) !important;
+    border-color: rgba(200, 151, 10, 0.25) !important;
+    border-left-color: #c8970a !important;
+    box-shadow: var(--card-shadow) !important;
 
     .item-email {
       font-weight: 600;
-      color: #111111;
+      color: var(--el-text-color-primary);
     }
 
     .item-name {
-      color: #888888;
+      color: var(--regular-text-color);
     }
 
     .item-avatar {
-      background: #E61919;
-      color: #ffffff;
+      background: linear-gradient(135deg, #1a3560, #2a4c8a);
+      color: #e8c84a;
     }
   }
 }

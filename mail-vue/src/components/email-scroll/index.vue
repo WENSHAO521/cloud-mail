@@ -985,7 +985,7 @@ function loadData() {
   display: flex;
   padding: 8px 0;
   justify-content: space-between;
-  border-bottom: 1px solid #F0EEE9;
+  border-bottom: 1px solid var(--light-border-color);
   cursor: pointer;
   align-items: center;
   position: relative;
@@ -1251,7 +1251,7 @@ function loadData() {
 
   .email-content {
     font-size: 12.5px !important;
-    color: rgba(0, 0, 0, 0.32) !important;
+    color: var(--email-scroll-content-color) !important;
   }
 
   .email-time {
@@ -1305,8 +1305,8 @@ function loadData() {
   gap: 12px;
   padding: 0 14px;
   height: 38px;
-  border-bottom: 1px solid #E8E8E8;
-  background: #FAFAFA;
+  border-bottom: 1px solid var(--light-border-color);
+  background: var(--extra-light-fill);
 
   .header-left {
     display: flex;
