@@ -18,8 +18,8 @@
             <span v-else>{{ emailInitial(item.email, item.name) }}</span>
           </div>
           <div class="item-info">
-            <div class="item-email">{{ item.email }}</div>
             <div class="item-name" v-if="item.name">{{ item.name }}</div>
+            <div class="item-email">{{ item.email }}</div>
           </div>
           <div class="item-actions" @click.stop>
             <Icon @click="setAllReceive(item)" v-if="!item.allReceive"
@@ -542,9 +542,10 @@ path[fill="#ffdda1"] {
   .head-opt {
     display: flex;
     align-items: center;
-    height: 40px;
-    border-bottom: 1px solid var(--light-border-color);
-    padding: 0 10px;
+    justify-content: flex-end;
+    height: 36px;
+    border-bottom: 2px solid #111111;
+    padding: 0 8px;
     gap: 2px;
     background: var(--extra-light-fill);
 
@@ -570,7 +571,7 @@ path[fill="#ffdda1"] {
 
   .scrollbar {
     width: 100%;
-    height: calc(100% - 40px);
+    height: calc(100% - 36px);
     overflow: auto;
     @media (max-width: 767px) { height: calc(100% - 98px); }
 
@@ -604,16 +605,17 @@ path[fill="#ffdda1"] {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 9px 10px;
-    margin: 4px 8px;
-    border-radius: 3px;
+    padding: 10px 12px 10px 10px;
+    margin: 0;
+    border-radius: 0;
     cursor: pointer;
     background: transparent;
-    border-left: 2px solid transparent;
+    border-left: 3px solid transparent;
+    border-bottom: 1px solid var(--light-border-color);
     transition: background 0.12s ease, border-left-color 0.12s ease;
 
-    &:first-child { margin-top: 8px; }
-    &:last-child  { margin-bottom: 8px; }
+    &:first-child { margin-top: 0; }
+    &:last-child  { border-bottom: none; }
 
     @media (hover: hover) {
       &:hover:not(.item-choose) {
@@ -622,54 +624,59 @@ path[fill="#ffdda1"] {
     }
   }
 
-  /* ── Avatar: square monogram ── */
+  /* ── Avatar ── */
   .avatar-photo {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 2px;
     display: block;
   }
 
   .item-avatar {
     flex-shrink: 0;
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
     border-radius: 2px;
-    background: #333333;
-    color: #ffffff;
-    font-family: 'IBM Plex Sans', sans-serif;
+    background: #1a1a1a;
+    color: rgba(255,255,255,0.85);
+    font-family: 'IBM Plex Mono', monospace;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 13px;
     display: flex;
     align-items: center;
     justify-content: center;
     user-select: none;
-    transition: background 0.12s;
+    overflow: hidden;
+    letter-spacing: 0;
   }
 
-  /* ── Text info ── */
+  /* ── Text info — name primary, email secondary ── */
   .item-info {
     flex: 1;
     min-width: 0;
-
-    .item-email {
-      font-size: 12px;
-      font-weight: 500;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      color: var(--el-text-color-primary);
-    }
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 
     .item-name {
-      font-size: 11px;
-      font-weight: 400;
-      color: var(--secondary-text-color);
-      margin-top: 1px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--el-text-color-primary);
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+      letter-spacing: 0.01em;
+    }
+
+    .item-email {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 400;
+      color: var(--secondary-text-color);
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      letter-spacing: 0;
     }
   }
 
@@ -678,7 +685,7 @@ path[fill="#ffdda1"] {
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    gap: 2px;
+    gap: 1px;
     opacity: 0;
     transition: opacity 0.12s;
 
@@ -710,17 +717,22 @@ path[fill="#ffdda1"] {
     opacity: 1;
   }
 
-  /* ── Selected: left red bar ── */
+  /* ── Selected: red left bar, no red avatar ── */
   .item-choose {
     background: var(--extra-light-fill) !important;
     border-left-color: #CC0000 !important;
 
+    .item-name {
+      font-weight: 700;
+      color: var(--el-text-color-primary);
+    }
+
     .item-email {
-      font-weight: 600;
+      color: var(--regular-text-color);
     }
 
     .item-avatar {
-      background: #CC0000;
+      background: #111111;
       color: #ffffff;
     }
   }
