@@ -172,17 +172,24 @@ const accountService = {
 			lastSort = 9999999999;
 		}
 
-		// ensure account_share exists (self-healing, no manual /init needed)
+		// fetch shared accountIds separately so the main query never references
+		// account_share directly — safe even if the table doesn't exist yet
+		let sharedIds = [];
 		try {
-			await c.env.db.prepare(`CREATE TABLE IF NOT EXISTS account_share (id INTEGER PRIMARY KEY AUTOINCREMENT, account_id INTEGER NOT NULL, user_id INTEGER NOT NULL, create_time DATETIME DEFAULT CURRENT_TIMESTAMP, UNIQUE(account_id, user_id))`).run();
+			const { results } = await c.env.db
+				.prepare('SELECT account_id FROM account_share WHERE user_id = ?')
+				.bind(userId).all();
+			sharedIds = results.map(r => r.account_id);
 		} catch {}
+
+		const ownerCond = eq(account.userId, userId);
+		const accessCond = sharedIds.length > 0
+			? or(ownerCond, inArray(account.accountId, sharedIds))
+			: ownerCond;
 
 		return orm(c).select().from(account).where(
 			and(
-				or(
-					eq(account.userId, userId),
-					sql`${account.accountId} IN (SELECT account_id FROM account_share WHERE user_id = ${userId})`
-				),
+				accessCond,
 				eq(account.isDel, isDel.NORMAL),
 				or(
 					lt(account.sort, lastSort),

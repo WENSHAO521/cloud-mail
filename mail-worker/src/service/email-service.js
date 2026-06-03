@@ -54,10 +54,18 @@ const emailService = {
 			allReceive = accountRow.allReceive;
 		}
 
-		// ensure account_share exists
+		// fetch shared accountIds — safe even if account_share doesn't exist yet
+		let sharedEmailAccountIds = [];
 		try {
-			await c.env.db.prepare(`CREATE TABLE IF NOT EXISTS account_share (id INTEGER PRIMARY KEY AUTOINCREMENT, account_id INTEGER NOT NULL, user_id INTEGER NOT NULL, create_time DATETIME DEFAULT CURRENT_TIMESTAMP, UNIQUE(account_id, user_id))`).run();
+			const { results } = await c.env.db
+				.prepare('SELECT account_id FROM account_share WHERE user_id = ?')
+				.bind(userId).all();
+			sharedEmailAccountIds = results.map(r => r.account_id);
 		} catch {}
+
+		const accessCond = sharedEmailAccountIds.length > 0
+			? or(eq(email.userId, userId), inArray(email.accountId, sharedEmailAccountIds))
+			: eq(email.userId, userId);
 
 		// check if is_spam column exists; if so, exclude spam from inbox
 		let spamFilter = null;
@@ -85,7 +93,7 @@ const emailService = {
 			.where(
 				and(
 					allReceive ? eq(1,1) : eq(email.accountId, accountId),
-					sql`(${email.userId} = ${userId} OR ${email.accountId} IN (SELECT account_id FROM account_share WHERE user_id = ${userId}))`,
+					accessCond,
 					timeSort ? gt(email.emailId, emailId) : lt(email.emailId, emailId),
 					eq(email.type, type),
 					eq(email.isDel, isDel.NORMAL),
@@ -102,7 +110,7 @@ const emailService = {
 
 		const listQuery = query.limit(size).all();
 
-		const accessCond = sql`(${email.userId} = ${userId} OR ${email.accountId} IN (SELECT account_id FROM account_share WHERE user_id = ${userId}))`;
+		// reuse the same sharedEmailAccountIds computed above
 
 		const totalQuery = orm(c).select({ total: count() }).from(email)
 			.leftJoin(
@@ -182,20 +190,35 @@ const emailService = {
 
 		try {
 			const accountCond = allReceive ? '' : 'AND e.account_id = ?';
-			const bindsMain   = [userId, userId, userId, ...(allReceive ? [] : [accountId]), emailId, size];
+
+			// get shared accountIds safely
+			let spamSharedIds = [];
+			try {
+				const { results: shareRows } = await c.env.db
+					.prepare('SELECT account_id FROM account_share WHERE user_id = ?')
+					.bind(userId).all();
+				spamSharedIds = shareRows.map(r => r.account_id);
+			} catch {}
+
+			const spamAccountCond = spamSharedIds.length > 0
+				? `(e.user_id = ? OR e.account_id IN (${spamSharedIds.map(() => '?').join(',')}))`
+				: 'e.user_id = ?';
+			const spamAccessBinds = spamSharedIds.length > 0
+				? [userId, ...spamSharedIds]
+				: [userId];
 
 			const { results } = await c.env.db.prepare(`
 				SELECT e.*, s.star_id
 				FROM email e
 				LEFT JOIN star s ON s.email_id = e.email_id AND s.user_id = ?
-				WHERE (e.user_id = ? OR e.account_id IN (SELECT account_id FROM account_share WHERE user_id = ?))
+				WHERE ${spamAccountCond}
 				  AND e.is_del = 0
 				  AND COALESCE(e.is_spam, 0) = 1
 				  ${accountCond}
 				  AND e.email_id < ?
 				ORDER BY e.email_id DESC
 				LIMIT ?
-			`).bind(...bindsMain).all();
+			`).bind(userId, ...spamAccessBinds, ...(allReceive ? [] : [accountId]), emailId, size).all();
 
 			const list = results.map(item => ({ ...item, isStar: item.star_id != null ? 1 : 0 }));
 			await this.emailAddAtt(c, list);
