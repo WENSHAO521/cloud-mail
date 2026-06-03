@@ -245,7 +245,7 @@ const handleDelete = () => {
     align-items: center;
 
     @media (hover: hover) {
-      &:hover { color: #CC0000; }
+      &:hover { color: #E61919; }
     }
   }
 }
@@ -272,7 +272,7 @@ const handleDelete = () => {
     line-height: 1.3;
     letter-spacing: -0.02em;
     color: #111111;
-    border-left: 3px solid #CC0000;
+    border-left: 3px solid #E61919;
     padding-left: 14px;
   }
 
@@ -463,7 +463,7 @@ const handleDelete = () => {
 
         &:hover {
           background: #EFEFEF;
-          border-left-color: #CC0000;
+          border-left-color: #E61919;
         }
 
         .att-icon { display: grid; }
@@ -490,13 +490,13 @@ const handleDelete = () => {
           gap: 8px;
           cursor: pointer;
 
-          &:hover { color: #CC0000; }
+          &:hover { color: #E61919; }
 
           a {
             color: #888888;
             align-items: center;
             display: flex;
-            &:hover { color: #CC0000; }
+            &:hover { color: #E61919; }
           }
         }
       }

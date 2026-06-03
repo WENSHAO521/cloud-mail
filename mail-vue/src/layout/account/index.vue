@@ -19,7 +19,7 @@
           </div>
           <div class="item-actions" @click.stop>
             <Icon @click="setAllReceive(item)" v-if="!item.allReceive"
-                  icon="eva:email-fill" width="17" height="17" class="action-icon" style="color:#c8970a"/>
+                  icon="eva:email-fill" width="17" height="17" class="action-icon" style="color:#E61919"/>
             <Icon @click="setAllReceive(item)" v-else
                   icon="flat-color-icons:folder" width="17" height="17" class="action-icon"/>
             <Icon icon="fluent-color:clipboard-24" width="17" height="17" class="action-icon"
@@ -685,7 +685,7 @@ path[fill="#ffdda1"] {
     }
 
     .item-avatar {
-      background: #CC0000;
+      background: #E61919;
       color: #ffffff;
       box-shadow: none;
     }

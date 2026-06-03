@@ -455,7 +455,7 @@ window.onresize = () => {
     transition: color 0.12s;
 
     @media (hover: hover) {
-      &:hover { color: #CC0000; }
+      &:hover { color: #E61919; }
     }
   }
 }

@@ -270,7 +270,7 @@ function submitPwd() {
       }
 
       .edit-name {
-        color: #CC0000;
+        color: #E61919;
         font-size: 12px;
         font-weight: 600;
         padding-left: 12px;
@@ -319,7 +319,7 @@ function submitPwd() {
     gap: 16px;
     padding: 16px;
     border: 1px solid #E8E8E8;
-    border-left: 3px solid #CC0000;
+    border-left: 3px solid #E61919;
     background: #FAFAFA;
   }
 }

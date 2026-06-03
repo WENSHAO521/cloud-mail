@@ -646,7 +646,7 @@ function submitRegister() {
   justify-content: center;
   width: 450px;
   height: 100%;
-  border-left: 3px solid #CC0000;
+  border-left: 3px solid #E61919;
   box-shadow: -24px 0 60px rgba(0, 0, 0, 0.5);
   @media (max-width: 1024px) {
     padding: 20px 18px;
@@ -763,7 +763,7 @@ function submitRegister() {
   @media (hover: hover) {
     &:hover {
       background: rgba(255, 255, 255, 0.18);
-      border-color: rgba(200, 151, 10, 0.5);
+      border-color: rgba(230, 25, 25, 0.25);
     }
   }
 }
@@ -873,7 +873,7 @@ function submitRegister() {
   .brand-rule {
     width: 32px;
     height: 2px;
-    background: #CC0000;
+    background: #E61919;
     margin-bottom: 32px;
   }
 
@@ -898,7 +898,7 @@ function submitRegister() {
         content: '';
         width: 4px;
         height: 4px;
-        background: #CC0000;
+        background: #E61919;
         flex-shrink: 0;
       }
     }
@@ -919,22 +919,22 @@ function submitRegister() {
 
 /* ── German red primary button ── */
 :deep(.el-button--primary) {
-  background: #CC0000 !important;
-  border-color: #CC0000 !important;
+  background: #E61919 !important;
+  border-color: #E61919 !important;
   color: #ffffff !important;
   font-weight: 700 !important;
   border-radius: 2px !important;
 
   &:hover, &:focus {
-    background: #A30000 !important;
-    border-color: #A30000 !important;
+    background: #B80000 !important;
+    border-color: #B80000 !important;
   }
 }
 
 /* ── Gold primary button in login form ── */
 :deep(.el-button--primary) {
-  background: linear-gradient(135deg, #c8970a, #e8b520) !important;
-  border-color: #c8970a !important;
+  background: linear-gradient(135deg, #E61919, #E61919) !important;
+  border-color: #E61919 !important;
   color: #0c1c3a !important;
   font-weight: 700 !important;
 

@@ -1319,7 +1319,7 @@ function loadData() {
     transition: color 0.12s;
 
     @media (hover: hover) {
-      &:hover { color: #CC0000; }
+      &:hover { color: #E61919; }
     }
   }
 
@@ -1360,7 +1360,7 @@ function loadData() {
 .unread {
   height: 5px;
   width: 5px;
-  background: #CC0000;
+  background: #E61919;
   margin-bottom: 2px;
   margin-right: 5px;
   border-radius: 0;

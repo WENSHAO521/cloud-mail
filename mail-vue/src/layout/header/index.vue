@@ -382,7 +382,7 @@ function formatName(email) {
     height: 36px;
     border-radius: 4px;
     color: #ffffff;
-    background: #CC0000;
+    background: #E61919;
     box-shadow: none;
     transition: var(--transition-smooth);
     display: flex;
@@ -398,7 +398,7 @@ function formatName(email) {
 
   @media (hover: hover) {
     &:hover .writer {
-      background: #A30000;
+      background: #B80000;
     }
   }
 }
