@@ -19,7 +19,7 @@ export default defineConfig(({mode}) => {
             VitePWA({
                 injectRegister: 'script-defer',
                 manifest: {
-                    name: env.VITE_PWA_NAME,
+                    name: 'Panorama Scholarly Group Mail',
                     short_name: env.VITE_PWA_NAME,
                     description: 'PSG Mail — Panorama Scholarly Group internal email',
                     background_color: '#111111',
