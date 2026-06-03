@@ -67,6 +67,10 @@ const userService = {
 
 	async updateSignature(c, params, userId) {
 		const { signature } = params;
+		// ensure column exists (idempotent — silently skips if already added)
+		try {
+			await c.env.db.prepare(`ALTER TABLE user ADD COLUMN signature TEXT NOT NULL DEFAULT '';`).run();
+		} catch {}
 		await c.env.db
 			.prepare('UPDATE user SET signature = ? WHERE user_id = ?')
 			.bind(signature ?? '', userId).run();
