@@ -1,153 +1,171 @@
 <template>
   <div class="settings-page">
 
-    <!-- ── Page title ── -->
-    <div class="page-title-block">
-      <h1 class="page-title">{{ $t('settings') }}</h1>
+    <!-- ── Page heading ── -->
+    <header class="page-head">
+      <h1 class="page-h1">{{ $t('settings') }}</h1>
+    </header>
+
+    <!-- ══════════════════════════════
+         PROFILE
+    ══════════════════════════════ -->
+    <div class="setting-row">
+      <div class="row-label">
+        <div class="label-title">{{ $t('profile') }}</div>
+        <div class="label-desc">{{ $t('profileDesc') }}</div>
+      </div>
+      <div class="row-body">
+
+        <!-- Avatar strip -->
+        <div class="avatar-strip">
+          <div class="avatar-wrap" @click="triggerUpload">
+            <img v-if="userStore.avatar" :src="userStore.avatar" class="avatar-img"/>
+            <div v-else class="avatar-init">{{ userInitial }}</div>
+            <div class="avatar-lens">
+              <Icon icon="solar:camera-add-bold" width="18" height="18"/>
+            </div>
+            <input ref="fileInputRef" type="file" accept="image/*"
+                   style="display:none" @change="handleFileChange"/>
+          </div>
+          <div class="avatar-meta">
+            <div class="meta-name">{{ userStore.user.name || userStore.user.email }}</div>
+            <div class="meta-email">{{ userStore.user.email }}</div>
+            <div class="meta-role" v-if="userStore.user.role?.name">{{ userStore.user.role.name }}</div>
+            <div class="avatar-links">
+              <button class="link-btn" @click="triggerUpload">{{ $t('uploadAvatar') }}</button>
+              <button class="link-btn dim" v-if="userStore.avatar" @click="removeAvatar">{{ $t('removeAvatar') }}</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Info rows -->
+        <div class="data-table">
+          <div class="data-row">
+            <span class="data-key">{{ $t('username') }}</span>
+            <div class="data-val">
+              <template v-if="setNameShow">
+                <el-input v-model="accountName" size="small" style="width:180px"/>
+                <button class="link-btn" @click="setName">{{ $t('save') }}</button>
+                <button class="link-btn dim" @click="setNameShow = false">{{ $t('cancel') }}</button>
+              </template>
+              <template v-else>
+                <span class="val-str">{{ userStore.user.name || '—' }}</span>
+                <button class="link-btn" @click="showSetName">{{ $t('change') }}</button>
+              </template>
+            </div>
+          </div>
+          <div class="data-row">
+            <span class="data-key">{{ $t('emailAccount') }}</span>
+            <span class="val-str mono">{{ userStore.user.email }}</span>
+          </div>
+          <div class="data-row last">
+            <span class="data-key">{{ $t('password') }}</span>
+            <div class="data-val">
+              <span class="val-str">••••••••</span>
+              <button class="link-btn" @click="pwdShow = true">{{ $t('changePwdBtn') }}</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
 
-    <!-- ══════════════════════════════════════
-         PROFILE
-    ══════════════════════════════════════ -->
-    <section class="block">
-      <div class="block-header">
-        <div class="block-label">{{ $t('profile') }}</div>
-      </div>
-
-      <!-- Avatar + identity -->
-      <div class="profile-hero">
-        <div class="avatar-zone" @click="triggerUpload">
-          <img v-if="userStore.avatar" :src="userStore.avatar" class="avatar-img"/>
-          <div v-else class="avatar-init">{{ userInitial }}</div>
-          <div class="avatar-overlay">
-            <Icon icon="solar:camera-add-bold" width="20" height="20"/>
-          </div>
-          <input ref="fileInputRef" type="file" accept="image/*"
-                 style="display:none" @change="handleFileChange"/>
-        </div>
-        <div class="profile-identity">
-          <div class="profile-name">{{ userStore.user.name || userStore.user.email }}</div>
-          <div class="profile-email">{{ userStore.user.email }}</div>
-          <div class="profile-role" v-if="userStore.user.role?.name">{{ userStore.user.role.name }}</div>
-          <div class="avatar-actions">
-            <button class="text-action" @click="triggerUpload">{{ $t('uploadAvatar') }}</button>
-            <button class="text-action muted" v-if="userStore.avatar" @click="removeAvatar">{{ $t('removeAvatar') }}</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Info rows -->
-      <div class="info-table">
-        <div class="info-row">
-          <span class="info-key">{{ $t('username') }}</span>
-          <div class="info-val">
-            <template v-if="setNameShow">
-              <el-input v-model="accountName" size="small" style="width:180px"/>
-              <button class="text-action" @click="setName">{{ $t('save') }}</button>
-              <button class="text-action muted" @click="setNameShow = false">{{ $t('cancel') }}</button>
-            </template>
-            <template v-else>
-              <span class="val-text">{{ userStore.user.name || '—' }}</span>
-              <button class="text-action" @click="showSetName">{{ $t('change') }}</button>
-            </template>
-          </div>
-        </div>
-        <div class="info-row">
-          <span class="info-key">{{ $t('emailAccount') }}</span>
-          <span class="val-text mono">{{ userStore.user.email }}</span>
-        </div>
-        <div class="info-row last">
-          <span class="info-key">{{ $t('password') }}</span>
-          <div class="info-val">
-            <span class="val-text">••••••••</span>
-            <button class="text-action" @click="pwdShow = true">{{ $t('changePwdBtn') }}</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ══════════════════════════════════════
+    <!-- ══════════════════════════════
          LANGUAGE
-    ══════════════════════════════════════ -->
-    <section class="block">
-      <div class="block-header">
-        <div class="block-label">{{ $t('language') }}</div>
+    ══════════════════════════════ -->
+    <div class="setting-row">
+      <div class="row-label">
+        <div class="label-title">{{ $t('language') }}</div>
+        <div class="label-desc">{{ $t('languageDesc') }}</div>
       </div>
-      <el-select :model-value="langSelect" style="width:180px" @change="changeLang">
-        <el-option label="中文" value="zh" @pointerdown.prevent.stop="changeLang('zh')"/>
-        <el-option label="English" value="en" @pointerdown.prevent.stop="changeLang('en')"/>
-      </el-select>
-    </section>
+      <div class="row-body">
+        <el-select :model-value="langSelect" style="width:180px" @change="changeLang">
+          <el-option label="中文" value="zh" @pointerdown.prevent.stop="changeLang('zh')"/>
+          <el-option label="English" value="en" @pointerdown.prevent.stop="changeLang('en')"/>
+        </el-select>
+      </div>
+    </div>
 
-    <!-- ══════════════════════════════════════
-         EMAIL SIGNATURE
-    ══════════════════════════════════════ -->
-    <section class="block">
-      <div class="block-header">
-        <div class="block-label">{{ $t('signature') }}</div>
-        <el-button type="primary" size="small" :loading="signatureLoading" @click="saveSignature" class="block-action">
-          {{ $t('save') }}
-        </el-button>
+    <!-- ══════════════════════════════
+         SIGNATURE
+    ══════════════════════════════ -->
+    <div class="setting-row">
+      <div class="row-label">
+        <div class="label-title">{{ $t('signature') }}</div>
+        <div class="label-desc">{{ $t('signatureDesc') }}</div>
       </div>
-      <div class="editor-frame">
-        <tinyEditor
-          ref="signatureEditorRef"
-          :def-value="signatureText"
-          editor-id="signature-editor"
-          toolbar="bold italic underline | forecolor | link | code"
-          height="160px"
-          @change="onSignatureChange"
-        />
-      </div>
-    </section>
-
-    <!-- ══════════════════════════════════════
-         AUTO-REPLY
-    ══════════════════════════════════════ -->
-    <section class="block">
-      <div class="block-header">
-        <div class="block-label">{{ $t('autoReply') }}</div>
-        <el-switch v-model="autoReplyEnabled" @change="saveAutoReply" class="block-switch"/>
-      </div>
-
-      <transition name="slide-fade">
-        <div class="autoreply-body" v-if="autoReplyEnabled">
-          <el-input
-            v-model="autoReplyMessage"
-            type="textarea"
-            :rows="4"
-            :placeholder="$t('autoReplyMessage')"
-            resize="none"
-            class="autoreply-input"
+      <div class="row-body">
+        <div class="editor-shell">
+          <tinyEditor
+            ref="signatureEditorRef"
+            :def-value="signatureText"
+            editor-id="signature-editor"
+            toolbar="bold italic underline | forecolor | link | code"
+            height="160px"
+            @change="onSignatureChange"
           />
-          <div class="autoreply-footer">
-            <el-button type="primary" size="small" :loading="autoReplySaving" @click="saveAutoReply">
-              {{ $t('save') }}
-            </el-button>
+        </div>
+        <div class="row-action-bar">
+          <el-button type="primary" size="small" :loading="signatureLoading" @click="saveSignature">
+            {{ $t('save') }}
+          </el-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════
+         AUTO-REPLY
+    ══════════════════════════════ -->
+    <div class="setting-row">
+      <div class="row-label">
+        <div class="label-title">{{ $t('autoReply') }}</div>
+        <div class="label-desc">{{ $t('autoReplyDesc') }}</div>
+      </div>
+      <div class="row-body">
+        <div class="toggle-line">
+          <el-switch v-model="autoReplyEnabled" @change="saveAutoReply"/>
+          <span class="toggle-text">{{ autoReplyEnabled ? $t('autoReplyEnabled') : $t('disable') }}</span>
+        </div>
+        <transition name="expand">
+          <div class="autoreply-body" v-if="autoReplyEnabled">
+            <el-input
+              v-model="autoReplyMessage"
+              type="textarea" :rows="4"
+              :placeholder="$t('autoReplyMessage')"
+              resize="none"
+            />
+            <div class="row-action-bar">
+              <el-button type="primary" size="small" :loading="autoReplySaving" @click="saveAutoReply">
+                {{ $t('save') }}
+              </el-button>
+            </div>
           </div>
-        </div>
-      </transition>
-    </section>
+        </transition>
+      </div>
+    </div>
 
-    <!-- ══════════════════════════════════════
+    <!-- ══════════════════════════════
          DANGER ZONE
-    ══════════════════════════════════════ -->
-    <section class="block danger-block" v-perm="'my:delete'">
-      <div class="block-header">
-        <div class="block-label danger-label">{{ $t('dangerZone') }}</div>
+    ══════════════════════════════ -->
+    <div class="setting-row danger-row" v-perm="'my:delete'">
+      <div class="row-label">
+        <div class="label-title red">{{ $t('dangerZone') }}</div>
+        <div class="label-desc">{{ $t('dangerZoneDesc') }}</div>
       </div>
-      <div class="danger-card">
-        <div class="danger-content">
-          <div class="danger-title">{{ $t('deleteUserBtn') }}</div>
-          <div class="danger-desc">{{ $t('delAccountMsg') }}</div>
+      <div class="row-body">
+        <div class="danger-card">
+          <div class="danger-text">
+            <div class="danger-heading">{{ $t('deleteUserBtn') }}</div>
+            <div class="danger-sub">{{ $t('delAccountMsg') }}</div>
+          </div>
+          <el-button type="danger" size="small" @click="deleteConfirm">
+            {{ $t('deleteUserBtn') }}
+          </el-button>
         </div>
-        <el-button type="danger" size="small" @click="deleteConfirm" class="danger-btn">
-          {{ $t('deleteUserBtn') }}
-        </el-button>
       </div>
-    </section>
+    </div>
 
-    <!-- ── Change password dialog ── -->
+    <!-- Change password dialog -->
     <el-dialog v-model="pwdShow" :title="$t('changePassword')" width="380">
       <div class="pwd-form">
         <div class="pwd-field">
@@ -329,373 +347,316 @@ function submitPwd() {
 </script>
 
 <style scoped lang="scss">
-/* ── Page shell ── */
+/* ═══════════════════════════════════════
+   PAGE SHELL
+═══════════════════════════════════════ */
 .settings-page {
-  max-width: 680px;
-  padding: 48px 56px 80px;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
+  max-width: 900px;
+  padding: 52px 64px 96px;
 
-  @media (max-width: 767px) {
-    padding: 28px 20px 60px;
+  @media (max-width: 960px) {
+    padding: 36px 36px 72px;
+  }
+  @media (max-width: 640px) {
+    padding: 24px 20px 60px;
   }
 }
 
-/* ── Page title ── */
-.page-title-block {
-  margin-bottom: 48px;
-  padding-bottom: 20px;
+/* ── Page heading ── */
+.page-head {
+  padding-bottom: 24px;
+  margin-bottom: 0;
   border-bottom: 2px solid var(--el-text-color-primary);
 }
 
-.page-title {
-  font-size: 30px;
+.page-h1 {
+  font-size: 34px;
   font-weight: 900;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
   color: var(--el-text-color-primary);
   line-height: 1;
-  text-transform: uppercase;
 }
 
-/* ── Section block ── */
-.block {
-  padding: 36px 0;
+/* ═══════════════════════════════════════
+   TWO-COLUMN SETTING ROW
+═══════════════════════════════════════ */
+.setting-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 56px;
+  padding: 44px 0;
   border-bottom: 1px solid var(--light-border-color);
 
-  &:last-child { border-bottom: none; }
-}
+  &.danger-row { border-bottom: none; }
 
-.block-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.block-label {
-  font-size: 11px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--secondary-text-color);
-  padding-left: 10px;
-  border-left: 3px solid #CC0000;
-  line-height: 1.2;
-}
-
-.block-action {
-  border-radius: 2px !important;
-  font-size: 12px !important;
-  flex-shrink: 0;
-}
-
-.block-switch {
-  flex-shrink: 0;
-}
-
-/* ── Profile hero ── */
-.profile-hero {
-  display: flex;
-  align-items: flex-start;
-  gap: 24px;
-  margin-bottom: 28px;
-
-  @media (max-width: 520px) {
-    flex-direction: column;
-    gap: 16px;
+  @media (max-width: 760px) {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 32px 0;
   }
 }
 
-.avatar-zone {
+/* ── Left label column ── */
+.row-label {
+  padding-top: 2px;
+}
+
+.label-title {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--el-text-color-primary);
+  margin-bottom: 8px;
+
+  &.red { color: #CC0000; }
+}
+
+.label-desc {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--secondary-text-color);
+  font-weight: 400;
+}
+
+/* ── Right body column ── */
+.row-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+/* ═══════════════════════════════════════
+   PROFILE SECTION
+═══════════════════════════════════════ */
+.avatar-strip {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.avatar-wrap {
   position: relative;
-  width: 88px;
-  height: 88px;
-  border-radius: 8px;
+  width: 80px;
+  height: 80px;
+  border-radius: 6px;
   overflow: hidden;
   cursor: pointer;
   flex-shrink: 0;
   background: #111;
 
-  &:hover .avatar-overlay { opacity: 1; }
+  &:hover .avatar-lens { opacity: 1; }
 }
 
 .avatar-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
 }
 
 .avatar-init {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-  font-weight: 800;
-  color: #fff;
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; font-weight: 900;
   letter-spacing: -0.04em;
-  user-select: none;
+  color: #fff; user-select: none;
 }
 
-.avatar-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.55);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.avatar-lens {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.54);
+  display: flex; align-items: center; justify-content: center;
   opacity: 0;
-  transition: opacity 0.15s var(--ease-out, ease);
+  transition: opacity 0.15s cubic-bezier(0.22,1,0.36,1);
   color: #fff;
 }
 
-.profile-identity {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding-top: 4px;
+.avatar-meta {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; gap: 3px;
+  padding-top: 2px;
 }
 
-.profile-name {
-  font-size: 20px;
-  font-weight: 800;
+.meta-name {
+  font-size: 17px; font-weight: 800;
   letter-spacing: -0.025em;
   color: var(--el-text-color-primary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   line-height: 1.2;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-.profile-email {
-  font-size: 12.5px;
+.meta-email {
+  font-size: 12px;
   font-family: 'IBM Plex Mono', monospace;
   color: var(--secondary-text-color);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
-.profile-role {
-  display: inline-flex;
-  align-items: center;
-  font-size: 9.5px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+.meta-role {
+  display: inline-flex; align-items: center;
+  font-size: 9px; font-weight: 900;
+  letter-spacing: 0.14em; text-transform: uppercase;
   color: #CC0000;
   background: rgba(204,0,0,0.07);
   border: 1px solid rgba(204,0,0,0.18);
-  padding: 2px 8px;
-  border-radius: 2px;
-  width: fit-content;
-  margin-top: 4px;
+  padding: 2px 7px; border-radius: 2px;
+  width: fit-content; margin-top: 4px;
 }
 
-.avatar-actions {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-top: 12px;
+.avatar-links {
+  display: flex; align-items: center; gap: 14px;
+  margin-top: 10px;
 }
 
-/* ── Text action link ── */
-.text-action {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 700;
-  color: #CC0000;
-  padding: 0;
-  letter-spacing: 0.02em;
-  transition: opacity 0.12s;
-  user-select: none;
-
-  &:hover { opacity: 0.7; }
-  &.muted {
-    color: var(--secondary-text-color);
-    font-weight: 600;
-  }
-}
-
-/* ── Info table ── */
-.info-table {
+/* ── Data table ── */
+.data-table {
   border: 1px solid var(--light-border-color);
-  border-radius: 3px;
-  overflow: hidden;
+  border-radius: 3px; overflow: hidden;
 }
 
-.info-row {
+.data-row {
   display: grid;
-  grid-template-columns: 120px 1fr;
+  grid-template-columns: 110px 1fr;
   align-items: center;
-  min-height: 52px;
-  padding: 12px 18px;
+  min-height: 50px;
+  padding: 11px 16px;
   border-bottom: 1px solid var(--light-border-color);
   gap: 16px;
-  transition: background 0.12s;
+  transition: background 0.14s cubic-bezier(0.22,1,0.36,1);
 
   &:hover { background: var(--base-fill); }
   &.last { border-bottom: none; }
 
   @media (max-width: 480px) {
-    grid-template-columns: 90px 1fr;
-    padding: 10px 14px;
+    grid-template-columns: 80px 1fr;
+    padding: 10px 12px;
   }
 }
 
-.info-key {
-  font-size: 10px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.10em;
-  color: var(--secondary-text-color);
-  flex-shrink: 0;
+.data-key {
+  font-size: 10px; font-weight: 900;
+  text-transform: uppercase; letter-spacing: 0.10em;
+  color: var(--secondary-text-color); flex-shrink: 0;
 }
 
-.info-val {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+.data-val {
+  display: flex; align-items: center;
+  gap: 12px; flex-wrap: wrap;
 }
 
-.val-text {
-  font-size: 13.5px;
-  color: var(--el-text-color-primary);
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+.val-str {
+  font-size: 13.5px; color: var(--el-text-color-primary);
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
 
   &.mono {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 12.5px;
-    color: var(--regular-text-color);
+    font-size: 12px; color: var(--regular-text-color);
   }
 }
 
-/* ── Editor frame ── */
-.editor-frame {
+/* ── Link buttons ── */
+.link-btn {
+  background: transparent; border: none; cursor: pointer;
+  font-size: 12px; font-weight: 700;
+  color: #CC0000; padding: 0;
+  letter-spacing: 0.02em;
+  transition: opacity 0.12s; user-select: none;
+  font-family: inherit;
+
+  &:hover { opacity: 0.65; }
+  &.dim { color: var(--secondary-text-color); font-weight: 600; }
+}
+
+/* ═══════════════════════════════════════
+   SIGNATURE / EDITOR
+═══════════════════════════════════════ */
+.editor-shell {
   border: 1px solid var(--light-border-color);
-  border-radius: 2px;
-  overflow: hidden;
+  border-radius: 2px; overflow: hidden;
   height: 160px;
 }
 
-/* ── Auto-reply ── */
+.row-action-bar {
+  display: flex; justify-content: flex-end;
+}
+
+/* ═══════════════════════════════════════
+   AUTO-REPLY
+═══════════════════════════════════════ */
+.toggle-line {
+  display: flex; align-items: center; gap: 12px;
+}
+
+.toggle-text {
+  font-size: 13px; color: var(--regular-text-color);
+}
+
 .autoreply-body {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  display: flex; flex-direction: column; gap: 12px;
+  overflow: hidden;
 }
 
-.autoreply-input {
-  :deep(.el-textarea__inner) {
-    border-radius: 2px;
-    font-size: 13.5px;
-    line-height: 1.6;
-    resize: none;
-  }
+/* expand/collapse animation */
+.expand-enter-active {
+  transition: opacity 0.24s cubic-bezier(0.22,1,0.36,1),
+              transform 0.24s cubic-bezier(0.22,1,0.36,1),
+              max-height 0.28s cubic-bezier(0.22,1,0.36,1);
+}
+.expand-leave-active {
+  transition: opacity 0.16s ease,
+              transform 0.16s ease,
+              max-height 0.20s ease;
+}
+.expand-enter-from, .expand-leave-to {
+  opacity: 0; transform: translateY(-8px); max-height: 0;
+}
+.expand-enter-to, .expand-leave-from {
+  opacity: 1; transform: translateY(0); max-height: 300px;
 }
 
-.autoreply-footer {
-  display: flex;
-  justify-content: flex-end;
-}
-
-/* Slide transition for auto-reply body */
-.slide-fade-enter-active {
-  transition: opacity 0.22s var(--ease-out, ease), transform 0.22s var(--ease-out, ease);
-}
-.slide-fade-leave-active {
-  transition: opacity 0.15s ease, transform 0.15s ease;
-}
-.slide-fade-enter-from {
-  opacity: 0;
-  transform: translateY(-6px);
-}
-.slide-fade-leave-to {
-  opacity: 0;
-  transform: translateY(-4px);
-}
-
-/* ── Danger section ── */
-.danger-block {
-  border-bottom: none;
-}
-
-.danger-label {
-  color: #CC0000;
-  border-left-color: #CC0000;
-}
-
+/* ═══════════════════════════════════════
+   DANGER ZONE
+═══════════════════════════════════════ */
 .danger-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 24px;
   padding: 18px 20px;
-  border: 1px solid rgba(204,0,0,0.20);
+  border: 1px solid rgba(204,0,0,0.22);
   border-left: 3px solid #CC0000;
   border-radius: 2px;
   background: rgba(204,0,0,0.025);
 
   @media (max-width: 520px) {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: column; align-items: flex-start;
   }
 }
 
-.danger-content {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  min-width: 0;
-}
+.danger-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 
-.danger-title {
-  font-size: 13.5px;
-  font-weight: 700;
+.danger-heading {
+  font-size: 13.5px; font-weight: 700;
   color: var(--el-text-color-primary);
 }
 
-.danger-desc {
-  font-size: 12.5px;
+.danger-sub {
+  font-size: 12.5px; line-height: 1.5;
   color: var(--regular-text-color);
-  line-height: 1.5;
 }
 
-.danger-btn {
-  flex-shrink: 0;
-  border-radius: 2px !important;
-}
-
-/* ── Password dialog ── */
+/* ═══════════════════════════════════════
+   PASSWORD DIALOG
+═══════════════════════════════════════ */
 .pwd-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  display: flex; flex-direction: column; gap: 16px;
   padding: 4px 0 8px;
 }
 
-.pwd-field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
+.pwd-field { display: flex; flex-direction: column; gap: 6px; }
 
 .pwd-label {
-  font-size: 10.5px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.09em;
+  font-size: 10px; font-weight: 900;
+  text-transform: uppercase; letter-spacing: 0.10em;
   color: var(--secondary-text-color);
 }
 </style>
