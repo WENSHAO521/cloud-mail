@@ -85,44 +85,63 @@
       </div>
 
     </el-scrollbar>
-    <el-dialog v-model="showAdd" :title="$t('addAccount')">
-      <div class="container">
-        <el-input v-model="addForm.email" ref="addRef" type="text" :placeholder="$t('emailAccount')" autocomplete="off">
-          <template #append>
-            <div @click.stop="openSelect">
-              <el-select
-                  ref="mySelect"
-                  v-model="addForm.suffix"
-                  :placeholder="$t('select')"
-                  class="select"
-              >
-                <el-option
-                    v-for="item in domainList"
-                    :key="item"
-                    :label="item"
-                    :value="item"
-                />
-              </el-select>
-              <div>
-                <span>{{ addForm.suffix }}</span>
-                <Icon class="setting-icon" icon="mingcute:down-small-fill" width="20" height="20"/>
-              </div>
-            </div>
-          </template>
-        </el-input>
-        <el-button class="btn" type="primary" @click="submit" :loading="addLoading"
-        >{{ $t('add') }}
-        </el-button>
-      </div>
-      <div
-          class="add-email-turnstile"
-          :class="verifyShow ? 'turnstile-show' : 'turnstile-hide'"
-          :data-sitekey="settingStore.settings.siteKey"
-          data-callback="onTurnstileSuccess"
-          data-error-callback="onTurnstileError"
-      >
-        <span style="font-size: 12px;color: #F56C6C" v-if="botJsError">{{ $t('verifyModuleFailed') }}</span>
-      </div>
+    <el-dialog v-model="showAdd" :title="$t('addAccount')" width="420">
+      <el-tabs v-model="addTab" class="add-tabs">
+
+        <!-- Tab 1: Create new email -->
+        <el-tab-pane :label="$t('createNewEmail')" name="create">
+          <div class="container">
+            <el-input v-model="addForm.email" ref="addRef" type="text" :placeholder="$t('emailAccount')" autocomplete="off">
+              <template #append>
+                <div @click.stop="openSelect">
+                  <el-select
+                      ref="mySelect"
+                      v-model="addForm.suffix"
+                      :placeholder="$t('select')"
+                      class="select"
+                  >
+                    <el-option
+                        v-for="item in domainList"
+                        :key="item"
+                        :label="item"
+                        :value="item"
+                    />
+                  </el-select>
+                  <div>
+                    <span>{{ addForm.suffix }}</span>
+                    <Icon class="setting-icon" icon="mingcute:down-small-fill" width="20" height="20"/>
+                  </div>
+                </div>
+              </template>
+            </el-input>
+            <el-button class="btn" type="primary" @click="submit" :loading="addLoading">
+              {{ $t('add') }}
+            </el-button>
+          </div>
+          <div
+              class="add-email-turnstile"
+              :class="verifyShow ? 'turnstile-show' : 'turnstile-hide'"
+              :data-sitekey="settingStore.settings.siteKey"
+              data-callback="onTurnstileSuccess"
+              data-error-callback="onTurnstileError"
+          >
+            <span style="font-size: 12px;color: #F56C6C" v-if="botJsError">{{ $t('verifyModuleFailed') }}</span>
+          </div>
+        </el-tab-pane>
+
+        <!-- Tab 2: Bind registered email -->
+        <el-tab-pane :label="$t('bindExistingEmail')" name="bind">
+          <div class="container">
+            <p class="bind-tip">{{ $t('bindEmailTip') }}</p>
+            <el-input v-model="bindForm.email" type="text" :placeholder="$t('emailAccount')" autocomplete="off"/>
+            <el-input v-model="bindForm.password" type="password" :placeholder="$t('bindEmailPassword')" autocomplete="off"/>
+            <el-button class="btn" type="primary" @click="submitBind" :loading="bindLoading">
+              {{ $t('add') }}
+            </el-button>
+          </div>
+        </el-tab-pane>
+
+      </el-tabs>
     </el-dialog>
     <el-dialog v-model="setNameShow" :title="$t('changeUserName')">
       <div class="container">
@@ -144,7 +163,8 @@ import {
   accountDelete,
   accountSetName,
   accountSetAllReceive,
-  accountSetAsTop
+  accountSetAsTop,
+  accountBind
 } from "@/request/account.js";
 import {sleep} from "@/utils/time-utils.js"
 import {isEmail} from "@/utils/verify-utils.js";
@@ -162,7 +182,10 @@ const accountStore = useAccountStore();
 const settingStore = useSettingStore();
 const emailStore = useEmailStore();
 const showAdd = ref(false)
-const addLoading = ref(false);
+const addLoading = ref(false)
+const addTab = ref('create')
+const bindLoading = ref(false)
+const bindForm = reactive({ email: '', password: '' })
 const domainList = computed(() => settingStore.domainList)
 const accounts = reactive([])
 const noLoading = ref(false)
@@ -356,10 +379,31 @@ function changeAccount(account) {
 
 function add() {
   addForm.suffix = addForm.suffix || settingStore.domainList[0]
+  addTab.value = 'create'
   showAdd.value = true
   setTimeout(() => {
     addRef.value.focus()
   }, 100)
+}
+
+async function submitBind() {
+  if (!bindForm.email || !bindForm.password) return
+  bindLoading.value = true
+  try {
+    const accountRow = await accountBind(bindForm.email, bindForm.password)
+    showAdd.value = false
+    bindForm.email = ''
+    bindForm.password = ''
+    accounts.length = 0
+    noLoading.value = false
+    await getAccountList()
+    accountStore.setCurrentAccount(accountRow)
+    emailStore.emailScroll?.refreshList?.()
+  } catch(e) {
+    // error shown by axios interceptor
+  } finally {
+    bindLoading.value = false
+  }
 }
 
 function setAsTop(account, index) {
@@ -849,6 +893,21 @@ path[fill="#ffdda1"] {
   opacity: 0;
   pointer-events: none;
   position: fixed;
+}
+
+.bind-tip {
+  font-size: 12.5px;
+  color: var(--regular-text-color);
+  line-height: 1.5;
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  background: rgba(204,0,0,0.05);
+  border-left: 3px solid #CC0000;
+  border-radius: 2px;
+}
+
+.add-tabs {
+  :deep(.el-tabs__header) { margin-bottom: 14px; }
 }
 
 </style>

@@ -12,6 +12,7 @@ import turnstileService from './turnstile-service';
 import roleService from './role-service';
 import { t } from '../i18n/i18n';
 import verifyRecordService from './verify-record-service';
+import cryptoUtils from '../utils/crypto-utils';
 
 const accountService = {
 
@@ -97,6 +98,43 @@ const accountService = {
 
 		accountRow.addVerifyOpen = addVerifyOpen
 		return accountRow;
+	},
+
+	async bind(c, params, userId) {
+
+		const { email, password } = params;
+
+		if (!email || !password) throw new BizError(t('emptyEmail'));
+
+		// Find the user account registered with this email
+		const targetUser = await userService.selectByEmail(c, email);
+		if (!targetUser) throw new BizError(t('emailNotFound'));
+
+		if (targetUser.userId === userId) throw new BizError(t('bindSelf'));
+
+		// Verify password
+		const valid = await cryptoUtils.verifyPassword(password, targetUser.salt, targetUser.password);
+		if (!valid) throw new BizError(t('invalidPassword'));
+
+		// Get the account record for this email
+		const accountRow = await this.selectByEmailIncludeDel(c, email);
+		if (!accountRow) throw new BizError(t('emailNotFound'));
+
+		if (accountRow.userId === userId) throw new BizError(t('bindSelf'));
+
+		// Transfer account ownership to current user
+		await orm(c).update(account)
+			.set({ userId: userId })
+			.where(eq(account.accountId, accountRow.accountId))
+			.run();
+
+		// Transfer all emails for this account to current user
+		await c.env.db
+			.prepare('UPDATE email SET user_id = ? WHERE account_id = ?')
+			.bind(userId, accountRow.accountId)
+			.run();
+
+		return { ...accountRow, userId };
 	},
 
 	selectByEmailIncludeDel(c, email) {
