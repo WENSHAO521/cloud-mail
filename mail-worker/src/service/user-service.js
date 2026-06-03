@@ -44,7 +44,17 @@ const userService = {
 		user.permKeys = permKeys;
 		user.role = roleRow;
 		user.type = userRow.type;
-		user.signature = userRow.signature || '';
+
+		// signature is in a separate column added by v3_2DB migration;
+		// fall back to '' gracefully if the column doesn't exist yet.
+		try {
+			const sigRow = await c.env.db
+				.prepare('SELECT signature FROM user WHERE user_id = ?')
+				.bind(userId).first();
+			user.signature = sigRow?.signature || '';
+		} catch {
+			user.signature = '';
+		}
 
 		if (c.env.admin === userRow.email) {
 			user.role = constant.ADMIN_ROLE
@@ -57,7 +67,9 @@ const userService = {
 
 	async updateSignature(c, params, userId) {
 		const { signature } = params;
-		await orm(c).update(user).set({ signature: signature ?? '' }).where(eq(user.userId, userId)).run();
+		await c.env.db
+			.prepare('UPDATE user SET signature = ? WHERE user_id = ?')
+			.bind(signature ?? '', userId).run();
 	},
 
 	async resetPassword(c, params, userId) {
