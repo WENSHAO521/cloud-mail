@@ -19,15 +19,15 @@
           </div>
           <div class="item-actions" @click.stop>
             <Icon @click="setAllReceive(item)" v-if="!item.allReceive"
-                  icon="eva:email-fill" width="17" height="17" class="action-icon" style="color:#E61919"/>
+                  icon="solar:inbox-outline" width="15" height="15" class="action-icon"/>
             <Icon @click="setAllReceive(item)" v-else
-                  icon="flat-color-icons:folder" width="17" height="17" class="action-icon"/>
-            <Icon icon="fluent-color:clipboard-24" width="17" height="17" class="action-icon"
+                  icon="solar:inbox-archive-outline" width="15" height="15" class="action-icon action-active"/>
+            <Icon icon="solar:copy-outline" width="15" height="15" class="action-icon"
                   @click.stop="copyAccount(item.email)"/>
-            <Icon icon="fluent:settings-24-filled" width="17" height="17" class="action-icon action-settings"
+            <Icon icon="solar:settings-outline" width="15" height="15" class="action-icon"
                   v-if="showNullSetting(item)"/>
             <el-dropdown v-else trigger="click">
-              <Icon icon="fluent:settings-24-filled" width="17" height="17" class="action-icon action-settings"/>
+              <Icon icon="solar:settings-outline" width="15" height="15" class="action-icon"/>
               <template #dropdown>
                 <el-dropdown-menu>
                   <el-dropdown-item v-if="hasPerm('email:send')" @click="openSetName(item)">{{ $t('rename') }}</el-dropdown-item>
@@ -527,34 +527,36 @@ path[fill="#ffdda1"] {
 </style>
 <style scoped lang="scss">
 .account-box {
-  border-right: 1px solid var(--el-border-color-lighter);
-  background-color: var(--el-bg-color);
+  border-right: 1px solid #E8E6E1;
+  background: #F4F4F0;
   height: 100%;
   overflow: hidden;
 
+  /* ── Toolbar ── */
   .head-opt {
     display: flex;
     align-items: center;
-    height: 38px;
-    border-bottom: 1px solid var(--el-border-color-lighter);
-    padding: 0 12px;
-    gap: 4px;
+    height: 40px;
+    border-bottom: 1px solid #E8E6E1;
+    padding: 0 10px;
+    gap: 2px;
+    background: #F4F4F0;
 
     .icon {
       cursor: pointer;
-      width: 28px;
-      height: 28px;
-      border-radius: 6px;
+      width: 30px;
+      height: 30px;
+      border-radius: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--el-text-color-regular);
-      transition: background 0.15s ease;
+      color: #888888;
+      transition: background 0.12s, color 0.12s;
 
       @media (hover: hover) {
         &:hover {
-          background: var(--base-fill);
-          color: var(--el-text-color-primary);
+          background: #E8E6E1;
+          color: #111111;
         }
       }
     }
@@ -562,11 +564,9 @@ path[fill="#ffdda1"] {
 
   .scrollbar {
     width: 100%;
-    height: calc(100% - 38px);
+    height: calc(100% - 40px);
     overflow: auto;
-    @media (max-width: 767px) {
-      height: calc(100% - 98px);
-    }
+    @media (max-width: 767px) { height: calc(100% - 98px); }
 
     .empty {
       display: flex;
@@ -579,9 +579,12 @@ path[fill="#ffdda1"] {
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 10px 0;
-      font-size: 12px;
-      color: var(--secondary-text-color);
+      padding: 16px 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: #BBBBBB;
+      text-transform: uppercase;
     }
   }
 
@@ -595,99 +598,123 @@ path[fill="#ffdda1"] {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 9px 10px;
-    margin: 4px 8px;
-    border-radius: 10px;
+    padding: 10px 12px;
+    margin: 6px 8px;
+    border-radius: 6px;
     cursor: pointer;
-    border: 1px solid transparent;
-    transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    background: #ffffff;
+    border: 1px solid #E8E6E1;
+    border-left: 2px solid transparent;
+    transition: border-color 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
 
-    &:first-child { margin-top: 8px; }
-    &:last-child  { margin-bottom: 8px; }
+    &:first-child { margin-top: 10px; }
+    &:last-child  { margin-bottom: 10px; }
 
     @media (hover: hover) {
       &:hover:not(.item-choose) {
-        background: var(--email-hover-background);
-        border-color: var(--el-border-color-lighter);
+        border-color: #D0CEC9;
+        border-left-color: #D0CEC9;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.06);
       }
     }
   }
 
+  /* ── Avatar: monogram square ── */
   .item-avatar {
     flex-shrink: 0;
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
     border-radius: 4px;
     background: #111111;
     color: #ffffff;
+    font-family: 'IBM Plex Mono', monospace;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 14px;
+    letter-spacing: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: none;
     user-select: none;
+    transition: background 0.12s;
   }
 
+  /* ── Text info ── */
   .item-info {
     flex: 1;
     min-width: 0;
 
     .item-email {
-      font-size: 12.5px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11.5px;
       font-weight: 500;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      color: var(--el-text-color-primary);
+      color: #111111;
+      letter-spacing: 0.01em;
     }
 
     .item-name {
-      font-size: 11px;
-      color: var(--secondary-text-color);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #AAAAAA;
+      margin-top: 2px;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      margin-top: 1px;
     }
   }
 
+  /* ── Action icons: all monochrome ── */
   .item-actions {
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
 
     .action-icon {
       cursor: pointer;
-      opacity: 0.7;
-      transition: opacity 0.15s ease;
+      color: #BBBBBB;
+      display: flex;
+      align-items: center;
+      padding: 3px;
+      border-radius: 3px;
+      transition: color 0.12s, background 0.12s;
 
       @media (hover: hover) {
-        &:hover { opacity: 1; }
+        &:hover {
+          color: #111111;
+          background: #F0EEE9;
+        }
       }
     }
 
-    .action-settings {
-      color: var(--secondary-text-color);
+    .action-active {
+      color: #E61919;
     }
   }
 
-  /* ── Selected state: gold left accent ── */
+  /* ── Selected: left red border, white card ── */
   .item-choose {
-    background: var(--red-accent-subtle) !important;
-    box-shadow: inset 3px 0 0 var(--red-accent) !important;
-    border-color: transparent !important;
+    background: #ffffff !important;
+    border-color: #E8E6E1 !important;
+    border-left-color: #E61919 !important;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.08) !important;
 
     .item-email {
       font-weight: 600;
-      color: var(--red-accent-dark);
+      color: #111111;
+    }
+
+    .item-name {
+      color: #888888;
     }
 
     .item-avatar {
       background: #E61919;
       color: #ffffff;
-      box-shadow: none;
     }
   }
 }
