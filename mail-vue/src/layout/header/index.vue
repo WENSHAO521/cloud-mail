@@ -22,14 +22,18 @@
       <el-dropdown ref="userinfoRef" @visible-change="e => userInfoShow = e" :teleported="false" popper-class="detail-dropdown">
         <div class="avatar-wrap" @click="userInfoHide">
           <div class="avatar-circle">
-            {{ formatName(userStore.user.email) }}
+            <img v-if="userStore.avatar" :src="userStore.avatar" class="avatar-photo"/>
+            <span v-else>{{ formatName(userStore.user.email) }}</span>
           </div>
           <Icon class="chevron" icon="mingcute:down-small-fill" width="22" height="22"/>
         </div>
         <template #dropdown>
           <div class="user-details">
             <div class="details-head">
-              <div class="details-avatar">{{ formatName(userStore.user.email) }}</div>
+              <div class="details-avatar">
+        <img v-if="userStore.avatar" :src="userStore.avatar" class="avatar-photo-lg"/>
+        <span v-else>{{ formatName(userStore.user.email) }}</span>
+      </div>
               <div class="details-info">
                 <div class="user-name" v-if="userStore.user.name">{{ userStore.user.name }}</div>
                 <div class="detail-email" @click="copyEmail(userStore.user.email)">{{ userStore.user.email }}</div>
@@ -184,6 +188,8 @@ function clickLogout() {
     logoutLoading.value = false
   })
 }
+
+userStore.loadAvatar()
 
 function formatName(email) {
   const name = userStore.user?.name?.trim()
@@ -408,5 +414,19 @@ function formatName(email) {
 
 .el-tooltip__trigger:first-child:focus-visible {
   outline: unset;
+}
+
+.avatar-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.avatar-photo-lg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
 }
 </style>
