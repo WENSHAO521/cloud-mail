@@ -96,14 +96,48 @@ function initEditor() {
     forced_root_block: 'div',
     skin: `${uiStore.dark ? 'oxide-dark' : 'oxide'}`,
     content_css: `/tinymce/css/index.css,${uiStore.dark ? 'dark' : 'default'}`,
-    content_style: `:root {
-         --scrollbar-track-color: ${uiStore.dark ? '#141414' : '#FFFFFF'};
-         --scrollbar-thumb-color: ${uiStore.dark ? '#8D9095' : '#A8ABB2'};
-    }`,
-    plugins: 'link image advlist lists  emoticons fullscreen  table preview code',
-    toolbar: 'bold emoticons forecolor backcolor italic fontsize | alignleft aligncenter alignright alignjustify | outdent indent |  bullist numlist | link image  | table code preview fullscreen',
+    content_style: `
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto:wght@400;700&family=Open+Sans:wght@400;600&family=Lato:wght@400;700&family=Poppins:wght@400;600&family=Nunito:wght@400;600&family=Montserrat:wght@400;600&family=Source+Sans+3:wght@400;600&family=Raleway:wght@400;600&family=Ubuntu:wght@400;500&family=Merriweather:wght@400;700&family=Playfair+Display:wght@400;600&family=Lora:wght@400;600&family=EB+Garamond:wght@400;500&family=Noto+Serif:wght@400;700&family=Oswald:wght@400;600&family=Roboto+Mono:wght@400;500&family=Source+Code+Pro:wght@400;600&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700&family=Noto+Serif+SC:wght@400;700&family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&display=swap');
+      :root {
+        --scrollbar-track-color: ${uiStore.dark ? '#141414' : '#FFFFFF'};
+        --scrollbar-thumb-color: ${uiStore.dark ? '#8D9095' : '#A8ABB2'};
+      }
+    `,
+    font_family_formats: [
+      'System Default=-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif',
+      'Inter=Inter,sans-serif',
+      'Roboto=Roboto,sans-serif',
+      'Open Sans=Open Sans,sans-serif',
+      'Lato=Lato,sans-serif',
+      'Poppins=Poppins,sans-serif',
+      'Nunito=Nunito,sans-serif',
+      'Montserrat=Montserrat,sans-serif',
+      'Source Sans 3=Source Sans 3,sans-serif',
+      'Raleway=Raleway,sans-serif',
+      'Ubuntu=Ubuntu,sans-serif',
+      'Merriweather=Merriweather,serif',
+      'Playfair Display=Playfair Display,serif',
+      'Lora=Lora,serif',
+      'EB Garamond=EB Garamond,serif',
+      'Noto Serif=Noto Serif,serif',
+      'Oswald=Oswald,sans-serif',
+      'Roboto Mono=Roboto Mono,monospace',
+      'Source Code Pro=Source Code Pro,monospace',
+      'JetBrains Mono=JetBrains Mono,monospace',
+      'Noto Sans SC=Noto Sans SC,sans-serif',
+      'Noto Serif SC=Noto Serif SC,serif',
+      'ZCOOL XiaoWei=ZCOOL XiaoWei,serif',
+      'Ma Shan Zheng=Ma Shan Zheng,cursive',
+      'Arial=Arial,Helvetica,sans-serif',
+      'Times New Roman=Times New Roman,Times,serif',
+      'Georgia=Georgia,serif',
+      'Verdana=Verdana,Geneva,sans-serif',
+      'Courier New=Courier New,Courier,monospace',
+    ].join('; '),
+    plugins: 'link image advlist lists emoticons fullscreen table preview code',
+    toolbar: 'fontfamily fontsize | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | outdent indent | bullist numlist | emoticons link image | table code preview fullscreen',
     toolbar_mode: 'scrolling',
-    font_size_formats: '8px 10px 12px 14px 16px 18px 24px 36px',
+    font_size_formats: '8px 9px 10px 11px 12px 14px 16px 18px 20px 24px 28px 32px 36px 48px 72px',
     emoticons_search: false,
     language: language.value,
     language_load: true,
@@ -193,7 +227,9 @@ function destroyEditor() {
 }
 
 :deep(.tox-tbtn.tox-tbtn--select.tox-tbtn--bespoke) {
-  width: 80px !important;
+  width: auto !important;
+  min-width: 80px !important;
+  max-width: 160px !important;
 }
 
 :deep(.tox.tox-tinymce.tox-fullscreen) {

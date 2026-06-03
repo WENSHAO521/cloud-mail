@@ -697,7 +697,7 @@ function close() {
 /* ── Dialog box ──────────────────────────────── */
 .write-box {
   background: var(--el-bg-color);
-  width: min(860px, calc(100% - 32px));
+  width: min(1080px, calc(100% - 32px));
   display: grid;
   grid-template-rows: auto 1fr;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
@@ -711,7 +711,7 @@ function close() {
   }
 
   @media (min-width: 768px) {
-    height: min(720px, calc(100vh - 48px));
+    height: min(840px, calc(100vh - 32px));
   }
 }
 
@@ -817,7 +817,6 @@ function close() {
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow: hidden;
 }
 
 /* Each field row */
