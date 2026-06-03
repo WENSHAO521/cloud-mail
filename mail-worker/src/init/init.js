@@ -32,8 +32,25 @@ const dbInit = {
 		await this.v3_1DB(c);
 		await this.v3_2DB(c);
 		await this.v3_3DB(c);
+		await this.v3_4DB(c);
 		await settingService.refresh(c);
 		return c.text('success');
+	},
+
+	async v3_4DB(c) {
+		try {
+			await c.env.db.prepare(`
+				CREATE TABLE IF NOT EXISTS account_share (
+					id INTEGER PRIMARY KEY AUTOINCREMENT,
+					account_id INTEGER NOT NULL,
+					user_id INTEGER NOT NULL,
+					create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+					UNIQUE(account_id, user_id)
+				)
+			`).run();
+		} catch (e) {
+			console.warn(`跳过：${e.message}`);
+		}
 	},
 
 	async v3_3DB(c) {

@@ -106,35 +106,46 @@ const accountService = {
 
 		if (!email || !password) throw new BizError(t('emptyEmail'));
 
-		// Find the user account registered with this email
+		// Find the user registered with this email
 		const targetUser = await userService.selectByEmail(c, email);
 		if (!targetUser) throw new BizError(t('emailNotFound'));
-
-		if (targetUser.userId === userId) throw new BizError(t('bindSelf'));
 
 		// Verify password
 		const valid = await cryptoUtils.verifyPassword(password, targetUser.salt, targetUser.password);
 		if (!valid) throw new BizError(t('invalidPassword'));
 
-		// Get the account record for this email
+		// Get the account record
 		const accountRow = await this.selectByEmailIncludeDel(c, email);
 		if (!accountRow) throw new BizError(t('emailNotFound'));
 
+		// Already own it
 		if (accountRow.userId === userId) throw new BizError(t('bindSelf'));
 
-		// Transfer account ownership to current user
-		await orm(c).update(account)
-			.set({ userId: userId })
-			.where(eq(account.accountId, accountRow.accountId))
-			.run();
+		// Already shared
+		const existing = await c.env.db
+			.prepare('SELECT id FROM account_share WHERE account_id = ? AND user_id = ?')
+			.bind(accountRow.accountId, userId).first();
+		if (existing) throw new BizError(t('bindSelf'));
 
-		// Transfer all emails for this account to current user
+		// Ensure account_share table exists (auto-migration)
+		try {
+			await c.env.db.prepare(`
+				CREATE TABLE IF NOT EXISTS account_share (
+					id INTEGER PRIMARY KEY AUTOINCREMENT,
+					account_id INTEGER NOT NULL,
+					user_id INTEGER NOT NULL,
+					create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+					UNIQUE(account_id, user_id)
+				)
+			`).run();
+		} catch {}
+
+		// Grant shared access — both users keep independent access
 		await c.env.db
-			.prepare('UPDATE email SET user_id = ? WHERE account_id = ?')
-			.bind(userId, accountRow.accountId)
-			.run();
+			.prepare('INSERT OR IGNORE INTO account_share (account_id, user_id) VALUES (?, ?)')
+			.bind(accountRow.accountId, userId).run();
 
-		return { ...accountRow, userId };
+		return accountRow;
 	},
 
 	selectByEmailIncludeDel(c, email) {
@@ -163,19 +174,23 @@ const accountService = {
 
 		return orm(c).select().from(account).where(
 			and(
-				eq(account.userId, userId),
+				or(
+					eq(account.userId, userId),
+					sql`${account.accountId} IN (SELECT account_id FROM account_share WHERE user_id = ${userId})`
+				),
 				eq(account.isDel, isDel.NORMAL),
-					or(
-						lt(account.sort, lastSort),
-						and(
-							eq(account.sort, lastSort),
-							gt(account.accountId, accountId)
-						)
-					))
+				or(
+					lt(account.sort, lastSort),
+					and(
+						eq(account.sort, lastSort),
+						gt(account.accountId, accountId)
+					)
 				)
-			.orderBy(desc(account.sort), asc(account.accountId))
-			.limit(size)
-			.all();
+			)
+		)
+		.orderBy(desc(account.sort), asc(account.accountId))
+		.limit(size)
+		.all();
 	},
 
 	async delete(c, params, userId) {

@@ -80,7 +80,7 @@ const emailService = {
 			.where(
 				and(
 					allReceive ? eq(1,1) : eq(email.accountId, accountId),
-					eq(email.userId, userId),
+					sql`(${email.userId} = ${userId} OR ${email.accountId} IN (SELECT account_id FROM account_share WHERE user_id = ${userId}))`,
 					timeSort ? gt(email.emailId, emailId) : lt(email.emailId, emailId),
 					eq(email.type, type),
 					eq(email.isDel, isDel.NORMAL),
@@ -97,6 +97,8 @@ const emailService = {
 
 		const listQuery = query.limit(size).all();
 
+		const accessCond = sql`(${email.userId} = ${userId} OR ${email.accountId} IN (SELECT account_id FROM account_share WHERE user_id = ${userId}))`;
+
 		const totalQuery = orm(c).select({ total: count() }).from(email)
 			.leftJoin(
 				account,
@@ -105,7 +107,7 @@ const emailService = {
 			.where(
 				and(
 					allReceive ? eq(1,1) : eq(email.accountId, accountId),
-					eq(email.userId, userId),
+					accessCond,
 					eq(email.type, type),
 					eq(email.isDel, isDel.NORMAL),
 					eq(account.isDel, isDel.NORMAL)
@@ -115,7 +117,7 @@ const emailService = {
 		const latestEmailQuery = orm(c).select().from(email).where(
 			and(
 				allReceive ? eq(1,1) : eq(email.accountId, accountId),
-				eq(email.userId, userId),
+				accessCond,
 				eq(email.type, type),
 				eq(email.isDel, isDel.NORMAL)
 			))
@@ -175,13 +177,13 @@ const emailService = {
 
 		try {
 			const accountCond = allReceive ? '' : 'AND e.account_id = ?';
-			const bindsMain   = [userId, userId, ...(allReceive ? [] : [accountId]), emailId, size];
+			const bindsMain   = [userId, userId, userId, ...(allReceive ? [] : [accountId]), emailId, size];
 
 			const { results } = await c.env.db.prepare(`
 				SELECT e.*, s.star_id
 				FROM email e
 				LEFT JOIN star s ON s.email_id = e.email_id AND s.user_id = ?
-				WHERE e.user_id = ?
+				WHERE (e.user_id = ? OR e.account_id IN (SELECT account_id FROM account_share WHERE user_id = ?))
 				  AND e.is_del = 0
 				  AND COALESCE(e.is_spam, 0) = 1
 				  ${accountCond}
