@@ -24,9 +24,6 @@
 
     <div class="form-wrapper">
       <div class="container">
-        <div class="form-badge">
-          <span class="form-monogram">PSG</span>
-        </div>
         <span class="form-title">{{ settingStore.settings.title }}</span>
         <span class="form-desc" v-if="show === 'login'">{{ $t('loginTitle') }}</span>
         <span class="form-desc" v-else>{{ $t('regTitle') }}</span>
@@ -882,20 +879,6 @@ function submitRegister() {
   margin: 0;
 }
 
-/* ── Form monogram ── */
-.form-badge {
-  margin-bottom: 28px;
-
-  .form-monogram {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    color: #CC0000;
-    display: block;
-    text-transform: uppercase;
-  }
-}
 
 :deep(.el-button--primary) {
   background: #CC0000 !important;
