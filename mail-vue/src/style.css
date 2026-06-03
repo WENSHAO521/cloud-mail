@@ -135,7 +135,12 @@ button, input, select, textarea {
     display: flex !important;
     justify-content: flex-start !important;
     flex-wrap: nowrap !important;
-    padding: 2px 10px 2px 20px !important;
+    padding: 2px 8px !important;
+}
+/* Push first toolbar group (font family) away from the left edge */
+.tox .tox-toolbar .tox-toolbar__group:first-child {
+    padding-left: 16px !important;
+    margin-left: 0 !important;
 }
 
 /* Compact buttons */
