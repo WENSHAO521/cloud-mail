@@ -9,25 +9,23 @@
     </div>
     <div v-else :style="background"></div>
 
-    <!-- Left branding panel — desktop only -->
+    <!-- Left branding panel — editorial typographic treatment -->
     <div class="brand-panel">
-      <div class="brand-content">
-        <img class="brand-compass" src="/image/psg-logo.png" alt="Panorama Scholarly Group" />
-        <div class="brand-org">Panorama Scholarly Group</div>
-        <div class="brand-product">Internal Mail System</div>
-        <div class="brand-rule"></div>
-        <ul class="brand-points">
-          <li>Secure institutional communications</li>
-          <li>Academic workflow support</li>
-          <li>Transparent publication processes</li>
-        </ul>
+      <div class="brand-editorial">
+        <div class="brand-wordmark">
+          <span class="wm-line">PANORAMA</span>
+          <span class="wm-line muted">SCHOLARLY</span>
+          <span class="wm-line accent">GROUP</span>
+        </div>
+        <div class="brand-divider"></div>
+        <p class="brand-caption">Internal Mail System</p>
       </div>
     </div>
 
     <div class="form-wrapper">
       <div class="container">
         <div class="form-badge">
-          <img src="/image/psg-logo.png" alt="Panorama Scholarly Group" />
+          <span class="form-monogram">PSG</span>
         </div>
         <span class="form-title">{{ settingStore.settings.title }}</span>
         <span class="form-desc" v-if="show === 'login'">{{ $t('loginTitle') }}</span>
@@ -680,9 +678,10 @@ function submitRegister() {
   }
 
   .form-title {
-    font-weight: 800;
-    font-size: 24px !important;
-    letter-spacing: -0.02em;
+    font-weight: 700;
+    font-size: 20px !important;
+    letter-spacing: -0.01em;
+    font-family: 'IBM Plex Sans', sans-serif;
   }
 
   .switch {
@@ -819,6 +818,7 @@ function submitRegister() {
 .cloud { display: none; }
 
 /* ── Left branding panel ── */
+/* ── Left brand panel: editorial bottom-anchored typography ── */
 .brand-panel {
   position: fixed;
   left: 0;
@@ -827,93 +827,72 @@ function submitRegister() {
   right: 450px;
   z-index: 5;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  border-right: 1px solid #222222;
+  align-items: flex-end;
+  padding: 56px 60px;
+  border-right: 1px solid #1c1c1c;
 
+  @media (max-width: 1200px) {
+    right: 420px;
+    padding: 48px 48px;
+  }
   @media (max-width: 1100px) {
     display: none;
   }
 }
 
-.brand-content {
+.brand-editorial {
+  width: 100%;
+}
+
+.brand-wordmark {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 0 40px;
+  margin-bottom: 28px;
 
-  .brand-compass {
-    width: 160px;
-    height: auto;
-    margin-bottom: 32px;
-    filter: invert(1);
-    opacity: 0.92;
-  }
-
-  .brand-org {
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: 20px;
+  .wm-line {
+    display: block;
+    font-family: 'IBM Plex Mono', 'Courier New', monospace;
+    font-size: clamp(20px, 3.2vw, 42px);
     font-weight: 700;
+    letter-spacing: 0.06em;
+    line-height: 1.18;
     color: #ffffff;
-    letter-spacing: 0.04em;
-    line-height: 1.4;
-    margin-bottom: 8px;
-  }
-
-  .brand-product {
-    font-size: 10px;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.4);
-    letter-spacing: 0.18em;
     text-transform: uppercase;
-    margin-bottom: 36px;
-  }
 
-  .brand-rule {
-    width: 32px;
-    height: 2px;
-    background: #E61919;
-    margin-bottom: 32px;
-  }
-
-  .brand-points {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-
-    li {
-      color: rgba(255, 255, 255, 0.38);
-      font-size: 12px;
-      letter-spacing: 0.02em;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-align: left;
-
-      &::before {
-        content: '';
-        width: 4px;
-        height: 4px;
-        background: #E61919;
-        flex-shrink: 0;
-      }
-    }
+    &.muted { color: rgba(255, 255, 255, 0.42); }
+    &.accent { color: #E61919; }
   }
 }
 
-/* ── Form logo badge ── */
-.form-badge {
+.brand-divider {
+  width: 36px;
+  height: 2px;
+  background: #E61919;
   margin-bottom: 20px;
+}
 
-  img {
-    height: 32px;
-    width: auto;
+.brand-caption {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.28);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* ── Form monogram ── */
+.form-badge {
+  margin-bottom: 28px;
+
+  .form-monogram {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: #E61919;
     display: block;
-    object-fit: contain;
+    text-transform: uppercase;
   }
 }
 

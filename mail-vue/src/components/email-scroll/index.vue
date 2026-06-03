@@ -985,12 +985,14 @@ function loadData() {
   display: flex;
   padding: 8px 0;
   justify-content: space-between;
-  box-shadow: var(--header-actions-border);
+  border-bottom: 1px solid #F0EEE9;
   cursor: pointer;
   align-items: center;
   position: relative;
-  transition: background 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition: background 0.12s ease, border-left-color 0.12s ease;
   height: 48px;
+  border-left: 2px solid transparent;
+
   @media (max-width: 1366px) {
     height: 83px;
   }
@@ -1234,7 +1236,28 @@ function loadData() {
 
   &:hover {
     background-color: var(--email-hover-background);
+    border-left-color: #D8D6D0;
     z-index: 0;
+  }
+
+  /* Unread row: red left accent */
+  &:has(.unread) {
+    border-left-color: #E61919;
+  }
+
+  .name {
+    font-weight: 600 !important;
+  }
+
+  .email-content {
+    font-size: 12.5px !important;
+    color: rgba(0, 0, 0, 0.32) !important;
+  }
+
+  .email-time {
+    font-family: 'IBM Plex Mono', monospace !important;
+    font-size: 11px !important;
+    letter-spacing: 0.02em !important;
   }
 
   /*&[data-checked="true"] {

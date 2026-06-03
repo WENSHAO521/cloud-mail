@@ -48,6 +48,7 @@ time, kbd, samp, code, pre {
 
 html, body {
     background: var(--el-bg-color);
+    scroll-behavior: smooth;
 }
 
 ul, ol {
