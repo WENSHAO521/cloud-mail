@@ -16,3 +16,7 @@ export function updateSignature(signature) {
     return http.put('/my/signature', { signature })
 }
 
+export function getDirectory() {
+    return http.get('/my/directory')
+}
+

@@ -109,25 +109,62 @@
 
       </div>
     </div>
-    <el-dialog top="10vh" v-model="showContacts" @closed="clearSelectContact" :title="t('recentContacts')">
-      <el-table ref="contactsTabRef" row-key="email" :data="contacts" style="height: 445px">
-        <el-table-column type="selection" width="32" />
-        <el-table-column property="email" :label="t('emailAccount')" >
-          <template #default="props">
-            <div class="email-row">{{ props.row.email }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column width="55" label="" >
-          <template #default>
-            <div style="display: flex;">
-              <Icon icon="mage:user" style="color: var(--el-text-color-primary)" width="22" height="22" color="#606266" />
-            </div>
-          </template>
-        </el-table-column>
-      </el-table>
+    <el-dialog top="10vh" v-model="showContacts" @closed="clearSelectContact" :title="t('recentContacts')" width="480">
+      <el-tabs v-model="contactTab" @tab-change="onTabChange" class="contacts-tabs">
+
+        <!-- Recent contacts -->
+        <el-tab-pane :label="t('recentTab')" name="recent">
+          <el-table ref="contactsTabRef" row-key="email" :data="contacts" style="height: 380px">
+            <el-table-column type="selection" width="32" />
+            <el-table-column property="email" :label="t('emailAccount')">
+              <template #default="props">
+                <div class="email-row">{{ props.row.email }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column width="44">
+              <template #default>
+                <Icon icon="mage:user" width="20" height="20" style="color:var(--secondary-text-color)"/>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+
+        <!-- Internal directory -->
+        <el-tab-pane :label="t('internalDirectory')" name="directory">
+          <el-input
+            v-model="directorySearch"
+            :placeholder="t('directorySearch')"
+            clearable
+            style="margin-bottom:8px"
+          >
+            <template #prefix><Icon icon="iconoir:search" width="15" height="15"/></template>
+          </el-input>
+          <el-table
+            ref="directoryTabRef"
+            row-key="email"
+            :data="filteredDirectory"
+            v-loading="directoryLoading"
+            style="height:340px"
+          >
+            <el-table-column type="selection" width="32" />
+            <el-table-column :label="t('username')" width="130">
+              <template #default="{ row }">
+                <span class="dir-name">{{ row.name || '—' }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column :label="t('emailAccount')">
+              <template #default="{ row }">
+                <span class="email-row">{{ row.email }}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+
+      </el-tabs>
+
       <div class="contacts-bottom">
-        <el-button type="default" @click="deleteContact">{{t('clear')}}</el-button>
-        <el-button type="primary" @click="chooseContact">{{t('selectContacts')}}</el-button>
+        <el-button v-if="contactTab === 'recent'" type="default" @click="deleteContact">{{ t('clear') }}</el-button>
+        <el-button type="primary" @click="chooseContact">{{ t('selectContacts') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -154,6 +191,7 @@ import dayjs from "dayjs";
 import {useI18n} from "vue-i18n";
 import router from "@/router/index.js";
 import {ElMessageBox} from "element-plus";
+import {getDirectory} from "@/request/my.js";
 
 defineExpose({
   open,
@@ -178,7 +216,22 @@ let percentMessage = null
 let sending = false
 const defValue = ref('')
 const contactsTabRef = ref({})
+const directoryTabRef = ref({})
 const showContacts = ref(false)
+const contactTab = ref('recent')
+const directoryList = ref([])
+const directorySearch = ref('')
+const directoryLoading = ref(false)
+const directoryLoaded = ref(false)
+
+const filteredDirectory = computed(() => {
+  const q = directorySearch.value.trim().toLowerCase()
+  if (!q) return directoryList.value
+  return directoryList.value.filter(u =>
+    u.email.toLowerCase().includes(q) ||
+    (u.name || '').toLowerCase().includes(q)
+  )
+})
 const mySelect = ref()
 let selectStatus = false
 const backReply = reactive({
@@ -236,24 +289,40 @@ function deleteContact() {
   })
 }
 
-function chooseContact() {
-
-  const contactList = contactsTabRef.value.getSelectionRows().map(item => item.email);
-  contactList.forEach(item => {
-    if (!form.receiveEmail.includes(item)) {
-      form.receiveEmail.push(item);
+async function onTabChange(tab) {
+  if (tab === 'directory' && !directoryLoaded.value) {
+    directoryLoading.value = true
+    try {
+      directoryList.value = await getDirectory()
+      directoryLoaded.value = true
+    } finally {
+      directoryLoading.value = false
     }
+  }
+}
+
+function chooseContact() {
+  const tableRef = contactTab.value === 'directory' ? directoryTabRef.value : contactsTabRef.value
+  const selected = tableRef.getSelectionRows().map(item => item.email)
+
+  selected.forEach(email => {
+    if (!form.receiveEmail.includes(email)) form.receiveEmail.push(email)
   })
 
-  form.receiveEmail = form.receiveEmail.filter(item => {
-    return contactList.includes(item) || !writerStore.sendRecipientRecord.includes(item);
-  });
+  if (contactTab.value === 'recent') {
+    form.receiveEmail = form.receiveEmail.filter(item =>
+      selected.includes(item) || !writerStore.sendRecipientRecord.includes(item)
+    )
+  }
 
   showContacts.value = false
 }
 
 function clearSelectContact() {
-  contactsTabRef.value.clearSelection();
+  contactsTabRef.value?.clearSelection?.()
+  directoryTabRef.value?.clearSelection?.()
+  contactTab.value = 'recent'
+  directorySearch.value = ''
 }
 
 function selectChange(value) {
@@ -1066,6 +1135,20 @@ function close() {
   justify-content: flex-end;
   margin-top: 10px;
   gap: 8px;
+}
+
+.contacts-tabs {
+  :deep(.el-tabs__header) { margin-bottom: 10px; }
+}
+
+.dir-name {
+  font-weight: 600;
+  color: var(--el-text-color-primary);
+}
+
+.email-row {
+  font-size: 13px;
+  color: var(--regular-text-color);
 }
 
 .write-select {

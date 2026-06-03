@@ -76,6 +76,17 @@ const userService = {
 			.bind(signature ?? '', userId).run();
 	},
 
+	async directory(c) {
+		const { results } = await c.env.db.prepare(`
+			SELECT u.email, COALESCE(a.name, '') AS name
+			FROM user u
+			LEFT JOIN account a ON LOWER(u.email) = LOWER(a.email) AND a.is_del = 0
+			WHERE u.status = 0 AND u.is_del = 0
+			ORDER BY COALESCE(NULLIF(a.name,''), u.email) ASC
+		`).all();
+		return results;
+	},
+
 	async resetPassword(c, params, userId) {
 
 		const { password } = params;
