@@ -724,12 +724,17 @@ path[fill="#ffdda1"] {
     transform: translateX(0);
   }
 
-  /* ── Selected — Microsoft Outlook style ── */
+  /* ── Selected — gradient background, no bar ── */
   .item-choose {
-    background: var(--el-bg-color) !important;
-    border-color: var(--light-border-color) !important;
-    border-left-color: #CC0000 !important;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04) !important;
+    border-color: transparent !important;
+    border-left-color: transparent !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+    background: linear-gradient(
+      to right,
+      rgba(204, 0, 0, 0.13) 0%,
+      rgba(204, 0, 0, 0.05) 55%,
+      rgba(204, 0, 0, 0.00) 100%
+    ) !important;
 
     .item-name {
       font-weight: 700;
