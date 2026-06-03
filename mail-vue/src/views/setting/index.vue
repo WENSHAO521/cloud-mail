@@ -356,6 +356,7 @@ function submitPwd() {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
+  align-items: start;
   margin-bottom: 12px;
 
   @media (max-width: 760px) {
@@ -378,7 +379,6 @@ function submitPwd() {
   gap: 14px;
 
   &.full-card { margin-bottom: 12px; }
-  &.autoreply-card { flex: 1; }
 }
 
 .card-label {
