@@ -77,7 +77,7 @@
         <!-- Toolbar -->
         <div class="toolbar-bar">
           <div class="toolbar-left">
-            <div class="tb-btn" @click="chooseFile" :title="$t('attachment')">
+            <div class="tb-btn" @click="chooseFile" :title="$t('attachments')">
               <Icon icon="iconamoon:attachment-fill" width="18" height="18"/>
             </div>
             <div class="tb-btn" @click="clearContent" :title="$t('clear')">
