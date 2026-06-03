@@ -125,6 +125,18 @@
               </div>
               <div class="email-right" :style="showUserInfo ? 'align-self: start;':''">
                 <span class="email-time" :style="(item.unread === EmailUnreadEnum.UNREAD && showUnread) ? 'font-weight: bold' : ''">{{ item.formatCreateTime }}</span>
+                <!-- Hover quick actions -->
+                <div class="row-quick-actions" @click.stop>
+                  <button v-if="archiveEmail" class="rqa-btn" :title="$t('archive')" @click.stop="archiveEmail(item.emailId)">
+                    <Icon icon="material-symbols:archive-outline-rounded" width="14" height="14"/>
+                  </button>
+                  <button v-if="showStar" class="rqa-btn" :title="$t('star')" @click.stop="starChange(item)">
+                    <Icon icon="solar:star-line-duotone" width="14" height="14"/>
+                  </button>
+                  <button v-perm="'email:delete'" class="rqa-btn rqa-danger" :title="$t('delete')" @click.stop="rightDelete(item.emailId)">
+                    <Icon icon="material-symbols:delete-outline-rounded" width="14" height="14"/>
+                  </button>
+                </div>
               </div>
             </div>
             <skeletonBlock v-else-if="item.expand === 'loading'"
@@ -1396,10 +1408,62 @@ function loadData() {
     font-size: 12px;
     white-space: nowrap;
     display: flex;
-    padding-left: 15px;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 3px;
+    padding-left: 10px;
+    position: relative;
+
     @media (max-width: 1366px) {
       display: none;
+    }
+  }
+
+  /* Quick action buttons — float over time on hover */
+  .row-quick-actions {
+    display: flex;
+    gap: 1px;
+    position: absolute;
+    right: 0;
+    opacity: 0;
+    transform: translateX(4px);
+    transition: opacity 0.14s cubic-bezier(0.22,1,0.36,1),
+                transform 0.14s cubic-bezier(0.22,1,0.36,1);
+    background: var(--email-hover-background);
+    border-radius: 4px;
+    padding: 1px;
+  }
+
+  &:hover .row-quick-actions {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  &:hover .email-time {
+    opacity: 0;
+  }
+
+  .rqa-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border: none;
+    background: transparent;
+    border-radius: 3px;
+    cursor: pointer;
+    color: var(--secondary-text-color);
+    transition: background 0.10s, color 0.10s;
+
+    &:hover {
+      background: var(--base-fill);
+      color: var(--el-text-color-primary);
+    }
+    &.rqa-danger:hover {
+      background: rgba(204,0,0,0.10);
+      color: #CC0000;
     }
   }
 

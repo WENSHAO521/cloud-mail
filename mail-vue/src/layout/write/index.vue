@@ -928,14 +928,16 @@ function close() {
 }
 </style>
 <style scoped lang="scss">
-/* ── Overlay ─────────────────────────────────── */
+/* ── Overlay — immersive frosted glass backdrop ── */
 .send {
   position: fixed;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.60);
+  background: rgba(0, 0, 0, 0.52);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
   z-index: 2000;
 }
 

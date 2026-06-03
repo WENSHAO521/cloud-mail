@@ -1,5 +1,9 @@
 const zh = {
     compose: '发邮件',
+    commandPlaceholder: '搜索操作或快速跳转…',
+    navigate: '快速跳转',
+    appearance: '外观',
+    darkMode: '切换深色模式',
     inbox: '收件箱',
     drafts: '草稿箱',
     sent: '已发送',

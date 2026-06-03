@@ -1,63 +1,33 @@
 <template>
-  <el-scrollbar class="scroll">
-    <div class="sidebar-inner">
-      <!-- Logo -->
-      <div class="title">
-        <img class="psg-logo" src="/image/psg-logo.png" alt="Panorama Scholarly Group" />
+  <el-scrollbar class="scroll" :class="{ collapsed: uiStore.asideCollapsed }">
+    <div class="sidebar-inner" :class="{ collapsed: uiStore.asideCollapsed }">
+      <!-- Logo + collapse toggle -->
+      <div class="title" :class="{ collapsed: uiStore.asideCollapsed }">
+        <img v-if="!uiStore.asideCollapsed" class="psg-logo" src="/image/psg-logo.png" alt="Panorama Scholarly Group" />
+        <button class="collapse-btn" @click="uiStore.asideCollapsed = !uiStore.asideCollapsed" :title="uiStore.asideCollapsed ? $t('expand') : $t('collapse')">
+          <Icon :icon="uiStore.asideCollapsed ? 'material-symbols:chevron-right-rounded' : 'material-symbols:chevron-left-rounded'" width="18" height="18"/>
+        </button>
       </div>
 
-      <!-- Compose FAB — Google Material style, dark sidebar version -->
-      <div class="compose-btn" v-if="canSend" @click="openCompose">
-        <Icon icon="material-symbols:edit-outline-rounded" width="20" height="20" class="compose-icon"/>
-        <span class="compose-text">{{ $t('compose') }}</span>
-      </div>
+      <!-- Compose FAB -->
+      <el-tooltip :content="$t('compose')" placement="right" :disabled="!uiStore.asideCollapsed">
+        <div class="compose-btn" v-if="canSend" @click="openCompose" :class="{ 'compose-icon-only': uiStore.asideCollapsed }">
+          <Icon icon="material-symbols:edit-outline-rounded" width="20" height="20" class="compose-icon"/>
+          <span class="compose-text" v-if="!uiStore.asideCollapsed">{{ $t('compose') }}</span>
+        </div>
+      </el-tooltip>
 
       <el-menu :collapse="false" style="margin-top: 8px">
-        <el-menu-item @click="router.push({name: 'email'})" index="email"
-                      :class="route.meta.name === 'email' ? 'choose-item' : ''">
-          <Icon icon="hugeicons:mailbox-01" width="20" height="20" />
-          <span class="menu-name">{{$t('inbox')}}</span>
-        </el-menu-item>
-        <el-menu-item @click="router.push({name: 'send'})" index="send" v-perm="'email:send'"
-                      :class="route.meta.name === 'send' ? 'choose-item' : ''">
-          <Icon icon="cil:send" width="20" height="20" />
-          <span class="menu-name">{{$t('sent')}}</span>
-        </el-menu-item>
-        <el-menu-item @click="router.push({name: 'draft'})" index="draft" v-perm="'email:send'"
-                      :class="route.meta.name === 'draft' ? 'choose-item' : ''">
-          <Icon icon="ep:document" width="19" height="19" />
-          <span class="menu-name">{{$t('drafts')}}</span>
-        </el-menu-item>
-        <el-menu-item @click="router.push({name: 'star'})" index="star"
-                      :class="route.meta.name === 'star' ? 'choose-item' : ''">
-          <Icon icon="solar:star-line-duotone" width="20" height="20" />
-          <span class="menu-name">{{$t('starred')}}</span>
-        </el-menu-item>
-        <el-menu-item @click="router.push({name: 'archive'})" index="archive"
-                      :class="route.meta.name === 'archive' ? 'choose-item' : ''">
-          <Icon icon="material-symbols:archive-outline-rounded" width="20" height="20" />
-          <span class="menu-name">{{$t('archiveFolder')}}</span>
-        </el-menu-item>
-        <el-menu-item @click="router.push({name: 'spam'})" index="spam"
-                      :class="route.meta.name === 'spam' ? 'choose-item' : ''">
-          <Icon icon="material-symbols:report-outline-rounded" width="20" height="20" />
-          <span class="menu-name">{{$t('spam')}}</span>
-        </el-menu-item>
-        <el-menu-item @click="router.push({name: 'templates'})" index="templates"
-                      :class="route.meta.name === 'templates' ? 'choose-item' : ''">
-          <Icon icon="material-symbols:description-outline-rounded" width="20" height="20" />
-          <span class="menu-name">{{$t('templates')}}</span>
-        </el-menu-item>
-        <el-menu-item @click="router.push({name: 'groups'})" index="groups"
-                      :class="route.meta.name === 'groups' ? 'choose-item' : ''">
-          <Icon icon="material-symbols:group-outline" width="20" height="20" />
-          <span class="menu-name">{{$t('contactGroups')}}</span>
-        </el-menu-item>
-        <el-menu-item @click="router.push({name: 'setting'})" index="setting"
-                      :class="route.meta.name === 'setting' ? 'choose-item' : ''">
-          <Icon icon="fluent:settings-48-regular" width="20" height="20" />
-          <span class="menu-name">{{$t('settings')}}</span>
-        </el-menu-item>
+        <el-tooltip v-for="item in navItems" :key="item.name"
+                    :content="$t(item.labelKey)" placement="right"
+                    :disabled="!uiStore.asideCollapsed">
+          <el-menu-item @click="router.push({name: item.name})" :index="item.name"
+                        :class="route.meta.name === item.name ? 'choose-item' : ''"
+                        v-perm="item.perm || true">
+            <Icon :icon="item.icon" width="20" height="20" />
+            <span class="menu-name" v-if="!uiStore.asideCollapsed">{{$t(item.labelKey)}}</span>
+          </el-menu-item>
+        </el-tooltip>
 
         <div class="manage-title" v-perm="['all-email:query','user:query','role:query','setting:query','analysis:query','reg-key:query']">
           <div>{{$t('manage')}}</div>
@@ -111,6 +81,18 @@ const uiStore = useUiStore();
 
 const canSend = computed(() => hasPerm('email:send'));
 
+const navItems = [
+  { name: 'email',     labelKey: 'inbox',         icon: 'hugeicons:mailbox-01' },
+  { name: 'send',      labelKey: 'sent',          icon: 'cil:send',                       perm: 'email:send' },
+  { name: 'draft',     labelKey: 'drafts',        icon: 'ep:document',                    perm: 'email:send' },
+  { name: 'star',      labelKey: 'starred',       icon: 'solar:star-line-duotone' },
+  { name: 'archive',   labelKey: 'archiveFolder', icon: 'material-symbols:archive-outline-rounded' },
+  { name: 'spam',      labelKey: 'spam',          icon: 'material-symbols:report-outline-rounded' },
+  { name: 'templates', labelKey: 'templates',     icon: 'material-symbols:description-outline-rounded' },
+  { name: 'groups',    labelKey: 'contactGroups', icon: 'material-symbols:group-outline' },
+  { name: 'setting',   labelKey: 'settings',      icon: 'fluent:settings-48-regular' },
+];
+
 function openCompose() {
   uiStore.writerRef?.open?.();
 }
@@ -120,6 +102,9 @@ function openCompose() {
 .scroll {
   height: 100%;
   width: 256px;
+  transition: width 0.22s cubic-bezier(0.22,1,0.36,1);
+
+  &.collapsed { width: 56px; }
 
   :deep(.el-scrollbar__wrap) {
     background: var(--aside-backgound);
@@ -131,27 +116,58 @@ function openCompose() {
   min-height: 100%;
   background: var(--aside-backgound);
   padding-bottom: 24px;
+  transition: width 0.22s cubic-bezier(0.22,1,0.36,1);
+  overflow: hidden;
+
+  &.collapsed { width: 56px; }
 }
 
-/* Logo — white on black, red underline */
+/* Logo row */
 .title {
   margin: 0;
-  padding: 16px 18px 14px;
+  padding: 14px 14px 12px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   border-bottom: 2px solid #CC0000;
+  gap: 8px;
+
+  &.collapsed {
+    justify-content: center;
+    padding: 14px 8px 12px;
+  }
 
   .psg-logo {
-    height: 32px;
+    height: 28px;
     width: auto;
-    max-width: 180px;
+    max-width: 160px;
     display: block;
     object-fit: contain;
     filter: invert(1);
   }
 }
 
-/* Compose — aligned with menu items */
+.collapse-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: rgba(255,255,255,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.12s, color 0.12s;
+
+  &:hover {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.80);
+  }
+}
+
+/* Compose button */
 .compose-btn {
   display: flex;
   align-items: center;
@@ -165,6 +181,13 @@ function openCompose() {
   cursor: pointer;
   user-select: none;
   transition: background 0.15s ease;
+  justify-content: flex-start;
+
+  &.compose-icon-only {
+    padding: 0;
+    justify-content: center;
+    margin: 10px 8px 6px;
+  }
 
   .compose-icon {
     color: #ffffff;
@@ -181,14 +204,9 @@ function openCompose() {
   }
 
   @media (hover: hover) {
-    &:hover {
-      background: #A00000;
-    }
+    &:hover { background: #A00000; }
   }
-
-  &:active {
-    background: #880000;
-  }
+  &:active { background: #880000; }
 }
 
 /* Section label */
@@ -213,6 +231,12 @@ function openCompose() {
   transition: background 0.12s ease !important;
   color: rgba(255, 255, 255, 0.60) !important;
   gap: 0;
+
+  .sidebar-inner.collapsed & {
+    padding: 0 !important;
+    margin: 1px 4px !important;
+    justify-content: center !important;
+  }
 }
 
 /* Active — gradient background only, no bar */

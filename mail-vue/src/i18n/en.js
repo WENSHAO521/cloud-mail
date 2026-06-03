@@ -1,5 +1,9 @@
 const en = {
     compose: 'Compose',
+    commandPlaceholder: 'Search actions and navigate…',
+    navigate: 'Navigate',
+    appearance: 'Appearance',
+    darkMode: 'Toggle dark mode',
     inbox: 'Inbox',
     drafts: 'Drafts',
     sent: 'Sent',

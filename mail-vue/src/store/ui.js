@@ -3,6 +3,8 @@ import { defineStore } from 'pinia'
 export const useUiStore = defineStore('ui', {
     state: () => ({
         asideShow: window.innerWidth > 1024,
+        asideCollapsed: false,
+        commandPaletteShow: false,
         accountShow: false,
         backgroundLoading: true,
         changeNotice: 0,
@@ -27,6 +29,6 @@ export const useUiStore = defineStore('ui', {
         }
     },
     persist: {
-        pick: ['accountShow','dark'],
+        pick: ['accountShow','dark','asideCollapsed'],
     },
 })

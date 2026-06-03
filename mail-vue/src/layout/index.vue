@@ -1,4 +1,5 @@
 <template>
+  <CommandPalette ref="cmdPaletteRef"/>
   <el-container class="layout">
     <el-aside
         class="aside"
@@ -25,6 +26,7 @@
 import Aside from '@/layout/aside/index.vue'
 import Header from '@/layout/header/index.vue'
 import Main from '@/layout/main/index.vue'
+import CommandPalette from '@/components/command-palette/index.vue'
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import {useUiStore} from "@/store/ui.js";
 import {useNotificationStore} from "@/store/notification.js";
@@ -36,6 +38,7 @@ const uiStore = useUiStore();
 const notificationStore = useNotificationStore();
 const emailStore = useEmailStore();
 const writerRef = ref({})
+const cmdPaletteRef = ref(null)
 const isMobile = ref(window.innerWidth < 1025)
 const handleResize = () => {
   isMobile.value = window.innerWidth < 1025
@@ -43,6 +46,13 @@ const handleResize = () => {
 }
 
 function handleKeydown(e) {
+  /* Ctrl+K / Cmd+K → command palette */
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault()
+    cmdPaletteRef.value?.open()
+    return
+  }
+
   const tag = e.target.tagName
   if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable) return
   if (e.ctrlKey || e.metaKey || e.altKey) return
@@ -106,7 +116,7 @@ onBeforeUnmount(() => {
 
 .el-aside {
   width: auto;
-  transition: all 100ms ease;
+  transition: all 220ms cubic-bezier(0.22,1,0.36,1);
 }
 
 .layout {
