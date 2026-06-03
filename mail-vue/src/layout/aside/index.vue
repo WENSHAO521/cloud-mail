@@ -113,107 +113,103 @@ function openCompose() {
   padding-bottom: 24px;
 }
 
-/* Logo */
+/* Logo — white on black, red underline */
 .title {
   margin: 0;
   padding: 16px 18px 14px;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid rgba(200, 151, 10, 0.15);
+  border-bottom: 2px solid #CC0000;
 
   .psg-logo {
-    height: 32px;
+    height: 30px;
     width: auto;
     max-width: 172px;
     display: block;
     object-fit: contain;
-    filter: invert(1) brightness(1.1);
+    filter: invert(1);
   }
 }
 
-/* Compose — gold gradient CTA */
+/* Compose — solid red, rectangular */
 .compose-btn {
   display: flex;
   align-items: center;
   gap: 10px;
   margin: 14px 14px 10px;
-  padding: 11px 18px;
-  border-radius: 6px;
-  background: linear-gradient(135deg, #c8970a, #e8b520);
+  padding: 10px 18px;
+  border-radius: 3px;
+  background: #CC0000;
   border: none;
   cursor: pointer;
   user-select: none;
-  transition: opacity 0.18s ease, box-shadow 0.18s ease;
-  box-shadow: 0 2px 8px rgba(200, 151, 10, 0.35);
+  transition: background 0.15s ease;
 
   .compose-icon {
-    color: #fff;
+    color: #ffffff;
     flex-shrink: 0;
-    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.2));
   }
 
   .compose-text {
-    font-size: 13.5px;
-    font-weight: 600;
-    color: #fff;
-    letter-spacing: 0.04em;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.18);
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
 
   @media (hover: hover) {
     &:hover {
-      opacity: 0.9;
-      box-shadow: 0 4px 12px rgba(200, 151, 10, 0.45);
+      background: #A00000;
     }
   }
 
   &:active {
-    opacity: 0.82;
-    box-shadow: 0 1px 4px rgba(200, 151, 10, 0.3);
+    background: #880000;
   }
 }
 
 /* Section label */
 .manage-title {
-  margin-top: 18px;
+  margin-top: 20px;
   margin-bottom: 2px;
-  padding: 12px 20px 5px;
-  font-size: 9.5px;
+  padding: 10px 18px 5px;
+  font-size: 9px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(200, 151, 10, 0.5);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.25);
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 /* Menu item base */
 .el-menu-item {
-  margin: 1px 10px !important;
-  border-radius: 5px !important;
+  margin: 1px 8px !important;
+  border-radius: 2px !important;
   height: 38px !important;
   padding: 0 12px !important;
-  transition: background 0.15s ease !important;
-  color: rgba(255, 255, 255, 0.65) !important;
+  transition: background 0.12s ease !important;
+  color: rgba(255, 255, 255, 0.60) !important;
   gap: 0;
 }
 
-/* Active — navy gold accent */
+/* Active — red left bar accent */
 .choose-item {
   font-weight: 600 !important;
-  background: var(--gold-subtle) !important;
-  color: #e8c84a !important;
+  background: rgba(204, 0, 0, 0.15) !important;
+  color: #ffffff !important;
   border-left: none !important;
-  box-shadow: inset 3px 0 0 var(--gold-accent) !important;
+  box-shadow: inset 3px 0 0 #CC0000 !important;
 }
 
 .choose-item .menu-name {
-  color: #e8c84a !important;
+  color: #ffffff !important;
 }
 
 @media (hover: hover) {
   .el-menu-item:not(.choose-item):hover {
     background: rgba(255, 255, 255, 0.07) !important;
-    color: rgba(255, 255, 255, 0.90) !important;
+    color: rgba(255, 255, 255, 0.88) !important;
   }
 }
 
@@ -233,7 +229,7 @@ function openCompose() {
 
 :deep(.el-menu-item) {
   background: transparent;
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(255, 255, 255, 0.60);
 }
 
 :deep(.el-menu) {
@@ -243,11 +239,11 @@ function openCompose() {
 
 .el-menu {
   border-right: 0;
-  width: 236px;
+  width: 240px;
 }
 
 :deep(.el-divider__text) {
   background: var(--aside-backgound);
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.3);
 }
 </style>

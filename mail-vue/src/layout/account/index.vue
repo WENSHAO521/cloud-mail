@@ -692,15 +692,15 @@ path[fill="#ffdda1"] {
     }
 
     .action-active {
-      color: #c8970a;
+      color: #CC0000;
     }
   }
 
-  /* ── Selected: left navy+gold accent ── */
+  /* ── Selected: left red accent ── */
   .item-choose {
     background: var(--el-bg-color) !important;
-    border-color: rgba(200, 151, 10, 0.25) !important;
-    border-left-color: #c8970a !important;
+    border-color: var(--light-border-color) !important;
+    border-left-color: #CC0000 !important;
     box-shadow: var(--card-shadow) !important;
 
     .item-email {
@@ -713,8 +713,8 @@ path[fill="#ffdda1"] {
     }
 
     .item-avatar {
-      background: linear-gradient(135deg, #1a3560, #2a4c8a);
-      color: #e8c84a;
+      background: #111111;
+      color: #ffffff;
     }
   }
 }

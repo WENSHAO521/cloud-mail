@@ -232,20 +232,18 @@ function formatName(email) {
 }
 
 .breadcrumb-item {
-  font-weight: 600;
-  font-size: 14px;
-  color: var(--navy-primary);
+  font-weight: 700;
+  font-size: 13.5px;
+  color: var(--el-text-color-primary);
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   margin-left: 6px;
-  letter-spacing: 0.02em;
-}
-.dark .breadcrumb-item {
-  color: #d0daf0;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
-/* Center: compose button */
+/* Center: compose button — solid red, sharp */
 .compose-center {
   display: flex;
   justify-content: center;
@@ -260,23 +258,21 @@ function formatName(email) {
   align-items: center;
   gap: 8px;
   padding: 7px 20px;
-  border-radius: 6px;
-  background: linear-gradient(135deg, #c8970a, #e8b520);
+  border-radius: 3px;
+  background: #CC0000;
   border: none;
   color: #ffffff;
   cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  transition: opacity 0.15s, box-shadow 0.15s;
-  box-shadow: 0 2px 8px rgba(200, 151, 10, 0.30);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: background 0.12s;
   user-select: none;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.15);
 
   @media (hover: hover) {
     &:hover {
-      opacity: 0.9;
-      box-shadow: 0 3px 12px rgba(200, 151, 10, 0.40);
+      background: #A00000;
     }
   }
 }
@@ -291,24 +287,21 @@ function formatName(email) {
 .icon-btn {
   width: 34px;
   height: 34px;
-  border-radius: 6px;
+  border-radius: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   color: var(--secondary-text-color);
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.12s, color 0.12s;
   flex-shrink: 0;
 
   @media (hover: hover) {
     &:hover {
       background: var(--base-fill);
-      color: var(--navy-primary);
+      color: var(--el-text-color-primary);
     }
   }
-}
-.dark .icon-btn:hover {
-  color: #d0daf0 !important;
 }
 
 /* Avatar */
@@ -317,8 +310,8 @@ function formatName(email) {
   align-items: center;
   cursor: pointer;
   padding: 3px 4px 3px 4px;
-  border-radius: 6px;
-  transition: background 0.15s;
+  border-radius: 2px;
+  transition: background 0.12s;
   gap: 2px;
 
   @media (hover: hover) {
@@ -329,9 +322,9 @@ function formatName(email) {
 .avatar-circle {
   width: 30px;
   height: 30px;
-  border-radius: 5px;
-  background: linear-gradient(135deg, #1a3560, #2a4c8a);
-  color: #e8c84a;
+  border-radius: 2px;
+  background: #111111;
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -340,7 +333,6 @@ function formatName(email) {
   flex-shrink: 0;
   user-select: none;
   letter-spacing: 0.02em;
-  box-shadow: 0 1px 4px rgba(26, 53, 96, 0.30);
 }
 
 .chevron {
@@ -357,24 +349,23 @@ function formatName(email) {
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 18px 20px 12px;
-    background: linear-gradient(135deg, #f0f3fb, #f8f9fc);
-    border-bottom: 1px solid var(--light-border-color);
+    padding: 16px 20px 14px;
+    border-bottom: 2px solid #111111;
+    background: #FAFAFA;
   }
 
   .details-avatar {
-    width: 44px;
-    height: 44px;
-    border-radius: 8px;
-    background: linear-gradient(135deg, #1a3560, #2a4c8a);
-    color: #e8c84a;
-    font-size: 18px;
+    width: 42px;
+    height: 42px;
+    border-radius: 2px;
+    background: #111111;
+    color: #ffffff;
+    font-size: 17px;
     font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(26, 53, 96, 0.25);
   }
 
   .details-info {
@@ -383,31 +374,31 @@ function formatName(email) {
   }
 
   .user-name {
-    font-size: 14px;
-    font-weight: 600;
-    color: #1a3560;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #111111;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    letter-spacing: 0.01em;
   }
-  .dark .user-name { color: #d0daf0; }
 
   .detail-email {
-    font-size: 11.5px;
+    font-size: 11px;
     color: var(--regular-text-color);
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     cursor: pointer;
-    margin-top: 2px;
+    margin-top: 3px;
     font-family: 'IBM Plex Mono', monospace;
     @media (hover: hover) {
-      &:hover { color: #c8970a; }
+      &:hover { color: #CC0000; }
     }
   }
 
   .detail-role {
-    padding: 10px 20px 10px;
+    padding: 10px 20px 8px;
   }
 
   .detail-divider {
@@ -432,17 +423,17 @@ function formatName(email) {
     .action-label {
       color: var(--regular-text-color);
       font-weight: 500;
+      letter-spacing: 0.02em;
     }
 
     .action-val {
       display: flex;
       align-items: center;
       gap: 6px;
-      font-weight: 600;
-      color: #1a3560;
+      font-weight: 700;
+      color: var(--el-text-color-primary);
     }
   }
-  .dark .action-val { color: #d0daf0 !important; }
 
   .logout {
     margin-top: 14px;
@@ -454,7 +445,7 @@ function formatName(email) {
 }
 
 :deep(.el-popper.is-pure) {
-  border-radius: 8px;
+  border-radius: 3px;
 }
 
 .el-tooltip__trigger:first-child:focus-visible {
