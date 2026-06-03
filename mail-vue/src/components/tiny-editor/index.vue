@@ -249,10 +249,6 @@ function destroyEditor() {
   border-radius: 0;
 }
 
-:deep(.tox-toolbar__primary) {
-  justify-content: center !important;
-}
-
 :deep(.tox-toolbar__group) {
   padding-left: 0 !important;
   margin: 0 !important;

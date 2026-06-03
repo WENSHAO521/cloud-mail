@@ -126,41 +126,90 @@ button, input, select, textarea {
     z-index: 2100 !important;
 }
 
-/* ── TinyMCE toolbar — match Black/White/Red theme ────────────── */
-/* Replace oxide skin's default blue focus ring with red */
-.tox .tox-tbtn:focus,
-.tox .tox-tbtn--select:focus,
-.tox .tox-split-button:focus {
-    background: rgba(204, 0, 0, 0.07) !important;
-    box-shadow: 0 0 0 2px rgba(204, 0, 0, 0.25) !important;
+/* ── TinyMCE toolbar — Black/White/Red theme ──────────────────── */
+
+/* Centre all toolbar items */
+.tox .tox-toolbar__primary {
+    display: flex !important;
+    justify-content: center !important;
+    flex-wrap: nowrap !important;
+    padding: 2px 8px !important;
+    border-bottom: 1px solid #E8E8E8 !important;
+    background: #FAFAFA !important;
+    gap: 0 !important;
 }
-.tox .tox-tbtn:focus-visible,
-.tox .tox-tbtn--select:focus-visible {
-    outline: 2px solid #CC0000 !important;
-    outline-offset: -2px !important;
+.dark .tox .tox-toolbar__primary {
+    background: #1a1a1a !important;
+    border-bottom-color: #2e2e2e !important;
 }
-/* Active/pressed state */
+
+/* Tighter group separators */
+.tox .tox-toolbar__group {
+    padding: 0 3px !important;
+    border-right: 1px solid rgba(0,0,0,0.08) !important;
+}
+.tox .tox-toolbar__group:last-child {
+    border-right: none !important;
+}
+.dark .tox .tox-toolbar__group {
+    border-right-color: rgba(255,255,255,0.08) !important;
+}
+
+/* Toolbar button base */
+.tox .tox-tbtn {
+    border-radius: 3px !important;
+    width: 26px !important;
+    height: 26px !important;
+    margin: 1px !important;
+}
+
+/* Hover state */
+.tox .tox-tbtn:hover,
+.tox .tox-tbtn--select:hover {
+    background: rgba(0, 0, 0, 0.07) !important;
+    box-shadow: none !important;
+}
+.dark .tox .tox-tbtn:hover {
+    background: rgba(255, 255, 255, 0.10) !important;
+}
+
+/* Active/enabled state — red accent */
 .tox .tox-tbtn--enabled,
 .tox .tox-tbtn--enabled:hover {
     background: rgba(204, 0, 0, 0.10) !important;
     color: #CC0000 !important;
 }
-/* Hover state */
-.tox .tox-tbtn:hover,
-.tox .tox-tbtn--select:hover {
-    background: rgba(0, 0, 0, 0.06) !important;
-    box-shadow: none !important;
+
+/* Focus ring — red */
+.tox .tox-tbtn:focus,
+.tox .tox-tbtn--select:focus,
+.tox .tox-split-button:focus {
+    background: rgba(204, 0, 0, 0.07) !important;
+    box-shadow: 0 0 0 2px rgba(204, 0, 0, 0.25) !important;
+    outline: none !important;
 }
-/* Font/size select dropdown border */
+
+/* Font/size select dropdown */
 .tox .tox-tbtn--bespoke {
-    border: 1px solid transparent !important;
-    border-radius: 2px !important;
+    border: 1px solid rgba(0,0,0,0.10) !important;
+    border-radius: 3px !important;
+    background: #ffffff !important;
+    height: 26px !important;
+    padding: 0 6px !important;
+}
+.dark .tox .tox-tbtn--bespoke {
+    background: #2a2a2a !important;
+    border-color: rgba(255,255,255,0.12) !important;
 }
 .tox .tox-tbtn--bespoke:focus,
 .tox .tox-tbtn--bespoke:focus-visible {
     border-color: #CC0000 !important;
     box-shadow: 0 0 0 2px rgba(204, 0, 0, 0.18) !important;
     outline: none !important;
+}
+.tox .tox-tbtn--bespoke .tox-tbtn__select-label {
+    font-size: 12px !important;
+    font-weight: 500 !important;
 }
 
 :root {
