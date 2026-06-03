@@ -247,25 +247,57 @@ button, input, select, textarea {
     --header-actions-border: inset 0 -1px 0 0 #2E2E2E;
     --loadding-background: rgba(0, 0, 0, 0.3);
     --dark-border: #555555;
-    --base-fill: #282828;
-    --regular-text-color: #BBBBBB;
-    --light-border-color: #2E2E2E;
+    --base-fill: #1E1E1E;
+    --regular-text-color: #999999;
+    /* Dark mode: near-invisible row separators */
+    --light-border-color: #202020;
     --aside-right-border: 1px 0 0 rgba(0, 0, 0, 0.4);
     --choose-account-background: #2a1414;
-    --email-scroll-content-color: rgba(255, 255, 255, 0.3);
-    --email-hover-background: #1E1E1E;
+    /* Dark mode email: read = dim, unread = full white via CSS rules below */
+    --email-scroll-content-color: rgba(255, 255, 255, 0.25);
+    --email-hover-background: #1A1A1A;
     --login-border: 1px solid #2E2E2E;
     --form-desc-color: #999999;
     --login-switch-color: #D93333;
-    --scrollbar-track-color: #555555;
-    --base-border-color: #383838;
-    --secondary-text-color: #888888;
+    --scrollbar-track-color: #444444;
+    --base-border-color: #2E2E2E;
+    --secondary-text-color: #5A5A5A;
     --message-block-color: rgba(28, 28, 28, 0.2);
-    --el-border-color: #2E2E2E !important;
+    --el-border-color: #2A2A2A !important;
 
     --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.25);
     --card-shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.55), 0 1px 4px rgba(0, 0, 0, 0.3);
     --compose-shadow: 0 8px 40px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+/* ── Dark mode email: unread=white, read=dim ─────────────── */
+.dark :deep(.email-row):not(:has(.unread)) .name,
+.dark :deep(.email-row):not(:has(.unread)) .subject-text {
+    color: rgba(255, 255, 255, 0.42) !important;
+}
+.dark :deep(.email-row):has(.unread) .name,
+.dark :deep(.email-row):has(.unread) .subject-text {
+    color: #ffffff !important;
+}
+.dark :deep(.email-row) {
+    border-bottom-color: rgba(255, 255, 255, 0.035) !important;
+}
+
+/* ── Email micro-interaction keyframes ───────────────────── */
+@keyframes email-vanish-up {
+    0%   { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-10px) scale(0.97); }
+}
+@keyframes email-slide-in {
+    0%   { opacity: 0; transform: translateX(-6px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+.email-vanishing {
+    animation: email-vanish-up 0.20s var(--ease-out, ease) forwards;
+    pointer-events: none;
+}
+.email-arriving {
+    animation: email-slide-in 0.22s var(--ease-spring, cubic-bezier(0.34,1.56,0.64,1)) both;
 }
 
 .el-input {

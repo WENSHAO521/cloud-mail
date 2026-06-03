@@ -486,28 +486,30 @@ function submitPwd() {
   margin-top: 10px;
 }
 
-/* ── Data table ── */
+/* ── Data table — no borders, pure whitespace separation ── */
 .data-table {
-  border: 1px solid var(--light-border-color);
-  border-radius: 3px; overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  /* No outer border — card bg does the grouping */
 }
 
 .data-row {
   display: grid;
-  grid-template-columns: 110px 1fr;
+  grid-template-columns: 100px 1fr;
   align-items: center;
-  min-height: 50px;
-  padding: 11px 16px;
-  border-bottom: 1px solid var(--light-border-color);
+  min-height: 44px;
+  padding: 9px 0;
+  /* No border-bottom — breathing room only */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
   gap: 16px;
   transition: background 0.14s cubic-bezier(0.22,1,0.36,1);
+  border-radius: 3px;
 
-  &:hover { background: var(--base-fill); }
+  &:hover { background: var(--base-fill); padding: 9px 6px; }
   &.last { border-bottom: none; }
 
   @media (max-width: 480px) {
-    grid-template-columns: 80px 1fr;
-    padding: 10px 12px;
+    grid-template-columns: 72px 1fr;
   }
 }
 

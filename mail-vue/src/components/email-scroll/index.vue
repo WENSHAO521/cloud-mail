@@ -1158,13 +1158,16 @@ function loadData() {
   display: flex;
   padding: 8px 0;
   justify-content: space-between;
-  border-bottom: 1px solid var(--light-border-color);
+  /* Near-invisible separator — whitespace does the work, not hard lines */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.038);
   cursor: pointer;
   align-items: center;
   position: relative;
-  transition: background 0.16s var(--ease-out, ease), border-left-color 0.16s var(--ease-out, ease);
+  transition: background 0.18s var(--ease-out, ease),
+              border-left-color 0.18s var(--ease-out, ease),
+              box-shadow 0.18s var(--ease-out, ease);
   height: 48px;
-  border-left: 2px solid transparent;
+  border-left: 3px solid transparent;
 
   @media (max-width: 1366px) {
     height: 83px;
@@ -1408,13 +1411,26 @@ function loadData() {
 
   &:hover {
     background-color: var(--email-hover-background);
-    border-left-color: rgba(204, 0, 0, 0.25);
-    z-index: 0;
+    border-left-color: rgba(204, 0, 0, 0.30);
+    box-shadow: inset 0 0 0 0 transparent, 0 1px 6px rgba(0,0,0,0.06);
+    z-index: 1;
   }
 
-  /* Unread row: red left accent */
+  /* Unread: red left accent + glow */
   &:has(.unread) {
     border-left-color: #CC0000;
+  }
+
+  /* Read email: slightly dimmer to create contrast with unread */
+  &:not(:has(.unread)) {
+    .name { color: var(--regular-text-color) !important; }
+    .email-subject .subject-text { color: var(--regular-text-color); }
+  }
+
+  /* Unread email: full brightness */
+  &:has(.unread) {
+    .name { color: var(--el-text-color-primary) !important; }
+    .email-subject .subject-text { color: var(--el-text-color-primary); }
   }
 
   .name {
@@ -1478,8 +1494,9 @@ function loadData() {
   gap: 12px;
   padding: 0 14px;
   height: 38px;
-  border-bottom: 1px solid var(--light-border-color);
-  background: var(--extra-light-fill);
+  /* No grey table-header feel — just a thin separator */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  background: var(--el-bg-color);
 
   .header-left {
     display: flex;
@@ -1497,7 +1514,7 @@ function loadData() {
     grid-template-columns: auto auto;
     align-items: center;
     height: 100%;
-    color: #888888;
+    color: var(--secondary-text-color);
 
     .email-count {
       white-space: nowrap;
@@ -1511,11 +1528,11 @@ function loadData() {
   .icon {
     font-size: 17px;
     cursor: pointer;
-    color: #555555;
-    transition: color 0.12s;
+    color: var(--secondary-text-color);
+    transition: color 0.14s var(--ease-out, ease);
 
     @media (hover: hover) {
-      &:hover { color: #E61919; }
+      &:hover { color: #CC0000; }
     }
   }
 
@@ -1554,15 +1571,22 @@ function loadData() {
 }
 
 .unread {
-  height: 6px;
-  width: 6px;
+  height: 7px;
+  width: 7px;
   background: #CC0000;
   margin-bottom: 1px;
   margin-right: 6px;
   border-radius: 50%;
   display: inline-block;
   flex-shrink: 0;
-  box-shadow: 0 0 0 2px rgba(204, 0, 0, 0.15);
+  /* Glowing dot — like modern Superhuman/Hey unread indicator */
+  box-shadow: 0 0 0 2px rgba(204, 0, 0, 0.18), 0 0 8px rgba(204, 0, 0, 0.30);
+  animation: unread-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes unread-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(204,0,0,0.18), 0 0 8px rgba(204,0,0,0.30); }
+  50%       { box-shadow: 0 0 0 3px rgba(204,0,0,0.10), 0 0 14px rgba(204,0,0,0.20); }
 }
 
 ul {
