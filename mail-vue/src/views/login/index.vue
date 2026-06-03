@@ -636,9 +636,9 @@ function submitRegister() {
 }
 
 .container {
-  background: v-bind(loginOpacity);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: #ffffff;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   padding-left: 40px;
   padding-right: 40px;
   display: flex;
@@ -646,8 +646,8 @@ function submitRegister() {
   justify-content: center;
   width: 450px;
   height: 100%;
-  border-left: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: -24px 0 60px rgba(0, 0, 0, 0.35);
+  border-left: 3px solid #CC0000;
+  box-shadow: -24px 0 60px rgba(0, 0, 0, 0.5);
   @media (max-width: 1024px) {
     padding: 20px 18px;
     width: 384px;
@@ -803,7 +803,7 @@ function submitRegister() {
 
 
 #login-box {
-  background: linear-gradient(160deg, #060e1e 0%, #0c1c3a 35%, #0a1a36 65%, #060e1e 100%);
+  background: #111111;
   font: 100% Arial, sans-serif;
   height: 100%;
   margin: 0;
@@ -814,82 +814,9 @@ function submitRegister() {
   position: relative;
 }
 
-#background-wrap {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-@keyframes floatOrb {
-  0%, 100% { transform: translate(0, 0); }
-  25%       { transform: translate(4%, -5%); }
-  50%       { transform: translate(-3%, 6%); }
-  75%       { transform: translate(-6%, -2%); }
-}
-
-/* Gold & navy floating orbs replacing old clouds */
-.cloud {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(72px);
-  opacity: 0.45;
-  background: none;
-  box-shadow: none;
-}
-
-.cloud:after,
-.cloud:before {
-  display: none;
-}
-
-.x1 {
-  width: 520px;
-  height: 520px;
-  background: radial-gradient(circle, rgba(200, 151, 10, 0.85), transparent 68%);
-  top: -120px;
-  left: -80px;
-  animation: floatOrb 32s ease-in-out infinite;
-}
-
-.x2 {
-  width: 340px;
-  height: 340px;
-  background: radial-gradient(circle, rgba(232, 181, 32, 0.7), transparent 68%);
-  bottom: -80px;
-  left: 8%;
-  animation: floatOrb 22s ease-in-out infinite reverse;
-}
-
-.x3 {
-  width: 280px;
-  height: 280px;
-  background: radial-gradient(circle, rgba(26, 53, 96, 0.9), transparent 68%);
-  top: 35%;
-  left: 18%;
-  animation: floatOrb 28s ease-in-out infinite;
-  opacity: 0.6;
-}
-
-.x4 {
-  width: 240px;
-  height: 240px;
-  background: radial-gradient(circle, rgba(200, 151, 10, 0.6), transparent 68%);
-  top: 55%;
-  right: 28%;
-  animation: floatOrb 19s ease-in-out infinite reverse;
-}
-
-.x5 {
-  width: 420px;
-  height: 420px;
-  background: radial-gradient(circle, rgba(42, 76, 138, 0.75), transparent 68%);
-  bottom: 5%;
-  right: -60px;
-  animation: floatOrb 24s ease-in-out infinite;
-  opacity: 0.5;
-}
+/* No decorative orbs — German austerity */
+#background-wrap { display: none; }
+.cloud { display: none; }
 
 /* ── Left branding panel ── */
 .brand-panel {
@@ -902,6 +829,7 @@ function submitRegister() {
   display: flex;
   align-items: center;
   justify-content: center;
+  border-right: 1px solid #222222;
 
   @media (max-width: 1100px) {
     display: none;
@@ -916,39 +844,37 @@ function submitRegister() {
   padding: 0 40px;
 
   .brand-compass {
-    width: 140px;
+    width: 160px;
     height: auto;
-    margin-bottom: 28px;
-    border-radius: 14px;
-    background: #ffffff;
-    padding: 14px 18px;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+    margin-bottom: 32px;
+    filter: invert(1);
+    opacity: 0.92;
   }
 
   .brand-org {
     font-family: Georgia, 'Times New Roman', serif;
-    font-size: 21px;
+    font-size: 20px;
     font-weight: 700;
     color: #ffffff;
-    letter-spacing: 0.02em;
-    line-height: 1.35;
+    letter-spacing: 0.04em;
+    line-height: 1.4;
     margin-bottom: 8px;
   }
 
   .brand-product {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.45);
-    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    margin-bottom: 32px;
+    margin-bottom: 36px;
   }
 
   .brand-rule {
-    width: 52px;
-    height: 1.5px;
-    background: linear-gradient(90deg, transparent, #c8970a, transparent);
-    margin-bottom: 28px;
+    width: 32px;
+    height: 2px;
+    background: #CC0000;
+    margin-bottom: 32px;
   }
 
   .brand-points {
@@ -960,20 +886,19 @@ function submitRegister() {
     gap: 14px;
 
     li {
-      color: rgba(255, 255, 255, 0.45);
-      font-size: 13px;
-      letter-spacing: 0.01em;
+      color: rgba(255, 255, 255, 0.38);
+      font-size: 12px;
+      letter-spacing: 0.02em;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       text-align: left;
 
       &::before {
         content: '';
-        width: 5px;
-        height: 5px;
-        border-radius: 50%;
-        background: #c8970a;
+        width: 4px;
+        height: 4px;
+        background: #CC0000;
         flex-shrink: 0;
       }
     }
@@ -982,13 +907,27 @@ function submitRegister() {
 
 /* ── Form logo badge ── */
 .form-badge {
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 
   img {
-    height: 36px;
+    height: 32px;
     width: auto;
     display: block;
     object-fit: contain;
+  }
+}
+
+/* ── German red primary button ── */
+:deep(.el-button--primary) {
+  background: #CC0000 !important;
+  border-color: #CC0000 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  border-radius: 2px !important;
+
+  &:hover, &:focus {
+    background: #A30000 !important;
+    border-color: #A30000 !important;
   }
 }
 

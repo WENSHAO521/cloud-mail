@@ -617,15 +617,15 @@ path[fill="#ffdda1"] {
     flex-shrink: 0;
     width: 36px;
     height: 36px;
-    border-radius: 9px;
-    background: linear-gradient(135deg, #1a3560, #2a4c8a);
+    border-radius: 4px;
+    background: #111111;
     color: #ffffff;
     font-weight: 700;
     font-size: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 6px rgba(26, 53, 96, 0.22);
+    box-shadow: none;
     user-select: none;
   }
 
@@ -675,19 +675,19 @@ path[fill="#ffdda1"] {
 
   /* ── Selected state: gold left accent ── */
   .item-choose {
-    background: var(--gold-accent-subtle) !important;
-    box-shadow: inset 3px 0 0 var(--gold-accent) !important;
+    background: var(--red-accent-subtle) !important;
+    box-shadow: inset 3px 0 0 var(--red-accent) !important;
     border-color: transparent !important;
 
     .item-email {
       font-weight: 600;
-      color: var(--gold-accent-dark);
+      color: var(--red-accent-dark);
     }
 
     .item-avatar {
-      background: linear-gradient(135deg, #c8970a, #e8b520);
-      color: #0c1c3a;
-      box-shadow: 0 2px 6px rgba(200, 151, 10, 0.3);
+      background: #CC0000;
+      color: #ffffff;
+      box-shadow: none;
     }
   }
 }

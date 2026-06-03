@@ -80,24 +80,23 @@ const route = useRoute();
 <style lang="scss" scoped>
 
 .title {
-  margin: 16px 12px 8px;
-  height: 56px;
-  border-radius: 10px;
+  margin: 20px 14px 12px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #ffffff;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
-  transition: var(--transition-smooth);
-  max-width: 236px;
-  padding: 0 16px;
+  background: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  max-width: 232px;
+  padding: 0 8px 12px;
 
   .psg-logo {
-    height: 32px;
+    height: 36px;
     width: auto;
-    max-width: 180px;
+    max-width: 190px;
     display: block;
     object-fit: contain;
+    filter: invert(1);
   }
 }
 
@@ -122,10 +121,10 @@ const route = useRoute();
 
 .choose-item {
   font-weight: 700;
-  background: var(--gold-accent-subtle) !important;
+  background: var(--red-accent-subtle) !important;
   backdrop-filter: none;
-  box-shadow: inset 3px 0 0 var(--gold-accent);
-  color: var(--gold-accent-light) !important;
+  box-shadow: inset 3px 0 0 var(--red-accent);
+  color: #ffffff !important;
 }
 
 @media (hover: hover) {

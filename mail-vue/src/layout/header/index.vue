@@ -343,7 +343,7 @@ function formatName(email) {
     margin-top: 20px;
     height: 44px;
     width: 44px;
-    background: linear-gradient(135deg, #1a3560, #2a4c8a);
+    background: #111111;
     color: #ffffff;
     border: none;
     font-size: 18px;
@@ -380,10 +380,10 @@ function formatName(email) {
   .writer {
     width: 36px;
     height: 36px;
-    border-radius: 10px;
-    color: #0c1c3a;
-    background: linear-gradient(135deg, #c8970a 0%, #e8b520 55%, #c8970a 100%);
-    box-shadow: 0 2px 8px rgba(200, 151, 10, 0.35);
+    border-radius: 4px;
+    color: #ffffff;
+    background: #CC0000;
+    box-shadow: none;
     transition: var(--transition-smooth);
     display: flex;
     align-items: center;
@@ -398,8 +398,7 @@ function formatName(email) {
 
   @media (hover: hover) {
     &:hover .writer {
-      transform: scale(1.06);
-      box-shadow: 0 4px 14px rgba(200, 151, 10, 0.5);
+      background: #A30000;
     }
   }
 }
@@ -462,7 +461,7 @@ function formatName(email) {
     cursor: pointer;
 
     .avatar-text {
-      background: linear-gradient(135deg, #1a3560, #2a4c8a);
+      background: #111111;
       color: #ffffff;
       height: 30px;
       width: 30px;
