@@ -2,11 +2,11 @@
   <div class="box">
     <div class="header-actions">
       <Icon class="icon" icon="material-symbols-light:arrow-back-ios-new" width="20" height="20" @click="handleBack"/>
-      <Icon v-perm="'email:delete'" class="icon" icon="uiw:delete" width="16" height="16" @click="handleDelete"/>
-      <span class="star" v-if="emailStore.contentData.showStar">
-        <Icon class="icon" @click="changeStar" v-if="email.isStar" icon="fluent-color:star-16" width="20" height="20"/>
-        <Icon class="icon" @click="changeStar" v-else icon="solar:star-line-duotone" width="18" height="18"/>
-      </span>
+      <div class="header-divider"></div>
+      <Icon v-perm="'email:delete'" class="icon danger" icon="material-symbols:delete-outline-rounded" width="19" height="19" @click="handleDelete"/>
+      <Icon class="icon" @click="changeStar" v-if="emailStore.contentData.showStar && email.isStar" icon="fluent-color:star-16" width="20" height="20"/>
+      <Icon class="icon" @click="changeStar" v-if="emailStore.contentData.showStar && !email.isStar" icon="solar:star-line-duotone" width="18" height="18"/>
+      <div class="header-divider" v-if="emailStore.contentData.showReply"></div>
       <Icon class="icon" v-if="emailStore.contentData.showReply" v-perm="'email:send'" @click="openReply" icon="la:reply" width="21" height="21" />
       <Icon class="icon" v-if="emailStore.contentData.showReply" v-perm="'email:send'" @click="openReplyAll" icon="la:reply-all" width="22" height="22" />
       <Icon class="icon" v-if="emailStore.contentData.showReply" v-perm="'email:send'" @click="openForward" icon="iconoir:arrow-up-right" width="20" height="20" />
@@ -18,22 +18,24 @@
           {{ email.subject }}
         </div>
         <div class="content">
-          <div class="email-info">
-            <div>
-              <div class="send"><span class="send-source">{{$t('from')}}</span>
-                <div class="send-name">
-                  <span class="send-name-title">{{ email.name }}</span>
-                  <span><{{ email.sendEmail }}></span>
+          <div class="email-meta">
+            <div class="meta-avatar">{{ (email.name || email.sendEmail || '?')[0].toUpperCase() }}</div>
+            <div class="meta-body">
+              <div class="meta-top">
+                <div class="meta-identity">
+                  <span class="meta-sender-name">{{ email.name }}</span>
+                  <span class="meta-sender-email">{{ email.sendEmail }}</span>
                 </div>
+                <div class="meta-date">{{ formatDetailDate(email.createTime) }}</div>
               </div>
-              <div class="receive"><span class="source">{{$t('recipient')}}</span><span class="receive-email">{{  formateReceive(email.recipient) }}</span></div>
-              <div class="date">
-                <div>{{ formatDetailDate(email.createTime) }}</div>
+              <div class="meta-to">
+                <span class="meta-label">{{ $t('recipient') }}</span>
+                <span class="meta-recipients">{{ formateReceive(email.recipient) }}</span>
               </div>
+              <el-alert v-if="email.status === 3" :closable="false" :title="toMessage(email.message)" class="email-msg" type="error" show-icon />
+              <el-alert v-if="email.status === 4" :closable="false" :title="$t('complained')" class="email-msg" type="warning" show-icon />
+              <el-alert v-if="email.status === 5" :closable="false" :title="$t('delayed')" class="email-msg" type="warning" show-icon />
             </div>
-            <el-alert v-if="email.status === 3" :closable="false" :title="toMessage(email.message)" class="email-msg" type="error" show-icon />
-            <el-alert v-if="email.status === 4" :closable="false" :title="$t('complained')" class="email-msg" type="warning" show-icon />
-            <el-alert v-if="email.status === 5" :closable="false" :title="$t('delayed')" class="email-msg" type="warning" show-icon />
           </div>
           <el-scrollbar class="htm-scrollbar" :class="email.attList.length === 0 ? 'bottom-distance' : ''">
             <ShadowHtml class="shadow-html" :html="formatImage(email.content)" v-if="email.content" />
@@ -223,287 +225,291 @@ const handleDelete = () => {
 .box {
   height: 100%;
   overflow: hidden;
-  background: #ffffff;
+  background: var(--el-bg-color);
 }
 
+/* ── Toolbar ── */
 .header-actions {
-  padding: 0 16px;
-  height: 44px;
+  padding: 0 20px;
+  height: 48px;
   display: flex;
   align-items: center;
-  gap: 18px;
-  border-bottom: 1px solid #E8E8E8;
-  background: #ffffff;
+  gap: 4px;
+  border-bottom: 1px solid var(--light-border-color);
+  background: var(--el-bg-color);
+}
 
-  .star {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 21px;
-  }
+.header-divider {
+  width: 1px;
+  height: 16px;
+  background: var(--light-border-color);
+  margin: 0 6px;
+  flex-shrink: 0;
+}
 
-  .icon {
-    cursor: pointer;
-    color: #555555;
-    transition: color 0.12s;
-    display: flex;
-    align-items: center;
+.star {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    @media (hover: hover) {
-      &:hover { color: #E61919; }
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--regular-text-color);
+  transition: background 0.14s var(--ease-out), color 0.14s;
+  flex-shrink: 0;
+
+  @media (hover: hover) {
+    &:hover {
+      background: var(--base-fill);
+      color: var(--el-text-color-primary);
+    }
+    &.danger:hover {
+      background: rgba(204, 0, 0, 0.07);
+      color: #CC0000;
     }
   }
 }
 
+/* ── Reading area ── */
 .scrollbar {
-  height: calc(100% - 44px);
+  height: calc(100% - 48px);
   width: 100%;
 }
 
 .container {
-  font-size: 14px;
+  font-size: 14.5px;
   max-width: 860px;
   margin: 0 auto;
-  padding: 32px 24px;
+  padding: 52px 56px 64px;
 
-  @media (max-width: 1023px) {
-    padding: 20px 16px;
+  @media (max-width: 1200px) {
+    padding: 36px 36px 48px;
   }
-
-  .email-title {
-    font-size: 22px;
-    font-weight: 800;
-    margin-bottom: 20px;
-    line-height: 1.3;
-    letter-spacing: -0.02em;
-    color: #111111;
-    border-left: 3px solid #E61919;
-    padding-left: 14px;
+  @media (max-width: 767px) {
+    padding: 24px 20px 40px;
   }
+}
 
-  .htm-scrollbar {
-  }
+/* ── Subject ── */
+.email-title {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+  color: var(--el-text-color-primary);
+  margin-bottom: 32px;
+  word-break: break-word;
+}
 
-  .content {
+/* ── Sender meta card ── */
+.email-meta {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 20px;
+  margin-bottom: 32px;
+  border: 1px solid var(--light-border-color);
+  border-radius: 4px;
+  background: var(--extra-light-fill);
+  transition: border-color 0.15s;
+}
+
+.meta-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: rgba(204, 0, 0, 0.09);
+  border: 1px solid rgba(204, 0, 0, 0.18);
+  color: #CC0000;
+  font-size: 16px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: -0.02em;
+  margin-top: 2px;
+}
+
+.meta-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.meta-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.meta-identity {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+}
+
+.meta-sender-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--el-text-color-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meta-sender-email {
+  font-size: 12px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--secondary-text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meta-date {
+  font-size: 11.5px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--secondary-text-color);
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.meta-to {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.meta-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--secondary-text-color);
+  flex-shrink: 0;
+}
+
+.meta-recipients {
+  font-size: 12.5px;
+  color: var(--regular-text-color);
+  word-break: break-word;
+}
+
+.email-msg {
+  margin-top: 8px;
+  border-radius: 2px !important;
+}
+
+/* ── Content area ── */
+.content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Attachments ── */
+.att {
+  margin-top: 32px;
+  margin-bottom: 32px;
+  border: 1px solid var(--light-border-color);
+  border-top: 2px solid var(--el-text-color-primary);
+  width: fit-content;
+
+  .att-box {
+    min-width: min(420px, calc(100vw - 80px));
+    max-width: 600px;
     display: flex;
     flex-direction: column;
+    gap: 0;
+  }
 
-    .att {
-      margin-top: 30px;
-      margin-bottom: 30px;
-      border: 1px solid var(--light-border-color);
-      padding: 14px;
-      border-radius: 6px;
-      width: fit-content;
-      .att-box {
-        min-width: min(410px,calc(100vw - 60px));
-        max-width: 600px;
-        display: grid;
-        gap: 12px;
-        grid-template-rows: 1fr;
-      }
+  .att-title {
+    padding: 12px 14px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.10em;
+    font-weight: 700;
+    color: var(--el-text-color-primary);
+    border-bottom: 1px solid var(--light-border-color);
 
-      .att-title {
-        margin-bottom: 8px;
-        display: flex;
-        justify-content: space-between;
-        span:first-child {
-          font-weight: bold;
-        }
-      }
+    span:last-child {
+      color: var(--secondary-text-color);
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+  }
 
-      .att-item {
-        cursor: pointer;
-        div {
-          align-self: center;
-        }
-        background: var(--light-ill);
-        padding: 5px 7px;
-        border-radius: 4px;
-        align-self: start;
-        display: grid;
-        grid-template-columns: auto 1fr auto auto;
-        .att-icon {
-          display: grid;
-        }
+  .att-item {
+    cursor: pointer;
+    background: transparent;
+    padding: 10px 14px;
+    border-left: 2px solid transparent;
+    border-bottom: 1px solid var(--light-border-color);
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    align-items: center;
+    transition: border-color 0.14s var(--ease-out), background 0.14s;
 
-        .att-size {
-          color: var(--secondary-text-color);
-        }
+    &:last-child { border-bottom: none; }
 
-        .att-name {
-          margin-left: 8px;
-          margin-right: 8px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          word-break: break-all;
-        }
-
-        .att-image {
-          width: 60px;
-          height: 60px;
-          object-fit: contain;
-        }
-
-        .opt-icon {
-          padding-left: 10px;
-          color: var(--secondary-text-color);
-          align-items: center;
-          display: flex;
-          gap: 8px;
-          cursor: pointer;
-          a {
-            color: var(--secondary-text-color);
-            align-items: center;
-            display: flex;
-          }
-        }
-      }
+    &:hover {
+      background: var(--base-fill);
+      border-left-color: #CC0000;
     }
 
-    .email-info {
-      background: #FAFAFA;
-      border: 1px solid #E8E8E8;
-      border-left: 3px solid #E8E8E8;
-      padding: 14px 16px;
-      margin-bottom: 24px;
+    .att-icon { display: grid; color: var(--regular-text-color); }
 
-      .date {
-        color: #888888;
-        margin-top: 6px;
-        font-size: 12px;
-        letter-spacing: 0.02em;
-      }
-
-      .email-msg {
-        max-width: 400px;
-        width: fit-content;
-        margin-top: 10px;
-        border-radius: 0 !important;
-      }
-
-      .send {
-        display: flex;
-        margin-bottom: 4px;
-
-        .send-name {
-          color: #555555;
-          display: flex;
-          flex-wrap: wrap;
-          gap: 4px;
-        }
-
-        .send-name-title {
-          font-weight: 600;
-          color: #111111;
-        }
-      }
-
-      .receive {
-        margin-bottom: 4px;
-        display: flex;
-        .receive-email {
-          max-width: 700px;
-          word-break: break-word;
-          color: #555555;
-        }
-      }
-
-      .send-source,
-      .source {
-        white-space: nowrap;
-        font-weight: 700;
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        padding-right: 12px;
-        color: #888888;
-        min-width: 60px;
-      }
+    .att-size {
+      color: var(--secondary-text-color);
+      font-size: 11.5px;
+      font-family: 'IBM Plex Mono', monospace;
     }
 
-    .att {
-      margin-top: 24px;
-      margin-bottom: 24px;
-      border: 1px solid #E8E8E8;
-      border-top: 2px solid #111111;
-      padding: 14px;
-      border-radius: 0;
-      width: fit-content;
+    .att-name {
+      margin-left: 10px;
+      margin-right: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 13px;
+      color: var(--el-text-color-primary);
+    }
 
-      .att-box {
-        min-width: min(410px, calc(100vw - 60px));
-        max-width: 600px;
-        display: grid;
-        gap: 8px;
-      }
+    .opt-icon {
+      padding-left: 12px;
+      color: var(--secondary-text-color);
+      align-items: center;
+      display: flex;
+      gap: 8px;
+      transition: color 0.12s;
 
-      .att-title {
-        margin-bottom: 10px;
-        display: flex;
-        justify-content: space-between;
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        font-weight: 700;
-        color: #111111;
+      &:hover { color: #CC0000; }
 
-        span:last-child {
-          color: #888888;
-          font-weight: 400;
-        }
-      }
-
-      .att-item {
-        cursor: pointer;
-        background: #F5F5F5;
-        padding: 8px 10px;
-        border-radius: 0;
-        border-left: 2px solid transparent;
-        display: grid;
-        grid-template-columns: auto 1fr auto auto;
+      a {
+        color: var(--secondary-text-color);
         align-items: center;
-        transition: border-color 0.12s, background 0.12s;
-
-        &:hover {
-          background: #EFEFEF;
-          border-left-color: #E61919;
-        }
-
-        .att-icon { display: grid; }
-
-        .att-size {
-          color: #888888;
-          font-size: 12px;
-        }
-
-        .att-name {
-          margin-left: 10px;
-          margin-right: 10px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          font-size: 13px;
-        }
-
-        .opt-icon {
-          padding-left: 10px;
-          color: #888888;
-          align-items: center;
-          display: flex;
-          gap: 8px;
-          cursor: pointer;
-
-          &:hover { color: #E61919; }
-
-          a {
-            color: #888888;
-            align-items: center;
-            display: flex;
-            &:hover { color: #E61919; }
-          }
-        }
+        display: flex;
+        transition: color 0.12s;
+        &:hover { color: #CC0000; }
       }
     }
   }
@@ -512,22 +518,22 @@ const handleDelete = () => {
 .shadow-html::after {
   content: "";
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  inset: 0;
   background: var(--message-block-color);
   pointer-events: none;
 }
 
 .email-text {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
   white-space: pre-wrap;
   word-break: break-word;
   margin: 0;
   font-size: 13px;
-  line-height: 1.7;
-  color: #333333;
+  line-height: 1.8;
+  color: var(--regular-text-color);
 }
 
 .bottom-distance {
-  margin-bottom: 30px;
+  margin-bottom: 40px;
 }
 </style>

@@ -1162,7 +1162,7 @@ function loadData() {
   cursor: pointer;
   align-items: center;
   position: relative;
-  transition: background 0.12s ease, border-left-color 0.12s ease;
+  transition: background 0.16s var(--ease-out, ease), border-left-color 0.16s var(--ease-out, ease);
   height: 48px;
   border-left: 2px solid transparent;
 
@@ -1171,7 +1171,6 @@ function loadData() {
   }
 
   @media (pointer: coarse) {
-    /* 触屏 */
     user-select: none;
   }
   &.all-email {
@@ -1409,17 +1408,17 @@ function loadData() {
 
   &:hover {
     background-color: var(--email-hover-background);
-    border-left-color: #D8D6D0;
+    border-left-color: rgba(204, 0, 0, 0.25);
     z-index: 0;
   }
 
   /* Unread row: red left accent */
   &:has(.unread) {
-    border-left-color: #E61919;
+    border-left-color: #CC0000;
   }
 
   .name {
-    font-weight: 600 !important;
+    font-weight: 700 !important;
   }
 
   .email-content {
@@ -1431,6 +1430,7 @@ function loadData() {
     font-family: 'IBM Plex Mono', monospace !important;
     font-size: 11px !important;
     letter-spacing: 0.02em !important;
+    color: var(--secondary-text-color) !important;
   }
 
   /*&[data-checked="true"] {
@@ -1554,14 +1554,15 @@ function loadData() {
 }
 
 .unread {
-  height: 5px;
-  width: 5px;
-  background: #E61919;
-  margin-bottom: 2px;
-  margin-right: 5px;
-  border-radius: 0;
+  height: 6px;
+  width: 6px;
+  background: #CC0000;
+  margin-bottom: 1px;
+  margin-right: 6px;
+  border-radius: 50%;
   display: inline-block;
   flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(204, 0, 0, 0.15);
 }
 
 ul {
