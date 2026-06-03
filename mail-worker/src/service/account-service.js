@@ -152,7 +152,7 @@ const accountService = {
 		return orm(c).select().from(account).where(sql`${account.email} COLLATE NOCASE = ${email}`).get();
 	},
 
-	list(c, params, userId) {
+	async list(c, params, userId) {
 
 		let { accountId, size, lastSort } = params;
 
