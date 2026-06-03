@@ -91,7 +91,7 @@ const en = {
     changePerm: 'Change Role',
     from: 'From',
     subject: 'Subject',
-    sender: 'Sender',
+    sender: 'From',
     user: 'User',
     searchByContent: 'Enter text to search',
     noRecipient: 'No recipient',
