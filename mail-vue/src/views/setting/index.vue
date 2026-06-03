@@ -1,22 +1,17 @@
 <template>
   <div class="settings-page">
 
-    <!-- ── Page heading ── -->
     <header class="page-head">
       <h1 class="page-h1">{{ $t('settings') }}</h1>
     </header>
 
-    <!-- ══════════════════════════════
-         PROFILE
-    ══════════════════════════════ -->
-    <div class="setting-row">
-      <div class="row-label">
-        <div class="label-title">{{ $t('profile') }}</div>
-        <div class="label-desc">{{ $t('profileDesc') }}</div>
-      </div>
-      <div class="row-body">
+    <!-- ── Bento top row ── -->
+    <div class="bento-row">
 
-        <!-- Avatar strip -->
+      <!-- LEFT: Profile card -->
+      <div class="bento-card profile-card">
+        <div class="card-label">{{ $t('profile') }}</div>
+
         <div class="avatar-strip">
           <div class="avatar-wrap" @click="triggerUpload">
             <img v-if="userStore.avatar" :src="userStore.avatar" class="avatar-img"/>
@@ -38,13 +33,12 @@
           </div>
         </div>
 
-        <!-- Info rows -->
         <div class="data-table">
           <div class="data-row">
             <span class="data-key">{{ $t('username') }}</span>
             <div class="data-val">
               <template v-if="setNameShow">
-                <el-input v-model="accountName" size="small" style="width:180px"/>
+                <el-input v-model="accountName" size="small" style="width:140px"/>
                 <button class="link-btn" @click="setName">{{ $t('save') }}</button>
                 <button class="link-btn dim" @click="setNameShow = false">{{ $t('cancel') }}</button>
               </template>
@@ -66,102 +60,79 @@
             </div>
           </div>
         </div>
+      </div>
 
-      </div>
-    </div>
+      <!-- RIGHT column: Language + Auto-reply -->
+      <div class="bento-right">
 
-    <!-- ══════════════════════════════
-         LANGUAGE
-    ══════════════════════════════ -->
-    <div class="setting-row">
-      <div class="row-label">
-        <div class="label-title">{{ $t('language') }}</div>
-        <div class="label-desc">{{ $t('languageDesc') }}</div>
-      </div>
-      <div class="row-body">
-        <el-select :model-value="langSelect" style="width:180px" @change="changeLang">
-          <el-option label="中文" value="zh" @pointerdown.prevent.stop="changeLang('zh')"/>
-          <el-option label="English" value="en" @pointerdown.prevent.stop="changeLang('en')"/>
-        </el-select>
-      </div>
-    </div>
-
-    <!-- ══════════════════════════════
-         SIGNATURE
-    ══════════════════════════════ -->
-    <div class="setting-row">
-      <div class="row-label">
-        <div class="label-title">{{ $t('signature') }}</div>
-        <div class="label-desc">{{ $t('signatureDesc') }}</div>
-      </div>
-      <div class="row-body">
-        <div class="editor-shell">
-          <tinyEditor
-            ref="signatureEditorRef"
-            :def-value="signatureText"
-            editor-id="signature-editor"
-            toolbar="bold italic underline | forecolor | link | code"
-            height="160px"
-            @change="onSignatureChange"
-          />
+        <!-- Language card -->
+        <div class="bento-card">
+          <div class="card-label">{{ $t('language') }}</div>
+          <el-select :model-value="langSelect" style="width:180px" @change="changeLang">
+            <el-option label="中文" value="zh" @pointerdown.prevent.stop="changeLang('zh')"/>
+            <el-option label="English" value="en" @pointerdown.prevent.stop="changeLang('en')"/>
+          </el-select>
         </div>
-        <div class="row-action-bar">
-          <el-button type="primary" size="small" :loading="signatureLoading" @click="saveSignature">
-            {{ $t('save') }}
-          </el-button>
-        </div>
-      </div>
-    </div>
 
-    <!-- ══════════════════════════════
-         AUTO-REPLY
-    ══════════════════════════════ -->
-    <div class="setting-row">
-      <div class="row-label">
-        <div class="label-title">{{ $t('autoReply') }}</div>
-        <div class="label-desc">{{ $t('autoReplyDesc') }}</div>
-      </div>
-      <div class="row-body">
-        <div class="toggle-line">
-          <el-switch v-model="autoReplyEnabled" @change="saveAutoReply"/>
-          <span class="toggle-text">{{ autoReplyEnabled ? $t('autoReplyEnabled') : $t('disable') }}</span>
-        </div>
-        <transition name="expand">
-          <div class="autoreply-body" v-if="autoReplyEnabled">
-            <el-input
-              v-model="autoReplyMessage"
-              type="textarea" :rows="4"
-              :placeholder="$t('autoReplyMessage')"
-              resize="none"
-            />
-            <div class="row-action-bar">
-              <el-button type="primary" size="small" :loading="autoReplySaving" @click="saveAutoReply">
-                {{ $t('save') }}
-              </el-button>
+        <!-- Auto-reply card -->
+        <div class="bento-card autoreply-card">
+          <div class="card-label-row">
+            <div class="card-label">{{ $t('autoReply') }}</div>
+            <el-switch v-model="autoReplyEnabled" @change="saveAutoReply"/>
+          </div>
+          <div class="card-sub">{{ $t('autoReplyDesc') }}</div>
+          <transition name="expand">
+            <div class="autoreply-body" v-if="autoReplyEnabled">
+              <el-input
+                v-model="autoReplyMessage"
+                type="textarea" :rows="4"
+                :placeholder="$t('autoReplyMessage')"
+                resize="none"
+              />
+              <div class="row-action-bar">
+                <el-button type="primary" size="small" :loading="autoReplySaving" @click="saveAutoReply">
+                  {{ $t('save') }}
+                </el-button>
+              </div>
             </div>
-          </div>
-        </transition>
+          </transition>
+        </div>
+
       </div>
     </div>
 
-    <!-- ══════════════════════════════
-         DANGER ZONE
-    ══════════════════════════════ -->
-    <div class="setting-row danger-row" v-perm="'my:delete'">
-      <div class="row-label">
-        <div class="label-title red">{{ $t('dangerZone') }}</div>
-        <div class="label-desc">{{ $t('dangerZoneDesc') }}</div>
+    <!-- ── Signature (full width) ── -->
+    <div class="bento-card full-card">
+      <div class="card-label-row">
+        <div class="card-label">{{ $t('signature') }}</div>
+        <el-button type="primary" size="small" :loading="signatureLoading" @click="saveSignature">
+          {{ $t('save') }}
+        </el-button>
       </div>
-      <div class="row-body">
-        <div class="danger-card">
-          <div class="danger-text">
-            <div class="danger-heading">{{ $t('deleteUserBtn') }}</div>
-            <div class="danger-sub">{{ $t('delAccountMsg') }}</div>
-          </div>
-          <el-button type="danger" size="small" @click="deleteConfirm">
-            {{ $t('deleteUserBtn') }}
-          </el-button>
+      <div class="card-sub">{{ $t('signatureDesc') }}</div>
+      <div class="editor-shell">
+        <tinyEditor
+          ref="signatureEditorRef"
+          :def-value="signatureText"
+          editor-id="signature-editor"
+          toolbar="bold italic underline | forecolor | link | code"
+          height="160px"
+          @change="onSignatureChange"
+        />
+      </div>
+    </div>
+
+    <!-- ── Danger zone ── -->
+    <div class="bento-card danger-card-wrap" v-perm="'my:delete'">
+      <div class="card-label red">{{ $t('dangerZone') }}</div>
+      <div class="danger-inner">
+        <div class="danger-text">
+          <div class="danger-heading">{{ $t('deleteUserBtn') }}</div>
+          <div class="danger-sub">{{ $t('delAccountMsg') }}</div>
         </div>
+        <el-button type="danger" size="small" @click="deleteConfirm">
+          {{ $t('deleteUserBtn') }}
+        </el-button>
       </div>
     </div>
 
@@ -379,53 +350,59 @@ function submitPwd() {
 }
 
 /* ═══════════════════════════════════════
-   TWO-COLUMN SETTING ROW
+   BENTO GRID
 ═══════════════════════════════════════ */
-.setting-row {
+.bento-row {
   display: grid;
-  grid-template-columns: 180px 1fr;
-  gap: 36px;
-  padding: 20px 0;
-  border-bottom: 1px solid var(--light-border-color);
-
-  &.danger-row { border-bottom: none; }
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
 
   @media (max-width: 760px) {
     grid-template-columns: 1fr;
-    gap: 12px;
-    padding: 18px 0;
   }
 }
 
-/* ── Left label column ── */
-.row-label {
-  padding-top: 2px;
+.bento-right {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.label-title {
-  font-size: 11px;
+.bento-card {
+  border: 1px solid var(--light-border-color);
+  border-radius: 4px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  &.full-card { margin-bottom: 12px; }
+  &.autoreply-card { flex: 1; }
+}
+
+.card-label {
+  font-size: 10.5px;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.14em;
   color: var(--el-text-color-primary);
-  margin-bottom: 8px;
 
   &.red { color: #CC0000; }
 }
 
-.label-desc {
-  font-size: 12px;
-  line-height: 1.6;
-  color: var(--secondary-text-color);
-  font-weight: 400;
+.card-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-/* ── Right body column ── */
-.row-body {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-width: 0;
+.card-sub {
+  font-size: 12px;
+  color: var(--secondary-text-color);
+  margin-top: -8px;
+  line-height: 1.5;
 }
 
 /* ═══════════════════════════════════════
@@ -618,17 +595,21 @@ function submitPwd() {
 /* ═══════════════════════════════════════
    DANGER ZONE
 ═══════════════════════════════════════ */
-.danger-card {
-  display: flex; align-items: center;
-  justify-content: space-between; gap: 24px;
-  padding: 18px 20px;
-  border: 1px solid rgba(204,0,0,0.22);
-  border-left: 3px solid #CC0000;
-  border-radius: 2px;
-  background: rgba(204,0,0,0.025);
+.danger-card-wrap {
+  border-color: rgba(204,0,0,0.22) !important;
+  border-left: 3px solid #CC0000 !important;
+  background: rgba(204,0,0,0.02);
+}
+
+.danger-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
 
   @media (max-width: 520px) {
-    flex-direction: column; align-items: flex-start;
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 
