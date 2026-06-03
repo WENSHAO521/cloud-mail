@@ -352,25 +352,25 @@ function submitPwd() {
 ═══════════════════════════════════════ */
 .settings-page {
   max-width: 860px;
-  padding: 36px 48px 64px;
+  padding: 28px 48px 40px;
 
   @media (max-width: 960px) {
-    padding: 28px 28px 48px;
+    padding: 20px 24px 32px;
   }
   @media (max-width: 640px) {
-    padding: 20px 16px 40px;
+    padding: 16px 16px 24px;
   }
 }
 
 /* ── Page heading ── */
 .page-head {
-  padding-bottom: 18px;
+  padding-bottom: 14px;
   margin-bottom: 0;
   border-bottom: 2px solid var(--el-text-color-primary);
 }
 
 .page-h1 {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 900;
   letter-spacing: -0.04em;
   text-transform: uppercase;
@@ -384,16 +384,16 @@ function submitPwd() {
 .setting-row {
   display: grid;
   grid-template-columns: 180px 1fr;
-  gap: 40px;
-  padding: 28px 0;
+  gap: 36px;
+  padding: 20px 0;
   border-bottom: 1px solid var(--light-border-color);
 
   &.danger-row { border-bottom: none; }
 
   @media (max-width: 760px) {
     grid-template-columns: 1fr;
-    gap: 14px;
-    padding: 24px 0;
+    gap: 12px;
+    padding: 18px 0;
   }
 }
 
@@ -424,7 +424,7 @@ function submitPwd() {
 .row-body {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   min-width: 0;
 }
 

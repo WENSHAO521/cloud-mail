@@ -198,21 +198,20 @@ async function deleteGroup(groupId) {
 <style lang="scss" scoped>
 .page {
   max-width: 860px;
-  padding: 36px 48px 64px;
-  min-height: 100%;
+  padding: 32px 48px 40px;
 
-  @media (max-width: 960px) { padding: 28px 28px 48px; }
-  @media (max-width: 640px) { padding: 20px 16px 40px; }
+  @media (max-width: 960px) { padding: 24px 28px 32px; }
+  @media (max-width: 640px) { padding: 16px 16px 24px; }
 }
 
 /* ── Heading ── */
 .page-head {
-  padding-bottom: 24px;
+  padding-bottom: 14px;
   border-bottom: 2px solid var(--el-text-color-primary);
 }
 .page-h1 {
-  font-size: 34px; font-weight: 900;
-  letter-spacing: -0.05em; text-transform: uppercase;
+  font-size: 24px; font-weight: 900;
+  letter-spacing: -0.04em; text-transform: uppercase;
   color: var(--el-text-color-primary); line-height: 1;
 }
 
@@ -221,7 +220,7 @@ async function deleteGroup(groupId) {
   display: grid;
   grid-template-columns: 180px 1fr;
   gap: 40px;
-  padding: 28px 0;
+  padding: 20px 0;
 
   @media (max-width: 760px) {
     grid-template-columns: 1fr;
@@ -259,7 +258,7 @@ async function deleteGroup(groupId) {
 .empty-state {
   display: flex; flex-direction: column;
   align-items: center; gap: 8px;
-  padding: 48px 0 32px; text-align: center;
+  padding: 24px 0 16px; text-align: center;
 }
 .empty-icon { color: var(--secondary-text-color); opacity: 0.4; }
 .empty-title { font-size: 14px; font-weight: 700; color: var(--el-text-color-primary); margin-top: 4px; }
