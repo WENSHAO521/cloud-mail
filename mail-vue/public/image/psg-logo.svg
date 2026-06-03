@@ -1,99 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 172 34" fill="none">
-  <defs>
-    <!-- Envelope gradient: crimson → deep black-red -->
-    <linearGradient id="envBody" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%"   stop-color="#CC0000"/>
-      <stop offset="60%"  stop-color="#8B0000"/>
-      <stop offset="100%" stop-color="#2a0000"/>
-    </linearGradient>
-    <!-- Flap shine gradient -->
-    <linearGradient id="flapShine" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.13"/>
-      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.02"/>
-    </linearGradient>
-    <!-- Text gradient: white → off-white -->
-    <linearGradient id="textMain" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%"   stop-color="#FFFFFF"/>
-      <stop offset="100%" stop-color="#D0D0D0"/>
-    </linearGradient>
-    <!-- Red accent gradient for underline -->
-    <linearGradient id="redLine" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%"   stop-color="#CC0000"/>
-      <stop offset="100%" stop-color="#660000" stop-opacity="0"/>
-    </linearGradient>
-    <!-- Drop shadow filter -->
-    <filter id="envShadow" x="-10%" y="-10%" width="120%" height="130%">
-      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.5"/>
-    </filter>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 34" fill="none">
+  <!-- Left: favicon icon block — black square, red spine, white P letterform -->
+  <rect width="34" height="34" rx="3" fill="#111111"/>
+  <rect width="5" height="34" fill="#CC0000"/>
+  <!-- P stem -->
+  <rect x="10" y="7" width="3.5" height="20" fill="#FFFFFF"/>
+  <!-- P bowl filled -->
+  <path d="M 13.5 7 H 19.5 C 22.5 7 24.5 9 24.5 11.8 C 24.5 14.6 22.5 16.6 19.5 16.6 H 13.5 Z" fill="#FFFFFF"/>
+  <!-- P bowl cutout -->
+  <path d="M 13.5 9.6 H 19 C 21 9.6 22 10.5 22 11.8 C 22 13.1 21 14 19 14 H 13.5 Z" fill="#111111"/>
+  <!-- Red colophon rule -->
+  <rect x="10" y="29.5" width="14.5" height="1.5" fill="#CC0000"/>
 
-  <!-- ── Envelope icon (30 × 22, centered vertically at y=6) ── -->
+  <!-- Separator -->
+  <line x1="44" y1="7" x2="44" y2="27" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
 
-  <!-- Shadow layer -->
-  <rect x="1.5" y="8" width="28" height="20" rx="2" fill="#000000" opacity="0.45"/>
-
-  <!-- Envelope body with gradient -->
-  <rect x="1" y="6.5" width="28" height="20" rx="2" fill="url(#envBody)" filter="url(#envShadow)"/>
-
-  <!-- Outer border (crisp highlight) -->
-  <rect x="1" y="6.5" width="28" height="20" rx="2" fill="none"
-        stroke="rgba(255,255,255,0.18)" stroke-width="0.6"/>
-
-  <!-- Top-area shine (depth) -->
-  <path d="M3 6.5 Q1 6.5 1 8.5 L1 12.5 L29 12.5 L29 8.5 Q29 6.5 27 6.5 Z"
-        fill="url(#flapShine)"/>
-
-  <!-- Envelope flap: white V-shape -->
-  <path d="M1.5 7 L15 17.5 L28.5 7"
-        stroke="rgba(255,255,255,0.88)" stroke-width="1.6"
-        stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-
-  <!-- Bottom fold diagonal lines -->
-  <path d="M1.5 26 L9 18.5"
-        stroke="rgba(255,255,255,0.38)" stroke-width="1"
-        stroke-linecap="round"/>
-  <path d="M28.5 26 L21 18.5"
-        stroke="rgba(255,255,255,0.38)" stroke-width="1"
-        stroke-linecap="round"/>
-
-  <!-- Inner letter lines (content detail) -->
-  <line x1="6" y1="20.5" x2="24" y2="20.5"
-        stroke="rgba(255,255,255,0.18)" stroke-width="0.8"/>
-  <line x1="6" y1="23"   x2="20" y2="23"
-        stroke="rgba(255,255,255,0.11)" stroke-width="0.8"/>
-
-  <!-- Micro "PSG" stamp inside (watermark detail) -->
-  <text x="7" y="19.5"
+  <!-- PSG primary text -->
+  <text x="52" y="23"
         font-family="'IBM Plex Mono','Courier New',monospace"
-        font-size="5" font-weight="700"
-        fill="rgba(255,255,255,0.22)" letter-spacing="1.5">PSG</text>
+        font-size="18" font-weight="700"
+        fill="#FFFFFF" letter-spacing="1">PSG</text>
 
-  <!-- Red seal dot at fold point -->
-  <circle cx="15" cy="17.5" r="2" fill="#CC0000"/>
-  <circle cx="15" cy="17.5" r="1" fill="rgba(255,255,255,0.55)"/>
+  <!-- Red rule -->
+  <rect x="52" y="25" width="54" height="1.2" fill="#CC0000"/>
 
-  <!-- ── Separator ── -->
-  <line x1="39" y1="5" x2="39" y2="29"
-        stroke="rgba(255,255,255,0.09)" stroke-width="1"/>
-
-  <!-- ── PSG primary text ── -->
-  <text x="47" y="21"
-        font-family="'IBM Plex Mono','Courier New',monospace"
-        font-size="16" font-weight="700"
-        fill="url(#textMain)" letter-spacing="1.5">PSG</text>
-
-  <!-- Red gradient underline accent -->
-  <rect x="47" y="23" width="52" height="1.2" fill="url(#redLine)" rx="0.6"/>
-
-  <!-- ── MAIL subtext ── -->
-  <text x="47.5" y="30"
+  <!-- MAIL subtext -->
+  <text x="53" y="32"
         font-family="'IBM Plex Mono','Courier New',monospace"
         font-size="6.5" font-weight="500"
-        fill="rgba(255,255,255,0.30)" letter-spacing="4.2">MAIL</text>
-
-  <!-- ── Right detail: thin tick marks (construction lines) ── -->
-  <line x1="104" y1="21" x2="108" y2="21"
-        stroke="rgba(204,0,0,0.5)" stroke-width="1"/>
-  <line x1="110" y1="21" x2="112" y2="21"
-        stroke="rgba(204,0,0,0.25)" stroke-width="1"/>
+        fill="rgba(255,255,255,0.35)" letter-spacing="4.5">MAIL</text>
 </svg>
