@@ -671,16 +671,18 @@ function submitRegister() {
 
   .form-desc {
     margin-top: 6px;
-    margin-bottom: 22px;
-    color: var(--form-desc-color);
-    font-size: 14px;
+    margin-bottom: 28px;
+    color: #888888;
+    font-size: 13px;
+    line-height: 1.6;
   }
 
   .form-title {
-    font-weight: 700;
-    font-size: 20px !important;
-    letter-spacing: -0.01em;
+    font-weight: 800;
+    font-size: 22px !important;
+    letter-spacing: -0.02em;
     font-family: 'IBM Plex Sans', sans-serif;
+    color: #111111;
   }
 
   .switch {
@@ -694,24 +696,61 @@ function submitRegister() {
     }
   }
 
-  :deep(.el-input__wrapper) {
-    border-radius: 3px;
-    background: var(--el-bg-color);
-  }
-
-  .email-input :deep(.el-input__wrapper) {
-    border-radius: 3px 0 0 3px;
-    background: var(--el-bg-color);
-  }
-
+  /* ── All inputs ── */
   .el-input {
-    height: 40px;
     width: 100%;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
+  }
 
-    :deep(.el-input__inner) {
-      height: 38px;
-    }
+  :deep(.el-input__wrapper) {
+    border-radius: 3px !important;
+    background: #F7F7F7 !important;
+    box-shadow: 0 0 0 1px #E0E0E0 !important;
+    height: 44px;
+    transition: box-shadow 0.15s, background 0.15s !important;
+  }
+  :deep(.el-input__wrapper:hover) {
+    background: #F2F2F2 !important;
+    box-shadow: 0 0 0 1px #BBBBBB !important;
+  }
+  :deep(.el-input__wrapper.is-focus) {
+    background: #FFFFFF !important;
+    box-shadow: 0 0 0 2px rgba(204,0,0,0.18), 0 0 0 1px #CC0000 !important;
+  }
+  :deep(.el-input__inner) {
+    font-size: 13.5px !important;
+    color: #111111 !important;
+  }
+
+  /* ── Email + domain group — unified look ── */
+  .email-input :deep(.el-input__wrapper) {
+    border-radius: 3px 0 0 3px !important;
+  }
+  .email-input :deep(.el-input-group__append) {
+    background: #F7F7F7 !important;
+    border: none !important;
+    border-left: 1px solid #E0E0E0 !important;
+    border-radius: 0 3px 3px 0 !important;
+    box-shadow: 0 0 0 1px #E0E0E0 !important;
+    padding: 0 10px 0 12px !important;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    transition: background 0.15s !important;
+    color: #555555 !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    white-space: nowrap;
+  }
+  /* Focus-within for the group */
+  .email-input:focus-within :deep(.el-input__wrapper) {
+    box-shadow: 0 0 0 2px rgba(204,0,0,0.18), 0 0 0 1px #CC0000 !important;
+    background: #FFFFFF !important;
+  }
+  .email-input:focus-within :deep(.el-input-group__append) {
+    border-left-color: #CC0000 !important;
+    box-shadow: 0 0 0 1px #CC0000 !important;
+    background: #FFFFFF !important;
   }
 }
 
@@ -762,12 +801,7 @@ function submitRegister() {
   }
 }
 
-:deep(.el-input-group__append) {
-  padding: 0 8px 0 10px !important;
-  background: var(--el-bg-color);
-  border-radius: 0 3px 3px 0 !important;
-  border-left: 1px solid var(--base-border-color) !important;
-}
+/* Handled per-component above; reset global override for login */
 
 :deep(.el-button+.el-button) {
   margin: 0;
