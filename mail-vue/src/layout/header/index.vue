@@ -341,16 +341,18 @@ function formatName(email) {
 
   .details-avatar {
     margin-top: 20px;
-    height: 40px;
-    width: 40px;
-    background: var(--el-bg-color);
-    color: var(--el-text-color-primary);
-    border: 1px solid var(--dark-border);
+    height: 44px;
+    width: 44px;
+    background: linear-gradient(135deg, #1a3560, #2a4c8a);
+    color: #ffffff;
+    border: none;
     font-size: 18px;
+    font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 10px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(26, 53, 96, 0.3);
   }
 }
 
@@ -376,12 +378,13 @@ function formatName(email) {
   margin-left: 5px;
 
   .writer {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    color: #ffffff;
-    background: linear-gradient(135deg, #1890ff, #3a80dd);
-    transition: all 0.3s ease;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    color: #0c1c3a;
+    background: linear-gradient(135deg, #c8970a 0%, #e8b520 55%, #c8970a 100%);
+    box-shadow: 0 2px 8px rgba(200, 151, 10, 0.35);
+    transition: var(--transition-smooth);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -389,7 +392,14 @@ function formatName(email) {
     .writer-text {
       margin-left: 15px;
       font-size: 14px;
-      font-weight: bold;;
+      font-weight: bold;
+    }
+  }
+
+  @media (hover: hover) {
+    &:hover .writer {
+      transform: scale(1.06);
+      box-shadow: 0 4px 14px rgba(200, 151, 10, 0.5);
     }
   }
 }
@@ -452,15 +462,19 @@ function formatName(email) {
     cursor: pointer;
 
     .avatar-text {
-      background: var(--el-bg-color);
-      color: var(--el-text-color-primary);
+      background: linear-gradient(135deg, #1a3560, #2a4c8a);
+      color: #ffffff;
       height: 30px;
       width: 30px;
       display: flex;
       justify-content: center;
       align-items: center;
       border-radius: 8px;
-      border: 1px solid var(--dark-border);
+      border: none;
+      font-weight: 700;
+      font-size: 13px;
+      box-shadow: 0 2px 6px rgba(26, 53, 96, 0.3);
+      transition: var(--transition-smooth);
     }
 
     .setting-icon {
@@ -468,6 +482,12 @@ function formatName(email) {
       top: 0;
       margin-right: 10px;
       bottom: 10px;
+    }
+
+    @media (hover: hover) {
+      &:hover .avatar-text {
+        box-shadow: 0 4px 10px rgba(26, 53, 96, 0.45);
+      }
     }
   }
 
