@@ -1,47 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <defs>
-    <!-- Background: red top-left → near-black bottom-right (B/W/R gradient) -->
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%"   stop-color="#CC0000"/>
-      <stop offset="55%"  stop-color="#660000"/>
-      <stop offset="100%" stop-color="#0f0f0f"/>
-    </linearGradient>
-    <!-- Top shine like Gmail icon -->
-    <linearGradient id="shine" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%"   stop-color="rgba(255,255,255,0.18)"/>
-      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-    </linearGradient>
-    <!-- White P letter gradient: pure white top → slightly warm bottom -->
-    <linearGradient id="letter" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%"   stop-color="#FFFFFF"/>
-      <stop offset="100%" stop-color="rgba(255,255,255,0.88)"/>
-    </linearGradient>
-    <!-- Drop shadow for letter depth -->
-    <filter id="drop">
-      <feDropShadow dx="0" dy="1" stdDeviation="1"
-                    flood-color="rgba(0,0,0,0.4)" flood-opacity="1"/>
-    </filter>
-  </defs>
+  <!-- Solid near-black background — no gradient, flat Bauhaus fill -->
+  <rect width="32" height="32" rx="3" fill="#111111"/>
 
-  <!-- Squircle base (7px radius = iOS/Android squircle proportion) -->
-  <rect width="32" height="32" rx="7" fill="url(#bg)"/>
+  <!-- Red book-spine bar — left edge, full height, publisher identity mark -->
+  <rect x="0" y="0" width="5" height="32" fill="#CC0000"/>
 
-  <!-- Top shine layer (depth) -->
-  <rect width="32" height="19" rx="7" fill="url(#shine)"/>
+  <!-- White "P" — geometric, editorial proportions -->
+  <!-- Vertical stem -->
+  <rect x="10" y="7" width="3.5" height="18" fill="#FFFFFF"/>
+  <!-- Bowl: filled D-shape -->
+  <path d="M 13.5 7 H 19.5 C 22.5 7 24.5 9 24.5 11.8 C 24.5 14.6 22.5 16.6 19.5 16.6 H 13.5 Z"
+        fill="#FFFFFF"/>
+  <!-- Bowl inner cutout -->
+  <path d="M 13.5 9.6 H 19 C 21 9.6 22 10.5 22 11.8 C 22 13.1 21 14 19 14 H 13.5 Z"
+        fill="#111111"/>
 
-  <!-- Subtle dark border -->
-  <rect x="0.5" y="0.5" width="31" height="31" rx="6.5"
-        stroke="rgba(0,0,0,0.35)" stroke-width="1"/>
-
-  <!-- P letterform — stroke-based, rounded caps, modern editorial -->
-  <!-- Stem -->
-  <line x1="10.5" y1="26" x2="10.5" y2="6"
-        stroke="url(#letter)" stroke-width="3.6"
-        stroke-linecap="round"
-        filter="url(#drop)"/>
-  <!-- Bowl (D-shape arc) -->
-  <path d="M 10.5 6 C 10.5 6, 24 6, 24 11 C 24 16, 10.5 16, 10.5 16"
-        stroke="url(#letter)" stroke-width="3.6"
-        stroke-linecap="round" stroke-linejoin="round"
-        filter="url(#drop)"/>
+  <!-- Colophon rule — thin red rule below P, classic scholarly press mark -->
+  <rect x="10" y="27" width="14.5" height="1.5" fill="#CC0000"/>
 </svg>
