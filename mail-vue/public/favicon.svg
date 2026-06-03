@@ -1,59 +1,47 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
   <defs>
-    <!-- Background: rich near-black -->
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%"   stop-color="#1c1c1c"/>
-      <stop offset="100%" stop-color="#0a0a0a"/>
+    <!-- Background: red top-left → near-black bottom-right (B/W/R gradient) -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#CC0000"/>
+      <stop offset="55%"  stop-color="#660000"/>
+      <stop offset="100%" stop-color="#0f0f0f"/>
     </linearGradient>
-    <!-- Envelope body: crimson → deep dark-red -->
-    <linearGradient id="env" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%"   stop-color="#DD0000"/>
-      <stop offset="50%"  stop-color="#880000"/>
-      <stop offset="100%" stop-color="#1a0000"/>
+    <!-- Top shine like Gmail icon -->
+    <linearGradient id="shine" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="rgba(255,255,255,0.18)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
     </linearGradient>
-    <!-- Top shine on envelope -->
-    <linearGradient id="shine" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.16"/>
-      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    <!-- White P letter gradient: pure white top → slightly warm bottom -->
+    <linearGradient id="letter" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.88)"/>
     </linearGradient>
-    <filter id="sh">
-      <feDropShadow dx="0" dy="1" stdDeviation="1.5"
-                    flood-color="#000000" flood-opacity="0.7"/>
+    <!-- Drop shadow for letter depth -->
+    <filter id="drop">
+      <feDropShadow dx="0" dy="1" stdDeviation="1"
+                    flood-color="rgba(0,0,0,0.4)" flood-opacity="1"/>
     </filter>
   </defs>
 
-  <!-- Background: rounded square -->
+  <!-- Squircle base (7px radius = iOS/Android squircle proportion) -->
   <rect width="32" height="32" rx="7" fill="url(#bg)"/>
-  <!-- Subtle inner glow border -->
+
+  <!-- Top shine layer (depth) -->
+  <rect width="32" height="19" rx="7" fill="url(#shine)"/>
+
+  <!-- Subtle dark border -->
   <rect x="0.5" y="0.5" width="31" height="31" rx="6.5"
-        fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        stroke="rgba(0,0,0,0.35)" stroke-width="1"/>
 
-  <!-- Envelope body (generous padding, centered) -->
-  <rect x="3.5" y="8" width="25" height="17" rx="1.5"
-        fill="url(#env)" filter="url(#sh)"/>
-
-  <!-- Outer envelope border -->
-  <rect x="3.5" y="8" width="25" height="17" rx="1.5"
-        fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="0.5"/>
-
-  <!-- Top shine layer -->
-  <path d="M5 8 Q3.5 8 3.5 9.5 L3.5 13.5 L28.5 13.5 L28.5 9.5 Q28.5 8 27 8 Z"
-        fill="url(#shine)"/>
-
-  <!-- Envelope flap: white V -->
-  <path d="M4 8.5 L16 18 L28 8.5"
-        stroke="rgba(255,255,255,0.90)" stroke-width="1.8"
-        stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-
-  <!-- Bottom fold lines -->
-  <path d="M4 24.5 L9.5 19"
-        stroke="rgba(255,255,255,0.35)" stroke-width="1"
-        stroke-linecap="round"/>
-  <path d="M28 24.5 L22.5 19"
-        stroke="rgba(255,255,255,0.35)" stroke-width="1"
-        stroke-linecap="round"/>
-
-  <!-- Red seal dot at fold point -->
-  <circle cx="16" cy="18" r="2.2" fill="#CC0000"/>
-  <circle cx="16" cy="18" r="1"   fill="rgba(255,255,255,0.7)"/>
+  <!-- P letterform — stroke-based, rounded caps, modern editorial -->
+  <!-- Stem -->
+  <line x1="10.5" y1="26" x2="10.5" y2="6"
+        stroke="url(#letter)" stroke-width="3.6"
+        stroke-linecap="round"
+        filter="url(#drop)"/>
+  <!-- Bowl (D-shape arc) -->
+  <path d="M 10.5 6 C 10.5 6, 24 6, 24 11 C 24 16, 10.5 16, 10.5 16"
+        stroke="url(#letter)" stroke-width="3.6"
+        stroke-linecap="round" stroke-linejoin="round"
+        filter="url(#drop)"/>
 </svg>
