@@ -132,9 +132,9 @@
         <!-- Tab 2: Bind registered email -->
         <el-tab-pane :label="$t('bindExistingEmail')" name="bind">
           <div class="container">
-            <p class="bind-tip">{{ $t('bindEmailTip') }}</p>
             <el-input v-model="bindForm.email" type="text" :placeholder="$t('emailAccount')" autocomplete="off"/>
             <el-input v-model="bindForm.password" type="password" :placeholder="$t('bindEmailPassword')" autocomplete="off"/>
+            <p class="bind-tip">{{ $t('bindEmailTip') }}</p>
             <el-button class="btn" type="primary" @click="submitBind" :loading="bindLoading">
               {{ $t('add') }}
             </el-button>
@@ -866,6 +866,21 @@ path[fill="#ffdda1"] {
     width: 100%;
     margin-top: 4px;
   }
+
+  /* Standalone el-input (no append group) — match grouped input style */
+  :deep(.el-input:not(.el-input-group)) {
+    .el-input__wrapper {
+      border: 1px solid var(--base-border-color) !important;
+      border-radius: 3px !important;
+      box-shadow: none !important;
+      background: var(--el-bg-color) !important;
+      transition: border-color 0.15s !important;
+    }
+    .el-input__wrapper.is-focus {
+      border-color: #CC0000 !important;
+      box-shadow: none !important;
+    }
+  }
 }
 
 .select {
@@ -896,14 +911,10 @@ path[fill="#ffdda1"] {
 }
 
 .bind-tip {
-  font-size: 12.5px;
-  color: var(--regular-text-color);
+  font-size: 11.5px;
+  color: var(--secondary-text-color);
   line-height: 1.5;
-  margin: 0 0 12px;
-  padding: 10px 12px;
-  background: rgba(204,0,0,0.05);
-  border-left: 3px solid #CC0000;
-  border-radius: 2px;
+  margin: -2px 0 0;
 }
 
 .add-tabs {
