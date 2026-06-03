@@ -791,7 +791,6 @@ function submitRegister() {
   .psg-link-logo {
     height: 22px;
     width: auto;
-    filter: invert(1);
     display: block;
   }
 }
