@@ -24,7 +24,7 @@ const loginService = {
 
 	async register(c, params, oauth = false) {
 
-		const { email, password, token, code } = params;
+		const { email, password, token, code, name } = params;
 
 		let { regKey, register, registerVerify, regVerifyCount, minEmailPrefix, emailPrefixFilter } = await settingService.query(c)
 
@@ -130,7 +130,7 @@ const loginService = {
 
 		const userId = await userService.insert(c, { email, regKeyId,password: hash, salt, type: type || defType });
 
-		await accountService.insert(c, { userId: userId, email, name: emailUtils.getName(email) });
+		await accountService.insert(c, { userId: userId, email, name: (name && name.trim()) || emailUtils.getName(email) });
 
 		await userService.updateUserInfo(c, userId, true);
 

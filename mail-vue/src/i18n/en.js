@@ -11,6 +11,7 @@ const en = {
     permissions: 'Role',
     inviteCode: 'Invite Code',
     SystemSettings: 'System Settings',
+    namePlaceholder: 'Display name (optional)',
     internalDirectory: 'Internal Directory',
     recentTab: 'Recent',
     directorySearch: 'Search name or email…',

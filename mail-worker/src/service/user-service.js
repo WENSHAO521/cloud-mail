@@ -18,6 +18,7 @@ import { t } from '../i18n/i18n'
 import reqUtils from '../utils/req-utils';
 import {oauth} from "../entity/oauth";
 import oauthService from "./oauth-service";
+import {account} from "../entity/account";
 
 const userService = {
 
@@ -177,8 +178,14 @@ const userService = {
 			username: oauth.username,
 			trustLevel: oauth.trustLevel,
 			avatar: oauth.avatar,
-			name: oauth.name
-		}).from(user).leftJoin(oauth, eq(oauth.userId, user.userId))
+			oauthName: oauth.name,
+			accountName: account.name
+		}).from(user)
+			.leftJoin(oauth, eq(oauth.userId, user.userId))
+			.leftJoin(account, and(
+				sql`LOWER(${account.email}) = LOWER(${user.email})`,
+				eq(account.isDel, 0)
+			))
 			.where(and(...conditions));
 
 

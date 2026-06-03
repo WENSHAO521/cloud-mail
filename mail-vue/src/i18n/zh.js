@@ -11,6 +11,7 @@ const zh = {
     permissions: '权限控制',
     inviteCode: '注册密钥',
     SystemSettings: '系统设置',
+    namePlaceholder: '姓名（选填）',
     internalDirectory: '内部通讯录',
     recentTab: '最近联系',
     directorySearch: '搜索姓名或邮箱…',

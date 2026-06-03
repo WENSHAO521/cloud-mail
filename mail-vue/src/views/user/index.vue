@@ -51,6 +51,11 @@
               </div>
             </template>
           </el-table-column>
+          <el-table-column :label="$t('username')" min-width="110" show-overflow-tooltip>
+            <template #default="{ row }">
+              <span class="user-name-cell">{{ row.accountName || row.oauthName || '—' }}</span>
+            </template>
+          </el-table-column>
           <el-table-column :formatter="formatterReceive" label-class-name="receive" column-key="receive"
                            :filtered-value="filteredValue" :filters="filters" :width="receiveWidth"
                            :label="$t('tabReceived')"
@@ -1181,6 +1186,10 @@ function adjustWidth() {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.user-name-cell {
+  font-weight: 600;
 }
 
 .status-select {

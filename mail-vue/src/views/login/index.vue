@@ -88,6 +88,7 @@
               </div>
             </template>
           </el-input>
+          <el-input v-model="registerForm.name" :placeholder="$t('namePlaceholder')" type="text" autocomplete="off"/>
           <el-input v-model="registerForm.password" :placeholder="$t('password')" type="password" autocomplete="off"/>
           <el-input v-model="registerForm.confirmPassword" :placeholder="$t('confirmPwd')" type="password"
                     autocomplete="off"/>
@@ -204,6 +205,7 @@ const mySelect = ref()
 const suffix = ref('')
 const registerForm = reactive({
   email: '',
+  name: '',
   password: '',
   confirmPassword: '',
   code: null
@@ -560,6 +562,7 @@ function submitRegister() {
 
   const form = {
     email,
+    name: registerForm.name.trim(),
     password: registerForm.password,
     token: verifyToken,
     code: registerForm.code
@@ -568,6 +571,7 @@ function submitRegister() {
   register(form).then(({regVerifyOpen}) => {
     show.value = 'login'
     registerForm.email = ''
+    registerForm.name = ''
     registerForm.password = ''
     registerForm.confirmPassword = ''
     registerForm.code = ''
