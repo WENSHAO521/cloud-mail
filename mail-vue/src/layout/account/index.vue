@@ -745,17 +745,34 @@ path[fill="#ffdda1"] {
 }
 
 :deep(.el-input-group__append) {
-  padding: 0 !important;
-  padding-left: 8px !important;
-  background: var(--el-bg-color);
+  border-radius: 0 3px 3px 0 !important;
+  padding: 0 12px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  white-space: nowrap;
 }
 
 :deep(.el-dialog) {
   width: 400px !important;
+  border-radius: 4px !important;
+
   @media (max-width: 440px) {
     width: calc(100% - 40px) !important;
     margin-right: 20px !important;
     margin-left: 20px !important;
+  }
+}
+
+/* Add email / rename dialog body */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 4px;
+
+  .btn {
+    width: 100%;
+    margin-top: 4px;
   }
 }
 

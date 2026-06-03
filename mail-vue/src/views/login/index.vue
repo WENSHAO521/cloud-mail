@@ -704,53 +704,24 @@ function submitRegister() {
 
   :deep(.el-input__wrapper) {
     border-radius: 3px !important;
-    background: #F7F7F7 !important;
-    box-shadow: 0 0 0 1px #E0E0E0 !important;
-    height: 44px;
-    transition: box-shadow 0.15s, background 0.15s !important;
-  }
-  :deep(.el-input__wrapper:hover) {
-    background: #F2F2F2 !important;
-    box-shadow: 0 0 0 1px #BBBBBB !important;
-  }
-  :deep(.el-input__wrapper.is-focus) {
-    background: #FFFFFF !important;
-    box-shadow: 0 0 0 2px rgba(204,0,0,0.18), 0 0 0 1px #CC0000 !important;
+    height: 42px;
+    background: var(--el-bg-color) !important;
   }
   :deep(.el-input__inner) {
     font-size: 13.5px !important;
-    color: #111111 !important;
   }
 
-  /* ── Email + domain group — unified look ── */
+  /* ── Email + domain group — let El Plus handle the outer border ── */
   .email-input :deep(.el-input__wrapper) {
     border-radius: 3px 0 0 3px !important;
   }
   .email-input :deep(.el-input-group__append) {
-    background: #F7F7F7 !important;
-    border: none !important;
-    border-left: 1px solid #E0E0E0 !important;
-    border-radius: 0 3px 3px 0 !important;
-    box-shadow: 0 0 0 1px #E0E0E0 !important;
-    padding: 0 10px 0 12px !important;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    transition: background 0.15s !important;
-    color: #555555 !important;
+    height: 42px;
+    padding: 0 12px !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     white-space: nowrap;
-  }
-  /* Focus-within for the group */
-  .email-input:focus-within :deep(.el-input__wrapper) {
-    box-shadow: 0 0 0 2px rgba(204,0,0,0.18), 0 0 0 1px #CC0000 !important;
-    background: #FFFFFF !important;
-  }
-  .email-input:focus-within :deep(.el-input-group__append) {
-    border-left-color: #CC0000 !important;
-    box-shadow: 0 0 0 1px #CC0000 !important;
-    background: #FFFFFF !important;
+    border-radius: 0 3px 3px 0 !important;
   }
 }
 
@@ -801,7 +772,10 @@ function submitRegister() {
   }
 }
 
-/* Handled per-component above; reset global override for login */
+:deep(.el-input-group__append) {
+  border-radius: 0 3px 3px 0 !important;
+  padding: 0 12px !important;
+}
 
 :deep(.el-button+.el-button) {
   margin: 0;
