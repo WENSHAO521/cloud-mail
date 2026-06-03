@@ -600,26 +600,30 @@ path[fill="#ffdda1"] {
     margin-top: 15px;
   }
 
-  /* ── Account card ── */
+  /* ── Account card — Google/Outlook style ── */
   .item {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px 12px 10px 10px;
-    margin: 0;
-    border-radius: 0;
+    padding: 10px 10px 10px 10px;
+    margin: 3px 6px;
+    border-radius: 4px;
     cursor: pointer;
     background: transparent;
     border-left: 3px solid transparent;
-    border-bottom: 1px solid var(--light-border-color);
-    transition: background 0.12s ease, border-left-color 0.12s ease;
+    border: 1px solid transparent;
+    transition: background 0.15s ease, border-color 0.15s ease,
+                box-shadow 0.15s ease;
+    position: relative;
 
-    &:first-child { margin-top: 0; }
-    &:last-child  { border-bottom: none; }
+    &:first-child { margin-top: 6px; }
+    &:last-child  { margin-bottom: 6px; }
 
     @media (hover: hover) {
       &:hover:not(.item-choose) {
-        background: var(--extra-light-fill);
+        background: var(--el-bg-color);
+        border-color: var(--light-border-color);
+        box-shadow: 0 1px 4px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
       }
     }
   }
@@ -680,22 +684,25 @@ path[fill="#ffdda1"] {
     }
   }
 
-  /* ── Action icons ── */
+  /* ── Action icons — slide in from right ── */
   .item-actions {
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    gap: 1px;
+    gap: 2px;
     opacity: 0;
-    transition: opacity 0.12s;
+    transform: translateX(10px);
+    transition: opacity 0.18s ease, transform 0.18s ease;
 
     .action-icon {
       cursor: pointer;
       color: var(--secondary-text-color);
       display: flex;
       align-items: center;
-      padding: 4px;
-      border-radius: 2px;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
       transition: color 0.12s, background 0.12s;
 
       @media (hover: hover) {
@@ -708,27 +715,24 @@ path[fill="#ffdda1"] {
 
     .action-active {
       color: #CC0000;
-      opacity: 1;
     }
   }
 
   .item:hover .item-actions,
   .item-choose .item-actions {
     opacity: 1;
+    transform: translateX(0);
   }
 
-  /* ── Selected: red left bar, no red avatar ── */
+  /* ── Selected — Microsoft Outlook style ── */
   .item-choose {
-    background: var(--extra-light-fill) !important;
+    background: var(--el-bg-color) !important;
+    border-color: var(--light-border-color) !important;
     border-left-color: #CC0000 !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04) !important;
 
     .item-name {
       font-weight: 700;
-      color: var(--el-text-color-primary);
-    }
-
-    .item-email {
-      color: var(--regular-text-color);
     }
 
     .item-avatar {
