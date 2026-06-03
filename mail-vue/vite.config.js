@@ -21,14 +21,28 @@ export default defineConfig(({mode}) => {
                 manifest: {
                     name: env.VITE_PWA_NAME,
                     short_name: env.VITE_PWA_NAME,
-                    background_color: '#FFFFFF',
-                    theme_color: '#FFFFFF',
+                    description: 'PSG Mail — Panorama Scholarly Group internal email',
+                    background_color: '#111111',
+                    theme_color: '#111111',
+                    display: 'standalone',
+                    start_url: '/',
                     icons: [
                         {
-                            src: 'mail-pwa.png',
+                            src: 'pwa-192.png',
                             sizes: '192x192',
                             type: 'image/png',
-                        }
+                        },
+                        {
+                            src: 'pwa-512.png',
+                            sizes: '512x512',
+                            type: 'image/png',
+                        },
+                        {
+                            src: 'pwa-maskable-512.png',
+                            sizes: '512x512',
+                            type: 'image/png',
+                            purpose: 'maskable',
+                        },
                     ],
                 },
                 workbox: {
