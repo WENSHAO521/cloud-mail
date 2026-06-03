@@ -195,33 +195,19 @@ function openCompose() {
   gap: 0;
 }
 
-/* Active — gradient left bar + gradient background */
+/* Active — gradient background only, no bar */
 .choose-item {
   font-weight: 600 !important;
   color: #ffffff !important;
   border-left: none !important;
   box-shadow: none !important;
-  position: relative !important;
 
-  /* Gradient background: red tint fades to transparent rightward */
   background: linear-gradient(
     to right,
-    rgba(204, 0, 0, 0.22) 0%,
-    rgba(204, 0, 0, 0.08) 60%,
+    rgba(204, 0, 0, 0.28) 0%,
+    rgba(204, 0, 0, 0.10) 55%,
     rgba(204, 0, 0, 0.00) 100%
   ) !important;
-
-  /* Gradient left bar via pseudo-element */
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 15%;
-    bottom: 15%;
-    width: 3px;
-    border-radius: 0 2px 2px 0;
-    background: linear-gradient(to bottom, #FF3333, #CC0000, #880000);
-  }
 }
 
 .choose-item .menu-name {
