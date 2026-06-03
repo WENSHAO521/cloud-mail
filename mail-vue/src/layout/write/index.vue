@@ -935,14 +935,24 @@ function close() {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.52);
-  backdrop-filter: blur(10px) saturate(180%);
-  -webkit-backdrop-filter: blur(10px) saturate(180%);
   z-index: 2000;
+
+  /* Blur on pseudo-element — never touches the iframe's stacking context */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.52);
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    pointer-events: none;
+  }
 }
 
 /* ── Dialog box ──────────────────────────────── */
 .write-box {
+  position: relative; /* sit above the ::before blur layer */
+  z-index: 1;
   background: var(--el-bg-color);
   width: min(1300px, calc(100% - 16px));
   display: grid;
