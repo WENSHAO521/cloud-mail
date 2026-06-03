@@ -12,7 +12,11 @@
       <div v-infinite-scroll="getAccountList" :infinite-scroll-distance="600" :infinite-scroll-immediate="false">
         <div class="item" :class="itemBg(item.accountId)" v-for="(item, index) in accounts" :key="item.accountId"
              @click="changeAccount(item)">
-          <div class="item-avatar">{{ emailInitial(item.email, item.name) }}</div>
+          <div class="item-avatar">
+            <img v-if="item.accountId === userStore.user.account?.accountId && userStore.avatar"
+                 :src="userStore.avatar" class="avatar-photo"/>
+            <span v-else>{{ emailInitial(item.email, item.name) }}</span>
+          </div>
           <div class="item-info">
             <div class="item-email">{{ item.email }}</div>
             <div class="item-name" v-if="item.name">{{ item.name }}</div>
@@ -190,6 +194,7 @@ const mySelect = ref()
 if (hasPerm('account:query')) {
   getAccountList()
 }
+userStore.loadAvatar()
 
 watch(() => accountStore.changeUserAccountName, () => {
   accounts[0].name = accountStore.changeUserAccountName
@@ -618,6 +623,14 @@ path[fill="#ffdda1"] {
   }
 
   /* ── Avatar: square monogram ── */
+  .avatar-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 2px;
+    display: block;
+  }
+
   .item-avatar {
     flex-shrink: 0;
     width: 34px;

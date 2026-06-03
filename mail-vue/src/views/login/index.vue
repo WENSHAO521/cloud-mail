@@ -154,8 +154,8 @@
         </el-button>
       </div>
     </el-dialog>
-    <a v-show="settingStore.settings.projectLink" class="github" href="https://github.com/maillab/cloud-mail">
-      <Icon icon="mingcute:github-line" color="#1890ff" width="20" height="20" />
+    <a v-show="settingStore.settings.projectLink" class="psg-link" href="https://panorama-sg.com" target="_blank">
+      <img src="/image/psg-logo.png" class="psg-link-logo" alt="PSG"/>
     </a>
   </div>
 </template>
@@ -739,30 +739,26 @@ function submitRegister() {
   top: 6px;
 }
 
-.github {
+.psg-link {
   position: fixed;
-  width: 36px;
-  height: 36px;
   display: flex;
-  justify-content: center;
   align-items: center;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  justify-content: center;
   bottom: 14px;
-  right: 14px;
+  right: 16px;
   z-index: 1000;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  transition: var(--transition-smooth);
+  opacity: 0.55;
+  transition: opacity 0.15s;
 
   @media (hover: hover) {
-    &:hover {
-      background: rgba(255, 255, 255, 0.18);
-      border-color: rgba(230, 25, 25, 0.25);
-    }
+    &:hover { opacity: 1; }
+  }
+
+  .psg-link-logo {
+    height: 22px;
+    width: auto;
+    filter: invert(1);
+    display: block;
   }
 }
 

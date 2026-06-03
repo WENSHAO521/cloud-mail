@@ -11,7 +11,10 @@
             <span v-else>{{ $t('compose') }}</span>
           </div>
           <div class="wh-sender">
-            <div class="wh-avatar">{{ senderInitial }}</div>
+            <div class="wh-avatar">
+            <img v-if="userStore.avatar" :src="userStore.avatar" class="wh-avatar-img"/>
+            <span v-else>{{ senderInitial }}</span>
+          </div>
             <div class="wh-info">
               <span class="wh-name">{{ form.name || form.sendEmail.split('@')[0] }}</span>
               <span class="wh-email">{{ form.sendEmail }}</span>
@@ -767,6 +770,14 @@ function close() {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.wh-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .wh-info {
