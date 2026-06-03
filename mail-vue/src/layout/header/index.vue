@@ -14,6 +14,7 @@
       <div v-else class="icon-btn" @click="openDark($event)">
         <Icon icon="solar:moon-linear" width="20" height="20"/>
       </div>
+      <NotificationPanel />
       <div class="icon-btn" @click="openNotice">
         <Icon icon="streamline-plump:announcement-megaphone" width="20" height="20"/>
       </div>
@@ -75,6 +76,7 @@
 <script setup>
 import router from "@/router";
 import hanburger from '@/components/hamburger/index.vue'
+import NotificationPanel from '@/components/notification-panel/index.vue'
 import {logout} from "@/request/login.js";
 import {Icon} from "@iconify/vue";
 import {useUiStore} from "@/store/ui.js";

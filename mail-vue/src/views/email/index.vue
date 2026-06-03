@@ -30,6 +30,7 @@ import emailScroll from "@/components/email-scroll/index.vue"
 import {emailList, emailDelete, emailLatest, emailRead} from "@/request/email.js";
 import {starAdd, starCancel} from "@/request/star.js";
 import {defineOptions, h, onMounted, reactive, ref, watch} from "vue";
+import {useNotificationStore} from "@/store/notification.js";
 import {sleep} from "@/utils/time-utils.js";
 import router from "@/router/index.js";
 import {Icon} from "@iconify/vue";
@@ -47,6 +48,7 @@ const scroll = ref({})
 const params = reactive({
   timeSort: 0,
 })
+const notificationStore = useNotificationStore()
 
 onMounted(() => {
   emailStore.emailScroll = scroll;
@@ -111,6 +113,23 @@ async function latest() {
 
                 existIds.add(email.emailId)
                 scroll.value.addItem(email)
+
+                // push to notification store
+                notificationStore.push(email)
+
+                // browser notification when tab is not visible
+                if (
+                  document.visibilityState === 'hidden' &&
+                  typeof Notification !== 'undefined' &&
+                  Notification.permission === 'granted'
+                ) {
+                  new Notification(email.name || email.sendEmail || 'PSG Mail', {
+                    body: email.subject || '',
+                    icon: '/pwa-192.png',
+                    tag: `psg-mail-${email.emailId}`,
+                    renotify: true,
+                  })
+                }
 
                 await sleep(50)
               }
