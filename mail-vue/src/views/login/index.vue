@@ -155,7 +155,7 @@
       </div>
     </el-dialog>
     <a v-show="settingStore.settings.projectLink" class="psg-link" href="https://panorama-sg.com" target="_blank">
-      <img src="/image/psg-logo.png" class="psg-link-logo" alt="PSG"/>
+      <img src="/favicon.svg" class="psg-link-logo" alt="PSG"/>
     </a>
   </div>
 </template>
@@ -789,9 +789,10 @@ function submitRegister() {
   }
 
   .psg-link-logo {
-    height: 22px;
-    width: auto;
+    height: 28px;
+    width: 28px;
     display: block;
+    border-radius: 3px;
   }
 }
 
