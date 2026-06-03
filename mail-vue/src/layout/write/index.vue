@@ -77,8 +77,9 @@
         <!-- Toolbar -->
         <div class="toolbar-bar">
           <div class="toolbar-left">
-            <div class="tb-btn" @click="chooseFile" :title="$t('attachments')">
-              <Icon icon="iconamoon:attachment-fill" width="18" height="18"/>
+            <div class="tb-btn tb-btn--label" @click="chooseFile">
+              <Icon icon="iconamoon:attachment-fill" width="16" height="16"/>
+              <span>{{ $t('attachments') }}</span>
             </div>
             <div class="tb-btn" @click="clearContent" :title="$t('clear')">
               <Icon icon="icon-park-outline:clear-format" width="17" height="17"/>
@@ -925,8 +926,8 @@ function close() {
 }
 
 .tb-btn {
-  width: 30px;
   height: 30px;
+  min-width: 30px;
   border-radius: 2px;
   display: flex;
   align-items: center;
@@ -942,6 +943,14 @@ function close() {
       color: #CC0000;
     }
   }
+}
+
+.tb-btn--label {
+  gap: 5px;
+  padding: 0 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 .att-list {
