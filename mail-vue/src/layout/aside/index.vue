@@ -116,15 +116,15 @@ function openCompose() {
 /* Logo — white on black, red underline */
 .title {
   margin: 0;
-  padding: 14px 18px 12px;
+  padding: 16px 18px 14px;
   display: flex;
   align-items: center;
   border-bottom: 2px solid #CC0000;
 
   .psg-logo {
-    height: 40px;
+    height: 52px;
     width: auto;
-    max-width: 200px;
+    max-width: 220px;
     display: block;
     object-fit: contain;
     filter: invert(1);
