@@ -439,25 +439,24 @@ window.onresize = () => {
 }
 
 .header-actions {
-  padding: 9px 15px;
+  padding: 0 14px;
+  height: 44px;
   display: flex;
   align-items: center;
-  gap: 18px;
-  box-shadow: var(--header-actions-border);
-  font-size: 18px;
-
-  .search {
-    :deep(.el-input-group) {
-      height: 28px;
-    }
-
-    :deep(.el-input__inner) {
-      height: 28px;
-    }
-  }
+  gap: 12px;
+  border-bottom: 1px solid #E8E8E8;
+  background: #FAFAFA;
 
   .icon {
     cursor: pointer;
+    color: #555555;
+    display: flex;
+    align-items: center;
+    transition: color 0.12s;
+
+    @media (hover: hover) {
+      &:hover { color: #CC0000; }
+    }
   }
 }
 

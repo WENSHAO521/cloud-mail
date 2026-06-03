@@ -1084,30 +1084,29 @@ function adjustWidth() {
 }
 
 .header-actions {
-  padding: 9px 15px;
+  padding: 0 14px;
+  height: 44px;
   display: flex;
-  gap: 15px;
+  gap: 12px;
   flex-wrap: wrap;
   align-items: center;
-  box-shadow: var(--header-actions-border);
-  font-size: 18px;
+  border-bottom: 1px solid #E8E8E8;
+  background: #FAFAFA;
 
   .search-input {
-    width: min(200px, calc(100vw - 140px));
-  }
-
-  .search {
-    :deep(.el-input-group) {
-      height: 28px;
-    }
-
-    :deep(.el-input__inner) {
-      height: 28px;
-    }
+    width: min(220px, calc(100vw - 160px));
   }
 
   .icon {
     cursor: pointer;
+    color: #555555;
+    display: flex;
+    align-items: center;
+    transition: color 0.12s;
+
+    @media (hover: hover) {
+      &:hover { color: #CC0000; }
+    }
   }
 }
 

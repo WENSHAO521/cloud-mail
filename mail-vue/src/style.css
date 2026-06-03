@@ -184,6 +184,150 @@ button, input, select, textarea {
     --el-input-text-color: var(--el-text-color-primary) !important;
 }
 
+/* ═══════════════════════════════════════════════════════
+   DEUTSCHES DESIGN SYSTEM — Element Plus Global Overrides
+   Schwarz / Weiß / Rot  ·  Precision · Function · Clarity
+   ═══════════════════════════════════════════════════════ */
+
+/* Buttons — flat, sharp, precise */
+.el-button {
+    border-radius: 2px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.03em !important;
+    transition: background 0.12s, border-color 0.12s !important;
+}
+.el-button--primary {
+    background: #CC0000 !important;
+    border-color: #CC0000 !important;
+    color: #ffffff !important;
+}
+.el-button--primary:hover,
+.el-button--primary:focus {
+    background: #A30000 !important;
+    border-color: #A30000 !important;
+}
+.el-button--default:hover {
+    border-color: #111111 !important;
+    color: #111111 !important;
+}
+.el-button--danger {
+    border-radius: 2px !important;
+}
+
+/* Inputs — clean, minimal chrome */
+.el-input__wrapper {
+    border-radius: 2px !important;
+    box-shadow: 0 0 0 1px #D8D8D8 !important;
+    transition: box-shadow 0.12s !important;
+}
+.el-input__wrapper:hover {
+    box-shadow: 0 0 0 1px #111111 !important;
+}
+.el-input__wrapper.is-focus {
+    box-shadow: 0 0 0 1.5px #CC0000 !important;
+}
+.el-input-group__append,
+.el-input-group__prepend {
+    border-radius: 0 2px 2px 0 !important;
+}
+
+/* Tables — strong header, precise rows */
+.el-table th.el-table__cell {
+    background: #111111 !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.04em !important;
+    font-size: 12px !important;
+    text-transform: uppercase !important;
+    border-bottom: none !important;
+}
+.el-table td.el-table__cell {
+    border-bottom: 1px solid #F0F0F0 !important;
+}
+.el-table__row:hover td {
+    background: #F5F5F5 !important;
+}
+
+/* Cards — no radius, precise borders */
+.el-card {
+    border-radius: 0 !important;
+    border: 1px solid #E8E8E8 !important;
+    box-shadow: none !important;
+}
+
+/* Dialogs — sharp, authoritative */
+.el-dialog {
+    border-radius: 0 !important;
+    border-top: 3px solid #CC0000 !important;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.2) !important;
+}
+.el-dialog__header {
+    border-bottom: 1px solid #E8E8E8 !important;
+    padding: 16px 20px !important;
+}
+.el-dialog__title {
+    font-weight: 700 !important;
+    letter-spacing: 0.02em !important;
+    font-size: 15px !important;
+}
+
+/* Tags — minimal */
+.el-tag {
+    border-radius: 0 !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.04em !important;
+    font-size: 11px !important;
+}
+.el-tag--primary {
+    background: #FAEAEA !important;
+    border-color: #F0AAAA !important;
+    color: #CC0000 !important;
+}
+
+/* Pagination */
+.el-pagination .el-pager li.is-active {
+    background: #CC0000 !important;
+    border-radius: 2px !important;
+}
+.el-pagination button,
+.el-pagination .el-pager li {
+    border-radius: 2px !important;
+}
+
+/* Checkbox & Radio */
+.el-checkbox__input.is-checked .el-checkbox__inner {
+    background: #CC0000 !important;
+    border-color: #CC0000 !important;
+    border-radius: 0 !important;
+}
+.el-checkbox__inner {
+    border-radius: 0 !important;
+}
+.el-radio__input.is-checked .el-radio__inner {
+    border-color: #CC0000 !important;
+    background: #CC0000 !important;
+}
+
+/* Select */
+.el-select .el-input__wrapper.is-focus {
+    box-shadow: 0 0 0 1.5px #CC0000 !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #CCCCCC; border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: #999999; }
+
+/* Notification & Message */
+.el-notification {
+    border-radius: 0 !important;
+    border-left: 3px solid #CC0000 !important;
+}
+.el-message {
+    border-radius: 2px !important;
+}
+
 /* 视图过渡，基于径向剪裁 */
 html.dark,
 html:not(.dark) {

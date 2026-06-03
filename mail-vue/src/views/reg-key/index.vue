@@ -532,29 +532,17 @@ function openAdd() {
 }
 
 .header-actions {
-  padding: 9px 15px;
+  padding: 0 14px;
+  height: 44px;
   display: flex;
-  gap: 18px;
+  gap: 12px;
   flex-wrap: wrap;
   align-items: center;
-  box-shadow: inset 0 -1px 0 0 rgba(100, 121, 143, 0.12);
-  font-size: 18px;
-  @media (max-width: 767px) {
-    gap: 15px;
-  }
+  border-bottom: 1px solid #E8E8E8;
+  background: #FAFAFA;
 
   .search-input {
-    width: min(200px, calc(100vw - 140px));
-  }
-
-  .search {
-    :deep(.el-input-group) {
-      height: 28px;
-    }
-
-    :deep(.el-input__inner) {
-      height: 28px;
-    }
+    width: min(200px, calc(100vw - 160px));
   }
 
   .icon {

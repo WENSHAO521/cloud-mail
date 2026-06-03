@@ -625,104 +625,124 @@ function close() {
   display: flex;
   align-items: center;
   justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
 
   .write-box {
-    background: var(--el-bg-color);
-    width: min(1367px, calc(100% - 80px));
-    box-shadow: var(--el-box-shadow-light);
-    border: 1px solid var(--el-border-color-light);
-    transition: var(--el-transition-duration);
-    padding: 15px;
-    border-radius: 8px;
+    background: #ffffff;
+    width: min(1200px, calc(100% - 48px));
+    box-shadow: 0 16px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid #E8E8E8;
+    border-top: 3px solid #CC0000;
+    transition: none;
+    padding: 0;
+    border-radius: 0;
     display: grid;
     grid-template-rows: auto 1fr;
     overflow: hidden;
+
     @media (max-width: 1024px) {
       width: 100%;
       height: 100%;
-      border-radius: 0;
       border: 0;
-      padding-top: 10px;
+      border-top: 3px solid #CC0000;
     }
 
     @media (min-width: 1025px) {
-      height: min(800px, calc(100vh - 60px));
+      height: min(780px, calc(100vh - 40px));
     }
 
     .title {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 10px;
+      align-items: center;
+      padding: 10px 16px;
+      border-bottom: 1px solid #E8E8E8;
+      background: #FAFAFA;
 
       .title-left {
         align-items: center;
         display: grid;
         grid-template-columns: auto auto auto 1fr;
-      }
-
-      .title-text {
+        gap: 0;
       }
 
       .sender {
         margin-left: 8px;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #888888;
+        font-weight: 700;
       }
 
       .sender-name {
-        margin-left: 8px;
-        font-weight: bold;
+        margin-left: 6px;
+        font-weight: 700;
+        font-size: 13px;
+        color: #111111;
       }
 
-
-
-      div {
-        display: flex;
-        align-items: center;
-      }
+      div { display: flex; align-items: center; }
     }
 
     .container {
       height: 100%;
       display: grid;
       grid-template-rows: auto auto 1fr auto;
-      gap: 15px;
+      gap: 0;
+      padding: 12px 16px;
 
       .item-title {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #888888;
       }
 
       .button-item {
         display: grid;
         grid-template-columns: auto auto 1fr auto;
+        align-items: center;
+        padding-top: 10px;
+        border-top: 1px solid #E8E8E8;
 
-        .att-add {
+        .att-add, .att-clear {
           cursor: pointer;
+          color: #555555;
+          display: flex;
+          align-items: center;
+          padding: 6px;
+          transition: color 0.12s;
+
+          &:hover { color: #CC0000; }
         }
 
-        .att-clear {
-          cursor: pointer;
-          margin-left: 10px;
-        }
+        .att-clear { margin-left: 4px; }
 
         .att-list {
-          display: grid;
-          gap: 5px;
-          grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
           padding-left: 10px;
           padding-right: 10px;
-          max-height: 110px;
+          max-height: 90px;
           overflow-y: auto;
-          @media (max-width: 450px) {
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-          }
 
           .att-item {
             display: grid;
             grid-template-columns: auto 1fr auto auto;
             gap: 5px;
-            height: 32px;
-            font-size: 14px;
-            padding: 4px 5px;
-            background: var(--light-ill);
-            border-radius: 4px;
+            align-items: center;
+            height: 28px;
+            font-size: 12px;
+            padding: 3px 8px;
+            background: #F5F5F5;
+            border-left: 2px solid #E8E8E8;
+            border-radius: 0;
+            min-width: 140px;
+            max-width: 240px;
+
             .att-filename {
               white-space: nowrap;
               text-overflow: ellipsis;
@@ -733,7 +753,6 @@ function close() {
       }
     }
   }
-
 }
 
 .email-row {

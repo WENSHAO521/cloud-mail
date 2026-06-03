@@ -218,46 +218,62 @@ const handleDelete = () => {
 .box {
   height: 100%;
   overflow: hidden;
+  background: #ffffff;
 }
 
 .header-actions {
-  padding: 9px 15px;
+  padding: 0 16px;
+  height: 44px;
   display: flex;
   align-items: center;
-  gap: 20px;
-  box-shadow: var(--header-actions-border);
-  font-size: 18px;
+  gap: 18px;
+  border-bottom: 1px solid #E8E8E8;
+  background: #ffffff;
+
   .star {
     display: flex;
     align-items: center;
     justify-content: center;
     min-width: 21px;
   }
+
   .icon {
     cursor: pointer;
+    color: #555555;
+    transition: color 0.12s;
+    display: flex;
+    align-items: center;
+
+    @media (hover: hover) {
+      &:hover { color: #CC0000; }
+    }
   }
 }
 
-
 .scrollbar {
-  height: calc(100% - 38px);
+  height: calc(100% - 44px);
   width: 100%;
 }
 
 .container {
   font-size: 14px;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 10px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 32px 24px;
+
   @media (max-width: 1023px) {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding: 20px 16px;
   }
 
   .email-title {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    color: #111111;
+    border-left: 3px solid #CC0000;
+    padding-left: 14px;
   }
 
   .htm-scrollbar {
@@ -342,87 +358,171 @@ const handleDelete = () => {
     }
 
     .email-info {
+      background: #FAFAFA;
+      border: 1px solid #E8E8E8;
+      border-left: 3px solid #E8E8E8;
+      padding: 14px 16px;
+      margin-bottom: 24px;
 
-      border-bottom: 1px solid var(--light-border-color);
-      margin-bottom: 20px;
-      padding-bottom: 8px;
-      @media (max-width: 1024px) {
-        margin-bottom: 15px;
-      }
       .date {
-        color: var(--regular-text-color);
-        margin-bottom: 6px;
+        color: #888888;
+        margin-top: 6px;
+        font-size: 12px;
+        letter-spacing: 0.02em;
       }
 
       .email-msg {
         max-width: 400px;
         width: fit-content;
-        margin-bottom: 15px;
+        margin-top: 10px;
+        border-radius: 0 !important;
       }
 
       .send {
         display: flex;
-        margin-bottom: 6px;
+        margin-bottom: 4px;
 
         .send-name {
-          color: var(--regular-text-color);
+          color: #555555;
           display: flex;
           flex-wrap: wrap;
+          gap: 4px;
         }
 
         .send-name-title {
-          padding-right: 5px;
+          font-weight: 600;
+          color: #111111;
         }
       }
 
       .receive {
-        margin-bottom: 6px;
+        margin-bottom: 4px;
         display: flex;
         .receive-email {
           max-width: 700px;
           word-break: break-word;
-        }
-        span:nth-child(2) {
-          color: var(--regular-text-color);
+          color: #555555;
         }
       }
 
-      .send-source {
-        white-space: nowrap;
-        font-weight: bold;
-        padding-right: 10px;
-      }
-
+      .send-source,
       .source {
         white-space: nowrap;
-        font-weight: bold;
-        padding-right: 10px;
+        font-weight: 700;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding-right: 12px;
+        color: #888888;
+        min-width: 60px;
+      }
+    }
+
+    .att {
+      margin-top: 24px;
+      margin-bottom: 24px;
+      border: 1px solid #E8E8E8;
+      border-top: 2px solid #111111;
+      padding: 14px;
+      border-radius: 0;
+      width: fit-content;
+
+      .att-box {
+        min-width: min(410px, calc(100vw - 60px));
+        max-width: 600px;
+        display: grid;
+        gap: 8px;
+      }
+
+      .att-title {
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 700;
+        color: #111111;
+
+        span:last-child {
+          color: #888888;
+          font-weight: 400;
+        }
+      }
+
+      .att-item {
+        cursor: pointer;
+        background: #F5F5F5;
+        padding: 8px 10px;
+        border-radius: 0;
+        border-left: 2px solid transparent;
+        display: grid;
+        grid-template-columns: auto 1fr auto auto;
+        align-items: center;
+        transition: border-color 0.12s, background 0.12s;
+
+        &:hover {
+          background: #EFEFEF;
+          border-left-color: #CC0000;
+        }
+
+        .att-icon { display: grid; }
+
+        .att-size {
+          color: #888888;
+          font-size: 12px;
+        }
+
+        .att-name {
+          margin-left: 10px;
+          margin-right: 10px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          font-size: 13px;
+        }
+
+        .opt-icon {
+          padding-left: 10px;
+          color: #888888;
+          align-items: center;
+          display: flex;
+          gap: 8px;
+          cursor: pointer;
+
+          &:hover { color: #CC0000; }
+
+          a {
+            color: #888888;
+            align-items: center;
+            display: flex;
+            &:hover { color: #CC0000; }
+          }
+        }
       }
     }
   }
 }
 
-.shadow-html::after  {
+.shadow-html::after {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--message-block-color); /* 半透明黑色蒙层 */
-  pointer-events: none; /* 不影响点击 */
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--message-block-color);
+  pointer-events: none;
 }
 
 .email-text {
-  font-family: inherit;
+  font-family: 'Courier New', Courier, monospace;
   white-space: pre-wrap;
   word-break: break-word;
   margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #333333;
 }
 
 .bottom-distance {
   margin-bottom: 30px;
 }
-
-
 </style>

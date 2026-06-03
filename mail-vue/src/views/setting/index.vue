@@ -207,37 +207,52 @@ function submitPwd() {
 </script>
 <style scoped lang="scss">
 .box {
-  padding: 40px 40px;
+  max-width: 720px;
+  padding: 40px 48px;
 
   @media (max-width: 767px) {
-    padding: 30px 30px;
+    padding: 24px 20px;
   }
 
   .update-pwd {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
   }
 
   .title {
-    font-size: 18px;
-    font-weight: bold;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #888888;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #111111;
   }
 
   .container {
     font-size: 14px;
     display: grid;
-    gap: 20px;
+    gap: 0;
     margin-bottom: 40px;
+    border: 1px solid #E8E8E8;
 
     .item {
       display: grid;
-      grid-template-columns: 50px 1fr;
-      gap: 140px;
-      position: relative;
+      grid-template-columns: 160px 1fr;
+      gap: 0;
+      padding: 14px 16px;
+      border-bottom: 1px solid #E8E8E8;
+      align-items: center;
+
+      &:last-child { border-bottom: none; }
+
       .user-name {
-        display: grid;
-        grid-template-columns: auto 1fr;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
         span:first-child {
           overflow: hidden;
           white-space: nowrap;
@@ -246,31 +261,42 @@ function submitPwd() {
       }
 
       .edit-name-input {
-        position: absolute;
-        bottom: -6px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
         .el-input {
-          width: min(200px,calc(100vw - 222px));
+          width: min(220px, calc(100vw - 200px));
         }
       }
 
       .edit-name {
-        color: #4dabff;
-        padding-left: 10px;
+        color: #CC0000;
+        font-size: 12px;
+        font-weight: 600;
+        padding-left: 12px;
         cursor: pointer;
+        text-decoration: none;
+
+        &:hover { text-decoration: underline; }
       }
 
       @media (max-width: 767px) {
-        gap: 70px;
+        grid-template-columns: 120px 1fr;
       }
 
       div:first-child {
-        font-weight: bold;
+        font-weight: 700;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #555555;
       }
 
       div:last-child {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+        font-size: 14px;
       }
     }
   }
@@ -278,11 +304,11 @@ function submitPwd() {
   .language {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
     margin-bottom: 40px;
 
     .language-select {
-      width: 100px;
+      width: 140px;
     }
   }
 
@@ -290,7 +316,11 @@ function submitPwd() {
     font-size: 14px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
+    padding: 16px;
+    border: 1px solid #E8E8E8;
+    border-left: 3px solid #CC0000;
+    background: #FAFAFA;
   }
 }
 </style>

@@ -1535,7 +1535,7 @@ function editSetting(settingForm, refreshStatus = true) {
 .settings-container {
   height: 100%;
   overflow: hidden;
-  background: var(--extra-light-fill) !important;
+  background: #F8F8F8 !important;
   position: relative;
 
   .loading {
@@ -1579,17 +1579,36 @@ function editSetting(settingForm, refreshStatus = true) {
 }
 
 .card-grid {
-
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
-  padding: 20px;
-  gap: 20px;
+  padding: 24px;
+  gap: 16px;
+
   @media (max-width: 500px) {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: 1fr;
+    padding: 16px;
+    gap: 12px;
   }
+
   @media (max-width: 1023px) {
-    gap: 15px;
-    padding: 15px;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  :deep(.el-card) {
+    border-radius: 0 !important;
+    border: 1px solid #E8E8E8 !important;
+    border-top: 2px solid #111111 !important;
+  }
+
+  :deep(.el-card__header) {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    color: #555555 !important;
+    border-bottom: 1px solid #E8E8E8 !important;
+    padding: 12px 16px !important;
   }
 }
 
