@@ -126,6 +126,43 @@ button, input, select, textarea {
     z-index: 2100 !important;
 }
 
+/* ── TinyMCE toolbar — match Black/White/Red theme ────────────── */
+/* Replace oxide skin's default blue focus ring with red */
+.tox .tox-tbtn:focus,
+.tox .tox-tbtn--select:focus,
+.tox .tox-split-button:focus {
+    background: rgba(204, 0, 0, 0.07) !important;
+    box-shadow: 0 0 0 2px rgba(204, 0, 0, 0.25) !important;
+}
+.tox .tox-tbtn:focus-visible,
+.tox .tox-tbtn--select:focus-visible {
+    outline: 2px solid #CC0000 !important;
+    outline-offset: -2px !important;
+}
+/* Active/pressed state */
+.tox .tox-tbtn--enabled,
+.tox .tox-tbtn--enabled:hover {
+    background: rgba(204, 0, 0, 0.10) !important;
+    color: #CC0000 !important;
+}
+/* Hover state */
+.tox .tox-tbtn:hover,
+.tox .tox-tbtn--select:hover {
+    background: rgba(0, 0, 0, 0.06) !important;
+    box-shadow: none !important;
+}
+/* Font/size select dropdown border */
+.tox .tox-tbtn--bespoke {
+    border: 1px solid transparent !important;
+    border-radius: 2px !important;
+}
+.tox .tox-tbtn--bespoke:focus,
+.tox .tox-tbtn--bespoke:focus-visible {
+    border-color: #CC0000 !important;
+    box-shadow: 0 0 0 2px rgba(204, 0, 0, 0.18) !important;
+    outline: none !important;
+}
+
 :root {
     /* PSG — Black / White / Red — German publisher */
     --el-color-primary: #CC0000;

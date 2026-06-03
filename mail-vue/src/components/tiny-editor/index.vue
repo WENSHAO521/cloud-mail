@@ -104,7 +104,7 @@ function initEditor() {
       }
     `,
     font_family_formats: [
-      'System Default=-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif',
+      'Default=-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif',
       'Inter=Inter,sans-serif',
       'Roboto=Roboto,sans-serif',
       'Open Sans=Open Sans,sans-serif',
