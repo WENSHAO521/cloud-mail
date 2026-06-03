@@ -711,17 +711,41 @@ function submitRegister() {
     font-size: 13.5px !important;
   }
 
-  /* ── Email + domain group — let El Plus handle the outer border ── */
+  /* ── Email + domain group — coordinated border system ── */
   .email-input :deep(.el-input__wrapper) {
+    box-shadow: none !important;
+    border-top:    1px solid #DADADA !important;
+    border-bottom: 1px solid #DADADA !important;
+    border-left:   1px solid #DADADA !important;
+    border-right:  none !important;
     border-radius: 3px 0 0 3px !important;
+    background: var(--el-bg-color) !important;
+    height: 42px;
+    transition: border-color 0.15s !important;
+  }
+  .email-input :deep(.el-input__wrapper.is-focus) {
+    border-color: #CC0000 !important;
+    box-shadow: none !important;
   }
   .email-input :deep(.el-input-group__append) {
-    height: 42px;
+    box-shadow: none !important;
+    border-top:    1px solid #DADADA !important;
+    border-right:  1px solid #DADADA !important;
+    border-bottom: 1px solid #DADADA !important;
+    border-left:   1px solid #EBEBEB !important;
+    border-radius: 0 3px 3px 0 !important;
+    background: #F5F5F5 !important;
     padding: 0 12px !important;
+    height: 42px;
     font-size: 13px !important;
     font-weight: 500 !important;
     white-space: nowrap;
-    border-radius: 0 3px 3px 0 !important;
+    color: #555 !important;
+  }
+  .email-input:focus-within :deep(.el-input-group__append) {
+    border-top-color:    #CC0000 !important;
+    border-right-color:  #CC0000 !important;
+    border-bottom-color: #CC0000 !important;
   }
 }
 
@@ -772,10 +796,6 @@ function submitRegister() {
   }
 }
 
-:deep(.el-input-group__append) {
-  border-radius: 0 3px 3px 0 !important;
-  padding: 0 12px !important;
-}
 
 :deep(.el-button+.el-button) {
   margin: 0;
