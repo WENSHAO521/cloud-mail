@@ -697,7 +697,7 @@ function close() {
 /* ── Dialog box ──────────────────────────────── */
 .write-box {
   background: var(--el-bg-color);
-  width: min(1080px, calc(100% - 32px));
+  width: min(1300px, calc(100% - 16px));
   display: grid;
   grid-template-rows: auto 1fr;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
