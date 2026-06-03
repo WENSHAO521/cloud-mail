@@ -2,11 +2,7 @@
   <el-scrollbar class="scroll">
     <div>
       <div class="title">
-        <img class="psg-favicon" src="https://panorama-sg.com/favicon.png" alt="Panorama Scholarly Group" />
-        <div class="psg-label">
-          <span class="psg-name">PSG</span>
-          <span class="psg-sub">Scholarly Group</span>
-        </div>
+        <img class="psg-logo" src="/image/psg-logo.svg" alt="Panorama Scholarly Group" />
       </div>
       <el-menu :collapse="false" text-color="#fff" active-text-color="#fff" style="margin-top: 10px">
         <el-menu-item @click="router.push({name: 'email'})" index="email"
@@ -85,46 +81,23 @@ const route = useRoute();
 
 .title {
   margin: 16px 12px 8px;
-  height: 52px;
+  height: 56px;
   border-radius: 10px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  justify-content: center;
+  background: #ffffff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
   transition: var(--transition-smooth);
   max-width: 236px;
-  padding: 0 12px;
+  padding: 0 16px;
 
-  .psg-favicon {
-    width: 34px;
-    height: 34px;
-    border-radius: 7px;
+  .psg-logo {
+    height: 32px;
+    width: auto;
+    max-width: 180px;
+    display: block;
     object-fit: contain;
-    flex-shrink: 0;
-  }
-
-  .psg-label {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-
-    .psg-name {
-      font-size: 14px;
-      font-weight: 700;
-      color: #ffffff;
-      letter-spacing: 0.07em;
-      white-space: nowrap;
-    }
-
-    .psg-sub {
-      font-size: 9px;
-      font-weight: 600;
-      color: rgba(255, 255, 255, 0.38);
-      letter-spacing: 0.13em;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
   }
 }
 

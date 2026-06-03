@@ -12,7 +12,7 @@
     <!-- Left branding panel — desktop only -->
     <div class="brand-panel">
       <div class="brand-content">
-        <img class="brand-compass" src="https://panorama-sg.com/favicon.png" alt="Panorama Scholarly Group" />
+        <img class="brand-compass" src="/image/psg-logo.svg" alt="Panorama Scholarly Group" />
         <div class="brand-org">Panorama Scholarly Group</div>
         <div class="brand-product">Internal Mail System</div>
         <div class="brand-rule"></div>
@@ -27,7 +27,7 @@
     <div class="form-wrapper">
       <div class="container">
         <div class="form-badge">
-          <img src="https://panorama-sg.com/favicon.png" alt="Panorama Scholarly Group" />
+          <img src="/image/psg-logo.svg" alt="Panorama Scholarly Group" />
         </div>
         <span class="form-title">{{ settingStore.settings.title }}</span>
         <span class="form-desc" v-if="show === 'login'">{{ $t('loginTitle') }}</span>
@@ -916,11 +916,13 @@ function submitRegister() {
   padding: 0 40px;
 
   .brand-compass {
-    width: 96px;
-    height: 96px;
+    width: 140px;
+    height: auto;
     margin-bottom: 28px;
-    border-radius: 22px;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    background: #ffffff;
+    padding: 14px 18px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
   }
 
   .brand-org {
@@ -983,11 +985,10 @@ function submitRegister() {
   margin-bottom: 18px;
 
   img {
-    width: 52px;
-    height: 52px;
+    height: 36px;
+    width: auto;
     display: block;
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    object-fit: contain;
   }
 }
 
