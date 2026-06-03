@@ -270,16 +270,16 @@ button, input, select, textarea {
     --compose-shadow: 0 8px 40px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
-/* ── Dark mode email: unread=white, read=dim ─────────────── */
-.dark :deep(.email-row):not(:has(.unread)) .name,
-.dark :deep(.email-row):not(:has(.unread)) .subject-text {
+/* ── Dark mode email: unread=white, read=dim — class-based, no :has() ── */
+.dark .email-row:not(.is-unread) .name,
+.dark .email-row:not(.is-unread) .subject-text {
     color: rgba(255, 255, 255, 0.42) !important;
 }
-.dark :deep(.email-row):has(.unread) .name,
-.dark :deep(.email-row):has(.unread) .subject-text {
+.dark .email-row.is-unread .name,
+.dark .email-row.is-unread .subject-text {
     color: #ffffff !important;
 }
-.dark :deep(.email-row) {
+.dark .email-row {
     border-bottom-color: rgba(255, 255, 255, 0.035) !important;
 }
 

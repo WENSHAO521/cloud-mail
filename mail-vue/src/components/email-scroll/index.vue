@@ -54,7 +54,7 @@
                         :key="keyCount"
         >
           <template #default="{ data: item, index }" >
-            <div :class="'email-row ' + props.type"
+            <div :class="['email-row', props.type, { 'is-unread': item.unread === EmailUnreadEnum.UNREAD && showUnread }]"
                  :data-checked="item.checked"
                  @click="jumpDetails(item)"
                  v-if="!item.expand"
@@ -1175,9 +1175,8 @@ function loadData() {
   cursor: pointer;
   align-items: center;
   position: relative;
-  transition: background 0.18s var(--ease-out, ease),
-              border-left-color 0.18s var(--ease-out, ease),
-              box-shadow 0.18s var(--ease-out, ease);
+  /* background + border only — no box-shadow transition (triggers repaint) */
+  transition: background 0.14s ease, border-left-color 0.14s ease;
   height: 48px;
   border-left: 3px solid transparent;
 
@@ -1476,29 +1475,23 @@ function loadData() {
   &:hover {
     background-color: var(--email-hover-background);
     border-left-color: rgba(204, 0, 0, 0.30);
-    box-shadow: inset 0 0 0 0 transparent, 0 1px 6px rgba(0,0,0,0.06);
     z-index: 1;
   }
 
-  /* Unread: red left accent + glow */
-  &:has(.unread) {
+  /* Unread: red left accent — class set in JS, no :has() needed */
+  &.is-unread {
     border-left-color: #CC0000;
+    .name { color: var(--el-text-color-primary) !important; font-weight: 700 !important; }
+    .subject-text { color: var(--el-text-color-primary) !important; }
   }
 
-  /* Read email: slightly dimmer to create contrast with unread */
-  &:not(:has(.unread)) {
-    .name { color: var(--regular-text-color) !important; }
-    .email-subject .subject-text { color: var(--regular-text-color); }
-  }
-
-  /* Unread email: full brightness */
-  &:has(.unread) {
-    .name { color: var(--el-text-color-primary) !important; }
-    .email-subject .subject-text { color: var(--el-text-color-primary); }
+  /* Read: dimmer */
+  &:not(.is-unread) {
+    .name { color: var(--regular-text-color) !important; font-weight: 500 !important; }
   }
 
   .name {
-    font-weight: 700 !important;
+    font-weight: 500 !important;
   }
 
   .email-content {
@@ -1643,14 +1636,8 @@ function loadData() {
   border-radius: 50%;
   display: inline-block;
   flex-shrink: 0;
-  /* Glowing dot — like modern Superhuman/Hey unread indicator */
-  box-shadow: 0 0 0 2px rgba(204, 0, 0, 0.18), 0 0 8px rgba(204, 0, 0, 0.30);
-  animation: unread-pulse 2.4s ease-in-out infinite;
-}
-
-@keyframes unread-pulse {
-  0%, 100% { box-shadow: 0 0 0 2px rgba(204,0,0,0.18), 0 0 8px rgba(204,0,0,0.30); }
-  50%       { box-shadow: 0 0 0 3px rgba(204,0,0,0.10), 0 0 14px rgba(204,0,0,0.20); }
+  /* Static glow — no animation, no repaint per frame */
+  box-shadow: 0 0 0 2px rgba(204, 0, 0, 0.15);
 }
 
 ul {

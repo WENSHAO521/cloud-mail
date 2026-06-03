@@ -75,7 +75,7 @@ import { useRoute } from "vue-router";
 import { Icon } from "@iconify/vue";
 import { useUiStore } from "@/store/ui.js";
 import { hasPerm } from "@/perm/perm.js";
-import { computed } from "vue";
+import { computed, ref, onUnmounted } from "vue";
 
 const route = useRoute();
 const uiStore = useUiStore();
@@ -84,7 +84,9 @@ const canSend = computed(() => hasPerm('email:send'));
 
 // On mobile the sidebar overlays full-width — never apply the icon-only collapsed state
 const isMobile = ref(window.innerWidth < 1025)
-window.addEventListener('resize', () => { isMobile.value = window.innerWidth < 1025 })
+const onResize = () => { isMobile.value = window.innerWidth < 1025 }
+window.addEventListener('resize', onResize)
+onUnmounted(() => window.removeEventListener('resize', onResize))
 const collapsed = computed(() => uiStore.asideCollapsed && !isMobile.value)
 
 const navItems = [
