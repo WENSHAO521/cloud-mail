@@ -16,10 +16,6 @@
       </div>
       <div class="empty-title">{{ $t('noGroups') }}</div>
       <div class="empty-desc">{{ $t('noGroupsDesc') }}</div>
-      <el-button class="action-btn" @click="openAdd">
-        <Icon icon="ep:plus" width="14" height="14" />
-        {{ $t('addGroup') }}
-      </el-button>
     </div>
 
     <!-- Group list -->

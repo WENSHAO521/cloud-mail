@@ -18,10 +18,6 @@
         </div>
         <div class="empty-title">{{ $t('noTemplates') }}</div>
         <div class="empty-desc">{{ $t('noTemplatesDesc') }}</div>
-        <el-button class="action-btn" @click="openAdd">
-          <Icon icon="ep:plus" width="14" height="14" />
-          {{ $t('addTemplate') }}
-        </el-button>
       </div>
 
       <!-- Template list -->
