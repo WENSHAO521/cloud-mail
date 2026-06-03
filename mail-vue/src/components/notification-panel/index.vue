@@ -28,19 +28,6 @@
         </button>
       </div>
 
-      <!-- Permission prompt -->
-      <div v-if="notifStore.permission !== 'granted'" class="notif-permission-row">
-        <Icon icon="solar:bell-off-bold-duotone" width="15" height="15" class="perm-icon"/>
-        <span class="perm-text">
-          {{ notifStore.permission === 'denied' ? $t('notifDenied') : $t('enableDesktopNotif') }}
-        </span>
-        <button
-          v-if="notifStore.permission === 'default'"
-          class="perm-btn"
-          @click="notifStore.requestPermission()"
-        >{{ $t('enable') }}</button>
-      </div>
-
       <!-- List -->
       <div v-if="notifStore.items.length" class="notif-list">
         <div
@@ -134,37 +121,6 @@ const notifStore = useNotificationStore()
   }
 }
 
-.notif-permission-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  background: rgba(204, 0, 0, 0.05);
-  border-bottom: 1px solid var(--light-border-color);
-  flex-shrink: 0;
-
-  .perm-icon { color: #CC0000; flex-shrink: 0; }
-
-  .perm-text {
-    flex: 1;
-    font-size: 11.5px;
-    color: var(--regular-text-color);
-    line-height: 1.4;
-  }
-
-  .perm-btn {
-    background: #CC0000;
-    color: #fff;
-    border: none;
-    border-radius: 2px;
-    padding: 3px 8px;
-    font-size: 11px;
-    font-weight: 600;
-    cursor: pointer;
-    flex-shrink: 0;
-    &:hover { background: #A00000; }
-  }
-}
 
 .notif-list {
   overflow-y: auto;

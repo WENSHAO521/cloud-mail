@@ -27,9 +27,11 @@ import Header from '@/layout/header/index.vue'
 import Main from '@/layout/main/index.vue'
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import {useUiStore} from "@/store/ui.js";
+import {useNotificationStore} from "@/store/notification.js";
 import writer from '@/layout/write/index.vue'
 
 const uiStore = useUiStore();
+const notificationStore = useNotificationStore();
 const writerRef = ref({})
 const isMobile = ref(window.innerWidth < 1025)
 const handleResize = () => {
@@ -50,6 +52,8 @@ onMounted(() => {
   window.addEventListener('resize', handleResize)
   window.addEventListener('keydown', handleKeydown)
   handleResize()
+
+  notificationStore.requestPermission()
 })
 
 onBeforeUnmount(() => {
