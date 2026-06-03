@@ -748,12 +748,51 @@ path[fill="#ffdda1"] {
   top: 6px;
 }
 
-:deep(.el-input-group__append) {
-  border-radius: 0 3px 3px 0 !important;
-  padding: 0 12px !important;
-  font-size: 13px !important;
-  font-weight: 500 !important;
-  white-space: nowrap;
+/* ── Unified email + domain input in dialogs ── */
+:deep(.el-input.el-input-group) {
+
+  /* Input wrapper: only left/top/bottom border, no right */
+  .el-input__wrapper {
+    border-top:    1px solid var(--base-border-color) !important;
+    border-bottom: 1px solid var(--base-border-color) !important;
+    border-left:   1px solid var(--base-border-color) !important;
+    border-right:  none !important;
+    border-radius: 3px 0 0 3px !important;
+    box-shadow: none !important;
+    background: var(--el-bg-color) !important;
+    transition: border-color 0.15s !important;
+  }
+
+  /* Focus: turn all visible borders red */
+  .el-input__wrapper.is-focus {
+    border-color: #CC0000 !important;
+    box-shadow: none !important;
+  }
+
+  /* Append: top/right/bottom border, left is the divider */
+  .el-input-group__append {
+    border-top:    1px solid var(--base-border-color) !important;
+    border-right:  1px solid var(--base-border-color) !important;
+    border-bottom: 1px solid var(--base-border-color) !important;
+    border-left:   1px solid var(--light-border-color) !important;
+    border-radius: 0 3px 3px 0 !important;
+    box-shadow: none !important;
+    background: var(--extra-light-fill) !important;
+    padding: 0 12px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    color: var(--regular-text-color) !important;
+    white-space: nowrap;
+  }
+}
+
+/* Focus-within: red border on append too */
+:deep(.el-input.el-input-group:focus-within) {
+  .el-input-group__append {
+    border-top-color:    #CC0000 !important;
+    border-right-color:  #CC0000 !important;
+    border-bottom-color: #CC0000 !important;
+  }
 }
 
 :deep(.el-dialog) {
