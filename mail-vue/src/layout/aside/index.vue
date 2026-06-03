@@ -127,7 +127,6 @@ function openCompose() {
     max-width: 180px;
     display: block;
     object-fit: contain;
-    filter: invert(1);
   }
 }
 
