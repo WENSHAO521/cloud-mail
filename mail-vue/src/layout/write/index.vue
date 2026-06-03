@@ -1,93 +1,108 @@
 <template>
   <div class="send" v-show="show">
     <div class="write-box">
-      <div class="title">
-        <div class="title-left">
-          <span class="title-text">
-            <Icon icon="hugeicons:quill-write-01" width="28" height="28"/>
-          </span>
-          <span class="sender">{{ $t('sender') }}:</span>
-          <span class="sender-name">{{ form.name || form.sendEmail.split('@')[0] }}</span>
+
+      <!-- ── Header ─────────────────────────────── -->
+      <div class="wh">
+        <div class="wh-left">
+          <div class="wh-badge">
+            <span v-if="form.sendType === 'reply'">{{ $t('reply') }}</span>
+            <span v-else-if="form.sendType === 'forward'">{{ $t('forward') }}</span>
+            <span v-else>{{ $t('compose') }}</span>
+          </div>
+          <div class="wh-sender">
+            <div class="wh-avatar">{{ senderInitial }}</div>
+            <div class="wh-info">
+              <span class="wh-name">{{ form.name || form.sendEmail.split('@')[0] }}</span>
+              <span class="wh-email">{{ form.sendEmail }}</span>
+            </div>
+          </div>
         </div>
-        <div @click="close" style="cursor: pointer;">
+        <div class="wh-close" @click="close">
           <Icon icon="material-symbols-light:close-rounded" width="22" height="22"/>
         </div>
       </div>
+
+      <!-- ── Fields ─────────────────────────────── -->
       <div class="container">
-        <!-- To row -->
-        <el-input-tag @add-tag="addTagChange" tag-type="primary" @input="inputChange" size="default" v-model="form.receiveEmail">
-          <template #prefix>
-            <div class="item-title">{{ $t('recipient') }}</div>
-            <el-select
-                ref="mySelect"
-                class="write-select"
-                popper-class="write-select"
-                :show-arrow="false"
-                :no-match-text="' '"
-                :no-data-text="' '"
-                @visible-change="selectStatusChange"
-                @change="selectChange"
-            >
-              <el-option
-                  v-for="item in selectRecipientList"
-                  :key="item"
-                  :label="item"
-                  :value="item"
-                  style="color: #999896;"
-              />
-            </el-select>
-          </template>
-          <template #suffix>
-            <div class="to-suffix">
-              <span v-if="!showCc"  class="field-toggle" @click.stop="showCc = true">{{ $t('cc') }}</span>
-              <span v-if="!showBcc" class="field-toggle" @click.stop="showBcc = true">{{ $t('bcc') }}</span>
-              <Icon icon="fa7-solid:user-plus" width="18" height="18" class="add-contact" @click.stop="openContacts" />
+
+        <!-- To -->
+        <div class="field-row">
+          <span class="field-label">{{ $t('recipient') }}</span>
+          <el-input-tag class="field-tag" @add-tag="addTagChange" tag-type="primary"
+                        @input="inputChange" size="default" v-model="form.receiveEmail">
+            <template #prefix>
+              <el-select ref="mySelect" class="write-select" popper-class="write-select"
+                         :show-arrow="false" :no-match-text="' '" :no-data-text="' '"
+                         @visible-change="selectStatusChange" @change="selectChange">
+                <el-option v-for="item in selectRecipientList" :key="item"
+                           :label="item" :value="item" style="color:#999"/>
+              </el-select>
+            </template>
+          </el-input-tag>
+          <div class="field-actions">
+            <span v-if="!showCc"  class="field-toggle" @click.stop="showCc = true">{{ $t('cc') }}</span>
+            <span v-if="!showBcc" class="field-toggle" @click.stop="showBcc = true">{{ $t('bcc') }}</span>
+            <div class="icon-btn-sm" @click.stop="openContacts">
+              <Icon icon="fa7-solid:user-plus" width="14" height="14"/>
             </div>
-          </template>
-        </el-input-tag>
+          </div>
+        </div>
 
-        <!-- CC row -->
-        <el-input-tag v-show="showCc" v-model="form.cc" tag-type="primary"
-                      @add-tag="addCcTag" size="default">
-          <template #prefix>
-            <div class="item-title">{{ $t('cc') }}</div>
-          </template>
-        </el-input-tag>
+        <!-- Cc -->
+        <div class="field-row" v-show="showCc">
+          <span class="field-label">{{ $t('cc') }}</span>
+          <el-input-tag class="field-tag" v-model="form.cc" tag-type="primary"
+                        @add-tag="addCcTag" size="default"/>
+        </div>
 
-        <!-- BCC row -->
-        <el-input-tag v-show="showBcc" v-model="form.bcc" tag-type="primary"
-                      @add-tag="addBccTag" size="default">
-          <template #prefix>
-            <div class="item-title">{{ $t('bcc') }}</div>
-          </template>
-        </el-input-tag>
+        <!-- Bcc -->
+        <div class="field-row" v-show="showBcc">
+          <span class="field-label">{{ $t('bcc') }}</span>
+          <el-input-tag class="field-tag" v-model="form.bcc" tag-type="primary"
+                        @add-tag="addBccTag" size="default"/>
+        </div>
 
-        <el-input v-model="form.subject" :placeholder="t('subject')" />
+        <!-- Subject -->
+        <div class="field-row subject-row">
+          <el-input class="subject-input" v-model="form.subject"
+                    :placeholder="t('subject')" />
+        </div>
+
+        <!-- Editor -->
         <div class="editor-wrap">
           <tinyEditor :def-value="defValue" ref="editor" @change="change" @focus="focusChange" />
         </div>
-        <div class="button-item">
-          <div class="att-add" @click="chooseFile">
-            <Icon icon="iconamoon:attachment-fill" width="24" height="24"/>
-          </div>
-          <div class="att-clear" @click="clearContent">
-            <Icon icon="icon-park-outline:clear-format" width="24" height="24 "/>
-          </div>
-          <div class="att-list">
-            <div class="att-item" v-for="(item,index) in form.attachments" :key="index">
-              <Icon v-bind="getIconByName(item.filename)"/>
-              <span class="att-filename">{{ item.filename }}</span>
-              <span class="att-size">{{ formatBytes(item.size) }}</span>
-              <Icon style="cursor: pointer;" icon="material-symbols-light:close-rounded" @click="delAtt(index)"
-                    width="22" height="22"/>
+
+        <!-- Toolbar -->
+        <div class="toolbar-bar">
+          <div class="toolbar-left">
+            <div class="tb-btn" @click="chooseFile" :title="$t('attachment')">
+              <Icon icon="iconamoon:attachment-fill" width="18" height="18"/>
+            </div>
+            <div class="tb-btn" @click="clearContent" :title="$t('clear')">
+              <Icon icon="icon-park-outline:clear-format" width="17" height="17"/>
+            </div>
+            <div class="att-list">
+              <div class="att-item" v-for="(item,index) in form.attachments" :key="index">
+                <Icon v-bind="getIconByName(item.filename)" width="14" height="14"/>
+                <span class="att-filename">{{ item.filename }}</span>
+                <span class="att-size">{{ formatBytes(item.size) }}</span>
+                <Icon icon="material-symbols-light:close-rounded" width="16" height="16"
+                      style="cursor:pointer;flex-shrink:0" @click="delAtt(index)"/>
+              </div>
             </div>
           </div>
-          <div>
-            <el-button type="primary" @click="sendEmail" v-if="form.sendType === 'reply'">{{ $t('reply') }}</el-button>
-            <el-button type="primary" @click="sendEmail" v-else-if="form.sendType === 'forward'">{{ $t('forward') }}</el-button>
-            <el-button type="primary" @click="sendEmail" v-else>{{ $t('send') }}</el-button>
+          <div class="toolbar-right">
+            <el-button class="send-btn" type="primary" @click="sendEmail">
+              <Icon icon="mingcute:send-fill" width="15" height="15" style="margin-right:6px"/>
+              <span v-if="form.sendType === 'reply'">{{ $t('reply') }}</span>
+              <span v-else-if="form.sendType === 'forward'">{{ $t('forward') }}</span>
+              <span v-else>{{ $t('send') }}</span>
+            </el-button>
           </div>
         </div>
+
       </div>
     </div>
     <el-dialog top="10vh" v-model="showContacts" @closed="clearSelectContact" :title="t('recentContacts')">
@@ -185,6 +200,12 @@ const form = reactive({
 })
 
 const selectRecipientList = ref([])
+
+const senderInitial = computed(() => {
+  const name = form.name?.trim()
+  if (name) return name[0].toUpperCase()
+  return form.sendEmail?.[0]?.toUpperCase() || '?'
+})
 
 const contacts = computed(() => writerStore.sendRecipientRecord.map(item => ({email: item})))
 
@@ -662,150 +683,347 @@ function close() {
 }
 </style>
 <style scoped lang="scss">
+/* ── Overlay ─────────────────────────────────── */
 .send {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.60);
+  z-index: 2000;
+}
 
-  .write-box {
-    background: #ffffff;
-    width: min(1200px, calc(100% - 48px));
-    box-shadow: 0 16px 60px rgba(0, 0, 0, 0.3);
-    border: 1px solid #E8E8E8;
-    border-top: 3px solid #CC0000;
-    transition: none;
-    padding: 0;
+/* ── Dialog box ──────────────────────────────── */
+.write-box {
+  background: var(--el-bg-color);
+  width: min(860px, calc(100% - 32px));
+  display: grid;
+  grid-template-rows: auto 1fr;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+  border-radius: 2px;
+  overflow: hidden;
+
+  @media (max-width: 767px) {
+    width: 100%;
+    height: 100%;
     border-radius: 0;
-    display: grid;
-    grid-template-rows: auto 1fr;
-    overflow: hidden;
+  }
 
-    @media (max-width: 1024px) {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      border-top: 3px solid #CC0000;
-    }
+  @media (min-width: 768px) {
+    height: min(720px, calc(100vh - 48px));
+  }
+}
 
-    @media (min-width: 1025px) {
-      height: min(780px, calc(100vh - 40px));
-    }
+/* ── Header ──────────────────────────────────── */
+.wh {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px 0 20px;
+  height: 52px;
+  background: #111111;
+  flex-shrink: 0;
+  border-bottom: 3px solid #CC0000;
+}
 
-    .title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 16px;
-      border-bottom: 1px solid #E8E8E8;
-      background: #FAFAFA;
+.wh-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
 
-      .title-left {
-        align-items: center;
-        display: grid;
-        grid-template-columns: auto auto auto 1fr;
-        gap: 0;
-      }
+.wh-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #CC0000;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
 
-      .sender {
-        margin-left: 8px;
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        color: #888888;
-        font-weight: 700;
-      }
+.wh-sender {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  padding-left: 14px;
+  border-left: 1px solid rgba(255,255,255,0.10);
+}
 
-      .sender-name {
-        margin-left: 6px;
-        font-weight: 700;
-        font-size: 13px;
-        color: #111111;
-      }
+.wh-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 2px;
+  background: #CC0000;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
 
-      div { display: flex; align-items: center; }
-    }
+.wh-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
 
-    .container {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      padding: 0 16px 0;
+.wh-name {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.90);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-      .editor-wrap {
-        flex: 1;
-        min-height: 0;
-        overflow: hidden;
-      }
+.wh-email {
+  font-size: 10.5px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: rgba(255,255,255,0.38);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-      .item-title {
-        font-size: 11px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        color: #888888;
-      }
+.wh-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: rgba(255,255,255,0.55);
+  flex-shrink: 0;
+  transition: background 0.12s, color 0.12s;
 
-      .button-item {
-        display: grid;
-        grid-template-columns: auto auto 1fr auto;
-        align-items: center;
-        padding-top: 10px;
-        border-top: 1px solid #E8E8E8;
-
-        .att-add, .att-clear {
-          cursor: pointer;
-          color: #555555;
-          display: flex;
-          align-items: center;
-          padding: 6px;
-          transition: color 0.12s;
-
-          &:hover { color: #CC0000; }
-        }
-
-        .att-clear { margin-left: 4px; }
-
-        .att-list {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 6px;
-          padding-left: 10px;
-          padding-right: 10px;
-          max-height: 90px;
-          overflow-y: auto;
-
-          .att-item {
-            display: grid;
-            grid-template-columns: auto 1fr auto auto;
-            gap: 5px;
-            align-items: center;
-            height: 28px;
-            font-size: 12px;
-            padding: 3px 8px;
-            background: #F5F5F5;
-            border-left: 2px solid #E8E8E8;
-            border-radius: 0;
-            min-width: 140px;
-            max-width: 240px;
-
-            .att-filename {
-              white-space: nowrap;
-              text-overflow: ellipsis;
-              overflow: hidden;
-            }
-          }
-        }
-      }
+  @media (hover: hover) {
+    &:hover {
+      background: rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.90);
     }
   }
 }
+
+/* ── Fields container ────────────────────────── */
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Each field row */
+.field-row {
+  display: flex;
+  align-items: center;
+  min-height: 46px;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--light-border-color);
+  flex-shrink: 0;
+  gap: 0;
+}
+
+.field-label {
+  flex-shrink: 0;
+  width: 62px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--secondary-text-color);
+}
+
+.field-tag {
+  flex: 1;
+  min-width: 0;
+}
+
+.field-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.field-toggle {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--secondary-text-color);
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  user-select: none;
+  padding: 3px 6px;
+  border-radius: 2px;
+  transition: background 0.12s, color 0.12s;
+
+  @media (hover: hover) {
+    &:hover {
+      background: var(--base-fill);
+      color: var(--el-text-color-primary);
+    }
+  }
+}
+
+.icon-btn-sm {
+  width: 26px;
+  height: 26px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--secondary-text-color);
+  transition: background 0.12s, color 0.12s;
+
+  @media (hover: hover) {
+    &:hover {
+      background: var(--base-fill);
+      color: var(--el-text-color-primary);
+    }
+  }
+}
+
+/* Subject row */
+.subject-row {
+  min-height: 50px;
+  border-bottom: 2px solid var(--light-border-color);
+}
+
+/* Editor fills remaining height */
+.editor-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Bottom toolbar */
+.toolbar-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 16px 10px;
+  border-top: 1px solid var(--light-border-color);
+  background: var(--extra-light-fill);
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.tb-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--regular-text-color);
+  transition: background 0.12s, color 0.12s;
+  flex-shrink: 0;
+
+  @media (hover: hover) {
+    &:hover {
+      background: var(--base-fill);
+      color: #CC0000;
+    }
+  }
+}
+
+.att-list {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 0 4px;
+  max-width: 100%;
+
+  .att-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    height: 26px;
+    font-size: 11.5px;
+    padding: 0 8px;
+    background: var(--el-bg-color);
+    border: 1px solid var(--light-border-color);
+    border-left: 2px solid #CC0000;
+    border-radius: 0;
+    white-space: nowrap;
+    flex-shrink: 0;
+    max-width: 200px;
+
+    .att-filename {
+      max-width: 100px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      font-weight: 500;
+    }
+
+    .att-size {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--secondary-text-color);
+    }
+  }
+}
+
+.toolbar-right { flex-shrink: 0; }
+
+.send-btn {
+  height: 34px !important;
+  padding: 0 20px !important;
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  border-radius: 2px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+/* El overrides — flat field inputs */
+:deep(.field-tag .el-input-tag),
+:deep(.field-tag .el-input__wrapper) {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  background: transparent !important;
+  padding-left: 0 !important;
+}
+
+:deep(.subject-input .el-input__wrapper) {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  background: transparent !important;
+  padding-left: 0 !important;
+
+  .el-input__inner {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: var(--el-text-color-primary) !important;
+    letter-spacing: 0.01em !important;
+  }
+}
+
+:deep(.el-input-tag__suffix) { padding-right: 0; }
 
 .email-row {
   white-space: nowrap;
@@ -814,22 +1032,17 @@ function close() {
 }
 
 :deep(.el-dialog) {
-  width: 420px !important;
-  @media (max-width: 460px) {
-    width: calc(100% - 40px) !important;
-    margin-right: 20px !important;
-    margin-left: 20px !important;
+  width: 500px !important;
+  @media (max-width: 540px) {
+    width: calc(100% - 32px) !important;
   }
 }
 
 .contacts-bottom {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   margin-top: 10px;
-}
-
-.add-contact {
-  color: var(--regular-text-color)
+  gap: 8px;
 }
 
 .write-select {
@@ -839,53 +1052,5 @@ function close() {
   z-index: 0;
   opacity: 0;
   pointer-events: none;
-}
-
-/* Uniform border for both recipient and subject fields */
-:deep(.el-input__wrapper),
-:deep(.el-input-tag) {
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  border-bottom: 1px solid #E8E8E8 !important;
-  background: transparent !important;
-  padding-left: 0 !important;
-}
-:deep(.el-input__wrapper.is-focus),
-:deep(.el-input-tag.is-focus) {
-  box-shadow: none !important;
-  border-bottom-color: #CC0000 !important;
-}
-:deep(.el-input-tag__suffix) {
-  padding-right: 4px;
-}
-
-.icon {
-  cursor: pointer;
-}
-
-.to-suffix {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-right: 6px;
-}
-
-.field-toggle {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--secondary-text-color);
-  cursor: pointer;
-  letter-spacing: 0.02em;
-  padding: 2px 0;
-  border-bottom: 1px solid transparent;
-  transition: color 0.12s, border-color 0.12s;
-  user-select: none;
-
-  @media (hover: hover) {
-    &:hover {
-      color: var(--el-text-color-primary);
-      border-bottom-color: var(--el-text-color-primary);
-    }
-  }
 }
 </style>
