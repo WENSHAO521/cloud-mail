@@ -54,6 +54,18 @@ const routes = [
                 meta: { title: 'spam', name: 'spam', menu: true }
             },
             {
+                path: '/templates',
+                name: 'templates',
+                component: () => import('@/views/templates/index.vue'),
+                meta: { title: 'templates', name: 'templates', menu: true }
+            },
+            {
+                path: '/groups',
+                name: 'groups',
+                component: () => import('@/views/groups/index.vue'),
+                meta: { title: 'contactGroups', name: 'groups', menu: true }
+            },
+            {
                 path: '/starred',
                 name: 'star',
                 component: () => import('@/views/star/index.vue'),

@@ -43,6 +43,16 @@
           <Icon icon="material-symbols:report-outline-rounded" width="20" height="20" />
           <span class="menu-name">{{$t('spam')}}</span>
         </el-menu-item>
+        <el-menu-item @click="router.push({name: 'templates'})" index="templates"
+                      :class="route.meta.name === 'templates' ? 'choose-item' : ''">
+          <Icon icon="material-symbols:description-outline-rounded" width="20" height="20" />
+          <span class="menu-name">{{$t('templates')}}</span>
+        </el-menu-item>
+        <el-menu-item @click="router.push({name: 'groups'})" index="groups"
+                      :class="route.meta.name === 'groups' ? 'choose-item' : ''">
+          <Icon icon="material-symbols:group-outline" width="20" height="20" />
+          <span class="menu-name">{{$t('contactGroups')}}</span>
+        </el-menu-item>
         <el-menu-item @click="router.push({name: 'setting'})" index="setting"
                       :class="route.meta.name === 'setting' ? 'choose-item' : ''">
           <Icon icon="fluent:settings-48-regular" width="20" height="20" />

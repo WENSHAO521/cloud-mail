@@ -184,7 +184,7 @@
                  style="display:flex;align-items:center;justify-content:space-between;padding:8px 2px;border-bottom:1px solid var(--light-border-color)">
               <div>
                 <div style="font-weight:600;font-size:13px">{{ g.name }}</div>
-                <div style="font-size:11.5px;color:var(--regular-text-color)">{{ g.emails.join(', ') }}</div>
+                <div style="font-size:11.5px;color:var(--regular-text-color)">{{ g.contacts.map(c => c.name || c.email).join(', ') }}</div>
               </div>
               <el-button size="small" type="primary" @click="insertGroup(g)">{{ $t('insertGroup') }}</el-button>
             </div>
@@ -345,8 +345,8 @@ async function onTabChange(tab) {
 }
 
 function insertGroup(g) {
-  g.emails.forEach(email => {
-    if (!form.receiveEmail.includes(email)) form.receiveEmail.push(email)
+  g.contacts.forEach(c => {
+    if (c.email && !form.receiveEmail.includes(c.email)) form.receiveEmail.push(c.email)
   })
   showContacts.value = false
 }

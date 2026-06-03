@@ -4,31 +4,40 @@ import userContext from '../security/user-context';
 
 const ENSURE = `CREATE TABLE IF NOT EXISTS contact_group (group_id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, name TEXT NOT NULL DEFAULT '', emails TEXT NOT NULL DEFAULT '[]', create_time DATETIME DEFAULT CURRENT_TIMESTAMP)`;
 
+function parseContacts(raw) {
+	try {
+		const parsed = JSON.parse(raw || '[]');
+		return parsed.map(item =>
+			typeof item === 'string' ? { name: '', email: item } : item
+		);
+	} catch { return []; }
+}
+
 app.get('/contactGroup/list', async (c) => {
 	try { await c.env.db.prepare(ENSURE).run(); } catch {}
 	const userId = userContext.getUserId(c);
 	const { results } = await c.env.db.prepare(
 		'SELECT group_id, name, emails FROM contact_group WHERE user_id = ? ORDER BY group_id DESC'
 	).bind(userId).all();
-	return c.json(result.ok(results.map(r => ({ ...r, emails: JSON.parse(r.emails || '[]') }))));
+	return c.json(result.ok(results.map(r => ({ groupId: r.group_id, name: r.name, contacts: parseContacts(r.emails) }))));
 });
 
 app.post('/contactGroup/add', async (c) => {
 	try { await c.env.db.prepare(ENSURE).run(); } catch {}
 	const userId = userContext.getUserId(c);
-	const { name, emails } = await c.req.json();
+	const { name, contacts } = await c.req.json();
 	const row = await c.env.db.prepare(
 		'INSERT INTO contact_group (user_id, name, emails) VALUES (?,?,?) RETURNING *'
-	).bind(userId, name || '', JSON.stringify(emails || [])).first();
-	return c.json(result.ok({ ...row, emails: JSON.parse(row.emails || '[]') }));
+	).bind(userId, name || '', JSON.stringify(contacts || [])).first();
+	return c.json(result.ok({ groupId: row.group_id, name: row.name, contacts: parseContacts(row.emails) }));
 });
 
 app.put('/contactGroup/update', async (c) => {
 	const userId = userContext.getUserId(c);
-	const { groupId, name, emails } = await c.req.json();
+	const { groupId, name, contacts } = await c.req.json();
 	await c.env.db.prepare(
 		'UPDATE contact_group SET name=?, emails=? WHERE group_id=? AND user_id=?'
-	).bind(name || '', JSON.stringify(emails || []), groupId, userId).run();
+	).bind(name || '', JSON.stringify(contacts || []), groupId, userId).run();
 	return c.json(result.ok());
 });
 
