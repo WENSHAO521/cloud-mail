@@ -44,6 +44,7 @@ const userService = {
 		user.permKeys = permKeys;
 		user.role = roleRow;
 		user.type = userRow.type;
+		user.signature = userRow.signature || '';
 
 		if (c.env.admin === userRow.email) {
 			user.role = constant.ADMIN_ROLE
@@ -53,6 +54,11 @@ const userService = {
 		return user;
 	},
 
+
+	async updateSignature(c, params, userId) {
+		const { signature } = params;
+		await orm(c).update(user).set({ signature: signature ?? '' }).where(eq(user.userId, userId)).run();
+	},
 
 	async resetPassword(c, params, userId) {
 

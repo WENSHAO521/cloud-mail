@@ -68,6 +68,24 @@
       </el-select>
     </div>
 
+    <!-- ── Signature section ── -->
+    <div class="section">
+      <div class="section-label">{{ $t('signature') }}</div>
+      <div class="signature-area">
+        <el-input
+          v-model="signatureText"
+          type="textarea"
+          :rows="5"
+          :placeholder="$t('signaturePlaceholder')"
+          resize="none"
+          class="signature-input"
+        />
+        <el-button type="primary" size="small" :loading="signatureLoading" @click="saveSignature">
+          {{ $t('save') }}
+        </el-button>
+      </div>
+    </div>
+
     <!-- ── Danger zone ── -->
     <div class="section danger-section" v-perm="'my:delete'">
       <div class="section-label">{{ $t('dangerZone') }}</div>
@@ -115,11 +133,14 @@ const langSelect = ref(settingStore.lang)
 const fileInputRef = ref(null)
 const pwdShow = ref(false)
 const form = reactive({ password: '', newPwd: '' })
+const signatureText = ref('')
+const signatureLoading = ref(false)
 
 defineOptions({ name: 'setting' })
 
 onMounted(() => {
   userStore.loadAvatar()
+  signatureText.value = userStore.user.signature || ''
 })
 
 const userInitial = computed(() => {
@@ -182,6 +203,16 @@ function setName() {
     ElMessage({ message: t('saveSuccessMsg'), type: 'success', plain: true })
     accountStore.changeUserAccountName = name
   }).catch(() => { userStore.user.name = name })
+}
+
+async function saveSignature() {
+  signatureLoading.value = true
+  try {
+    await userStore.saveSignature(signatureText.value)
+    ElMessage({ message: t('signatureSaved'), type: 'success', plain: true })
+  } finally {
+    signatureLoading.value = false
+  }
 }
 
 function changeLang(lang) {
@@ -444,6 +475,23 @@ function submitPwd() {
 }
 
 /* ── Danger section ── */
+.signature-area {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 520px;
+
+  .signature-input :deep(textarea) {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .el-button {
+    align-self: flex-end;
+  }
+}
+
 .danger-card {
   display: flex;
   align-items: center;

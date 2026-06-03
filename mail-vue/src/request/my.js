@@ -12,3 +12,7 @@ export function userDelete() {
     return http.delete('/my/delete')
 }
 
+export function updateSignature(signature) {
+    return http.put('/my/signature', { signature })
+}
+

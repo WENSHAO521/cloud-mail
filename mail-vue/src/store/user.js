@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import {loginUserInfo} from "@/request/my.js";
+import {loginUserInfo, updateSignature} from "@/request/my.js";
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -38,6 +38,10 @@ export const useUserStore = defineStore('user', {
                 localStorage.removeItem(`psg_avatar_${email}`)
                 this.avatar = ''
             }
+        },
+        async saveSignature(signature) {
+            await updateSignature(signature)
+            this.user.signature = signature
         }
     }
 })
