@@ -179,6 +179,25 @@ export async function email(message, env, ctx) {
 
 		}
 
+		// 自动回复
+		if (account) {
+			try {
+				const arRow = await env.db.prepare(
+					'SELECT enabled, message FROM auto_reply WHERE user_id = ?'
+				).bind(account.userId).first();
+				if (arRow?.enabled && arRow.message && email.from?.address) {
+					await emailService.send({ env }, {
+						sendEmail: message.to,
+						receiveEmail: [email.from.address],
+						subject: 'Re: ' + (email.subject || ''),
+						content: `<p>${arRow.message.replace(/\n/g, '<br>')}</p>`,
+						text: arRow.message,
+						accountId: account.accountId,
+					}, account.userId).catch(() => {});
+				}
+			} catch {}
+		}
+
 	} catch (e) {
 		console.error('邮件接收异常: ', e);
 		throw e

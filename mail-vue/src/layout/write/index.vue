@@ -87,6 +87,20 @@
             <div class="tb-btn" @click="clearContent" :title="$t('clear')">
               <Icon icon="icon-park-outline:clear-format" width="17" height="17"/>
             </div>
+            <el-dropdown trigger="click" @command="insertTemplate" :hide-on-click="true">
+              <div class="tb-btn tb-btn--label">
+                <Icon icon="material-symbols:description-outline-rounded" width="16" height="16"/>
+                <span>{{ $t('insertTemplate') }}</span>
+              </div>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item v-if="!templatesList.length" disabled>{{ $t('noTemplates') }}</el-dropdown-item>
+                  <el-dropdown-item v-for="tpl in templatesList" :key="tpl.templateId" :command="tpl">
+                    {{ tpl.name }}
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
             <div class="att-list">
               <div class="att-item" v-for="(item,index) in form.attachments" :key="index">
                 <Icon v-bind="getIconByName(item.filename)" width="14" height="14"/>
@@ -160,6 +174,23 @@
           </el-table>
         </el-tab-pane>
 
+        <!-- Contact groups tab -->
+        <el-tab-pane :label="$t('contactGroups')" name="groups">
+          <div v-if="!groupsList.length" class="notif-empty" style="padding:20px 0">
+            <el-empty :image-size="56" :description="$t('noGroups')"/>
+          </div>
+          <div v-else style="display:flex;flex-direction:column;gap:6px;height:380px;overflow-y:auto;padding:4px 0">
+            <div v-for="g in groupsList" :key="g.groupId"
+                 style="display:flex;align-items:center;justify-content:space-between;padding:8px 2px;border-bottom:1px solid var(--light-border-color)">
+              <div>
+                <div style="font-weight:600;font-size:13px">{{ g.name }}</div>
+                <div style="font-size:11.5px;color:var(--regular-text-color)">{{ g.emails.join(', ') }}</div>
+              </div>
+              <el-button size="small" type="primary" @click="insertGroup(g)">{{ $t('insertGroup') }}</el-button>
+            </div>
+          </div>
+        </el-tab-pane>
+
       </el-tabs>
 
       <div class="contacts-bottom">
@@ -192,10 +223,13 @@ import {useI18n} from "vue-i18n";
 import router from "@/router/index.js";
 import {ElMessageBox} from "element-plus";
 import {getDirectory} from "@/request/my.js";
+import {templateList} from "@/request/template.js";
+import {contactGroupList} from "@/request/contact-group.js";
 
 defineExpose({
   open,
   openReply,
+  openReplyAll,
   openForward,
   openDraft
 })
@@ -218,7 +252,10 @@ const defValue = ref('')
 const contactsTabRef = ref({})
 const directoryTabRef = ref({})
 const showContacts = ref(false)
+const templatesList = ref([])
 const contactTab = ref('recent')
+const groupsList = ref([])
+const groupsLoaded = ref(false)
 const directoryList = ref([])
 const directorySearch = ref('')
 const directoryLoading = ref(false)
@@ -299,6 +336,19 @@ async function onTabChange(tab) {
       directoryLoading.value = false
     }
   }
+  if (tab === 'groups' && !groupsLoaded.value) {
+    try {
+      groupsList.value = await contactGroupList()
+      groupsLoaded.value = true
+    } catch {}
+  }
+}
+
+function insertGroup(g) {
+  g.emails.forEach(email => {
+    if (!form.receiveEmail.includes(email)) form.receiveEmail.push(email)
+  })
+  showContacts.value = false
 }
 
 function chooseContact() {
@@ -598,6 +648,63 @@ function openForward(email) {
   });
 }
 
+function openReplyAll(email) {
+  resetForm()
+  email.subject = email.subject || ''
+
+  // reply to original sender
+  form.receiveEmail.push(email.sendEmail)
+
+  // also add all original recipients except our own send address
+  const selfEmail = (accountStore.currentAccount.email || userStore.user.email || '').toLowerCase()
+  try {
+    const recipients = JSON.parse(email.recipient || '[]')
+    recipients.forEach(r => {
+      if (r.address && r.address.toLowerCase() !== selfEmail && !form.receiveEmail.includes(r.address)) {
+        form.receiveEmail.push(r.address)
+      }
+    })
+  } catch {}
+
+  // CC from original
+  try {
+    const ccList = JSON.parse(email.cc || '[]')
+    ccList.forEach(r => {
+      if (r.address && r.address.toLowerCase() !== selfEmail) {
+        form.cc.push(r.address)
+        showCc.value = true
+      }
+    })
+  } catch {}
+
+  form.subject = (
+    email.subject.startsWith('Re:') ||
+    email.subject.startsWith('Re：') ||
+    email.subject.startsWith('回复：') ||
+    email.subject.startsWith('回复:')) ? email.subject : 'Re: ' + email.subject
+  form.sendType = 'reply'
+  form.emailId = email.emailId
+
+  defValue.value = ''
+  setTimeout(() => {
+    defValue.value = `
+    <div></div>
+    <div><br>
+        ${formatDetailDate(email.createTime)} ${email.name} &lt${email.sendEmail}&gt ${t('wrote')}:
+    </div>
+    <blockquote class="mceNonEditable" style="margin:0 0 0 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex;">
+      <article>${formatImage(email.content) || `<pre style="font-family:inherit;word-break:break-word;white-space:pre-wrap;margin:0">${email.text}</pre>`}</article>
+    </blockquote>`
+    open()
+    nextTick(() => {
+      backReply.content = editor.value.getContent()
+      backReply.subject = form.subject
+      backReply.receiveEmail = form.receiveEmail
+      backReply.sendType = form.sendType
+    })
+  })
+}
+
 function openReply(email) {
 
   resetForm();
@@ -645,6 +752,21 @@ function formatImage(content) {
   return content.replace(/{{domain}}/g, toOssDomain(domain) + '/');
 }
 
+function insertTemplate(tpl) {
+  if (tpl.subject && !form.subject) form.subject = tpl.subject
+  const current = editor.value.getContent()
+  editor.value.clearEditor()
+  setTimeout(() => {
+    defValue.value = tpl.content + (current ? '<br>' + current : '')
+  })
+}
+
+async function loadTemplates() {
+  if (!templatesList.value.length) {
+    try { templatesList.value = await templateList() } catch {}
+  }
+}
+
 function open() {
   if (!accountStore.currentAccount.email) {
     form.sendEmail = userStore.user.email;
@@ -661,6 +783,7 @@ function open() {
     : ''
   show.value = true;
   editor.value.focus()
+  loadTemplates()
 }
 
 function openDraft(draft) {

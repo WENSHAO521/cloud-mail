@@ -42,6 +42,12 @@ const routes = [
                 }
             },
             {
+                path: '/archive',
+                name: 'archive',
+                component: () => import('@/views/archive/index.vue'),
+                meta: { title: 'archiveFolder', name: 'archive', menu: true }
+            },
+            {
                 path: '/spam',
                 name: 'spam',
                 component: () => import('@/views/spam/index.vue'),

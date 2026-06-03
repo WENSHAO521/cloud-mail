@@ -28,6 +28,18 @@ export function emailSpamList(accountId, allReceive, emailId, size) {
     return http.get('/email/spam/list', {params: {accountId, allReceive, emailId, size}})
 }
 
+export function emailArchive(emailIds) {
+    return http.put('/email/archive', {emailIds: emailIds.join(',')})
+}
+
+export function emailUnarchive(emailIds) {
+    return http.put('/email/unarchive', {emailIds: emailIds.join(',')})
+}
+
+export function emailArchiveList(accountId, allReceive, emailId, size) {
+    return http.get('/email/archive/list', {params: {accountId, allReceive, emailId, size}})
+}
+
 export function emailSend(form,progress) {
     return http.post('/email/send', form,{
         onUploadProgress: (e) => {

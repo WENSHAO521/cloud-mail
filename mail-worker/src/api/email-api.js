@@ -44,6 +44,21 @@ app.put('/email/unspam', async (c) => {
 	return c.json(result.ok());
 })
 
+app.put('/email/archive', async (c) => {
+	await emailService.archiveEmail(c, await c.req.json(), userContext.getUserId(c));
+	return c.json(result.ok());
+})
+
+app.put('/email/unarchive', async (c) => {
+	await emailService.unarchiveEmail(c, await c.req.json(), userContext.getUserId(c));
+	return c.json(result.ok());
+})
+
+app.get('/email/archive/list', async (c) => {
+	const data = await emailService.archiveList(c, c.req.query(), userContext.getUserId(c));
+	return c.json(result.ok(data));
+})
+
 app.get('/email/spam/list', async (c) => {
 	const data = await emailService.spamList(c, c.req.query(), userContext.getUserId(c));
 	return c.json(result.ok(data));

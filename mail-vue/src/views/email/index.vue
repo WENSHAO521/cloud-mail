@@ -10,6 +10,7 @@
                :email-read="emailRead"
                :show-unread="true"
                :spam-email="spamEmailAction"
+               :archive-email="archiveEmailAction"
                actionLeft="4px"
                @jump="jumpContent"
   >
@@ -28,7 +29,7 @@ import {useAccountStore} from "@/store/account.js";
 import {useEmailStore} from "@/store/email.js";
 import {useSettingStore} from "@/store/setting.js";
 import emailScroll from "@/components/email-scroll/index.vue"
-import {emailList, emailDelete, emailLatest, emailRead, emailMarkSpam} from "@/request/email.js";
+import {emailList, emailDelete, emailLatest, emailRead, emailMarkSpam, emailArchive} from "@/request/email.js";
 import {starAdd, starCancel} from "@/request/star.js";
 import {defineOptions, h, onMounted, reactive, ref, watch} from "vue";
 import {useNotificationStore} from "@/store/notification.js";
@@ -148,6 +149,10 @@ async function latest() {
       }
     }
   }
+}
+
+function archiveEmailAction(emailId) {
+  emailArchive([emailId]).then(() => scroll.value.deleteEmail([emailId]))
 }
 
 function spamEmailAction(emailId) {

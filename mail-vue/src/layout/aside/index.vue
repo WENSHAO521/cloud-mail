@@ -33,6 +33,11 @@
           <Icon icon="solar:star-line-duotone" width="20" height="20" />
           <span class="menu-name">{{$t('starred')}}</span>
         </el-menu-item>
+        <el-menu-item @click="router.push({name: 'archive'})" index="archive"
+                      :class="route.meta.name === 'archive' ? 'choose-item' : ''">
+          <Icon icon="material-symbols:archive-outline-rounded" width="20" height="20" />
+          <span class="menu-name">{{$t('archiveFolder')}}</span>
+        </el-menu-item>
         <el-menu-item @click="router.push({name: 'spam'})" index="spam"
                       :class="route.meta.name === 'spam' ? 'choose-item' : ''">
           <Icon icon="material-symbols:report-outline-rounded" width="20" height="20" />

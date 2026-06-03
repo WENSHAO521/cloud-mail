@@ -33,8 +33,61 @@ const dbInit = {
 		await this.v3_2DB(c);
 		await this.v3_3DB(c);
 		await this.v3_4DB(c);
+		await this.v3_5DB(c);
+		await this.v3_6DB(c);
+		await this.v3_7DB(c);
+		await this.v3_8DB(c);
 		await settingService.refresh(c);
 		return c.text('success');
+	},
+
+	async v3_8DB(c) {
+		try {
+			await c.env.db.prepare(`
+				CREATE TABLE IF NOT EXISTS auto_reply (
+					id INTEGER PRIMARY KEY AUTOINCREMENT,
+					user_id INTEGER NOT NULL UNIQUE,
+					enabled INTEGER NOT NULL DEFAULT 0,
+					message TEXT NOT NULL DEFAULT '',
+					update_time DATETIME DEFAULT CURRENT_TIMESTAMP
+				)
+			`).run();
+		} catch (e) { console.warn(`跳过：${e.message}`); }
+	},
+
+	async v3_7DB(c) {
+		try {
+			await c.env.db.prepare(`
+				CREATE TABLE IF NOT EXISTS contact_group (
+					group_id INTEGER PRIMARY KEY AUTOINCREMENT,
+					user_id INTEGER NOT NULL,
+					name TEXT NOT NULL DEFAULT '',
+					emails TEXT NOT NULL DEFAULT '[]',
+					create_time DATETIME DEFAULT CURRENT_TIMESTAMP
+				)
+			`).run();
+		} catch (e) { console.warn(`跳过：${e.message}`); }
+	},
+
+	async v3_6DB(c) {
+		try {
+			await c.env.db.prepare(`
+				CREATE TABLE IF NOT EXISTS email_template (
+					template_id INTEGER PRIMARY KEY AUTOINCREMENT,
+					user_id INTEGER NOT NULL,
+					name TEXT NOT NULL DEFAULT '',
+					subject TEXT NOT NULL DEFAULT '',
+					content TEXT NOT NULL DEFAULT '',
+					create_time DATETIME DEFAULT CURRENT_TIMESTAMP
+				)
+			`).run();
+		} catch (e) { console.warn(`跳过：${e.message}`); }
+	},
+
+	async v3_5DB(c) {
+		try {
+			await c.env.db.prepare(`ALTER TABLE email ADD COLUMN is_archive INTEGER NOT NULL DEFAULT 0;`).run();
+		} catch (e) { console.warn(`跳过：${e.message}`); }
 	},
 
 	async v3_4DB(c) {

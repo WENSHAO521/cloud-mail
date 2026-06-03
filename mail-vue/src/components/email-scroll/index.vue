@@ -198,6 +198,14 @@
               </div>
             </template>
           </el-dropdown-item>
+          <el-dropdown-item v-if="['email','star'].includes(props.type)" @click="openReplyAll(rightClickEmail)">
+            <template #default>
+              <div class="right-dropdown-item">
+                <Icon icon="la:reply-all" width="20" height="20"  />
+                <span>{{t('replyAll')}}</span>
+              </div>
+            </template>
+          </el-dropdown-item>
           <el-dropdown-item v-if="['email','send', 'star'].includes(props.type)" @click="openForward(rightClickEmail)">
             <template #default>
               <div class="right-dropdown-item">
@@ -235,6 +243,22 @@
               <div class="right-dropdown-item">
                 <Icon icon="iconoir:search" width="20" height="20" />
                 <span>{{t('searchSender')}}</span>
+              </div>
+            </template>
+          </el-dropdown-item>
+          <el-dropdown-item v-if="props.type === 'email'" @click="archiveAction(rightClickEmail.emailId)">
+            <template #default>
+              <div class="right-dropdown-item">
+                <Icon icon="material-symbols:archive-outline-rounded" width="20" height="20" />
+                <span>{{t('archive')}}</span>
+              </div>
+            </template>
+          </el-dropdown-item>
+          <el-dropdown-item v-if="props.type === 'archive'" @click="unarchiveAction(rightClickEmail.emailId)">
+            <template #default>
+              <div class="right-dropdown-item">
+                <Icon icon="material-symbols:unarchive-outline-rounded" width="20" height="20" />
+                <span>{{t('unarchive')}}</span>
               </div>
             </template>
           </el-dropdown-item>
@@ -335,6 +359,14 @@ const props = defineProps({
     default: null
   },
   unspamEmail: {
+    type: Function,
+    default: null
+  },
+  archiveEmail: {
+    type: Function,
+    default: null
+  },
+  unarchiveEmail: {
     type: Function,
     default: null
   }
@@ -552,6 +584,10 @@ function openReply(email) {
   uiStore.writerRef.openReply(email)
 }
 
+function openReplyAll(email) {
+  uiStore.writerRef.openReplyAll(email)
+}
+
 function openForward(email) {
   uiStore.writerRef.openForward(email)
 }
@@ -723,6 +759,14 @@ function rightDelete(emailId) {
     })
     emailStore.deleteIds = [emailId];
   })
+}
+
+function archiveAction(emailId) {
+  if (props.archiveEmail) props.archiveEmail(emailId)
+}
+
+function unarchiveAction(emailId) {
+  if (props.unarchiveEmail) props.unarchiveEmail(emailId)
 }
 
 function markSpamAction(emailId) {

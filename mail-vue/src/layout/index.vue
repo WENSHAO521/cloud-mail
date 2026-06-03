@@ -28,10 +28,13 @@ import Main from '@/layout/main/index.vue'
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import {useUiStore} from "@/store/ui.js";
 import {useNotificationStore} from "@/store/notification.js";
+import {useEmailStore} from "@/store/email.js";
+import {emailArchive} from "@/request/email.js";
 import writer from '@/layout/write/index.vue'
 
 const uiStore = useUiStore();
 const notificationStore = useNotificationStore();
+const emailStore = useEmailStore();
 const writerRef = ref({})
 const isMobile = ref(window.innerWidth < 1025)
 const handleResize = () => {
@@ -43,7 +46,20 @@ function handleKeydown(e) {
   const tag = e.target.tagName
   if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable) return
   if (e.ctrlKey || e.metaKey || e.altKey) return
-  if (e.key === 'c') uiStore.writerRef?.open?.()
+  const email = emailStore.contentData?.email
+  switch (e.key) {
+    case 'c': uiStore.writerRef?.open?.(); break
+    case 'r': if (email) uiStore.writerRef?.openReply?.(email); break
+    case 'a': if (email) uiStore.writerRef?.openReplyAll?.(email); break
+    case 'f': if (email) uiStore.writerRef?.openForward?.(email); break
+    case 'e':
+      if (email?.emailId) {
+        emailArchive([email.emailId]).then(() => {
+          emailStore.emailScroll?.deleteEmail?.([email.emailId])
+        }).catch(() => {})
+      }
+      break
+  }
 }
 
 onMounted(() => {

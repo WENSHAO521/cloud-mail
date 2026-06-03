@@ -74,6 +74,13 @@ const emailService = {
 			spamFilter = sql`COALESCE(email.is_spam, 0) = 0`;
 		} catch {}
 
+		// check if is_archive column exists; if so, exclude archived from inbox
+		let archiveFilter = null;
+		try {
+			await c.env.db.prepare('SELECT is_archive FROM email LIMIT 0').run();
+			archiveFilter = sql`COALESCE(email.is_archive, 0) = 0`;
+		} catch {}
+
 		const query = orm(c)
 			.select({
 				...email,
@@ -98,7 +105,8 @@ const emailService = {
 					eq(email.type, type),
 					eq(email.isDel, isDel.NORMAL),
 					eq(account.isDel, isDel.NORMAL),
-					spamFilter ?? sql`1=1`
+					spamFilter ?? sql`1=1`,
+					archiveFilter ?? sql`1=1`
 				)
 			);
 
@@ -155,6 +163,52 @@ const emailService = {
 		}
 
 		return { list, total: totalRow.total, latestEmail };
+	},
+
+	async archiveEmail(c, params, userId) {
+		const emailIdList = String(params.emailIds).split(',').map(Number).filter(Boolean);
+		if (!emailIdList.length) return;
+		try { await c.env.db.prepare(`ALTER TABLE email ADD COLUMN is_archive INTEGER NOT NULL DEFAULT 0;`).run(); } catch {}
+		let sharedIds = [];
+		try { const { results } = await c.env.db.prepare('SELECT account_id FROM account_share WHERE user_id = ?').bind(userId).all(); sharedIds = results.map(r => r.account_id); } catch {}
+		const placeholders = emailIdList.map(() => '?').join(',');
+		const cond = sharedIds.length > 0 ? `(user_id = ? OR account_id IN (${sharedIds.map(() => '?').join(',')}))` : 'user_id = ?';
+		await c.env.db.prepare(`UPDATE email SET is_archive = 1 WHERE email_id IN (${placeholders}) AND ${cond}`).bind(...emailIdList, userId, ...sharedIds).run();
+	},
+
+	async unarchiveEmail(c, params, userId) {
+		const emailIdList = String(params.emailIds).split(',').map(Number).filter(Boolean);
+		if (!emailIdList.length) return;
+		let sharedIds = [];
+		try { const { results } = await c.env.db.prepare('SELECT account_id FROM account_share WHERE user_id = ?').bind(userId).all(); sharedIds = results.map(r => r.account_id); } catch {}
+		const placeholders = emailIdList.map(() => '?').join(',');
+		const cond = sharedIds.length > 0 ? `(user_id = ? OR account_id IN (${sharedIds.map(() => '?').join(',')}))` : 'user_id = ?';
+		try { await c.env.db.prepare(`UPDATE email SET is_archive = 0 WHERE email_id IN (${placeholders}) AND ${cond}`).bind(...emailIdList, userId, ...sharedIds).run(); } catch {}
+	},
+
+	async archiveList(c, params, userId) {
+		let { emailId, accountId, size, allReceive } = params;
+		emailId   = Number(emailId) || 9999999999;
+		accountId = Number(accountId);
+		size      = Math.min(Number(size) || 20, 50);
+		allReceive= Number(allReceive);
+		let sharedIds = [];
+		try { const { results } = await c.env.db.prepare('SELECT account_id FROM account_share WHERE user_id = ?').bind(userId).all(); sharedIds = results.map(r => r.account_id); } catch {}
+		const accountCond = allReceive ? '' : 'AND e.account_id = ?';
+		const accessBinds = sharedIds.length > 0 ? [userId, ...sharedIds] : [userId];
+		const accessCond  = sharedIds.length > 0 ? `(e.user_id = ? OR e.account_id IN (${sharedIds.map(() => '?').join(',')}))` : 'e.user_id = ?';
+		try {
+			const { results } = await c.env.db.prepare(`
+				SELECT e.*, s.star_id FROM email e
+				LEFT JOIN star s ON s.email_id = e.email_id AND s.user_id = ?
+				WHERE ${accessCond} AND e.is_del = 0 AND COALESCE(e.is_archive,0) = 1
+				${accountCond} AND e.email_id < ?
+				ORDER BY e.email_id DESC LIMIT ?
+			`).bind(userId, ...accessBinds, ...(allReceive ? [] : [accountId]), emailId, size).all();
+			const list = results.map(item => ({ ...item, isStar: item.star_id != null ? 1 : 0 }));
+			await this.emailAddAtt(c, list);
+			return { list, total: list.length, latestEmail: list[0] || { emailId: 0, accountId, userId } };
+		} catch { return { list: [], total: 0, latestEmail: { emailId: 0, accountId, userId } }; }
 	},
 
 	async markSpam(c, params, userId) {
