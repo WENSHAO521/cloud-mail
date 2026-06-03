@@ -10,16 +10,42 @@
             <span v-else-if="form.sendType === 'forward'">{{ $t('forward') }}</span>
             <span v-else>{{ $t('compose') }}</span>
           </div>
-          <div class="wh-sender">
-            <div class="wh-avatar">
-            <img v-if="userStore.avatar" :src="userStore.avatar" class="wh-avatar-img"/>
-            <span v-else>{{ senderInitial }}</span>
-          </div>
-            <div class="wh-info">
-              <span class="wh-name">{{ form.name || form.sendEmail.split('@')[0] }}</span>
-              <span class="wh-email">{{ form.sendEmail }}</span>
+          <el-dropdown trigger="click" @command="selectSender" :disabled="senderAccounts.length <= 1">
+            <div class="wh-sender" :class="{ selectable: senderAccounts.length > 1 }">
+              <div class="wh-avatar">
+                <img v-if="userStore.avatar" :src="userStore.avatar" class="wh-avatar-img"/>
+                <span v-else>{{ senderInitial }}</span>
+              </div>
+              <div class="wh-info">
+                <span class="wh-name">{{ form.name || form.sendEmail.split('@')[0] }}</span>
+                <span class="wh-email">{{ form.sendEmail }}</span>
+              </div>
+              <Icon v-if="senderAccounts.length > 1"
+                    icon="ep:arrow-down" width="12" height="12" class="sender-chevron"/>
             </div>
-          </div>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item
+                  v-for="acc in senderAccounts"
+                  :key="acc.accountId"
+                  :command="acc"
+                  :class="{ 'is-active-sender': acc.accountId === form.accountId }"
+                >
+                  <div class="sender-option">
+                    <div class="sender-opt-avatar">
+                      {{ (acc.name || acc.email || '?')[0].toUpperCase() }}
+                    </div>
+                    <div class="sender-opt-info">
+                      <span class="sender-opt-name" v-if="acc.name">{{ acc.name }}</span>
+                      <span class="sender-opt-email">{{ acc.email }}</span>
+                    </div>
+                    <Icon v-if="acc.accountId === form.accountId"
+                          icon="ep:check" width="14" height="14" class="sender-opt-check"/>
+                  </div>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
         </div>
         <div class="wh-close" @click="close">
           <Icon icon="material-symbols-light:close-rounded" width="22" height="22"/>
@@ -225,6 +251,7 @@ import {ElMessageBox} from "element-plus";
 import {getDirectory} from "@/request/my.js";
 import {templateList} from "@/request/template.js";
 import {contactGroupList} from "@/request/contact-group.js";
+import {accountList} from "@/request/account.js";
 
 defineExpose({
   open,
@@ -260,6 +287,8 @@ const directoryList = ref([])
 const directorySearch = ref('')
 const directoryLoading = ref(false)
 const directoryLoaded = ref(false)
+const senderAccounts = ref([])
+const senderLoaded = ref(false)
 
 const filteredDirectory = computed(() => {
   const q = directorySearch.value.trim().toLowerCase()
@@ -767,6 +796,21 @@ async function loadTemplates() {
   }
 }
 
+async function loadSenderAccounts() {
+  if (senderLoaded.value) return
+  try {
+    const list = await accountList(0, 30, null)
+    senderAccounts.value = Array.isArray(list) ? list : []
+    senderLoaded.value = true
+  } catch {}
+}
+
+function selectSender(acc) {
+  form.sendEmail = acc.email
+  form.accountId = acc.accountId
+  form.name = acc.name || ''
+}
+
 function open() {
   if (!accountStore.currentAccount.email) {
     form.sendEmail = userStore.user.email;
@@ -784,6 +828,7 @@ function open() {
   show.value = true;
   editor.value.focus()
   loadTemplates()
+  loadSenderAccounts()
 }
 
 function openDraft(draft) {
@@ -952,6 +997,82 @@ function close() {
   min-width: 0;
   padding-left: 14px;
   border-left: 1px solid rgba(255,255,255,0.10);
+  border-radius: 4px;
+  padding: 4px 8px 4px 14px;
+  transition: background 0.14s;
+  outline: none;
+  cursor: default;
+
+  &.selectable {
+    cursor: pointer;
+    &:hover { background: rgba(255,255,255,0.07); }
+  }
+}
+
+.sender-chevron {
+  color: rgba(255,255,255,0.35);
+  flex-shrink: 0;
+  margin-left: 2px;
+  transition: transform 0.18s cubic-bezier(0.22,1,0.36,1);
+}
+
+/* Dropdown option rows */
+.sender-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 220px;
+  padding: 2px 0;
+}
+
+.sender-opt-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: rgba(204,0,0,0.10);
+  border: 1px solid rgba(204,0,0,0.20);
+  color: #CC0000;
+  font-size: 11px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sender-opt-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.sender-opt-name {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--el-text-color-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sender-opt-email {
+  font-size: 11.5px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--secondary-text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sender-opt-check {
+  color: #CC0000;
+  flex-shrink: 0;
+}
+
+:deep(.is-active-sender) {
+  background: rgba(204,0,0,0.05) !important;
 }
 
 .wh-avatar {
