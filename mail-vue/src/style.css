@@ -128,10 +128,17 @@ button, input, select, textarea {
 
 /* ── TinyMCE toolbar — Black/White/Red theme ──────────────────── */
 
-/* Center toolbar rows (works with toolbar_mode:'wrap') */
-.tox .tox-toolbar__primary,
-.tox .tox-toolbar {
+/* Center every toolbar row */
+.tox .tox-toolbar-overlord .tox-toolbar,
+.tox .tox-toolbar-overlord .tox-toolbar__primary,
+.tox .tox-toolbar__primary {
+    display: flex !important;
     justify-content: center !important;
+    flex-wrap: nowrap !important;
+}
+/* Subtle separator between the two toolbar rows */
+.tox .tox-toolbar-overlord .tox-toolbar + .tox-toolbar {
+    border-top: 1px solid rgba(0,0,0,0.07) !important;
 }
 
 /* Compact buttons */
