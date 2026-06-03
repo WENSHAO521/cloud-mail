@@ -164,20 +164,36 @@ const emailService = {
 		try {
 			await c.env.db.prepare(`ALTER TABLE email ADD COLUMN is_spam INTEGER NOT NULL DEFAULT 0;`).run();
 		} catch {}
+		let spamShared = [];
+		try {
+			const { results } = await c.env.db.prepare('SELECT account_id FROM account_share WHERE user_id = ?').bind(userId).all();
+			spamShared = results.map(r => r.account_id);
+		} catch {}
 		const placeholders = emailIdList.map(() => '?').join(',');
+		const spamCond = spamShared.length > 0
+			? `(user_id = ? OR account_id IN (${spamShared.map(() => '?').join(',')}))`
+			: `user_id = ?`;
 		await c.env.db.prepare(
-			`UPDATE email SET is_spam = 1 WHERE email_id IN (${placeholders}) AND user_id = ?`
-		).bind(...emailIdList, userId).run();
+			`UPDATE email SET is_spam = 1 WHERE email_id IN (${placeholders}) AND ${spamCond}`
+		).bind(...emailIdList, userId, ...spamShared).run();
 	},
 
 	async unmarkSpam(c, params, userId) {
 		const emailIdList = String(params.emailIds).split(',').map(Number).filter(Boolean);
 		if (!emailIdList.length) return;
+		let unspamShared = [];
+		try {
+			const { results } = await c.env.db.prepare('SELECT account_id FROM account_share WHERE user_id = ?').bind(userId).all();
+			unspamShared = results.map(r => r.account_id);
+		} catch {}
 		const placeholders = emailIdList.map(() => '?').join(',');
+		const unspamCond = unspamShared.length > 0
+			? `(user_id = ? OR account_id IN (${unspamShared.map(() => '?').join(',')}))`
+			: `user_id = ?`;
 		try {
 			await c.env.db.prepare(
-				`UPDATE email SET is_spam = 0 WHERE email_id IN (${placeholders}) AND user_id = ?`
-			).bind(...emailIdList, userId).run();
+				`UPDATE email SET is_spam = 0 WHERE email_id IN (${placeholders}) AND ${unspamCond}`
+			).bind(...emailIdList, userId, ...unspamShared).run();
 		} catch {}
 	},
 
@@ -233,10 +249,17 @@ const emailService = {
 	async delete(c, params, userId) {
 		const { emailIds } = params;
 		const emailIdList = emailIds.split(',').map(Number);
+		let sharedIds = [];
+		try {
+			const { results } = await c.env.db.prepare('SELECT account_id FROM account_share WHERE user_id = ?').bind(userId).all();
+			sharedIds = results.map(r => r.account_id);
+		} catch {}
+		const ownerCond = eq(email.userId, userId);
+		const accessCond = sharedIds.length > 0
+			? or(ownerCond, inArray(email.accountId, sharedIds))
+			: ownerCond;
 		await orm(c).update(email).set({ isDel: isDel.DELETE }).where(
-			and(
-				eq(email.userId, userId),
-				inArray(email.emailId, emailIdList)))
+			and(accessCond, inArray(email.emailId, emailIdList)))
 			.run();
 	},
 
@@ -817,6 +840,15 @@ const emailService = {
 			allReceive = accountRow.allReceive;
 		}
 
+		let sharedLatestIds = [];
+		try {
+			const { results } = await c.env.db.prepare('SELECT account_id FROM account_share WHERE user_id = ?').bind(userId).all();
+			sharedLatestIds = results.map(r => r.account_id);
+		} catch {}
+		const latestAccessCond = sharedLatestIds.length > 0
+			? or(eq(email.userId, userId), inArray(email.accountId, sharedLatestIds))
+			: eq(email.userId, userId);
+
 		let list = await orm(c).select({...email}).from(email)
 			.leftJoin(
 				account,
@@ -825,7 +857,7 @@ const emailService = {
 			.where(
 				and(
 					gt(email.emailId, emailId),
-					eq(email.userId, userId),
+					latestAccessCond,
 					eq(email.isDel, isDel.NORMAL),
 					eq(account.isDel, isDel.NORMAL),
 					allReceive ? eq(1,1) : eq(email.accountId, accountId),
@@ -1093,7 +1125,18 @@ const emailService = {
 
 	async read(c, params, userId) {
 		const { emailIds } = params;
-		await orm(c).update(email).set({ unread: emailConst.unread.READ }).where(and(eq(email.userId, userId), inArray(email.emailId, emailIds)));
+		let sharedReadIds = [];
+		try {
+			const { results } = await c.env.db.prepare('SELECT account_id FROM account_share WHERE user_id = ?').bind(userId).all();
+			sharedReadIds = results.map(r => r.account_id);
+		} catch {}
+		const readAccessCond = sharedReadIds.length > 0
+			? or(eq(email.userId, userId), inArray(email.accountId, sharedReadIds))
+			: eq(email.userId, userId);
+		await orm(c).update(email)
+			.set({ unread: emailConst.unread.READ })
+			.where(and(readAccessCond, inArray(email.emailId, emailIds)))
+			.run();
 	}
 };
 
