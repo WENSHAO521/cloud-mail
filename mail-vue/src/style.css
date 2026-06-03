@@ -117,6 +117,15 @@ button, input, select, textarea {
     max-height: 220px !important;
 }
 
+/* TinyMCE auxiliary layer (menus, dropdowns) must sit above the compose overlay (z-index:2000) */
+.tox-tinymce-aux {
+    z-index: 2100 !important;
+}
+.tox .tox-menu,
+.tox .tox-dialog-wrap {
+    z-index: 2100 !important;
+}
+
 :root {
     /* PSG — Black / White / Red — German publisher */
     --el-color-primary: #CC0000;
