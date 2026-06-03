@@ -54,6 +54,11 @@ const emailService = {
 			allReceive = accountRow.allReceive;
 		}
 
+		// ensure account_share exists
+		try {
+			await c.env.db.prepare(`CREATE TABLE IF NOT EXISTS account_share (id INTEGER PRIMARY KEY AUTOINCREMENT, account_id INTEGER NOT NULL, user_id INTEGER NOT NULL, create_time DATETIME DEFAULT CURRENT_TIMESTAMP, UNIQUE(account_id, user_id))`).run();
+		} catch {}
+
 		// check if is_spam column exists; if so, exclude spam from inbox
 		let spamFilter = null;
 		try {

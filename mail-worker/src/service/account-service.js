@@ -172,6 +172,11 @@ const accountService = {
 			lastSort = 9999999999;
 		}
 
+		// ensure account_share exists (self-healing, no manual /init needed)
+		try {
+			await c.env.db.prepare(`CREATE TABLE IF NOT EXISTS account_share (id INTEGER PRIMARY KEY AUTOINCREMENT, account_id INTEGER NOT NULL, user_id INTEGER NOT NULL, create_time DATETIME DEFAULT CURRENT_TIMESTAMP, UNIQUE(account_id, user_id))`).run();
+		} catch {}
+
 		return orm(c).select().from(account).where(
 			and(
 				or(
