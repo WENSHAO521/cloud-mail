@@ -3,7 +3,7 @@
     <div class="sidebar-inner">
       <!-- Logo -->
       <div class="title">
-        <img class="psg-logo" src="/image/psg-logo.svg" alt="Panorama Scholarly Group" />
+        <img class="psg-logo" src="/image/psg-logo.png" alt="Panorama Scholarly Group" />
       </div>
 
       <!-- Compose FAB — Google Material style, dark sidebar version -->
@@ -116,17 +116,18 @@ function openCompose() {
 /* Logo — white on black, red underline */
 .title {
   margin: 0;
-  padding: 16px 18px 14px;
+  padding: 14px 18px 12px;
   display: flex;
   align-items: center;
   border-bottom: 2px solid #CC0000;
 
   .psg-logo {
-    height: 30px;
+    height: 40px;
     width: auto;
-    max-width: 172px;
+    max-width: 200px;
     display: block;
     object-fit: contain;
+    filter: invert(1);
   }
 }
 
@@ -240,7 +241,7 @@ function openCompose() {
 
 .el-menu {
   border-right: 0;
-  width: 240px;
+  width: 256px;
 }
 
 :deep(.el-divider__text) {
