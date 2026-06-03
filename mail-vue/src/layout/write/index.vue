@@ -14,9 +14,10 @@
         </div>
       </div>
       <div class="container">
-        <el-input-tag  @add-tag="addTagChange" tag-type="primary" @input="inputChange" size="default" v-model="form.receiveEmail" >
+        <!-- To row -->
+        <el-input-tag @add-tag="addTagChange" tag-type="primary" @input="inputChange" size="default" v-model="form.receiveEmail">
           <template #prefix>
-            <div class="item-title" >{{ $t('recipient') }}</div>
+            <div class="item-title">{{ $t('recipient') }}</div>
             <el-select
                 ref="mySelect"
                 class="write-select"
@@ -37,13 +38,34 @@
             </el-select>
           </template>
           <template #suffix>
-            <div style="display: flex;margin-right: 3px;">
-              <Icon icon="fa7-solid:user-plus" width="20" height="20" class="add-contact" @click.stop="openContacts" />
+            <div class="to-suffix">
+              <span v-if="!showCc"  class="field-toggle" @click.stop="showCc = true">{{ $t('cc') }}</span>
+              <span v-if="!showBcc" class="field-toggle" @click.stop="showBcc = true">{{ $t('bcc') }}</span>
+              <Icon icon="fa7-solid:user-plus" width="18" height="18" class="add-contact" @click.stop="openContacts" />
             </div>
           </template>
         </el-input-tag>
+
+        <!-- CC row -->
+        <el-input-tag v-show="showCc" v-model="form.cc" tag-type="primary"
+                      @add-tag="addCcTag" size="default">
+          <template #prefix>
+            <div class="item-title">{{ $t('cc') }}</div>
+          </template>
+        </el-input-tag>
+
+        <!-- BCC row -->
+        <el-input-tag v-show="showBcc" v-model="form.bcc" tag-type="primary"
+                      @add-tag="addBccTag" size="default">
+          <template #prefix>
+            <div class="item-title">{{ $t('bcc') }}</div>
+          </template>
+        </el-input-tag>
+
         <el-input v-model="form.subject" :placeholder="t('subject')" />
-        <tinyEditor :def-value="defValue" ref="editor" @change="change" @focus="focusChange" />
+        <div class="editor-wrap">
+          <tinyEditor :def-value="defValue" ref="editor" @change="change" @focus="focusChange" />
+        </div>
         <div class="button-item">
           <div class="att-add" @click="chooseFile">
             <Icon icon="iconamoon:attachment-fill" width="24" height="24"/>
@@ -130,6 +152,8 @@ const accountStore = useAccountStore()
 const editor = ref({})
 const userStore = useUserStore();
 const show = ref(false);
+const showCc = ref(false);
+const showBcc = ref(false);
 const percent = ref(0)
 let percentMessage = null
 let sending = false
@@ -147,6 +171,8 @@ const backReply = reactive({
 const form = reactive({
   sendEmail: '',
   receiveEmail: [],
+  cc: [],
+  bcc: [],
   accountId: -1,
   name: '',
   subject: '',
@@ -409,6 +435,8 @@ function addRecipientRecord() {
 
 function resetForm() {
   form.receiveEmail = []
+  form.cc = []
+  form.bcc = []
   form.subject = ''
   form.content = ''
   form.manyType = null
@@ -416,11 +444,29 @@ function resetForm() {
   form.sendType = ''
   form.emailId = 0
   form.draftId = null
+  showCc.value = false
+  showBcc.value = false
   backReply.content = ''
   backReply.subject = ''
   backReply.receiveEmail = []
   backReply.sendType = ''
   editor.value.clearEditor()
+}
+
+function addCcTag(val) {
+  const emails = val.split(/[,，]/).map(e => e.trim()).filter(e => e)
+  form.cc.splice(form.cc.length - 1, 1)
+  emails.forEach(email => {
+    if (isEmail(email) && !form.cc.includes(email)) form.cc.push(email)
+  })
+}
+
+function addBccTag(val) {
+  const emails = val.split(/[,，]/).map(e => e.trim()).filter(e => e)
+  form.bcc.splice(form.bcc.length - 1, 1)
+  emails.forEach(email => {
+    if (isEmail(email) && !form.bcc.includes(email)) form.bcc.push(email)
+  })
 }
 
 function change(content, text) {
@@ -687,10 +733,16 @@ function close() {
 
     .container {
       height: 100%;
-      display: grid;
-      grid-template-rows: auto auto 1fr auto;
+      display: flex;
+      flex-direction: column;
       gap: 0;
-      padding: 12px 16px;
+      padding: 0 16px 0;
+
+      .editor-wrap {
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+      }
 
       .item-title {
         font-size: 11px;
@@ -809,5 +861,31 @@ function close() {
 
 .icon {
   cursor: pointer;
+}
+
+.to-suffix {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: 6px;
+}
+
+.field-toggle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--secondary-text-color);
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  padding: 2px 0;
+  border-bottom: 1px solid transparent;
+  transition: color 0.12s, border-color 0.12s;
+  user-select: none;
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--el-text-color-primary);
+      border-bottom-color: var(--el-text-color-primary);
+    }
+  }
 }
 </style>

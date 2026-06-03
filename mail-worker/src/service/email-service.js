@@ -158,6 +158,8 @@ const emailService = {
 			sendType, //发件类型
 			emailId, //邮件id，如果是回复邮件会带
 			receiveEmail, //收件人邮箱
+			cc = [], //抄送
+			bcc = [], //密件抄送
 			text, //邮件纯文本
 			content, //邮件内容
 			subject, //邮件标题
@@ -268,6 +270,8 @@ const emailService = {
 					name,
 					accountEmail: accountRow.email,
 					receiveEmail,
+					cc,
+					bcc,
 					subject,
 					text,
 					html,
@@ -280,6 +284,8 @@ const emailService = {
 					name,
 					accountEmail: accountRow.email,
 					receiveEmail,
+					cc,
+					bcc,
 					subject,
 					text,
 					html,
@@ -382,6 +388,9 @@ const emailService = {
 			subject: params.subject
 		};
 
+		if (params.cc?.length > 0)  sendForm.cc  = [...params.cc];
+		if (params.bcc?.length > 0) sendForm.bcc = [...params.bcc];
+
 		if (params.text) {
 			sendForm.text = params.text;
 		}
@@ -422,6 +431,9 @@ const emailService = {
 			html: params.html,
 			attachments: await this.toResendAttachments(params.attachments)
 		};
+
+		if (params.cc?.length > 0)  sendForm.cc  = [...params.cc];
+		if (params.bcc?.length > 0) sendForm.bcc = [...params.bcc];
 
 		if (params.sendType === 'reply') {
 			sendForm.headers = {
