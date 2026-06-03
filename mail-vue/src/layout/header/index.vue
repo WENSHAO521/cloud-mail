@@ -1,17 +1,9 @@
 <template>
-  <div class="header" :class="!hasPerm('email:send') ? 'not-send' : ''">
+  <div class="header">
     <!-- Left: hamburger + page title -->
     <div class="header-left">
       <hanburger @click="changeAside"/>
       <span class="breadcrumb-item">{{ $t(route.meta.title) }}</span>
-    </div>
-
-    <!-- Center: Compose button (only when send perm) -->
-    <div v-perm="'email:send'" class="compose-center" @click="openSend">
-      <div class="compose-pill">
-        <Icon icon="material-symbols:edit-outline-rounded" width="18" height="18"/>
-        <span class="compose-label">{{ $t('compose') }}</span>
-      </div>
     </div>
 
     <!-- Right: toolbar -->
@@ -207,20 +199,20 @@ function formatName(email) {
 </style>
 <style lang="scss" scoped>
 
-/* Header grid: left | center | right */
+/* Header: left | spacer | right */
 .header {
-  display: grid;
+  display: flex;
   height: 100%;
   align-items: center;
-  grid-template-columns: auto 1fr auto;
-  gap: 10px;
   padding: 0 14px 0 6px;
   background: var(--el-bg-color);
   border-bottom: 1px solid var(--light-border-color);
+  gap: 8px;
 }
 
-.header.not-send {
-  grid-template-columns: auto 1fr auto;
+.header-left {
+  flex: 1;
+  min-width: 0;
 }
 
 /* Left */
@@ -241,40 +233,6 @@ function formatName(email) {
   margin-left: 6px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-}
-
-/* Center: compose button — solid red, sharp */
-.compose-center {
-  display: flex;
-  justify-content: center;
-
-  @media (max-width: 767px) {
-    display: none;
-  }
-}
-
-.compose-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 20px;
-  border-radius: 3px;
-  background: #CC0000;
-  border: none;
-  color: #ffffff;
-  cursor: pointer;
-  font-size: 12.5px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  transition: background 0.12s;
-  user-select: none;
-
-  @media (hover: hover) {
-    &:hover {
-      background: #A00000;
-    }
-  }
 }
 
 /* Right toolbar */

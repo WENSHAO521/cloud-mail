@@ -12,7 +12,7 @@
       <div v-infinite-scroll="getAccountList" :infinite-scroll-distance="600" :infinite-scroll-immediate="false">
         <div class="item" :class="itemBg(item.accountId)" v-for="(item, index) in accounts" :key="item.accountId"
              @click="changeAccount(item)">
-          <div class="item-avatar">{{ emailInitial(item.email) }}</div>
+          <div class="item-avatar">{{ emailInitial(item.email, item.name) }}</div>
           <div class="item-info">
             <div class="item-email">{{ item.email }}</div>
             <div class="item-name" v-if="item.name">{{ item.name }}</div>
@@ -371,7 +371,8 @@ function setAsTop(account, index) {
   });
 }
 
-function emailInitial(email) {
+function emailInitial(email, name) {
+  if (name && name.trim()) return name.trim()[0].toUpperCase()
   return (email || '').charAt(0).toUpperCase()
 }
 
@@ -528,7 +529,7 @@ path[fill="#ffdda1"] {
 <style scoped lang="scss">
 .account-box {
   border-right: 1px solid var(--light-border-color);
-  background: var(--extra-light-fill);
+  background: var(--el-bg-color);
   height: 100%;
   overflow: hidden;
 
@@ -544,14 +545,14 @@ path[fill="#ffdda1"] {
 
     .icon {
       cursor: pointer;
-      width: 30px;
-      height: 30px;
-      border-radius: 8px;
+      width: 28px;
+      height: 28px;
+      border-radius: 2px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--secondary-text-color);
-      transition: background 0.15s, color 0.15s;
+      transition: background 0.12s, color 0.12s;
 
       @media (hover: hover) {
         &:hover {
@@ -579,11 +580,11 @@ path[fill="#ffdda1"] {
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 16px 0;
+      padding: 14px 0;
       font-family: 'IBM Plex Mono', monospace;
       font-size: 10px;
       letter-spacing: 0.08em;
-      color: #BBBBBB;
+      color: var(--dark-border);
       text-transform: uppercase;
     }
   }
@@ -598,44 +599,40 @@ path[fill="#ffdda1"] {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px 12px;
-    margin: 6px 8px;
-    border-radius: 10px;
+    padding: 9px 10px;
+    margin: 4px 8px;
+    border-radius: 3px;
     cursor: pointer;
-    background: var(--el-bg-color);
-    border: 1px solid var(--light-border-color);
+    background: transparent;
     border-left: 2px solid transparent;
-    transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    transition: background 0.12s ease, border-left-color 0.12s ease;
 
-    &:first-child { margin-top: 10px; }
-    &:last-child  { margin-bottom: 10px; }
+    &:first-child { margin-top: 8px; }
+    &:last-child  { margin-bottom: 8px; }
 
     @media (hover: hover) {
       &:hover:not(.item-choose) {
-        border-color: var(--dark-border);
-        border-left-color: var(--dark-border);
-        box-shadow: var(--card-shadow);
+        background: var(--extra-light-fill);
       }
     }
   }
 
-  /* ── Avatar: monogram rounded ── */
+  /* ── Avatar: square monogram ── */
   .item-avatar {
     flex-shrink: 0;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: var(--el-text-color-primary);
-    color: var(--el-bg-color);
-    font-family: 'IBM Plex Mono', monospace;
+    width: 34px;
+    height: 34px;
+    border-radius: 2px;
+    background: #333333;
+    color: #ffffff;
+    font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 700;
     font-size: 14px;
-    letter-spacing: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     user-select: none;
-    transition: background 0.15s;
+    transition: background 0.12s;
   }
 
   /* ── Text info ── */
@@ -644,23 +641,19 @@ path[fill="#ffdda1"] {
     min-width: 0;
 
     .item-email {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 11.5px;
+      font-size: 12px;
       font-weight: 500;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
       color: var(--el-text-color-primary);
-      letter-spacing: 0.01em;
     }
 
     .item-name {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      font-size: 11px;
+      font-weight: 400;
       color: var(--secondary-text-color);
-      margin-top: 2px;
+      margin-top: 1px;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -672,16 +665,18 @@ path[fill="#ffdda1"] {
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 2px;
+    opacity: 0;
+    transition: opacity 0.12s;
 
     .action-icon {
       cursor: pointer;
-      color: var(--dark-border);
+      color: var(--secondary-text-color);
       display: flex;
       align-items: center;
-      padding: 3px;
-      border-radius: 6px;
-      transition: color 0.15s, background 0.15s;
+      padding: 4px;
+      border-radius: 2px;
+      transition: color 0.12s, background 0.12s;
 
       @media (hover: hover) {
         &:hover {
@@ -693,27 +688,26 @@ path[fill="#ffdda1"] {
 
     .action-active {
       color: #CC0000;
+      opacity: 1;
     }
   }
 
-  /* ── Selected: left red accent ── */
+  .item:hover .item-actions,
+  .item-choose .item-actions {
+    opacity: 1;
+  }
+
+  /* ── Selected: left red bar ── */
   .item-choose {
-    background: var(--el-bg-color) !important;
-    border-color: var(--light-border-color) !important;
+    background: var(--extra-light-fill) !important;
     border-left-color: #CC0000 !important;
-    box-shadow: var(--card-shadow) !important;
 
     .item-email {
       font-weight: 600;
-      color: var(--el-text-color-primary);
-    }
-
-    .item-name {
-      color: var(--regular-text-color);
     }
 
     .item-avatar {
-      background: #111111;
+      background: #CC0000;
       color: #ffffff;
     }
   }

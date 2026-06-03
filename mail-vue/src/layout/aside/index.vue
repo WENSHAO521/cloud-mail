@@ -131,14 +131,15 @@ function openCompose() {
   }
 }
 
-/* Compose — solid red, rectangular */
+/* Compose — aligned with menu items */
 .compose-btn {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin: 14px 14px 10px;
-  padding: 10px 18px;
-  border-radius: 3px;
+  gap: 0;
+  margin: 10px 8px 6px;
+  padding: 0 12px;
+  height: 40px;
+  border-radius: 2px;
   background: #CC0000;
   border: none;
   cursor: pointer;
@@ -156,6 +157,7 @@ function openCompose() {
     color: #ffffff;
     letter-spacing: 0.06em;
     text-transform: uppercase;
+    margin-left: 12px;
   }
 
   @media (hover: hover) {
