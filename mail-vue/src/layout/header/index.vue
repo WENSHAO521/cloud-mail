@@ -251,7 +251,9 @@ function clickLogout() {
 }
 
 function formatName(email) {
-  return email[0]?.toUpperCase() || ''
+  const name = userStore.user?.name?.trim()
+  if (name) return name[0].toUpperCase()
+  return email?.[0]?.toUpperCase() || ''
 }
 
 </script>
