@@ -86,6 +86,10 @@ const notifStore = useNotificationStore()
 }
 
 .notif-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   :deep(.el-badge__content) {
     background: #CC0000;
     border-color: transparent;
