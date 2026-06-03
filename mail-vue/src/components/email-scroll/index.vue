@@ -238,6 +238,22 @@
               </div>
             </template>
           </el-dropdown-item>
+          <el-dropdown-item v-if="props.type === 'email'" @click="markSpamAction(rightClickEmail.emailId)">
+            <template #default>
+              <div class="right-dropdown-item">
+                <Icon icon="material-symbols:report-outline-rounded" width="20" height="20" />
+                <span>{{t('markAsSpam')}}</span>
+              </div>
+            </template>
+          </el-dropdown-item>
+          <el-dropdown-item v-if="props.type === 'spam'" @click="unmarkSpamAction(rightClickEmail.emailId)">
+            <template #default>
+              <div class="right-dropdown-item">
+                <Icon icon="material-symbols:check-circle-outline-rounded" width="20" height="20" />
+                <span>{{t('notSpam')}}</span>
+              </div>
+            </template>
+          </el-dropdown-item>
           <el-dropdown-item @click="rightDelete(rightClickEmail.emailId)">
             <template #default>
               <div class="right-dropdown-item">
@@ -313,6 +329,14 @@ const props = defineProps({
   showUnread: {
     type: Boolean,
     default: false
+  },
+  spamEmail: {
+    type: Function,
+    default: null
+  },
+  unspamEmail: {
+    type: Function,
+    default: null
   }
 })
 
@@ -699,6 +723,18 @@ function rightDelete(emailId) {
     })
     emailStore.deleteIds = [emailId];
   })
+}
+
+function markSpamAction(emailId) {
+  if (props.spamEmail) {
+    props.spamEmail(emailId)
+  }
+}
+
+function unmarkSpamAction(emailId) {
+  if (props.unspamEmail) {
+    props.unspamEmail(emailId)
+  }
 }
 
 function handleSearch(type, value) {

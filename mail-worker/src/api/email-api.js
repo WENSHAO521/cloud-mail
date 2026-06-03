@@ -34,3 +34,18 @@ app.put('/email/read', async (c) => {
 	return c.json(result.ok());
 })
 
+app.put('/email/spam', async (c) => {
+	await emailService.markSpam(c, await c.req.json(), userContext.getUserId(c));
+	return c.json(result.ok());
+})
+
+app.put('/email/unspam', async (c) => {
+	await emailService.unmarkSpam(c, await c.req.json(), userContext.getUserId(c));
+	return c.json(result.ok());
+})
+
+app.get('/email/spam/list', async (c) => {
+	const data = await emailService.spamList(c, c.req.query(), userContext.getUserId(c));
+	return c.json(result.ok(data));
+})
+

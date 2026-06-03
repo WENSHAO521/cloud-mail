@@ -54,6 +54,13 @@ const emailService = {
 			allReceive = accountRow.allReceive;
 		}
 
+		// check if is_spam column exists; if so, exclude spam from inbox
+		let spamFilter = null;
+		try {
+			await c.env.db.prepare('SELECT is_spam FROM email LIMIT 0').run();
+			spamFilter = sql`COALESCE(email.is_spam, 0) = 0`;
+		} catch {}
+
 		const query = orm(c)
 			.select({
 				...email,
@@ -77,7 +84,8 @@ const emailService = {
 					timeSort ? gt(email.emailId, emailId) : lt(email.emailId, emailId),
 					eq(email.type, type),
 					eq(email.isDel, isDel.NORMAL),
-					eq(account.isDel, isDel.NORMAL)
+					eq(account.isDel, isDel.NORMAL),
+					spamFilter ?? sql`1=1`
 				)
 			);
 
@@ -132,6 +140,64 @@ const emailService = {
 		}
 
 		return { list, total: totalRow.total, latestEmail };
+	},
+
+	async markSpam(c, params, userId) {
+		const emailIdList = String(params.emailIds).split(',').map(Number).filter(Boolean);
+		if (!emailIdList.length) return;
+		// auto-add column if missing
+		try {
+			await c.env.db.prepare(`ALTER TABLE email ADD COLUMN is_spam INTEGER NOT NULL DEFAULT 0;`).run();
+		} catch {}
+		const placeholders = emailIdList.map(() => '?').join(',');
+		await c.env.db.prepare(
+			`UPDATE email SET is_spam = 1 WHERE email_id IN (${placeholders}) AND user_id = ?`
+		).bind(...emailIdList, userId).run();
+	},
+
+	async unmarkSpam(c, params, userId) {
+		const emailIdList = String(params.emailIds).split(',').map(Number).filter(Boolean);
+		if (!emailIdList.length) return;
+		const placeholders = emailIdList.map(() => '?').join(',');
+		try {
+			await c.env.db.prepare(
+				`UPDATE email SET is_spam = 0 WHERE email_id IN (${placeholders}) AND user_id = ?`
+			).bind(...emailIdList, userId).run();
+		} catch {}
+	},
+
+	async spamList(c, params, userId) {
+		let { emailId, accountId, size, allReceive } = params;
+		emailId   = Number(emailId) || 9999999999;
+		accountId = Number(accountId);
+		size      = Math.min(Number(size) || 20, 50);
+		allReceive= Number(allReceive);
+
+		try {
+			const accountCond = allReceive ? '' : 'AND e.account_id = ?';
+			const bindsMain   = [userId, userId, ...(allReceive ? [] : [accountId]), emailId, size];
+
+			const { results } = await c.env.db.prepare(`
+				SELECT e.*, s.star_id
+				FROM email e
+				LEFT JOIN star s ON s.email_id = e.email_id AND s.user_id = ?
+				WHERE e.user_id = ?
+				  AND e.is_del = 0
+				  AND COALESCE(e.is_spam, 0) = 1
+				  ${accountCond}
+				  AND e.email_id < ?
+				ORDER BY e.email_id DESC
+				LIMIT ?
+			`).bind(...bindsMain).all();
+
+			const list = results.map(item => ({ ...item, isStar: item.star_id != null ? 1 : 0 }));
+			await this.emailAddAtt(c, list);
+
+			const latestEmail = list[0] || { emailId: 0, accountId, userId };
+			return { list, total: list.length, latestEmail };
+		} catch {
+			return { list: [], total: 0, latestEmail: { emailId: 0, accountId, userId } };
+		}
 	},
 
 	async delete(c, params, userId) {

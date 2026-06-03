@@ -16,6 +16,18 @@ export function emailRead(emailIds) {
     return http.put('/email/read', {emailIds})
 }
 
+export function emailMarkSpam(emailIds) {
+    return http.put('/email/spam', {emailIds: emailIds.join(',')})
+}
+
+export function emailUnmarkSpam(emailIds) {
+    return http.put('/email/unspam', {emailIds: emailIds.join(',')})
+}
+
+export function emailSpamList(accountId, allReceive, emailId, size) {
+    return http.get('/email/spam/list', {params: {accountId, allReceive, emailId, size}})
+}
+
 export function emailSend(form,progress) {
     return http.post('/email/send', form,{
         onUploadProgress: (e) => {
