@@ -58,8 +58,6 @@
         </div>
       </div>
 
-    </div>
-
     <!-- Drawer -->
     <el-drawer
       v-model="drawerShow"
