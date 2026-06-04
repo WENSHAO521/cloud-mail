@@ -395,7 +395,13 @@ const emailService = {
 		}
 
 		if (accountRow.userId !== userId) {
-			throw new BizError(t('sendEmailNotCurUser'));
+			// Allow shared/bound accounts — check account_share table
+			const sharedAccess = await c.env.db
+				.prepare('SELECT id FROM account_share WHERE account_id = ? AND user_id = ?')
+				.bind(accountId, userId).first();
+			if (!sharedAccess) {
+				throw new BizError(t('sendEmailNotCurUser'));
+			}
 		}
 
 		if (c.env.admin !== userRow.email) {
