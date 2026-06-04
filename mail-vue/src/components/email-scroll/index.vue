@@ -66,10 +66,13 @@
                            v-model="item.checked" @click.stop></el-checkbox>
               <div class="row-avatar"
                    :class="{ 'rva-clickable': showStar }"
-                   :style="{ background: senderImg(item) ? 'transparent' : senderBg(item) }"
+                   :style="{ background: senderBg(item) }"
                    @click.stop="showStar && starChange(item)">
-                <img v-if="senderImg(item)" :src="senderImg(item)" class="rva-img"/>
-                <span v-else class="rva-letter">{{ senderLetter(item) }}</span>
+                <span class="rva-letter">{{ senderLetter(item) }}</span>
+                <img v-if="senderImg(item)"
+                     :src="senderImg(item)"
+                     class="rva-img"
+                     @error="e => { e.target.style.display='none'; markGravatarMiss(item.sendEmail) }"/>
                 <div v-if="showStar && item.isStar" class="rva-star">
                   <Icon icon="fluent-color:star-16" width="10" height="10"/>
                 </div>
@@ -317,7 +320,7 @@ import {useEmailStore} from "@/store/email.js";
 import {useUiStore} from "@/store/ui.js";
 import {useSettingStore} from "@/store/setting.js";
 import {sleep} from "@/utils/time-utils.js"
-import { avatarBg, avatarLetter, storedAvatar } from '@/utils/avatar.js'
+import { avatarBg, avatarLetter, storedAvatar, gravatarCandidate, markGravatarMiss } from '@/utils/avatar.js'
 import {fromNow} from "@/utils/day.js";
 import {useI18n} from "vue-i18n";
 import {EmailUnreadEnum} from "@/enums/email-enum.js";
@@ -700,7 +703,7 @@ function cleanSpace(text) {
 
 function senderBg(item) { return avatarBg(item.sendEmail || item.name || '') }
 function senderLetter(item) { return avatarLetter(item.name, item.sendEmail) }
-function senderImg(item) { return storedAvatar(item.sendEmail) }
+function senderImg(item) { return storedAvatar(item.sendEmail) || gravatarCandidate(item.sendEmail) }
 
 function starChange(email) {
 
@@ -1542,6 +1545,8 @@ function loadData() {
   &.rva-clickable { cursor: pointer; }
 
   .rva-img {
+    position: absolute;
+    inset: 0;
     width: 34px;
     height: 34px;
     border-radius: 50%;

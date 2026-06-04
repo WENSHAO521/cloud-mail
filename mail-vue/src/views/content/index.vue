@@ -19,11 +19,12 @@
         </div>
         <div class="content">
           <div class="email-meta">
-            <div class="meta-avatar"
-                 :style="metaAvatarImg ? { background: 'transparent', border: 'none', padding: 0 }
-                                       : { background: metaAvatarBg, border: 'none' }">
-              <img v-if="metaAvatarImg" :src="metaAvatarImg" class="meta-avatar-img"/>
-              <span v-else>{{ (email.name || email.sendEmail || '?')[0].toUpperCase() }}</span>
+            <div class="meta-avatar" :style="{ background: metaAvatarBg, border: 'none' }">
+              <span>{{ (email.name || email.sendEmail || '?')[0].toUpperCase() }}</span>
+              <img v-if="metaAvatarImg"
+                   :src="metaAvatarImg"
+                   class="meta-avatar-img"
+                   @error="e => { e.target.style.display='none'; markGravatarMiss(email.sendEmail) }"/>
             </div>
             <div class="meta-body">
               <div class="meta-top">
@@ -100,7 +101,7 @@ import {allEmailDelete} from "@/request/all-email.js";
 import {useUiStore} from "@/store/ui.js";
 import {useI18n} from "vue-i18n";
 import {EmailUnreadEnum} from "@/enums/email-enum.js";
-import {avatarBg, storedAvatar} from "@/utils/avatar.js";
+import {avatarBg, storedAvatar, gravatarCandidate, markGravatarMiss} from "@/utils/avatar.js";
 import {computed} from "vue";
 
 const uiStore = useUiStore();
@@ -109,7 +110,7 @@ const accountStore = useAccountStore();
 const emailStore = useEmailStore();
 const router = useRouter()
 const email = emailStore.contentData.email
-const metaAvatarImg = computed(() => storedAvatar(email.sendEmail))
+const metaAvatarImg = computed(() => storedAvatar(email.sendEmail) || gravatarCandidate(email.sendEmail))
 const metaAvatarBg = computed(() => avatarBg(email.sendEmail || email.name || ''))
 const showPreview = ref(false)
 const srcList = reactive([])
@@ -335,7 +336,6 @@ const handleDelete = () => {
   height: 40px;
   border-radius: 8px;
   background: rgba(204, 0, 0, 0.09);
-  border: 1px solid rgba(204, 0, 0, 0.18);
   color: #CC0000;
   font-size: 16px;
   font-weight: 800;
@@ -345,10 +345,13 @@ const handleDelete = () => {
   flex-shrink: 0;
   letter-spacing: -0.02em;
   margin-top: 2px;
+  position: relative;
   overflow: hidden;
 }
 
 .meta-avatar-img {
+  position: absolute;
+  inset: 0;
   width: 40px;
   height: 40px;
   object-fit: cover;
