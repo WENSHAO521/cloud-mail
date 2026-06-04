@@ -15,7 +15,8 @@ export default defineConfig(({mode}) => {
             hmr: true,
         },
         base: env.VITE_STATIC_URL || '/',
-        plugins: [vue(),
+        plugins: [
+            vue(),
             VitePWA({
                 injectRegister: 'script-defer',
                 manifest: {
@@ -27,22 +28,9 @@ export default defineConfig(({mode}) => {
                     display: 'standalone',
                     start_url: '/',
                     icons: [
-                        {
-                            src: 'pwa-192.png',
-                            sizes: '192x192',
-                            type: 'image/png',
-                        },
-                        {
-                            src: 'pwa-512.png',
-                            sizes: '512x512',
-                            type: 'image/png',
-                        },
-                        {
-                            src: 'pwa-maskable-512.png',
-                            sizes: '512x512',
-                            type: 'image/png',
-                            purpose: 'maskable',
-                        },
+                        { src: 'pwa-192.png',         sizes: '192x192', type: 'image/png' },
+                        { src: 'pwa-512.png',          sizes: '512x512', type: 'image/png' },
+                        { src: 'pwa-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
                     ],
                 },
                 workbox: {
@@ -53,53 +41,73 @@ export default defineConfig(({mode}) => {
                     cleanupOutdatedCaches: true,
                 }
             }),
-            AutoImport({
-                resolvers: [ElementPlusResolver()],
-            }),
-            Components({
-                resolvers: [ElementPlusResolver()],
-            })
+            AutoImport({ resolvers: [ElementPlusResolver()] }),
+            Components({ resolvers: [ElementPlusResolver()] }),
         ],
         resolve: {
-            alias: {
-                '@': path.resolve(__dirname, 'src')
-            }
+            alias: { '@': path.resolve(__dirname, 'src') }
         },
         build: {
             target: 'es2022',
             outDir: env.VITE_OUT_DIR || 'dist',
             emptyOutDir: true,
             assetsInclude: ['**/*.json'],
+            // Don't report compressed sizes — speeds up CI/build output
+            reportCompressedSize: false,
+            chunkSizeWarningLimit: 1200,
             rollupOptions: {
                 output: {
                     manualChunks(id) {
-                        // ECharts gets its own cacheable chunk
+                        // TinyMCE is ~1 MB — must be its own cached chunk
+                        if (id.includes('node_modules/tinymce')) {
+                            return 'vendor-tinymce';
+                        }
+                        // ECharts + zrender
                         if (id.includes('node_modules/echarts') || id.includes('node_modules/zrender')) {
                             return 'vendor-echarts';
                         }
-                        // Element Plus UI in its own chunk
+                        // Element Plus UI
                         if (id.includes('node_modules/element-plus') || id.includes('node_modules/@element-plus')) {
                             return 'vendor-element-plus';
                         }
-                        // Vue core
+                        // Vue core + Pinia
                         if (id.includes('node_modules/vue') || id.includes('node_modules/@vue') || id.includes('node_modules/pinia')) {
                             return 'vendor-vue';
                         }
-                        // VueUse utilities
+                        // VueUse
                         if (id.includes('node_modules/@vueuse')) {
                             return 'vendor-vueuse';
                         }
-                        // Iconify icon runtime
+                        // Iconify runtime
                         if (id.includes('node_modules/@iconify')) {
                             return 'vendor-iconify';
                         }
-                        // Date/time utilities
+                        // Lodash
+                        if (id.includes('node_modules/lodash')) {
+                            return 'vendor-lodash';
+                        }
+                        // Date utilities
                         if (id.includes('node_modules/dayjs')) {
                             return 'vendor-dayjs';
                         }
                     }
                 }
             }
-        }
+        },
+        // CSS optimization
+        css: {
+            devSourcemap: false,
+        },
+        // Dependency pre-bundling — faster cold starts in dev
+        optimizeDeps: {
+            include: [
+                'vue', 'pinia', 'vue-router',
+                'element-plus', '@element-plus/icons-vue',
+                '@vueuse/core', '@vueuse/components',
+                'dayjs', 'axios', 'lodash-es',
+                '@iconify/vue',
+            ],
+            exclude: ['tinymce'],  // TinyMCE handles its own loading
+        },
     }
 })

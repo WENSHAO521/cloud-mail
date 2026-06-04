@@ -1099,10 +1099,9 @@ function loadData() {
   gap: 8px;
   padding: 6px 12px;
   border-bottom: 1px solid var(--light-border-color);
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.90);
   backdrop-filter: blur(10px) saturate(1.4);
   -webkit-backdrop-filter: blur(10px) saturate(1.4);
-  will-change: transform;
 
   .search-bar-icon {
     color: var(--secondary-text-color);

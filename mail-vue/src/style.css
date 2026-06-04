@@ -237,12 +237,21 @@ button, input, select, textarea {
     --card-shadow-hover: 0 2px 8px rgba(0, 0, 0, 0.09), 0 1px 3px rgba(0, 0, 0, 0.05);
     --compose-shadow: 0 8px 40px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(0, 0, 0, 0.08);
 
-    /* Motion */
+    /* PSG Gradients — Black/White/Red palette only */
+    --psg-gradient-red:        linear-gradient(135deg, #c00000 0%, #7a0000 100%);
+    --psg-gradient-red-h:      linear-gradient(135deg, #a80000 0%, #680000 100%);
+    --psg-gradient-dark:       linear-gradient(180deg, #1c1c1c 0%, #0a0a0a 100%);
+    --psg-gradient-sidebar:    linear-gradient(180deg, #161616 0%, #0a0a0a 100%);
+    --psg-gradient-card-top:   linear-gradient(90deg, #b00000 0%, #7a0000 100%);
+    --psg-gradient-header-bar: linear-gradient(90deg, #0f0f0f 0%, #1a0000 100%);
+    --psg-gradient-surface:    linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+
+    /* Motion — never use 'all', only specific properties */
     --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
     --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-    --transition-smooth: all 0.20s var(--ease-out);
-    --transition-spring: all 0.30s var(--ease-spring);
+    --transition-smooth: background 0.18s var(--ease-out), color 0.18s var(--ease-out), border-color 0.18s var(--ease-out), box-shadow 0.18s var(--ease-out);
+    --transition-spring: transform 0.28s var(--ease-spring), opacity 0.22s var(--ease-out);
 }
 
 .dark {
@@ -319,28 +328,29 @@ button, input, select, textarea {
    Bauhaus · Editorial · Precise · German publisher
    ═══════════════════════════════════════════════════ */
 
-/* Buttons — sharp, authoritative */
+/* Buttons */
 .el-button {
     border-radius: 3px !important;
     font-weight: 500 !important;
     letter-spacing: 0.02em !important;
-    transition: background 0.15s var(--ease-out), box-shadow 0.15s, border-color 0.15s, transform 0.12s var(--ease-spring) !important;
+    transition: background 0.15s var(--ease-out), box-shadow 0.15s var(--ease-out), border-color 0.15s, transform 0.12s var(--ease-spring) !important;
 }
 .el-button:active {
     transform: scale(0.97) !important;
 }
 .el-button--primary {
-    background: #b00000 !important;
+    background: var(--psg-gradient-red) !important;
     border-color: #b00000 !important;
     color: #ffffff !important;
     font-size: 13px !important;
     font-weight: 600 !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.25) !important;
 }
 .el-button--primary:hover,
 .el-button--primary:focus {
-    background: #8f0000 !important;
+    background: var(--psg-gradient-red-h) !important;
     border-color: #8f0000 !important;
-    box-shadow: 0 1px 4px rgba(176, 0, 0, 0.30) !important;
+    box-shadow: 0 2px 8px rgba(176, 0, 0, 0.35) !important;
 }
 .el-button--default {
     border-color: #CCCCCC !important;
@@ -362,11 +372,11 @@ button, input, select, textarea {
     border-radius: 2px !important;
 }
 
-/* Inputs — clean rectangular */
+/* Inputs */
 .el-input__wrapper {
     border-radius: 3px !important;
     box-shadow: 0 0 0 1px #DADADA !important;
-    transition: box-shadow 0.15s !important;
+    transition: box-shadow 0.15s var(--ease-out) !important;
 }
 .el-input__wrapper:hover {
     box-shadow: 0 0 0 1px #666666 !important;
@@ -424,7 +434,7 @@ button, input, select, textarea {
     border-radius: 3px !important;
     border: 1px solid #E8E8E8 !important;
     box-shadow: var(--card-shadow) !important;
-    transition: box-shadow 0.18s !important;
+    transition: box-shadow 0.18s var(--ease-out) !important;
 }
 .dark .el-card {
     border-color: #2E2E2E !important;

@@ -940,16 +940,15 @@ function close() {
 }
 </style>
 <style scoped lang="scss">
-/* ── Overlay — frosted glass scrim ── */
+/* ── Overlay ── no backdrop-filter: TinyMCE repaints on every keystroke,
+   blur forces GPU recompositing of all layers below → severe lag */
 .send {
   position: fixed;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(17, 17, 17, 0.45);
-  backdrop-filter: blur(6px) saturate(0.9);
-  -webkit-backdrop-filter: blur(6px) saturate(0.9);
+  background: rgba(10, 10, 10, 0.62);
   z-index: 2000;
 }
 
@@ -974,16 +973,17 @@ function close() {
   }
 }
 
-/* ── Header ──────────────────────────────────── */
+/* ── Header — dark gradient editorial bar ──────── */
 .wh {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 16px 0 20px;
+  background: linear-gradient(90deg, #111111 0%, #1c0000 100%);
   height: 52px;
-  background: #111111;
   flex-shrink: 0;
-  border-bottom: 3px solid #CC0000;
+  border-bottom: 3px solid transparent;
+  border-image: linear-gradient(90deg, #c00000 0%, #7a0000 100%) 1;
 }
 
 .wh-left {

@@ -134,7 +134,7 @@ function openCompose() {
 .sidebar-inner {
   width: 256px;
   min-height: 100%;
-  background: var(--aside-backgound);
+  background: linear-gradient(180deg, #161616 0%, #0a0a0a 100%);
   padding-bottom: 24px;
   transition: width 0.22s cubic-bezier(0.22,1,0.36,1);
   overflow: hidden;
@@ -149,7 +149,8 @@ function openCompose() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 2px solid #b00000;
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(90deg, #c00000 0%, #7a0000 100%) 1;
   gap: 8px;
 
   &.collapsed {
@@ -201,12 +202,13 @@ function openCompose() {
   padding: 0 12px;
   height: 40px;
   border-radius: 2px;
-  background: #b00000;
+  background: linear-gradient(135deg, #c00000 0%, #7e0000 100%);
   border: none;
   cursor: pointer;
   user-select: none;
-  transition: background 0.15s ease;
+  transition: box-shadow 0.15s ease, filter 0.15s ease;
   justify-content: flex-start;
+  box-shadow: 0 2px 6px rgba(176, 0, 0, 0.40);
 
   &.compose-icon-only {
     padding: 0;
@@ -229,9 +231,9 @@ function openCompose() {
   }
 
   @media (hover: hover) {
-    &:hover { background: #8f0000; }
+    &:hover { filter: brightness(1.12); box-shadow: 0 3px 10px rgba(176,0,0,0.50); }
   }
-  &:active { background: #7a0000; }
+  &:active { filter: brightness(0.88); box-shadow: none; }
 }
 
 /* Section label */
@@ -264,13 +266,13 @@ function openCompose() {
   }
 }
 
-/* Active — solid #b00000 with white text, sharp left indicator */
+/* Active — red gradient, white indicator bar */
 .choose-item {
   font-weight: 600 !important;
   color: #ffffff !important;
-  border-left: 3px solid #ffffff !important;
-  box-shadow: none !important;
-  background: #b00000 !important;
+  border-left: 3px solid rgba(255,255,255,0.70) !important;
+  box-shadow: 0 2px 8px rgba(176, 0, 0, 0.35) !important;
+  background: linear-gradient(90deg, #c00000 0%, #8a0000 100%) !important;
   border-radius: 2px !important;
 }
 
