@@ -1535,8 +1535,6 @@ function editSetting(settingForm, refreshStatus = true) {
 
 <style scoped lang="scss">
 .settings-container {
-  height: 100%;
-  overflow: hidden;
   background: var(--psg-bg, #f7f7f7) !important;
   position: relative;
 
@@ -1566,51 +1564,32 @@ function editSetting(settingForm, refreshStatus = true) {
 
 .scroll {
   width: 100%;
-  min-height: 100%;
 
   :deep(.el-scrollbar__view) {
-    height: 100%;
+    min-height: 100%;
   }
 
   .scroll-body {
-    min-height: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 24px 32px 56px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    gap: 20px;
+
+    @media (max-width: 960px)  { padding: 20px 24px 40px; }
+    @media (max-width: 640px)  { padding: 16px 16px 32px; gap: 14px; }
   }
 }
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
-  padding: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
   gap: 20px;
 
-  @media (max-width: 500px) {
+  @media (max-width: 540px) {
     grid-template-columns: 1fr;
-    padding: 16px;
     gap: 14px;
-  }
-
-  @media (max-width: 1023px) {
-    gap: 12px;
-    padding: 16px;
-  }
-
-  :deep(.el-card) {
-    border-radius: 0 !important;
-    border: 1px solid #E8E8E8 !important;
-    border-top: 2px solid #111111 !important;
-  }
-
-  :deep(.el-card__header) {
-    font-size: 11px !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.08em !important;
-    color: #555555 !important;
-    border-bottom: 1px solid #E8E8E8 !important;
-    padding: 12px 16px !important;
   }
 }
 
@@ -1637,7 +1616,7 @@ function editSetting(settingForm, refreshStatus = true) {
 
 .settings-card {
   background: var(--surface, #ffffff);
-  border-radius: 16px;
+  border-radius: 24px;
   border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
   box-shadow: 0 4px 14px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
   overflow: hidden;

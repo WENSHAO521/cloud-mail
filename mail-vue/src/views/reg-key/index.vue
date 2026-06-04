@@ -1,5 +1,6 @@
 <template>
-  <div class="reg-key">
+  <div class="page-outer">
+    <div class="space-y">
     <div class="header-actions">
       <Icon class="icon" icon="ion:add-outline" width="23" height="23" @click="openAdd"/>
       <div class="search">
@@ -15,7 +16,7 @@
       <Icon class="icon" icon="fluent:broom-sparkle-16-regular" width="22" height="22" @click="clearNotUse"/>
     </div>
 
-    <el-scrollbar class="scrollbar">
+    <div class="keys-body">
       <div  class="loading" :class="regKeyLoading ? 'loading-show' : 'loading-hide'" :style="regKeyFirst ? 'background: transparent' : ''">
         <loading/>
       </div>
@@ -59,8 +60,10 @@
       <div class="empty" v-if="regKeyData.length === 0">
         <el-empty v-if="!regKeyFirst" :image-size="isMobile ? 120 : null" :description="$t('noCodeFound')"/>
       </div>
-    </el-scrollbar>
-    <el-dialog v-model="showAdd" :title="$t('addRegKey')">
+    </div><!-- /keys-body -->
+    </div><!-- /space-y -->
+  </div><!-- /page-outer -->
+  <el-dialog v-model="showAdd" :title="$t('addRegKey')">
       <div class="container">
         <el-input v-model="addForm.code" :placeholder="$t('regKey')">
           <template #suffix>
@@ -92,7 +95,6 @@
                          :label="$t('date')" fixed="right" :show-overflow-tooltip="true"/>
       </el-table>
     </el-dialog>
-  </div>
 </template>
 
 <script setup>
@@ -388,18 +390,58 @@ function openAdd() {
 </script>
 
 <style scoped lang="scss">
-.reg-key {
-  height: 100%;
-  overflow: hidden;
-  background: var(--psg-bg, #f7f7f7);
+.page-outer {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 24px 32px 56px;
+  @media (max-width: 960px)  { padding: 20px 24px 40px; }
+  @media (max-width: 640px)  { padding: 16px 16px 32px; }
 }
 
-.scrollbar {
-  height: calc(100% - 52px);
-  position: relative;
-  @media (max-width: 372px) {
-    height: calc(100% - 85px);
+.space-y {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.header-actions {
+  padding: 0 16px;
+  height: 52px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  background: var(--surface, #fff);
+  border-radius: 24px;
+  border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+
+  .search-input {
+    width: min(200px, calc(100vw - 160px));
   }
+
+  .icon {
+    cursor: pointer;
+    color: var(--muted, #9ca3af);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    transition: background 0.12s, color 0.12s;
+
+    @media (hover: hover) {
+      &:hover {
+        background: rgba(0,0,0,0.07);
+        color: var(--el-text-color-primary);
+      }
+    }
+  }
+}
+
+.keys-body {
+  position: relative;
 
   .code-box {
     padding: 20px 20px 32px;
@@ -409,7 +451,7 @@ function openAdd() {
 
     .code-item {
       background: var(--surface, #fff);
-      border-radius: 16px;
+      border-radius: 24px;
       border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
       box-shadow: 0 4px 14px rgba(0,0,0,0.04);
       transition: box-shadow 0.14s ease;
@@ -536,39 +578,6 @@ function openAdd() {
   cursor: pointer;
 }
 
-.header-actions {
-  padding: 0 16px;
-  height: 52px;
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  align-items: center;
-  border-bottom: 1px solid var(--separator, #e5e7eb);
-  background: var(--surface, #fff);
-
-  .search-input {
-    width: min(200px, calc(100vw - 160px));
-  }
-
-  .icon {
-    cursor: pointer;
-    color: var(--muted, #9ca3af);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    transition: background 0.12s, color 0.12s;
-
-    @media (hover: hover) {
-      &:hover {
-        background: rgba(0,0,0,0.07);
-        color: var(--el-text-color-primary);
-      }
-    }
-  }
-}
 
 :deep(.el-table__inner-wrapper:before) {
   background: var(--el-bg-color);

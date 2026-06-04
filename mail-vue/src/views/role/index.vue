@@ -1,10 +1,11 @@
 <template>
-  <div class="perm-box">
+  <div class="page-outer">
+    <div class="space-y">
     <div class="header-actions">
       <Icon class="icon" icon="ion:add-outline" width="23" height="23" @click="openAddRole"/>
       <Icon class="icon" icon="ion:reload" width="18" height="18" @click="refresh"/>
     </div>
-    <el-scrollbar class="perm-scrollbar">
+    <div class="table-card">
       <div class="loading" :class="tableLoading ? 'loading-show' : 'loading-hide'"
            :style="first ? 'background: transparent' : ''">
         <loading/>
@@ -46,8 +47,10 @@
           </template>
         </el-table-column>
       </el-table>
-    </el-scrollbar>
-    <el-dialog top="5vh" class="dialog" v-model="roleFormShow" @closed="resetForm">
+    </div><!-- /table-card -->
+    </div><!-- /space-y -->
+  </div><!-- /page-outer -->
+  <el-dialog top="5vh" class="dialog" v-model="roleFormShow" @closed="resetForm">
       <template #header>
         <span style="font-size: 18px">{{ dialogType.title }}</span>
         <el-popover
@@ -140,7 +143,6 @@
         </el-button>
       </div>
     </el-dialog>
-  </div>
 </template>
 <script setup>
 import {Icon} from "@iconify/vue";
@@ -415,25 +417,27 @@ window.onresize = () => {
 </script>
 <style scoped lang="scss">
 
-.perm-box {
-  height: 100%;
-  overflow: hidden;
-  width: 100%;
-  background: var(--psg-bg, #f7f7f7);
+.page-outer {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 24px 32px 56px;
+  @media (max-width: 960px)  { padding: 20px 24px 40px; }
+  @media (max-width: 640px)  { padding: 16px 16px 32px; }
+}
+
+.space-y {
   display: flex;
   flex-direction: column;
-  padding: 20px;
   gap: 16px;
+}
 
-  .perm-scrollbar {
-    flex: 1;
-    min-height: 0;
-    overflow: hidden;
-    background: var(--surface, #fff);
-    border-radius: 16px;
-    border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
-    box-shadow: 0 4px 14px rgba(0,0,0,0.04);
-  }
+.table-card {
+  width: 100%;
+  overflow: hidden;
+  background: var(--surface, #fff);
+  border-radius: 24px;
+  border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
 }
 
 .send-num {
@@ -456,9 +460,9 @@ window.onresize = () => {
   align-items: center;
   gap: 8px;
   background: var(--surface, #fff);
-  border-radius: 16px;
+  border-radius: 24px;
   border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
   flex-shrink: 0;
 
   .icon {
@@ -496,12 +500,11 @@ window.onresize = () => {
 }
 
 .loading {
-  height: calc(100% - 41px);
+  height: 200px;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: absolute;
   background: var(--loadding-background);
   z-index: 2;
 }

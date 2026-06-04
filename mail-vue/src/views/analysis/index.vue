@@ -2,120 +2,105 @@
   <div v-if="analysisLoading" class="analysis-loading">
     <loading/>
   </div>
-  <el-scrollbar v-else style="height: 100%;">
-    <div class="analysis" :key="boxKey">
-      <div class="number">
-        <div class="number-item">
-          <div class="top">
-            <div class="left">
-              <div>{{ $t('totalReceived') }}</div>
-              <div>
-                <el-statistic :formatter="value => Math.round(value)" :value="receiveData"/>
-              </div>
-            </div>
-            <div class="right">
-              <div class="count-icon">
-                <Icon icon="psg:inbox" width="22" height="22"></Icon>
-              </div>
-            </div>
-          </div>
-          <div class="delete-ratio">
-            <div>{{ $t('active') }} <span class="normal">{{ numberCount.normalReceiveTotal }}</span></div>
-            <div>{{ $t('deleted') }} <span class="deleted">{{ numberCount.delReceiveTotal }}</span></div>
-          </div>
-        </div>
-        <div class="number-item">
-          <div class="top">
-            <div class="left">
-              <div>{{ $t('totalSent') }}</div>
-              <div>
-                <el-statistic :formatter="value => Math.round(value)" :value="sendData"/>
-              </div>
-            </div>
-            <div class="right">
-              <div class="count-icon">
-                <Icon icon="psg:send" width="22" height="22"></Icon>
-              </div>
-            </div>
-          </div>
-          <div class="delete-ratio">
-            <div>{{ $t('active') }} <span class="normal">{{ numberCount.normalSendTotal }}</span></div>
-            <div>{{ $t('deleted') }} <span class="deleted">{{ numberCount.delSendTotal }}</span></div>
-          </div>
-        </div>
-        <div class="number-item">
-          <div class="top">
-            <div class="left">
-              <div>{{ $t('totalMailboxes') }}</div>
-              <div>
-                <el-statistic :formatter="value => Math.round(value)" :value="accountData"/>
-              </div>
-            </div>
-            <div class="right">
-              <div class="count-icon">
-                <Icon icon="psg:all-mail" width="22" height="22"></Icon>
-              </div>
-            </div>
-          </div>
-          <div class="delete-ratio">
-            <div>{{ $t('active') }} <span class="normal">{{ numberCount.normalAccountTotal }}</span></div>
-            <div>{{ $t('deleted') }} <span class="deleted">{{ numberCount.delAccountTotal }}</span></div>
-          </div>
-        </div>
-        <div class="number-item">
-          <div class="top">
-            <div class="left">
-              <div>{{ $t('totalUsers') }}</div>
-              <div>
-                <el-statistic :formatter="value => Math.round(value)" :value="userData"/>
-              </div>
-            </div>
-            <div class="right">
-              <div class="count-icon">
-                <Icon icon="psg:group" width="22" height="22"></Icon>
-              </div>
-            </div>
-          </div>
-          <div class="delete-ratio">
-            <div>{{ $t('active') }} <span class="normal">{{ numberCount.normalUserTotal }}</span></div>
-            <div>{{ $t('deleted') }} <span class="deleted">{{ numberCount.delUserTotal }}</span></div>
-          </div>
-        </div>
-      </div>
-      <div class="picture">
-        <div class="picture-item">
-          <div class="title" style="display: flex;justify-content: space-between;">
-            <span>{{ $t('emailSource') }}</span>
-            <span class="source-button" v-if="false">
-              <el-radio-group v-model="checkedSourceType">
-                <el-radio-button label="发件人" value="sender"/>
-                <el-radio-button label="邮箱" value="email"/>
-              </el-radio-group>
-            </span>
-          </div>
-          <div class="sender-pie">
+  <div v-else class="page-outer" :key="boxKey">
 
+    <!-- ── Stat cards ── -->
+    <div class="stat-grid">
+      <section class="stat-card">
+        <div class="stat-body">
+          <div class="stat-left">
+            <div class="stat-label">{{ $t('totalReceived') }}</div>
+            <div class="stat-value">
+              <el-statistic :formatter="value => Math.round(value)" :value="receiveData"/>
+            </div>
+          </div>
+          <div class="stat-icon" style="background:rgba(14,165,233,0.1);color:rgb(14,165,233)">
+            <Icon icon="psg:inbox" width="24" height="24"/>
           </div>
         </div>
-        <div class="picture-item">
-          <div class="title">{{ $t('userGrowth') }}</div>
-          <div class="increase-line">
-
+        <div class="stat-breakdown">
+          <span class="bd-normal">{{ numberCount.normalReceiveTotal }} {{ $t('active') }}</span>
+          <span class="bd-del">{{ numberCount.delReceiveTotal }} {{ $t('deleted') }}</span>
+        </div>
+      </section>
+      <section class="stat-card">
+        <div class="stat-body">
+          <div class="stat-left">
+            <div class="stat-label">{{ $t('totalSent') }}</div>
+            <div class="stat-value">
+              <el-statistic :formatter="value => Math.round(value)" :value="sendData"/>
+            </div>
+          </div>
+          <div class="stat-icon" style="background:rgba(99,102,241,0.1);color:rgb(99,102,241)">
+            <Icon icon="psg:send" width="24" height="24"/>
           </div>
         </div>
-      </div>
-      <div class="picture-cs">
-        <div class="picture-cs-item">
-          <div class="title">{{ $t('emailGrowth') }}</div>
-          <div class="email-column"></div>
+        <div class="stat-breakdown">
+          <span class="bd-normal">{{ numberCount.normalSendTotal }} {{ $t('active') }}</span>
+          <span class="bd-del">{{ numberCount.delSendTotal }} {{ $t('deleted') }}</span>
         </div>
-        <div class="picture-cs-item">
-          <div class="title">{{ $t('sentToday') }}</div>
-          <div class="send-count"></div>
+      </section>
+      <section class="stat-card">
+        <div class="stat-body">
+          <div class="stat-left">
+            <div class="stat-label">{{ $t('totalMailboxes') }}</div>
+            <div class="stat-value">
+              <el-statistic :formatter="value => Math.round(value)" :value="accountData"/>
+            </div>
+          </div>
+          <div class="stat-icon" style="background:rgba(16,185,129,0.1);color:rgb(16,185,129)">
+            <Icon icon="psg:all-mail" width="24" height="24"/>
+          </div>
         </div>
-      </div>
+        <div class="stat-breakdown">
+          <span class="bd-normal">{{ numberCount.normalAccountTotal }} {{ $t('active') }}</span>
+          <span class="bd-del">{{ numberCount.delAccountTotal }} {{ $t('deleted') }}</span>
+        </div>
+      </section>
+      <section class="stat-card">
+        <div class="stat-body">
+          <div class="stat-left">
+            <div class="stat-label">{{ $t('totalUsers') }}</div>
+            <div class="stat-value">
+              <el-statistic :formatter="value => Math.round(value)" :value="userData"/>
+            </div>
+          </div>
+          <div class="stat-icon" style="background:rgba(245,158,11,0.1);color:rgb(245,158,11)">
+            <Icon icon="psg:group" width="24" height="24"/>
+          </div>
+        </div>
+        <div class="stat-breakdown">
+          <span class="bd-normal">{{ numberCount.normalUserTotal }} {{ $t('active') }}</span>
+          <span class="bd-del">{{ numberCount.delUserTotal }} {{ $t('deleted') }}</span>
+        </div>
+      </section>
     </div>
-  </el-scrollbar>
+
+    <!-- ── Charts row 1 ── -->
+    <div class="chart-grid">
+      <section class="chart-card">
+        <h2 class="chart-title">{{ $t('emailSource') }}</h2>
+        <div class="sender-pie chart-area"></div>
+      </section>
+      <section class="chart-card">
+        <h2 class="chart-title">{{ $t('userGrowth') }}</h2>
+        <div class="increase-line chart-area"></div>
+      </section>
+    </div>
+
+    <!-- ── Charts row 2 ── -->
+    <div class="chart-grid">
+      <section class="chart-card">
+        <h2 class="chart-title">{{ $t('emailGrowth') }}</h2>
+        <div class="email-column chart-area"></div>
+      </section>
+      <section class="chart-card">
+        <h2 class="chart-title">{{ $t('sentToday') }}</h2>
+        <div class="send-count chart-area"></div>
+      </section>
+    </div>
+
+  </div>
 </template>
 
 <script setup>
@@ -745,202 +730,109 @@ function createSendGauge() {
   justify-content: center;
 }
 
-.analysis {
-  height: 100%;
-  padding: 24px 24px 36px;
-  gap: 20px;
-  background: var(--extra-light-fill);
+.page-outer {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 24px 32px 56px;
   display: grid;
+  gap: 20px;
   grid-auto-rows: min-content;
-  @media (max-width: 1024px) {
-    padding: 16px 16px 32px;
-    gap: 14px;
+  @media (max-width: 960px)  { padding: 20px 24px 40px; gap: 14px; }
+  @media (max-width: 640px)  { padding: 16px 16px 32px; }
+}
+
+/* ── Stat cards grid ── */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  @media (max-width: 1200px) { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 600px)  { grid-template-columns: 1fr; }
+}
+
+.stat-card {
+  background: var(--surface, #fff);
+  border-radius: 24px;
+  border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+  padding: 20px;
+
+  .stat-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
   }
 
-  /* Section heading: Bauhaus all-caps editorial label */
-  .title {
-    margin: 14px 0 0 18px;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    opacity: 0.45;
+  .stat-left {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
   }
 
-  /* ── KPI cards ─────────────────────────────── */
-  .number {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 16px;
-    @media (max-width: 1366px) {
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-    @media (max-width: 767px) {
-      grid-template-columns: 1fr;
-    }
+  .stat-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted, #9ca3af);
+  }
 
-    .number-item {
-      background: var(--surface, #ffffff);
-      border-radius: 16px;
-      border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
-      box-shadow: 0 4px 14px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.04);
-      padding: 20px;
-      transition: box-shadow 0.14s ease;
-
-      @media (hover: hover) {
-        &:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05); }
-      }
-
-      .top {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 12px;
-
-        .left {
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-          min-width: 0;
-
-          > div:first-child {
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--muted, #9ca3af);
-            letter-spacing: 0;
-            text-transform: none;
-            opacity: 1;
-          }
-
-          > div:last-child { font-size: 13px; }
-
-          :deep(.el-statistic__number) {
-            font-size: 30px !important;
-            font-weight: 600 !important;
-            letter-spacing: -0.02em !important;
-            line-height: 1.1 !important;
-          }
-        }
-
-        .right {
-          flex-shrink: 0;
-
-          .count-icon {
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            background: rgba(14, 165, 233, 0.10);
-            color: rgb(14, 165, 233);
-          }
-        }
-      }
-
-      .delete-ratio {
-        width: 100%;
-        display: grid;
-        grid-template-columns: auto auto;
-        justify-content: start;
-        gap: 18px;
-        padding-top: 10px;
-        margin-top: 8px;
-        border-top: 1px solid var(--el-border-color);
-        font-size: 12px;
-        opacity: 0.75;
-
-        .normal {
-          color: var(--el-color-success);
-          font-weight: 600;
-          margin-left: 3px;
-        }
-
-        .deleted {
-          color: #CC0000;
-          font-weight: 600;
-          margin-left: 3px;
-        }
-      }
+  .stat-value {
+    :deep(.el-statistic__number) {
+      font-size: 30px !important;
+      font-weight: 700 !important;
+      letter-spacing: -0.02em !important;
+      line-height: 1.1 !important;
     }
   }
 
-  /* ── Chart panels ───────────────────────────── */
-  .picture {
-    display: grid;
-    grid-template-columns: 500px 1fr;
-    gap: 16px;
-    @media (max-width: 1620px) {
-      grid-template-columns: 1fr;
-    }
-    @media (max-width: 1024px) {
-      gap: 14px;
-    }
-
-    .picture-item {
-      background: var(--surface, #ffffff);
-      border-radius: 16px;
-      border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
-      box-shadow: 0 4px 14px rgba(0,0,0,0.05);
-      padding: 16px;
-
-      .source-button {
-        padding-right: 15px;
-        display: flex;
-        align-items: start;
-
-        :deep(.el-radio-button__inner) {
-          padding: 6px 10px;
-        }
-      }
-
-      .sender-pie {
-        height: 350px;
-        @media (max-width: 767px) {
-          height: 200px;
-        }
-      }
-
-      .increase-line {
-        height: 350px;
-        @media (max-width: 767px) {
-          height: 280px;
-        }
-      }
-    }
+  .stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
   }
 
-  .picture-cs {
-    display: grid;
-    grid-template-columns: 1fr 500px;
-    gap: 16px;
-    @media (max-width: 1620px) {
-      grid-template-columns: 1fr;
-      gap: 14px;
-    }
+  .stat-breakdown {
+    display: flex;
+    gap: 12px;
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--secondary-text-color, #6b7280);
+  }
 
-    .picture-cs-item {
-      background: var(--surface, #ffffff);
-      border-radius: 16px;
-      border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
-      box-shadow: 0 4px 14px rgba(0,0,0,0.05);
-      padding: 16px;
+  .bd-normal { color: var(--secondary-text-color, #6b7280); }
+  .bd-del { color: var(--muted, #9ca3af); }
+}
 
-      .send-count {
-        height: 350px;
-        @media (max-width: 767px) {
-          height: 320px;
-        }
-      }
+/* ── Chart cards ── */
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  @media (max-width: 900px) { grid-template-columns: 1fr; }
+}
 
-      .email-column {
-        height: 350px;
-        @media (max-width: 767px) {
-          height: 250px;
-        }
-      }
-    }
+.chart-card {
+  background: var(--surface, #fff);
+  border-radius: 24px;
+  border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+  padding: 20px;
+
+  .chart-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--el-text-color-primary);
+    margin: 0 0 12px;
+  }
+
+  .chart-area {
+    height: 280px;
+    @media (max-width: 640px) { height: 220px; }
   }
 }
 </style>

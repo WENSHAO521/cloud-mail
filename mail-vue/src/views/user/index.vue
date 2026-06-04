@@ -1,5 +1,6 @@
 <template>
-  <div class="user-box">
+  <div class="page-outer">
+    <div class="space-y">
     <div class="header-actions">
       <Icon class="icon" icon="ion:add-outline" width="23" height="23" @click="openAdd"/>
       <div class="search">
@@ -25,7 +26,7 @@
       <Icon class="icon" icon="ion:reload" width="18" height="18" @click="refresh"/>
       <Icon class="icon" icon="uiw:delete" width="16" height="16" @click="delUser"/>
     </div>
-    <el-scrollbar ref="scrollbarRef" class="scrollbar">
+    <div class="table-card">
       <div>
         <div class="loading" :class="tableLoading ? 'loading-show' : 'loading-hide'"
              :style="first ? 'background: transparent' : ''">
@@ -137,8 +138,11 @@
           />
         </div>
       </div>
-    </el-scrollbar>
-    <el-dialog class="dialog" v-model="setPwdShow" :title="$t('changePassword')" @closed="resetUserForm">
+    </div><!-- /table-card -->
+    </div><!-- /space-y -->
+  </div><!-- /page-outer -->
+  <!-- dialogs -->
+  <el-dialog class="dialog" v-model="setPwdShow" :title="$t('changePassword')" @closed="resetUserForm">
       <div class="dialog-box">
         <el-input v-model="userForm.password" type="password" :placeholder="$t('newPassword')" autocomplete="off">
         </el-input>
@@ -366,7 +370,6 @@
         </el-dropdown-menu>
       </template>
     </el-dropdown>
-  </div>
 </template>
 
 <script setup>
@@ -422,7 +425,6 @@ const tableRef = ref({})
 const userDetails = ref({})
 const total = ref(0)
 const first = ref(true)
-const scrollbarRef = ref(null)
 const accountLoading = ref(false)
 const dropdownRef = ref(null);
 const dropdownShow = ref(false);
@@ -1015,8 +1017,7 @@ function getUserList(loading = true) {
   userList(newParams).then(data => {
     users.value = data.list.map(item => ({...item, checkedClass: ''}))
     total.value = data.total
-    scrollbarRef.value?.setScrollTop(0);
-  }).finally(() => {
+    }).finally(() => {
     tableLoading.value = false
     setTimeout(() => {
       first.value = false
@@ -1068,13 +1069,17 @@ function adjustWidth() {
   background: var(--el-color-warning-light-9);
 }
 
-.user-box {
-  overflow: hidden;
-  height: 100%;
-  background: var(--psg-bg, #f7f7f7);
+.page-outer {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 24px 32px 56px;
+  @media (max-width: 960px)  { padding: 20px 24px 40px; }
+  @media (max-width: 640px)  { padding: 16px 16px 32px; }
+}
+
+.space-y {
   display: flex;
   flex-direction: column;
-  padding: 20px;
   gap: 16px;
 }
 
@@ -1104,9 +1109,9 @@ function adjustWidth() {
   flex-wrap: wrap;
   align-items: center;
   background: var(--surface, #fff);
-  border-radius: 16px;
+  border-radius: 24px;
   border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
   flex-shrink: 0;
 
   .search-input {
@@ -1149,13 +1154,10 @@ function adjustWidth() {
   color: var(--el-color-primary)
 }
 
-.scrollbar {
-  flex: 1;
-  min-height: 0;
+.table-card {
   width: 100%;
-  overflow: auto;
   background: var(--surface, #fff);
-  border-radius: 16px;
+  border-radius: 24px;
   border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
   box-shadow: 0 4px 14px rgba(0,0,0,0.04);
   overflow: hidden;
