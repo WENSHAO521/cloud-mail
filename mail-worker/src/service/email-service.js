@@ -498,12 +498,18 @@ const emailService = {
 		emailData.resendEmailId = data?.id;
 
 		const recipient = [];
-
 		receiveEmail.forEach(item => {
 			recipient.push({ address: item, name: '' });
 		});
-
 		emailData.recipient = JSON.stringify(recipient);
+
+		// Save CC and BCC so they appear in the reading pane
+		if (cc.length > 0) {
+			emailData.cc = JSON.stringify(cc.map(e => ({ address: e, name: '' })));
+		}
+		if (bcc.length > 0) {
+			emailData.bcc = JSON.stringify(bcc.map(e => ({ address: e, name: '' })));
+		}
 
 		if (sendType === 'reply') {
 			emailData.inReplyTo = emailRow.messageId;
@@ -537,10 +543,16 @@ const emailService = {
 		const attList = await attService.selectByEmailIds(c, [emailResult.emailId]);
 		emailResult.attList = attList;
 
-		//如果全是站内接收方，直接写入数据库（包括 CC / BCC 站内收件人）
-		if (allInternal) {
-			const allInternalRecipients = [...new Set([...receiveEmail, ...cc, ...bcc])];
-			await this.HandleOnSiteEmail(c, allInternalRecipients, emailResult, attList);
+		// Always deliver to internal recipients via DB, regardless of whether SMTP was also used.
+		// This handles: allInternal (no SMTP), mixed (SMTP for external + DB for internal).
+		const isInternalEmail = addr => domainList.includes('@' + emailUtils.getDomain(addr));
+		const internalRecipients = [...new Set([
+			...receiveEmail.filter(isInternalEmail),
+			...cc.filter(isInternalEmail),
+			...bcc.filter(isInternalEmail)
+		])];
+		if (internalRecipients.length > 0) {
+			await this.HandleOnSiteEmail(c, internalRecipients, emailResult, attList);
 		}
 
 		const dateStr = dayjs().format('YYYY-MM-DD');
@@ -558,14 +570,17 @@ const emailService = {
 	},
 
 	async sendByCloudflareEmail(c, params) {
+		// Cloudflare Email API requires { email, name? } objects, not plain strings
+		const toAddr = e => (typeof e === 'string' ? { email: e } : e);
+
 		const sendForm = {
 			from: { email: params.accountEmail, name: params.name },
-			to: [...params.receiveEmail],
+			to: params.receiveEmail.map(toAddr),
 			subject: params.subject
 		};
 
-		if (params.cc?.length > 0)  sendForm.cc  = [...params.cc];
-		if (params.bcc?.length > 0) sendForm.bcc = [...params.bcc];
+		if (params.cc?.length > 0)  sendForm.cc  = params.cc.map(toAddr);
+		if (params.bcc?.length > 0) sendForm.bcc = params.bcc.map(toAddr);
 
 		if (params.text) {
 			sendForm.text = params.text;

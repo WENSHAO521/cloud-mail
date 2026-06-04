@@ -38,6 +38,14 @@
                 <span class="meta-label">{{ $t('recipient') }}</span>
                 <span class="meta-recipients">{{ formateReceive(email.recipient) }}</span>
               </div>
+              <div class="meta-to" v-if="parsedCc.length > 0">
+                <span class="meta-label">{{ $t('cc') }}</span>
+                <span class="meta-recipients">{{ parsedCc.join(', ') }}</span>
+              </div>
+              <div class="meta-to" v-if="parsedBcc.length > 0">
+                <span class="meta-label">{{ $t('bcc') }}</span>
+                <span class="meta-recipients">{{ parsedBcc.join(', ') }}</span>
+              </div>
               <el-alert v-if="email.status === 3" :closable="false" :title="toMessage(email.message)" class="email-msg" type="error" show-icon />
               <el-alert v-if="email.status === 4" :closable="false" :title="$t('complained')" class="email-msg" type="warning" show-icon />
               <el-alert v-if="email.status === 5" :closable="false" :title="$t('delayed')" class="email-msg" type="warning" show-icon />
@@ -172,9 +180,20 @@ function isImage(filename) {
 }
 
 function formateReceive(recipient) {
-  recipient = JSON.parse(recipient)
-  return recipient.map(item => item.address).join(', ')
+  try {
+    return JSON.parse(recipient || '[]').map(item => item.address).join(', ')
+  } catch { return '' }
 }
+
+function parseAddressList(raw) {
+  try {
+    const list = JSON.parse(raw || '[]')
+    return list.map(item => (typeof item === 'string' ? item : item.address)).filter(Boolean)
+  } catch { return [] }
+}
+
+const parsedCc  = computed(() => parseAddressList(email.cc))
+const parsedBcc = computed(() => parseAddressList(email.bcc))
 
 function changeStar() {
   if (email.isStar) {
