@@ -499,9 +499,12 @@ window.onresize = () => {
   text-overflow: ellipsis;
 }
 
+.table-card { position: relative; }
+
 .loading {
-  height: 200px;
-  width: 100%;
+  position: absolute;
+  inset: 0;
+  min-height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -208,13 +208,22 @@ async function deleteGroup(groupId) {
 
 .page-main { display: flex; flex-direction: column; gap: 16px; }
 
-.list-toolbar { display: flex; justify-content: flex-end; }
+.list-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--surface, #fff);
+  border-radius: 24px;
+  border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+}
 
 .add-btn {
   display: flex; align-items: center; gap: 6px;
   font-size: 12.5px; font-weight: 700;
   height: 32px; padding: 0 14px;
-  border-radius: 2px !important;
+  border-radius: 8px !important;
 }
 
 .empty-state {
@@ -228,7 +237,7 @@ async function deleteGroup(groupId) {
 /* Group list */
 .group-list {
   background: var(--surface, #fff);
-  border-radius: 16px;
+  border-radius: 24px;
   border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
   box-shadow: 0 4px 14px rgba(0,0,0,0.04);
   overflow: hidden;

@@ -1155,6 +1155,7 @@ function adjustWidth() {
 }
 
 .table-card {
+  position: relative;
   width: 100%;
   background: var(--surface, #fff);
   border-radius: 24px;

@@ -1,5 +1,4 @@
 <template>
-  <el-scrollbar style="height: 100%">
   <div class="settings-outer">
 
     <!-- Pill tabs — matches vfasky settings-tab-list -->
@@ -80,10 +79,12 @@
           <div class="section-head">
             <span class="section-label">{{ $t('language') }}</span>
           </div>
+          <div class="section-body">
           <el-select :model-value="langSelect" style="width:200px" @change="changeLang">
             <el-option label="中文" value="zh" @pointerdown.prevent.stop="changeLang('zh')"/>
             <el-option label="English" value="en" @pointerdown.prevent.stop="changeLang('en')"/>
           </el-select>
+          </div>
         </section>
 
         <!-- ── SIGNATURE ── -->
@@ -94,6 +95,7 @@
               {{ $t('save') }}
             </el-button>
           </div>
+          <div class="section-body">
           <div class="section-desc">{{ $t('signatureDesc') }}</div>
           <div class="editor-shell">
             <tinyEditor
@@ -105,6 +107,7 @@
               @change="onSignatureChange"
             />
           </div>
+          </div>
         </section>
 
         <!-- ── AUTO-REPLY ── -->
@@ -113,6 +116,7 @@
             <span class="section-label">{{ $t('autoReply') }}</span>
             <el-switch v-model="autoReplyEnabled" @change="saveAutoReply"/>
           </div>
+          <div class="section-body">
           <div class="section-desc">{{ $t('autoReplyDesc') }}</div>
           <transition name="expand">
             <div class="autoreply-body" v-if="autoReplyEnabled">
@@ -129,6 +133,7 @@
               </div>
             </div>
           </transition>
+          </div>
         </section>
 
       </div>
@@ -177,7 +182,6 @@
     </el-dialog>
 
   </div>
-  </el-scrollbar>
 </template>
 
 <script setup>
@@ -362,10 +366,64 @@ function submitPwd() {
   gap: 0;
 }
 
+/* ── Settings grid ── */
+.settings-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+  gap: 20px;
+  align-items: start;
+
+  @media (max-width: 1100px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.settings-danger-sticky {
+  position: sticky;
+  top: 24px;
+
+  @media (max-width: 1100px) {
+    position: static;
+  }
+}
+
+/* ── Tab list ── */
+.settings-tab-list {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--surface-secondary, #f3f3f3);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+.settings-tab-button {
+  min-width: 108px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--secondary-text-color, #6b7280);
+  cursor: pointer;
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 11px 22px;
+  transition: background 140ms ease, box-shadow 140ms ease, color 140ms ease;
+  white-space: nowrap;
+  font-family: inherit;
+
+  &[data-active="true"] {
+    background: var(--surface, #fff);
+    color: var(--el-text-color-primary);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.08);
+  }
+}
+
 /* ── Section — surface-card ── */
 .section {
   background: var(--surface, #fff);
-  border-radius: 16px;
+  border-radius: 24px;
   border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
   box-shadow: 0 4px 14px rgba(0,0,0,0.04);
   overflow: hidden;
@@ -405,6 +463,10 @@ function submitPwd() {
   flex-shrink: 0;
 }
 
+.section-body {
+  padding: 16px 24px 20px;
+}
+
 .section-desc {
   font-size: 12.5px;
   color: var(--secondary-text-color);
@@ -418,6 +480,7 @@ function submitPwd() {
   align-items: flex-start;
   gap: 20px;
   margin-bottom: 16px;
+  padding: 16px 24px 0;
 }
 
 .avatar-wrap {
