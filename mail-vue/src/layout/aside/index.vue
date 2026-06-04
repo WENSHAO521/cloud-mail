@@ -1,30 +1,32 @@
 <template>
   <div class="sidebar-root" :class="{ collapsed }">
+
+    <!-- Account header — mirrors vfasky top row -->
+    <div class="account-header" :class="{ collapsed }">
+      <el-tooltip :content="(userStore.user.name || '') + ' · ' + (userStore.user.email || '')"
+                  placement="right" :disabled="!collapsed">
+        <div class="acct-row" @click="router.push({name: 'setting'})">
+          <div class="acct-avatar" :style="{ background: acctAvatarBg }">
+            <span class="acct-initial">{{ acctInitial }}</span>
+            <img v-if="userStore.avatar" :src="userStore.avatar" class="acct-avatar-img"
+                 @error="e => e.target.style.display = 'none'" />
+          </div>
+          <div class="acct-info" v-if="!collapsed">
+            <span class="acct-name">{{ userStore.user.name || userStore.user.email }}</span>
+            <span class="acct-email">{{ userStore.user.email }}</span>
+          </div>
+        </div>
+      </el-tooltip>
+      <button class="collapse-btn" @click="uiStore.asideCollapsed = !uiStore.asideCollapsed"
+              :title="collapsed ? $t('expand') : $t('collapse')">
+        <Icon icon="material-symbols:menu-rounded" width="20" height="20" />
+      </button>
+    </div>
+
+    <!-- Scrollable nav area -->
     <el-scrollbar class="sidebar-scroll">
       <div class="sidebar-inner" :class="{ collapsed }">
-        <!-- Logo + collapse toggle -->
-        <div class="title" :class="{ collapsed }">
-          <img v-if="!collapsed" class="psg-logo" src="/image/psg-logo.png" alt="Panorama Scholarly Group" />
-          <button class="collapse-btn" @click="uiStore.asideCollapsed = !uiStore.asideCollapsed" :title="collapsed ? $t('expand') : $t('collapse')">
-            <Icon :icon="collapsed ? 'psg:chevron-right' : 'psg:chevron-left'" width="18" height="18"/>
-          </button>
-        </div>
-
-        <!-- Account section -->
-        <el-tooltip :content="userStore.user.email" placement="right" :disabled="!collapsed">
-          <div class="account-section" :class="{ collapsed }" @click="router.push({name: 'setting'})">
-            <div class="acct-avatar" :style="{ background: acctAvatarBg }">
-              <span class="acct-initial">{{ acctInitial }}</span>
-              <img v-if="userStore.avatar" :src="userStore.avatar" class="acct-avatar-img" @error="e => e.target.style.display='none'" />
-            </div>
-            <div class="acct-info" v-if="!collapsed">
-              <div class="acct-name">{{ userStore.user.name || userStore.user.email }}</div>
-              <div class="acct-email">{{ userStore.user.email }}</div>
-            </div>
-          </div>
-        </el-tooltip>
-
-        <el-menu :collapse="false" style="margin-top: 8px">
+        <el-menu :collapse="false">
           <el-tooltip v-for="item in navItems" :key="item.name"
                       :content="$t(item.labelKey)" placement="right"
                       :disabled="!uiStore.asideCollapsed">
@@ -33,69 +35,71 @@
               @click="router.push({name: item.name})" :index="item.name"
               :class="route.meta.name === item.name ? 'choose-item' : ''">
               <Icon :icon="item.icon" width="20" height="20" />
-              <span class="menu-name" v-if="!collapsed">{{$t(item.labelKey)}}</span>
+              <span class="menu-name" v-if="!collapsed">{{ $t(item.labelKey) }}</span>
             </el-menu-item>
           </el-tooltip>
 
-          <div class="manage-title" v-if="!collapsed" v-perm="['all-email:query','user:query','role:query','setting:query','analysis:query','reg-key:query']">
-            <div>{{$t('manage')}}</div>
+          <div class="manage-title" v-if="!collapsed"
+               v-perm="['all-email:query','user:query','role:query','setting:query','analysis:query','reg-key:query']">
+            <span>{{ $t('manage') }}</span>
           </div>
 
           <el-tooltip :content="$t('analytics')" placement="right" :disabled="!collapsed">
             <el-menu-item @click="router.push({name: 'analysis'})" index="analysis" v-perm="'analysis:query'"
                           :class="route.meta.name === 'analysis' ? 'choose-item' : ''">
               <Icon icon="psg:analytics" width="20" height="20" />
-              <span class="menu-name" v-if="!collapsed">{{$t('analytics')}}</span>
+              <span class="menu-name" v-if="!collapsed">{{ $t('analytics') }}</span>
             </el-menu-item>
           </el-tooltip>
           <el-tooltip :content="$t('allUsers')" placement="right" :disabled="!collapsed">
             <el-menu-item @click="router.push({name: 'user'})" index="user" v-perm="'user:query'"
                           :class="route.meta.name === 'user' ? 'choose-item' : ''">
               <Icon icon="psg:group" width="20" height="20" />
-              <span class="menu-name" v-if="!collapsed">{{$t('allUsers')}}</span>
+              <span class="menu-name" v-if="!collapsed">{{ $t('allUsers') }}</span>
             </el-menu-item>
           </el-tooltip>
           <el-tooltip :content="$t('allMail')" placement="right" :disabled="!collapsed">
             <el-menu-item @click="router.push({name: 'all-email'})" index="all-email" v-perm="'all-email:query'"
                           :class="route.meta.name === 'all-email' ? 'choose-item' : ''">
               <Icon icon="psg:all-mail" width="20" height="20" />
-              <span class="menu-name" v-if="!collapsed">{{$t('allMail')}}</span>
+              <span class="menu-name" v-if="!collapsed">{{ $t('allMail') }}</span>
             </el-menu-item>
           </el-tooltip>
           <el-tooltip :content="$t('permissions')" placement="right" :disabled="!collapsed">
             <el-menu-item @click="router.push({name: 'role'})" index="role" v-perm="'role:query'"
                           :class="route.meta.name === 'role' ? 'choose-item' : ''">
               <Icon icon="psg:lock" width="20" height="20" />
-              <span class="menu-name" v-if="!collapsed">{{$t('permissions')}}</span>
+              <span class="menu-name" v-if="!collapsed">{{ $t('permissions') }}</span>
             </el-menu-item>
           </el-tooltip>
           <el-tooltip :content="$t('inviteCode')" placement="right" :disabled="!collapsed">
             <el-menu-item @click="router.push({name: 'reg-key'})" index="reg-key" v-perm="'reg-key:query'"
                           :class="route.meta.name === 'reg-key' ? 'choose-item' : ''">
               <Icon icon="psg:key" width="20" height="20" />
-              <span class="menu-name" v-if="!collapsed">{{$t('inviteCode')}}</span>
+              <span class="menu-name" v-if="!collapsed">{{ $t('inviteCode') }}</span>
             </el-menu-item>
           </el-tooltip>
           <el-tooltip :content="$t('SystemSettings')" placement="right" :disabled="!collapsed">
             <el-menu-item @click="router.push({name: 'sys-setting'})" index="sys-setting" v-perm="'setting:query'"
                           :class="route.meta.name === 'sys-setting' ? 'choose-item' : ''">
               <Icon icon="psg:system" width="20" height="20" />
-              <span class="menu-name" v-if="!collapsed">{{$t('SystemSettings')}}</span>
+              <span class="menu-name" v-if="!collapsed">{{ $t('SystemSettings') }}</span>
             </el-menu-item>
           </el-tooltip>
         </el-menu>
       </div>
     </el-scrollbar>
 
-    <!-- Compose button — pinned to sidebar bottom -->
+    <!-- Compose button — pinned at bottom -->
     <div class="sidebar-footer" :class="{ collapsed }">
       <el-tooltip :content="$t('compose')" placement="right" :disabled="!collapsed">
         <div class="compose-btn" v-if="canSend" @click="openCompose" :class="{ 'compose-icon-only': collapsed }">
-          <Icon icon="psg:compose" width="20" height="20" class="compose-icon"/>
+          <Icon icon="psg:compose" width="20" height="20" class="compose-icon" />
           <span class="compose-text" v-if="!collapsed">{{ $t('compose') }}</span>
         </div>
       </el-tooltip>
     </div>
+
   </div>
 </template>
 
@@ -115,14 +119,14 @@ const userStore = useUserStore();
 
 const canSend = computed(() => hasPerm('email:send'));
 
-const isMobile = ref(window.innerWidth < 1025)
-const onResize = () => { isMobile.value = window.innerWidth < 1025 }
-window.addEventListener('resize', onResize)
-onUnmounted(() => window.removeEventListener('resize', onResize))
-const collapsed = computed(() => uiStore.asideCollapsed && !isMobile.value)
+const isMobile = ref(window.innerWidth < 1025);
+const onResize = () => { isMobile.value = window.innerWidth < 1025; }
+window.addEventListener('resize', onResize);
+onUnmounted(() => window.removeEventListener('resize', onResize));
+const collapsed = computed(() => uiStore.asideCollapsed && !isMobile.value);
 
-const acctAvatarBg = computed(() => avatarBg(userStore.user?.email || ''))
-const acctInitial = computed(() => avatarLetter(userStore.user?.name, userStore.user?.email))
+const acctAvatarBg = computed(() => avatarBg(userStore.user?.email || ''));
+const acctInitial  = computed(() => avatarLetter(userStore.user?.name, userStore.user?.email));
 
 const navItems = [
   { name: 'email',     labelKey: 'inbox',         icon: 'psg:inbox' },
@@ -142,120 +146,64 @@ function openCompose() {
 </script>
 
 <style lang="scss" scoped>
-/* Root wrapper — controls overall sidebar width */
+/* ─── Root ─────────────────────────────────────────────── */
 .sidebar-root {
   display: flex;
   flex-direction: column;
-  width: 256px;
+  width: 240px;
   height: 100%;
-  background: linear-gradient(180deg, #161616 0%, #0a0a0a 100%);
-  transition: width 0.22s cubic-bezier(0.22,1,0.36,1);
+  background: #111111;
+  transition: width 0.22s cubic-bezier(0.22, 1, 0.36, 1);
   overflow: hidden;
 
   &.collapsed { width: 56px; }
 }
 
-/* Scrollable nav area */
-.sidebar-scroll {
-  flex: 1;
-  overflow: hidden;
-  min-height: 0;
-
-  :deep(.el-scrollbar__wrap) {
-    background: transparent;
-  }
-}
-
-.sidebar-inner {
-  width: 256px;
-  min-height: 100%;
-  padding-bottom: 8px;
-
-  &.collapsed { width: 56px; }
-}
-
-/* Logo row */
-.title {
-  margin: 0;
-  padding: 14px 14px 12px;
+/* ─── Account header ────────────────────────────────────── */
+.account-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  border-bottom: 2px solid transparent;
-  border-image: linear-gradient(90deg, #c00000 0%, #7a0000 100%) 1;
   gap: 8px;
-
-  &.collapsed {
-    justify-content: center;
-    padding: 14px 8px 12px;
-  }
-
-  .psg-logo {
-    height: 28px;
-    width: auto;
-    max-width: 160px;
-    display: block;
-    object-fit: contain;
-    filter: invert(1);
-  }
-}
-
-.collapse-btn {
-  width: 28px;
-  height: 28px;
-  border-radius: 4px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  color: rgba(255,255,255,0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 12px 10px 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   flex-shrink: 0;
-  transition: background 0.12s, color 0.12s;
 
-  @media (max-width: 1024px) { display: none; }
-
-  &:hover {
-    background: rgba(255,255,255,0.08);
-    color: rgba(255,255,255,0.80);
+  /* Collapsed: stack avatar + hamburger vertically */
+  &.collapsed {
+    flex-direction: column;
+    padding: 12px 8px;
+    gap: 6px;
+    align-items: center;
   }
 }
 
-/* Account section */
-.account-section {
+.acct-row {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 12px;
-  margin: 6px 8px 4px;
-  border-radius: 2px;
+  flex: 1;
+  min-width: 0;
   cursor: pointer;
-  transition: background 0.12s ease;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  padding-bottom: 14px;
-  margin-bottom: 0;
-  border-radius: 0;
-  margin-left: 0;
-  margin-right: 0;
-  padding-left: 14px;
-  padding-right: 14px;
-
-  &.collapsed {
-    justify-content: center;
-    padding: 10px 8px;
-    margin: 0;
-    border-radius: 0;
-  }
+  border-radius: 4px;
+  padding: 2px 4px;
+  margin: -2px -4px;
+  transition: background 0.12s;
 
   @media (hover: hover) {
-    &:hover { background: rgba(255,255,255,0.05); }
+    &:hover { background: rgba(255, 255, 255, 0.06); }
+  }
+
+  .collapsed & {
+    flex: none;
+    padding: 0;
+    margin: 0;
+    background: none !important;
   }
 }
 
 .acct-avatar {
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   flex-shrink: 0;
   display: flex;
@@ -266,10 +214,10 @@ function openCompose() {
 
   .acct-initial {
     color: #fff;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
-    line-height: 1;
     letter-spacing: 0;
+    line-height: 1;
   }
 
   .acct-avatar-img {
@@ -291,158 +239,180 @@ function openCompose() {
 }
 
 .acct-name {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  color: rgba(255,255,255,0.88);
+  color: rgba(255, 255, 255, 0.90);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  letter-spacing: 0.01em;
 }
 
 .acct-email {
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
-  color: rgba(255,255,255,0.38);
+  color: rgba(255, 255, 255, 0.35);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  letter-spacing: 0.01em;
-  font-family: 'IBM Plex Mono', monospace;
 }
 
-/* Section label */
+.collapse-btn {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.12s, color 0.12s;
+
+  /* Hide on mobile — sidebar is a full overlay, no collapse needed */
+  @media (max-width: 1024px) { display: none; }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.80);
+  }
+}
+
+/* ─── Scrollable nav ────────────────────────────────────── */
+.sidebar-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+
+  :deep(.el-scrollbar__wrap) { background: transparent; }
+}
+
+.sidebar-inner {
+  width: 240px;
+  min-height: 100%;
+  padding: 4px 0 8px;
+
+  &.collapsed { width: 56px; }
+}
+
+/* ─── Section divider ───────────────────────────────────── */
 .manage-title {
-  margin-top: 20px;
-  margin-bottom: 2px;
-  padding: 10px 18px 5px;
+  padding: 16px 18px 4px;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.25);
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.22);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  margin-top: 8px;
 }
 
-/* Menu item base */
-.el-menu-item {
+/* ─── Nav items ─────────────────────────────────────────── */
+:deep(.el-menu) {
+  background: transparent;
+  border-right: none;
+}
+
+:deep(.el-menu-item) {
+  display: flex;
+  align-items: center;
   margin: 1px 8px !important;
-  border-radius: 2px !important;
+  border-radius: 6px !important;
   height: 38px !important;
   padding: 0 12px !important;
-  transition: background 0.12s ease !important;
-  color: rgba(255, 255, 255, 0.60) !important;
+  color: rgba(255, 255, 255, 0.58) !important;
+  background: transparent !important;
+  transition: background 0.10s ease, color 0.10s ease !important;
   gap: 0;
 
   .sidebar-inner.collapsed & {
     padding: 0 !important;
-    margin: 1px 4px !important;
+    margin: 1px 6px !important;
     justify-content: center !important;
+    border-radius: 6px !important;
+  }
+
+  @media (hover: hover) {
+    &:not(.choose-item):hover {
+      background: rgba(255, 255, 255, 0.07) !important;
+      color: rgba(255, 255, 255, 0.90) !important;
+    }
   }
 }
 
-/* Active */
-.choose-item {
+/* Active state */
+:deep(.el-menu-item.choose-item) {
+  color: #ffffff !important;
+  background: rgba(192, 0, 0, 0.18) !important;
+  border-left: 2px solid #cc0000 !important;
+  padding-left: 10px !important;
   font-weight: 600 !important;
-  color: #ffffff !important;
-  border-left: 3px solid rgba(255,255,255,0.70) !important;
-  box-shadow: 0 2px 8px rgba(176, 0, 0, 0.35) !important;
-  background: linear-gradient(90deg, #c00000 0%, #8a0000 100%) !important;
-  border-radius: 2px !important;
-}
+  border-radius: 0 6px 6px 0 !important;
+  margin-left: 0 !important;
+  margin-right: 8px !important;
 
-.choose-item .menu-name {
-  color: #ffffff !important;
-}
-
-@media (hover: hover) {
-  .el-menu-item:not(.choose-item):hover {
-    background: rgba(255, 255, 255, 0.07) !important;
-    color: rgba(255, 255, 255, 0.88) !important;
+  .sidebar-inner.collapsed & {
+    border-left: none !important;
+    padding-left: 0 !important;
+    margin-left: 6px !important;
+    border-radius: 6px !important;
+    background: rgba(192, 0, 0, 0.24) !important;
   }
 }
 
 .menu-name {
-  user-select: none;
   font-size: 13px;
+  font-weight: 400;
   letter-spacing: 0.01em;
-  margin-left: 12px;
+  margin-left: 11px;
   color: inherit;
+  user-select: none;
 }
 
-/* Sidebar footer — compose button pinned at bottom */
+:deep(.el-menu-item.choose-item) .menu-name {
+  font-weight: 600;
+}
+
+/* ─── Sidebar footer (compose) ──────────────────────────── */
 .sidebar-footer {
   flex-shrink: 0;
-  padding: 10px 8px 14px;
-  border-top: 1px solid rgba(255,255,255,0.07);
-  background: linear-gradient(180deg, #0f0f0f 0%, #0a0a0a 100%);
+  padding: 8px 12px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
 
-  &.collapsed {
-    padding: 10px 8px 14px;
-  }
+  &.collapsed { padding: 8px 8px 16px; }
 }
 
 .compose-btn {
   display: flex;
   align-items: center;
-  gap: 0;
-  padding: 0 12px;
+  justify-content: flex-start;
   height: 40px;
-  border-radius: 2px;
-  background: linear-gradient(135deg, #c00000 0%, #7e0000 100%);
-  border: none;
+  padding: 0 14px;
+  border-radius: 6px;
+  background: #cc0000;
   cursor: pointer;
   user-select: none;
-  transition: box-shadow 0.15s ease, filter 0.15s ease;
-  justify-content: flex-start;
-  box-shadow: 0 2px 6px rgba(176, 0, 0, 0.40);
+  transition: background 0.14s ease;
 
   &.compose-icon-only {
     padding: 0;
     justify-content: center;
   }
 
-  .compose-icon {
-    color: #ffffff;
-    flex-shrink: 0;
-  }
+  .compose-icon { color: #fff; flex-shrink: 0; }
 
   .compose-text {
-    font-size: 12px;
-    font-weight: 700;
-    color: #ffffff;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-left: 12px;
+    margin-left: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.03em;
   }
 
   @media (hover: hover) {
-    &:hover { filter: brightness(1.12); box-shadow: 0 3px 10px rgba(176,0,0,0.50); }
+    &:hover { background: #a80000; }
   }
-  &:active { filter: brightness(0.88); box-shadow: none; }
-}
-
-/* Element Plus overrides */
-:deep(.el-scrollbar__wrap--hidden-default) {
-  background: transparent !important;
-}
-
-:deep(.el-menu-item) {
-  background: transparent;
-  color: rgba(255, 255, 255, 0.60);
-}
-
-:deep(.el-menu) {
-  background: transparent;
-  border-right: none;
-}
-
-.el-menu {
-  border-right: 0;
-  width: 256px;
-}
-
-:deep(.el-divider__text) {
-  background: var(--aside-backgound);
-  color: rgba(255, 255, 255, 0.3);
+  &:active { background: #8a0000; }
 }
 </style>
