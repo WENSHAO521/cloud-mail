@@ -84,7 +84,7 @@
         <!-- ··· dropdown -->
         <el-dropdown placement="top-end" trigger="click">
           <button class="sidebar-more-button">
-            <Icon icon="material-symbols:more-horiz-rounded" width="20" height="20" />
+            <span class="more-dots"><span/><span/><span/></span>
           </button>
           <template #dropdown>
             <el-dropdown-menu>
@@ -445,7 +445,6 @@ function clickLogout() {
   border: 1px solid rgba(255, 255, 255, 0.55);
   border-radius: 8px;
   background: #111111;
-  color: #ffffff;
   cursor: pointer;
   transition: background 0.12s, border-color 0.12s;
 
@@ -454,6 +453,20 @@ function clickLogout() {
       background: #222222;
       border-color: rgba(255, 255, 255, 0.85);
     }
+  }
+}
+
+.more-dots {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+
+  span {
+    display: block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #ffffff;
   }
 }
 
