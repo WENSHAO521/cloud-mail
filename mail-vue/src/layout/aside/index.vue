@@ -30,40 +30,52 @@
           </el-menu-item>
         </el-tooltip>
 
-        <div class="manage-title" v-perm="['all-email:query','user:query','role:query','setting:query','analysis:query','reg-key:query']">
+        <div class="manage-title" v-if="!collapsed" v-perm="['all-email:query','user:query','role:query','setting:query','analysis:query','reg-key:query']">
           <div>{{$t('manage')}}</div>
         </div>
 
-        <el-menu-item @click="router.push({name: 'analysis'})" index="analysis" v-perm="'analysis:query'"
-                      :class="route.meta.name === 'analysis' ? 'choose-item' : ''">
-          <Icon icon="psg:analytics" width="20" height="20" />
-          <span class="menu-name">{{$t('analytics')}}</span>
-        </el-menu-item>
-        <el-menu-item @click="router.push({name: 'user'})" index="user" v-perm="'user:query'"
-                      :class="route.meta.name === 'user' ? 'choose-item' : ''">
-          <Icon icon="psg:group" width="20" height="20" />
-          <span class="menu-name">{{$t('allUsers')}}</span>
-        </el-menu-item>
-        <el-menu-item @click="router.push({name: 'all-email'})" index="all-email" v-perm="'all-email:query'"
-                      :class="route.meta.name === 'all-email' ? 'choose-item' : ''">
-          <Icon icon="psg:all-mail" width="20" height="20" />
-          <span class="menu-name">{{$t('allMail')}}</span>
-        </el-menu-item>
-        <el-menu-item @click="router.push({name: 'role'})" index="role" v-perm="'role:query'"
-                      :class="route.meta.name === 'role' ? 'choose-item' : ''">
-          <Icon icon="psg:lock" width="20" height="20" />
-          <span class="menu-name">{{$t('permissions')}}</span>
-        </el-menu-item>
-        <el-menu-item @click="router.push({name: 'reg-key'})" index="reg-key" v-perm="'reg-key:query'"
-                      :class="route.meta.name === 'reg-key' ? 'choose-item' : ''">
-          <Icon icon="psg:key" width="20" height="20" />
-          <span class="menu-name">{{$t('inviteCode')}}</span>
-        </el-menu-item>
-        <el-menu-item @click="router.push({name: 'sys-setting'})" index="sys-setting" v-perm="'setting:query'"
-                      :class="route.meta.name === 'sys-setting' ? 'choose-item' : ''">
-          <Icon icon="psg:system" width="20" height="20" />
-          <span class="menu-name">{{$t('SystemSettings')}}</span>
-        </el-menu-item>
+        <el-tooltip :content="$t('analytics')" placement="right" :disabled="!collapsed">
+          <el-menu-item @click="router.push({name: 'analysis'})" index="analysis" v-perm="'analysis:query'"
+                        :class="route.meta.name === 'analysis' ? 'choose-item' : ''">
+            <Icon icon="psg:analytics" width="20" height="20" />
+            <span class="menu-name" v-if="!collapsed">{{$t('analytics')}}</span>
+          </el-menu-item>
+        </el-tooltip>
+        <el-tooltip :content="$t('allUsers')" placement="right" :disabled="!collapsed">
+          <el-menu-item @click="router.push({name: 'user'})" index="user" v-perm="'user:query'"
+                        :class="route.meta.name === 'user' ? 'choose-item' : ''">
+            <Icon icon="psg:group" width="20" height="20" />
+            <span class="menu-name" v-if="!collapsed">{{$t('allUsers')}}</span>
+          </el-menu-item>
+        </el-tooltip>
+        <el-tooltip :content="$t('allMail')" placement="right" :disabled="!collapsed">
+          <el-menu-item @click="router.push({name: 'all-email'})" index="all-email" v-perm="'all-email:query'"
+                        :class="route.meta.name === 'all-email' ? 'choose-item' : ''">
+            <Icon icon="psg:all-mail" width="20" height="20" />
+            <span class="menu-name" v-if="!collapsed">{{$t('allMail')}}</span>
+          </el-menu-item>
+        </el-tooltip>
+        <el-tooltip :content="$t('permissions')" placement="right" :disabled="!collapsed">
+          <el-menu-item @click="router.push({name: 'role'})" index="role" v-perm="'role:query'"
+                        :class="route.meta.name === 'role' ? 'choose-item' : ''">
+            <Icon icon="psg:lock" width="20" height="20" />
+            <span class="menu-name" v-if="!collapsed">{{$t('permissions')}}</span>
+          </el-menu-item>
+        </el-tooltip>
+        <el-tooltip :content="$t('inviteCode')" placement="right" :disabled="!collapsed">
+          <el-menu-item @click="router.push({name: 'reg-key'})" index="reg-key" v-perm="'reg-key:query'"
+                        :class="route.meta.name === 'reg-key' ? 'choose-item' : ''">
+            <Icon icon="psg:key" width="20" height="20" />
+            <span class="menu-name" v-if="!collapsed">{{$t('inviteCode')}}</span>
+          </el-menu-item>
+        </el-tooltip>
+        <el-tooltip :content="$t('SystemSettings')" placement="right" :disabled="!collapsed">
+          <el-menu-item @click="router.push({name: 'sys-setting'})" index="sys-setting" v-perm="'setting:query'"
+                        :class="route.meta.name === 'sys-setting' ? 'choose-item' : ''">
+            <Icon icon="psg:system" width="20" height="20" />
+            <span class="menu-name" v-if="!collapsed">{{$t('SystemSettings')}}</span>
+          </el-menu-item>
+        </el-tooltip>
       </el-menu>
     </div>
   </el-scrollbar>
