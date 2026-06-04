@@ -83,7 +83,7 @@
 
         <!-- ··· dropdown -->
         <el-dropdown placement="top-end" trigger="click">
-          <button class="icon-button sidebar-more-button">
+          <button class="sidebar-more-button">
             <Icon icon="material-symbols:more-horiz-rounded" width="20" height="20" />
           </button>
           <template #dropdown>
@@ -436,20 +436,23 @@ function clickLogout() {
 }
 
 .sidebar-more-button {
-  width: 40px !important;
-  height: 40px !important;
-  border: 1px solid rgba(255, 255, 255, 0.55) !important;
-  border-radius: 8px !important;
-  background: #111111 !important;
-  color: #ffffff !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 8px;
+  background: #111111;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
 
   @media (hover: hover) {
     &:hover {
-      background: #1e1e1e !important;
-      border-color: rgba(255, 255, 255, 0.80) !important;
+      background: #222222;
+      border-color: rgba(255, 255, 255, 0.85);
     }
   }
 }
