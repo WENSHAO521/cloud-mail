@@ -28,11 +28,8 @@
       </section>
     </template>
 
-    <!-- ── Workspace mode: header + content (col 2) ── -->
+    <!-- ── Workspace mode: content (col 2) ── -->
     <main v-else class="workspace-pane">
-      <header class="workspace-header">
-        <Header />
-      </header>
       <div class="workspace-body">
         <router-view v-slot="{ Component, route: r }">
           <keep-alive :include="keepAliveWorkspace">
@@ -49,7 +46,6 @@
 
 <script setup>
 import Aside from '@/layout/aside/index.vue'
-import Header from '@/layout/header/index.vue'
 import ContentPane from '@/views/content/index.vue'
 import CommandPalette from '@/components/command-palette/index.vue'
 import writer from '@/layout/write/index.vue'
@@ -227,27 +223,12 @@ onBeforeUnmount(() => {
 
 /* ── Workspace pane ────────────────────────────────────────── */
 .workspace-pane {
-  display: flex;
-  flex-direction: column;
   min-height: 0;
   overflow: hidden;
   background: var(--psg-bg, #f7f7f7);
 
   @media (max-width: 1024px) {
     height: 100dvh;
-  }
-}
-
-.workspace-header {
-  flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--separator, #e5e7eb);
-
-  :global(.dark) & {
-    background: rgba(18, 18, 18, 0.92);
-    border-bottom-color: rgba(255,255,255,0.08);
   }
 }
 
