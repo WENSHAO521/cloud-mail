@@ -440,11 +440,19 @@ function clickLogout() {
   height: 40px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 8px;
-  color: rgba(255, 255, 255, 0.68);
   background: transparent;
+}
+
+/* ── Force icon colors inside dark sidebar footer ── */
+.sidebar-footer .icon-button,
+.sidebar-footer .sidebar-more-button {
+  color: rgba(255, 255, 255, 0.68) !important;
 
   @media (hover: hover) {
-    &:hover { background: rgba(255,255,255,0.07); color: #fff; }
+    &:hover {
+      background: rgba(255, 255, 255, 0.07);
+      color: #fff !important;
+    }
   }
 }
 
