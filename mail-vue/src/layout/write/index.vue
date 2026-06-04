@@ -335,7 +335,12 @@ const senderInitial = computed(() => {
 })
 
 // avatar of the currently selected sender account (switches on account change)
-const currentSenderAvatar = computed(() => storedAvatar(form.sendEmail) || userStore.avatar)
+const currentSenderAvatar = computed(() => {
+  // Try the specific sender account's avatar, then fall back to the logged-in user's avatar
+  const primary = userStore.user?.email
+  if (form.sendEmail === primary) return userStore.avatar
+  return storedAvatar(form.sendEmail) || userStore.avatar
+})
 
 const contacts = computed(() => writerStore.sendRecipientRecord.map(item => ({email: item})))
 
@@ -809,8 +814,6 @@ async function loadSenderAccounts() {
     const list = await accountList(0, 30, null)
     senderAccounts.value = Array.isArray(list) ? list : []
     senderLoaded.value = true
-    // Sync all bound account emails so avatar shows everywhere
-    userStore.registerOwnEmails(senderAccounts.value.map(a => a.email).filter(Boolean))
   } catch {}
 }
 

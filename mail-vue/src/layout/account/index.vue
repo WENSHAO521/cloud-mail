@@ -179,10 +179,10 @@ import {AccountAllReceiveEnum} from "@/enums/account-enum.js";
 const {t} = useI18n();
 const userStore = useUserStore();
 
-// Avatar lookup: storedAvatar → ownEmails fallback → primary account fallback
+// Each account has its own independent avatar stored under its email key.
+// For the currently active account, fall back to userStore.avatar if no key exists yet.
 function accountPhoto(item) {
   return storedAvatar(item.email)
-    || (userStore.ownEmails.includes(item.email) ? userStore.avatar : '')
     || (item.accountId === userStore.user.account?.accountId ? userStore.avatar : '')
 }
 const accountStore = useAccountStore();
@@ -481,9 +481,6 @@ function getAccountList() {
     }
 
     accounts.push(...list)
-
-    // Register all loaded account emails so avatar syncs everywhere
-    userStore.registerOwnEmails(accounts.map(a => a.email).filter(Boolean))
 
     loading.value = false
     followLoading.value = false
