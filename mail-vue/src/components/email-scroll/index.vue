@@ -1016,6 +1016,8 @@ function getEmailList(refresh = false) {
     total.value = data.total;
   }).finally(() => {
     loading.value = false
+    firstLoad.value = false    // must clear even on error — skeleton blocks page forever otherwise
+    followLoading.value = false
     reqLock = false
   })
 }

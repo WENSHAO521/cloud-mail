@@ -597,12 +597,15 @@ function openDetails(user) {
 
 function getAccountList(loading = false) {
   accountLoading.value = loading
-  userAllAccount(accountParams.userId,accountParams.num, accountParams.size).then(({list,total}) => {
-    accountList.length = 0
-    accountList.push(...list)
-    accountParams.total = total
-    accountLoading.value = false
-  })
+  userAllAccount(accountParams.userId, accountParams.num, accountParams.size)
+    .then(({ list, total }) => {
+      accountList.length = 0
+      accountList.push(...list)
+      accountParams.total = total
+    })
+    .finally(() => {
+      accountLoading.value = false
+    })
 }
 
 function tableFilter(e) {

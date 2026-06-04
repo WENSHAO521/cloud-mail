@@ -237,9 +237,10 @@ onMounted(() => {
     emailColumnData.receiveData = data.emailDayCount.receiveDayCount.map(item => item.total)
     emailColumnData.sendData = data.emailDayCount.sendDayCount.map(item => item.total)
     daySendTotal = data.daySendTotal
-    analysisLoading.value = false
     initPicture();
     first = false
+  }).finally(() => {
+    analysisLoading.value = false
   })
 
 })

@@ -970,6 +970,8 @@ function getSettings() {
     nextTick(() => {
       settingReady.value = true
     })
+  }).finally(() => {
+    firstLoading.value = false
   })
 }
 
