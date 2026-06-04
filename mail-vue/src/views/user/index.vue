@@ -51,7 +51,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('username')" min-width="110" show-overflow-tooltip>
+          <el-table-column :label="$t('username')" width="150" show-overflow-tooltip>
             <template #default="{ row }">
               <span class="user-name-cell">{{ row.accountName || row.oauthName || '—' }}</span>
             </template>
@@ -1190,6 +1190,10 @@ function adjustWidth() {
 
 .user-name-cell {
   font-weight: 600;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .status-select {
