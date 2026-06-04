@@ -6,13 +6,11 @@ export const useUserStore = defineStore('user', {
         user: {},
         refreshList: 0,
         avatar: '',
-        ownEmails: new Set()   // all bound account emails for this user
+        ownEmails: []   // all bound account emails — plain Array for reliable Vue reactivity
     }),
     actions: {
         refreshUserList() {
-            loginUserInfo().then(user => {
-                this.refreshList ++
-            })
+            loginUserInfo().then(() => { this.refreshList++ })
         },
         refreshUserInfo() {
             loginUserInfo().then(user => {
@@ -24,17 +22,16 @@ export const useUserStore = defineStore('user', {
             const email = this.user?.email
             if (!email) return
             this.avatar = localStorage.getItem(`psg_avatar_${email}`) || ''
-            // Restore persisted own-email set (populated after first compose open)
             try {
                 const extras = JSON.parse(localStorage.getItem('psg_own_emails') || '[]')
-                this.ownEmails = new Set([email, ...extras])
+                const all = [email, ...extras.filter(e => e && e !== email)]
+                this.ownEmails = all
             } catch {
-                this.ownEmails = new Set([email])
+                this.ownEmails = [email]
             }
         },
         saveAvatar(base64) {
             this.avatar = base64
-            // Write avatar under every bound account email so storedAvatar() finds it anywhere
             for (const e of this.ownEmails) {
                 if (e) localStorage.setItem(`psg_avatar_${e}`, base64)
             }
@@ -45,16 +42,15 @@ export const useUserStore = defineStore('user', {
                 if (e) localStorage.removeItem(`psg_avatar_${e}`)
             }
         },
-        // Called after account list loads — registers all bound emails and back-fills avatar
         registerOwnEmails(emails) {
             const primary = this.user?.email
-            const all = primary ? [primary, ...emails] : [...emails]
-            this.ownEmails = new Set(all)
-            localStorage.setItem('psg_own_emails', JSON.stringify(emails))
-            // If user already has an avatar, sync it to any newly discovered account emails
+            const deduped = [...new Set([...(primary ? [primary] : []), ...emails.filter(Boolean)])]
+            this.ownEmails = deduped
+            localStorage.setItem('psg_own_emails', JSON.stringify(emails.filter(Boolean)))
+            // Back-fill avatar to any newly discovered account email keys
             if (this.avatar) {
-                for (const e of all) {
-                    if (e && !localStorage.getItem(`psg_avatar_${e}`)) {
+                for (const e of deduped) {
+                    if (!localStorage.getItem(`psg_avatar_${e}`)) {
                         localStorage.setItem(`psg_avatar_${e}`, this.avatar)
                     }
                 }

@@ -13,9 +13,7 @@
         <div class="item" :class="itemBg(item.accountId)" v-for="(item, index) in accounts" :key="item.accountId"
              @click="changeAccount(item)">
           <div class="item-avatar">
-            <img v-if="storedAvatar(item.email) || (item.accountId === userStore.user.account?.accountId && userStore.avatar)"
-                 :src="storedAvatar(item.email) || userStore.avatar"
-                 class="avatar-photo"/>
+            <img v-if="accountPhoto(item)" :src="accountPhoto(item)" class="avatar-photo"/>
             <span v-else>{{ emailInitial(item.email, item.name) }}</span>
           </div>
           <div class="item-info">
@@ -180,6 +178,13 @@ import {AccountAllReceiveEnum} from "@/enums/account-enum.js";
 
 const {t} = useI18n();
 const userStore = useUserStore();
+
+// Avatar lookup: storedAvatar → ownEmails fallback → primary account fallback
+function accountPhoto(item) {
+  return storedAvatar(item.email)
+    || (userStore.ownEmails.includes(item.email) ? userStore.avatar : '')
+    || (item.accountId === userStore.user.account?.accountId ? userStore.avatar : '')
+}
 const accountStore = useAccountStore();
 const settingStore = useSettingStore();
 const emailStore = useEmailStore();
