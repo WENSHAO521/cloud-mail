@@ -1610,32 +1610,30 @@ function loadData() {
 }
 
 .header-actions {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
   align-items: center;
   gap: 12px;
   padding: 0 14px;
-  height: 38px;
-  /* Subtle tint — distinguishable but not a heavy grey table header */
+  min-height: 38px;
   border-bottom: 1px solid var(--light-border-color);
   background: var(--extra-light-fill);
+  box-sizing: border-box;
 
   .header-left {
+    flex: 1;
+    min-width: 0;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    position: relative;
-    column-gap: 16px;
-    row-gap: 8px;
-    padding-left: 2px;
+    gap: 10px;
     color: var(--el-text-color-primary);
   }
 
   .header-right {
-    display: grid;
-    grid-template-columns: auto auto;
+    display: flex;
     align-items: center;
-    height: 100%;
+    gap: 8px;
+    flex-shrink: 0;
     color: var(--secondary-text-color);
 
     .email-count {
@@ -1648,9 +1646,11 @@ function loadData() {
   }
 
   .icon {
-    font-size: 17px;
+    display: flex;
+    align-items: center;
     cursor: pointer;
     color: var(--secondary-text-color);
+    flex-shrink: 0;
     transition: color 0.14s var(--ease-out, ease);
 
     @media (hover: hover) {
@@ -1659,7 +1659,7 @@ function loadData() {
   }
 
   .more-icon {
-    margin-left: 12px;
+    margin-left: 4px;
   }
 }
 

@@ -415,18 +415,35 @@ async function latest() {
   color: var(--el-text-color-regular);
 }
 
+/* ── Toolbar height — one source of truth ─────── */
 :deep(.header-actions) {
-  padding-top: 8px;
-  padding-bottom: 8px;
+  height: 46px;
+  min-height: 46px;
+}
+
+/* ── Unify all interactive control heights ─────── */
+:deep(.el-input__wrapper) {
+  height: 28px;
+  padding: 0 8px;
+  box-sizing: border-box;
+}
+
+:deep(.el-select__wrapper) {
+  height: 28px;
+  min-height: 28px;
+  padding: 0 8px;
+  box-sizing: border-box;
 }
 
 .search-input {
   width: 100%;
-  max-width: 280px;
+  max-width: 260px;
+  flex-shrink: 1;
+  flex-grow: 0;
 
   .setting-icon {
-    position: relative;
-    top: 3px;
+    display: flex;
+    align-items: center;
   }
 }
 
@@ -447,26 +464,8 @@ async function latest() {
 }
 
 .status-select {
-  width: 102px;
+  width: 100px;
   flex-shrink: 0;
-
-  :deep(.el-select__wrapper) {
-    min-height: 28px;
-  }
-}
-
-.input-with-select {
-  max-width: 200px;
-  border-radius: 0 4px 4px 0;
-}
-
-:deep(.input-with-select .el-input-group__append) {
-  background-color: var(--el-fill-color-blank);
-}
-
-:deep(.el-select__wrapper) {
-  padding: 2px 10px;
-  min-height: 28px;
 }
 
 :deep(.el-date-editor.el-input__wrapper) {
@@ -474,10 +473,17 @@ async function latest() {
 }
 
 .icon {
-  cursor: pointer;
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: center;
+  cursor: pointer;
   flex-shrink: 0;
+  color: var(--el-text-color-regular);
+  transition: color 0.14s ease;
+
+  @media (hover: hover) {
+    &:hover { color: #CC0000; }
+  }
 }
 
 .clear {
