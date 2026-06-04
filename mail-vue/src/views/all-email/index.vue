@@ -423,7 +423,6 @@ async function latest() {
 .search-input {
   width: 100%;
   max-width: 280px;
-  height: 28px;
 
   .setting-icon {
     position: relative;
@@ -448,8 +447,8 @@ async function latest() {
 }
 
 .status-select {
-  margin-bottom: 2px;
   width: 102px;
+  flex-shrink: 0;
 
   :deep(.el-select__wrapper) {
     min-height: 28px;
@@ -476,6 +475,9 @@ async function latest() {
 
 .icon {
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 .clear {
