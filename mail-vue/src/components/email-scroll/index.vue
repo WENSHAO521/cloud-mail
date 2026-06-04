@@ -1084,6 +1084,7 @@ function loadData() {
   display: grid;
   grid-template-rows: auto auto 1fr;
   padding: 0;
+  background: var(--psg-bg, #f7f7f7);
   font-size: 14px;
   color: var(--el-text-color-primary);
   overflow: hidden;
@@ -1096,7 +1097,7 @@ function loadData() {
   gap: 8px;
   padding: 6px 12px;
   border-bottom: 1px solid var(--light-border-color);
-  background: var(--el-bg-color);
+  background: var(--psg-white, #ffffff);
 
   .search-bar-icon {
     color: var(--secondary-text-color);
@@ -1126,7 +1127,7 @@ function loadData() {
 }
 
 .search-toggle-active {
-  color: #CC0000 !important;
+  color: #b00000 !important;
 }
 
 .scroll {
@@ -1188,17 +1189,19 @@ function loadData() {
 
 :deep(.email-row) {
   display: flex;
-  padding: 8px 0;
+  padding: 6px 0;
   justify-content: space-between;
-  /* Near-invisible separator — whitespace does the work, not hard lines */
-  border-bottom: 1px solid rgba(0, 0, 0, 0.038);
+  /* Card-style: white on #f7f7f7 canvas */
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-left: 3px solid transparent;
+  border-radius: 3px;
+  margin: 2px 8px;
   cursor: pointer;
   align-items: center;
   position: relative;
-  /* background + border only — no box-shadow transition (triggers repaint) */
-  transition: background 0.14s ease, border-left-color 0.14s ease;
+  transition: background 0.12s ease, border-left-color 0.12s ease, box-shadow 0.12s ease;
   height: 48px;
-  border-left: 3px solid transparent;
 
   @media (max-width: 1366px) {
     height: 83px;
@@ -1482,7 +1485,7 @@ function loadData() {
     }
     &.rqa-danger:hover {
       background: rgba(204,0,0,0.10);
-      color: #CC0000;
+      color: #b00000;
     }
   }
 
@@ -1493,15 +1496,18 @@ function loadData() {
   }
 
   &:hover {
-    background-color: var(--email-hover-background);
-    border-left-color: rgba(204, 0, 0, 0.30);
+    background: #fafafa;
+    border-color: #d1d5db;
+    border-left-color: rgba(176, 0, 0, 0.35);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     z-index: 1;
   }
 
-  /* Unread: red left accent — class set in JS, no :has() needed */
+  /* Unread: deep red left accent + bold text */
   &.is-unread {
-    border-left-color: #CC0000;
-    .name { color: var(--el-text-color-primary) !important; font-weight: 700 !important; }
+    border-left-color: #b00000;
+    background: #fff;
+    .name { color: #111111 !important; font-weight: 700 !important; }
     .subject-text { color: var(--el-text-color-primary) !important; }
   }
 
@@ -1661,7 +1667,7 @@ function loadData() {
     transition: color 0.14s var(--ease-out, ease);
 
     @media (hover: hover) {
-      &:hover { color: #CC0000; }
+      &:hover { color: #b00000; }
     }
   }
 
@@ -1702,7 +1708,7 @@ function loadData() {
 .unread {
   height: 7px;
   width: 7px;
-  background: #CC0000;
+  background: #b00000;
   margin-bottom: 1px;
   margin-right: 6px;
   border-radius: 50%;

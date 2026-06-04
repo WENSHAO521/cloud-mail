@@ -149,7 +149,7 @@ function openCompose() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 2px solid #CC0000;
+  border-bottom: 2px solid #b00000;
   gap: 8px;
 
   &.collapsed {
@@ -201,7 +201,7 @@ function openCompose() {
   padding: 0 12px;
   height: 40px;
   border-radius: 2px;
-  background: #CC0000;
+  background: #b00000;
   border: none;
   cursor: pointer;
   user-select: none;
@@ -229,9 +229,9 @@ function openCompose() {
   }
 
   @media (hover: hover) {
-    &:hover { background: #A00000; }
+    &:hover { background: #8f0000; }
   }
-  &:active { background: #880000; }
+  &:active { background: #7a0000; }
 }
 
 /* Section label */
@@ -264,19 +264,14 @@ function openCompose() {
   }
 }
 
-/* Active — gradient background only, no bar */
+/* Active — solid #b00000 with white text, sharp left indicator */
 .choose-item {
   font-weight: 600 !important;
   color: #ffffff !important;
-  border-left: none !important;
+  border-left: 3px solid #ffffff !important;
   box-shadow: none !important;
-
-  background: linear-gradient(
-    to right,
-    rgba(204, 0, 0, 0.28) 0%,
-    rgba(204, 0, 0, 0.10) 55%,
-    rgba(204, 0, 0, 0.00) 100%
-  ) !important;
+  background: #b00000 !important;
+  border-radius: 2px !important;
 }
 
 .choose-item .menu-name {

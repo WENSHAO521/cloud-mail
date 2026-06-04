@@ -940,16 +940,17 @@ function close() {
 }
 </style>
 <style scoped lang="scss">
-/* ── Overlay ── */
+/* ── Overlay — frosted glass scrim ── */
 .send {
   position: fixed;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(17, 17, 17, 0.45);
+  backdrop-filter: blur(6px) saturate(0.9);
+  -webkit-backdrop-filter: blur(6px) saturate(0.9);
   z-index: 2000;
-  /* No backdrop-filter — blur recomposites on every keystroke, causes severe lag */
 }
 
 /* ── Dialog box ──────────────────────────────── */

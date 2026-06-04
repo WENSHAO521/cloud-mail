@@ -241,7 +241,7 @@ const handleDelete = () => {
 .box {
   height: 100%;
   overflow: hidden;
-  background: var(--el-bg-color);
+  background: var(--psg-bg, #f7f7f7);
 }
 
 /* ── Toolbar ── */
@@ -251,8 +251,8 @@ const handleDelete = () => {
   display: flex;
   align-items: center;
   gap: 4px;
-  border-bottom: 1px solid var(--light-border-color);
-  background: var(--el-bg-color);
+  border-bottom: 1px solid var(--psg-border, #e5e7eb);
+  background: #ffffff;
 }
 
 .header-divider {
@@ -288,7 +288,7 @@ const handleDelete = () => {
     }
     &.danger:hover {
       background: rgba(204, 0, 0, 0.07);
-      color: #CC0000;
+      color: #b00000;
     }
   }
 }
@@ -299,17 +299,38 @@ const handleDelete = () => {
   width: 100%;
 }
 
+/* White document card wrapper */
 .container {
   font-size: 14.5px;
   max-width: 860px;
-  margin: 0 auto;
-  padding: 52px 56px 64px;
+  margin: 24px auto;
+  padding: 0;
+  background: #ffffff;
+  border: 1px solid var(--psg-border, #e5e7eb);
+  border-radius: 3px;
+  border-top: 3px solid #b00000;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+
+  /* inner content padding */
+  > * {
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+  > .email-title { padding-top: 40px; }
+  > .att { padding-bottom: 32px; }
+  > .content { padding-bottom: 0; }
 
   @media (max-width: 1200px) {
-    padding: 36px 36px 48px;
+    margin: 16px;
+    > * { padding-left: 28px; padding-right: 28px; }
+    > .email-title { padding-top: 28px; }
   }
   @media (max-width: 767px) {
-    padding: 24px 20px 40px;
+    margin: 8px;
+    border-radius: 0;
+    > * { padding-left: 16px; padding-right: 16px; }
+    > .email-title { padding-top: 20px; }
   }
 }
 
@@ -329,11 +350,10 @@ const handleDelete = () => {
   display: flex;
   align-items: flex-start;
   gap: 14px;
-  padding: 16px 20px;
-  margin-bottom: 32px;
-  border: 1px solid var(--light-border-color);
-  border-radius: 4px;
-  background: var(--extra-light-fill);
+  padding: 14px 0;
+  margin: 0 0 24px;
+  border-bottom: 1px solid var(--psg-border, #e5e7eb);
+  background: transparent;
   transition: border-color 0.15s;
 }
 
@@ -342,7 +362,7 @@ const handleDelete = () => {
   height: 40px;
   border-radius: 8px;
   background: rgba(204, 0, 0, 0.09);
-  color: #CC0000;
+  color: #b00000;
   font-size: 16px;
   font-weight: 800;
   display: flex;
@@ -452,9 +472,9 @@ const handleDelete = () => {
 /* ── Attachments ── */
 .att {
   margin-top: 32px;
-  margin-bottom: 32px;
-  border: 1px solid var(--light-border-color);
-  border-top: 2px solid var(--el-text-color-primary);
+  margin-bottom: 0;
+  border: 1px solid var(--psg-border, #e5e7eb);
+  border-top: 2px solid #111111;
   width: fit-content;
 
   .att-box {
@@ -500,7 +520,7 @@ const handleDelete = () => {
 
     &:hover {
       background: var(--base-fill);
-      border-left-color: #CC0000;
+      border-left-color: #b00000;
     }
 
     .att-icon { display: grid; color: var(--regular-text-color); }
@@ -529,14 +549,14 @@ const handleDelete = () => {
       gap: 8px;
       transition: color 0.12s;
 
-      &:hover { color: #CC0000; }
+      &:hover { color: #b00000; }
 
       a {
         color: var(--secondary-text-color);
         align-items: center;
         display: flex;
         transition: color 0.12s;
-        &:hover { color: #CC0000; }
+        &:hover { color: #b00000; }
       }
     }
   }
@@ -562,5 +582,23 @@ const handleDelete = () => {
 
 .bottom-distance {
   margin-bottom: 40px;
+}
+
+/* Subject styling in card context */
+.email-title {
+  color: #111111;
+  letter-spacing: -0.02em;
+}
+</style>
+
+/* ── Global: blockquote inside shadow-html iframe ───────── */
+<style>
+.psg-shadow-blockquote,
+.shadow-html-host blockquote,
+blockquote {
+  border-left: 3px solid #b00000 !important;
+  padding-left: 16px !important;
+  margin: 16px 0 !important;
+  color: #6b7280 !important;
 }
 </style>

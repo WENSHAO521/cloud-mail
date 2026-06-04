@@ -151,9 +151,11 @@ onBeforeUnmount(() => {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(17, 17, 17, 0.38);
+  backdrop-filter: blur(4px) saturate(0.85);
+  -webkit-backdrop-filter: blur(4px) saturate(0.85);
   z-index: 99;
-  transition: all 0.3s;
+  transition: opacity 0.25s ease;
 }
 
 .overlay-hide {
