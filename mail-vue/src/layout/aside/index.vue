@@ -5,14 +5,14 @@
       <div class="title" :class="{ collapsed }">
         <img v-if="!collapsed" class="psg-logo" src="/image/psg-logo.png" alt="Panorama Scholarly Group" />
         <button class="collapse-btn" @click="uiStore.asideCollapsed = !uiStore.asideCollapsed" :title="collapsed ? $t('expand') : $t('collapse')">
-          <Icon :icon="collapsed ? 'material-symbols:chevron-right-rounded' : 'material-symbols:chevron-left-rounded'" width="18" height="18"/>
+          <Icon :icon="collapsed ? 'psg:chevron-right' : 'psg:chevron-left'" width="18" height="18"/>
         </button>
       </div>
 
       <!-- Compose FAB -->
       <el-tooltip :content="$t('compose')" placement="right" :disabled="!collapsed">
         <div class="compose-btn" v-if="canSend" @click="openCompose" :class="{ 'compose-icon-only': collapsed }">
-          <Icon icon="material-symbols:edit-outline-rounded" width="20" height="20" class="compose-icon"/>
+          <Icon icon="psg:compose" width="20" height="20" class="compose-icon"/>
           <span class="compose-text" v-if="!collapsed">{{ $t('compose') }}</span>
         </div>
       </el-tooltip>
@@ -36,32 +36,32 @@
 
         <el-menu-item @click="router.push({name: 'analysis'})" index="analysis" v-perm="'analysis:query'"
                       :class="route.meta.name === 'analysis' ? 'choose-item' : ''">
-          <Icon icon="fluent:data-pie-20-regular" width="22" height="22" />
+          <Icon icon="psg:analytics" width="20" height="20" />
           <span class="menu-name">{{$t('analytics')}}</span>
         </el-menu-item>
         <el-menu-item @click="router.push({name: 'user'})" index="user" v-perm="'user:query'"
                       :class="route.meta.name === 'user' ? 'choose-item' : ''">
-          <Icon icon="si:user-alt-2-line" width="20" height="20" />
+          <Icon icon="psg:group" width="20" height="20" />
           <span class="menu-name">{{$t('allUsers')}}</span>
         </el-menu-item>
         <el-menu-item @click="router.push({name: 'all-email'})" index="all-email" v-perm="'all-email:query'"
                       :class="route.meta.name === 'all-email' ? 'choose-item' : ''">
-          <Icon icon="fluent:mail-list-28-regular" width="22" height="22" />
+          <Icon icon="psg:all-mail" width="20" height="20" />
           <span class="menu-name">{{$t('allMail')}}</span>
         </el-menu-item>
         <el-menu-item @click="router.push({name: 'role'})" index="role" v-perm="'role:query'"
                       :class="route.meta.name === 'role' ? 'choose-item' : ''">
-          <Icon icon="fluent:lock-closed-16-regular" width="22" height="22" />
+          <Icon icon="psg:lock" width="20" height="20" />
           <span class="menu-name">{{$t('permissions')}}</span>
         </el-menu-item>
         <el-menu-item @click="router.push({name: 'reg-key'})" index="reg-key" v-perm="'reg-key:query'"
                       :class="route.meta.name === 'reg-key' ? 'choose-item' : ''">
-          <Icon icon="fluent:fingerprint-20-filled" width="22" height="22" />
+          <Icon icon="psg:key" width="20" height="20" />
           <span class="menu-name">{{$t('inviteCode')}}</span>
         </el-menu-item>
         <el-menu-item @click="router.push({name: 'sys-setting'})" index="sys-setting" v-perm="'setting:query'"
                       :class="route.meta.name === 'sys-setting' ? 'choose-item' : ''">
-          <Icon icon="eos-icons:system-ok-outlined" width="20" height="20" />
+          <Icon icon="psg:system" width="20" height="20" />
           <span class="menu-name">{{$t('SystemSettings')}}</span>
         </el-menu-item>
       </el-menu>
@@ -90,15 +90,15 @@ onUnmounted(() => window.removeEventListener('resize', onResize))
 const collapsed = computed(() => uiStore.asideCollapsed && !isMobile.value)
 
 const navItems = [
-  { name: 'email',     labelKey: 'inbox',         icon: 'mdi:email-outline' },
-  { name: 'send',      labelKey: 'sent',          icon: 'cil:send',                       perm: 'email:send' },
-  { name: 'draft',     labelKey: 'drafts',        icon: 'ep:document',                    perm: 'email:send' },
-  { name: 'star',      labelKey: 'starred',       icon: 'solar:star-line-duotone' },
-  { name: 'archive',   labelKey: 'archiveFolder', icon: 'material-symbols:archive-outline-rounded' },
-  { name: 'spam',      labelKey: 'spam',          icon: 'material-symbols:report-outline-rounded' },
-  { name: 'templates', labelKey: 'templates',     icon: 'material-symbols:description-outline-rounded' },
-  { name: 'groups',    labelKey: 'contactGroups', icon: 'material-symbols:group-outline' },
-  { name: 'setting',   labelKey: 'settings',      icon: 'fluent:settings-48-regular' },
+  { name: 'email',     labelKey: 'inbox',         icon: 'psg:inbox' },
+  { name: 'send',      labelKey: 'sent',          icon: 'psg:send',     perm: 'email:send' },
+  { name: 'draft',     labelKey: 'drafts',        icon: 'psg:draft',    perm: 'email:send' },
+  { name: 'star',      labelKey: 'starred',       icon: 'psg:bookmark' },
+  { name: 'archive',   labelKey: 'archiveFolder', icon: 'psg:archive' },
+  { name: 'spam',      labelKey: 'spam',          icon: 'psg:spam' },
+  { name: 'templates', labelKey: 'templates',     icon: 'psg:template' },
+  { name: 'groups',    labelKey: 'contactGroups', icon: 'psg:group' },
+  { name: 'setting',   labelKey: 'settings',      icon: 'psg:settings' },
 ];
 
 function openCompose() {

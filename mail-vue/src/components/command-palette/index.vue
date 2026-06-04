@@ -67,52 +67,52 @@ const listRef = ref(null)
 const allActions = computed(() => [
   {
     id: 'compose', group: t('compose'), label: t('compose'),
-    icon: 'material-symbols:edit-outline-rounded', shortcut: 'C',
+    icon: 'psg:compose', shortcut: 'C',
     action: () => uiStore.writerRef?.open?.()
   },
   {
     id: 'inbox', group: t('navigate'), label: t('inbox'),
-    icon: 'hugeicons:mailbox-01',
+    icon: 'psg:inbox',
     action: () => router.push({ name: 'email' })
   },
   {
     id: 'sent', group: t('navigate'), label: t('sent'),
-    icon: 'cil:send',
+    icon: 'psg:send',
     action: () => router.push({ name: 'send' })
   },
   {
     id: 'drafts', group: t('navigate'), label: t('drafts'),
-    icon: 'ep:document',
+    icon: 'psg:draft',
     action: () => router.push({ name: 'draft' })
   },
   {
     id: 'starred', group: t('navigate'), label: t('starred'),
-    icon: 'solar:star-line-duotone',
+    icon: 'psg:bookmark',
     action: () => router.push({ name: 'star' })
   },
   {
     id: 'archive', group: t('navigate'), label: t('archiveFolder'),
-    icon: 'material-symbols:archive-outline-rounded',
+    icon: 'psg:archive',
     action: () => router.push({ name: 'archive' })
   },
   {
     id: 'spam', group: t('navigate'), label: t('spam'),
-    icon: 'material-symbols:report-outline-rounded',
+    icon: 'psg:spam',
     action: () => router.push({ name: 'spam' })
   },
   {
     id: 'templates', group: t('navigate'), label: t('templates'),
-    icon: 'material-symbols:description-outline-rounded',
+    icon: 'psg:template',
     action: () => router.push({ name: 'templates' })
   },
   {
     id: 'groups', group: t('navigate'), label: t('contactGroups'),
-    icon: 'material-symbols:group-outline',
+    icon: 'psg:group',
     action: () => router.push({ name: 'groups' })
   },
   {
     id: 'settings', group: t('navigate'), label: t('settings'),
-    icon: 'fluent:settings-48-regular',
+    icon: 'psg:settings',
     action: () => router.push({ name: 'setting' })
   },
   {
