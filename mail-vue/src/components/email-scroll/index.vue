@@ -41,9 +41,6 @@
       <div class="toolbar-right">
         <span class="mail-count" v-if="total && !searchQuery.trim()">{{ $t('emailCount', { total }) }}</span>
         <span class="mail-count" v-if="searchQuery.trim()">{{ $t('searchResultCount', { count: searchResultCount }) }}</span>
-        <button v-if="showAccountIcon" class="icon-btn" @click="changeAccountShow">
-          <Icon icon="akar-icons:dot-grid-fill" width="15" height="15" />
-        </button>
       </div>
     </div>
 

@@ -5,7 +5,7 @@ export const useUiStore = defineStore('ui', {
         asideShow: window.innerWidth > 1024,
         asideCollapsed: false,
         commandPaletteShow: false,
-        accountShow: false,
+        accountShow: false,   // never persist — not in vfasky pattern
         backgroundLoading: true,
         changeNotice: 0,
         writerRef: null,
@@ -29,6 +29,6 @@ export const useUiStore = defineStore('ui', {
         }
     },
     persist: {
-        pick: ['accountShow','dark'],
+        pick: ['dark'],
     },
 })
