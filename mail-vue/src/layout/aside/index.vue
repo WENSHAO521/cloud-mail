@@ -440,6 +440,12 @@ function clickLogout() {
   height: 40px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 8px;
+  color: rgba(255, 255, 255, 0.68);
+  background: transparent;
+
+  @media (hover: hover) {
+    &:hover { background: rgba(255,255,255,0.07); color: #fff; }
+  }
 }
 
 .compose-icon-btn {

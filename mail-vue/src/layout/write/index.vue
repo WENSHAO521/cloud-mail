@@ -862,7 +862,7 @@ function open() {
   }
   const sig = userStore.user.signature
   defValue.value = sig
-    ? `<p><br></p><p><br></p><p style="color:#999;border-top:1px solid #e0e0e0;padding-top:8px;margin-top:0">-- </p>${sig}`
+    ? `<p><br></p><p><br></p><p style="color:#999;margin-top:0">-- </p>${sig}`
     : ''
   show.value = true;
   editor.value.focus()
@@ -985,8 +985,8 @@ function close() {
   width: min(1300px, calc(100% - 16px));
   display: grid;
   grid-template-rows: auto 1fr;
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
-  border-radius: 2px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.40), 0 4px 16px rgba(0,0,0,0.18);
+  border-radius: 16px;
   overflow: hidden;
 
   @media (max-width: 767px) {
@@ -1273,7 +1273,7 @@ function close() {
 /* Subject row */
 .subject-row {
   min-height: 50px;
-  border-bottom: 2px solid var(--light-border-color);
+  border-bottom: 1px solid var(--separator, #e5e7eb);
 }
 
 /* Editor fills remaining height */
