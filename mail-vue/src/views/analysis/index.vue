@@ -15,7 +15,7 @@
             </div>
             <div class="right">
               <div class="count-icon">
-                <Icon icon="hugeicons:mailbox-01" width="25" height="25"></Icon>
+                <Icon icon="psg:inbox" width="22" height="22"></Icon>
               </div>
             </div>
           </div>
@@ -34,7 +34,7 @@
             </div>
             <div class="right">
               <div class="count-icon">
-                <Icon icon="cil:send" width="25" height="25"></Icon>
+                <Icon icon="psg:send" width="22" height="22"></Icon>
               </div>
             </div>
           </div>
@@ -53,7 +53,7 @@
             </div>
             <div class="right">
               <div class="count-icon">
-                <Icon icon="lets-icons:e-mail" width="23" height="23"></Icon>
+                <Icon icon="psg:all-mail" width="22" height="22"></Icon>
               </div>
             </div>
           </div>
@@ -72,7 +72,7 @@
             </div>
             <div class="right">
               <div class="count-icon">
-                <Icon icon="iconoir:user" width="25" height="25"></Icon>
+                <Icon icon="psg:group" width="22" height="22"></Icon>
               </div>
             </div>
           </div>
@@ -376,7 +376,7 @@ function createSenderPie() {
         labelLine: {
           show: true
         },
-        color: ['#3CB2FF', '#13DEB9', '#FBBF24', '#FF7F50', '#BAE6FD', '#C084FC'] // 添加符合主题的配色
+        color: ['#CC0000', '#8B0000', '#E57373', '#333333', '#666666', '#A0A0A0']
       }
     ]
   }
@@ -503,22 +503,22 @@ function createIncreaseLine() {
         smooth: 0.1,
         symbol: 'none',
         lineStyle: {
-          color: '#1D84FF',
-          width: 2.5
+          color: '#CC0000',
+          width: 2
         },
         areaStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
             {
               offset: 0,
-              color: 'rgba(29, 132, 255, 0.3)'
+              color: 'rgba(204, 0, 0, 0.18)'
             },
             {
               offset: 1,
-              color: 'rgba(29, 132, 255, 0.03)'
+              color: 'rgba(204, 0, 0, 0.02)'
             }
           ])
         },
-        color: ['#1D84FF'],
+        color: ['#CC0000'],
       }
     ]
   };
@@ -626,13 +626,13 @@ function createEmailColumnChart() {
         },
         data: emailColumnData.receiveData,
         itemStyle: {
-          color: '#3CB2FF',
+          color: '#CC0000',
         }
       },
       {
         name: t('emailSent'),
         type: 'bar',
-        stack: 'total', // 堆叠组标识（必须相同）
+        stack: 'total',
         emphasis: {
           itemStyle: {
             shadowBlur: 10,
@@ -641,7 +641,7 @@ function createEmailColumnChart() {
         },
         data: emailColumnData.sendData,
         itemStyle: {
-          color: '#13deb9',
+          color: '#333333',
         }
       }
     ]
@@ -671,13 +671,12 @@ function createSendGauge() {
         show: true,
         roundCap: true,
         itemStyle: {
-          color: '#3CB2FF'
+          color: '#CC0000'
         }
       },
-      // 指针颜色（新增）
       pointer: {
         itemStyle: {
-          color: '#3CB2FF'
+          color: '#CC0000'
         }
       },
       axisLabel: {
@@ -716,7 +715,7 @@ function createSendGauge() {
         }
       }]
     }],
-    color: ['#3CB2FF']
+    color: ['#CC0000']
   };
   sendGauge.setOption(option);
 }
@@ -747,30 +746,34 @@ function createSendGauge() {
 
 .analysis {
   height: 100%;
-  padding: 20px 20px 30px;
+  padding: 24px 24px 36px;
   gap: 20px;
   background: var(--extra-light-fill);
   display: grid;
   grid-auto-rows: min-content;
   @media (max-width: 1024px) {
-    padding: 15px 15px 30px;
-    gap: 15px
+    padding: 16px 16px 32px;
+    gap: 14px;
   }
 
+  /* Section heading: Bauhaus all-caps editorial label */
   .title {
-    margin-top: 10px;
-    margin-left: 15px;
-    font-size: 18px;
-    font-weight: 500;
+    margin: 14px 0 0 18px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.45;
   }
 
+  /* ── KPI cards ─────────────────────────────── */
   .number {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 20px;
+    gap: 16px;
     @media (max-width: 1366px) {
       grid-template-columns: 1fr 1fr;
-      gap: 15px;
+      gap: 14px;
     }
     @media (max-width: 767px) {
       grid-template-columns: 1fr;
@@ -778,9 +781,10 @@ function createSendGauge() {
 
     .number-item {
       background: var(--el-bg-color);
-      border-radius: 8px;
+      border-radius: 2px;
       border: 1px solid var(--el-border-color);
-      padding: 21px 20px;
+      border-left: 3px solid #CC0000;
+      padding: 20px 20px 16px;
 
       .top {
         display: grid;
@@ -790,11 +794,15 @@ function createSendGauge() {
 
         .left {
           display: grid;
-          gap: 5px;
+          gap: 4px;
           grid-auto-rows: min-content;
 
           > div:first-child {
-            font-size: 15px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            opacity: 0.5;
           }
 
           > div:last-child {
@@ -802,7 +810,9 @@ function createSendGauge() {
           }
 
           :deep(.el-statistic__number) {
-            font-size: 26px;
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
           }
         }
 
@@ -811,61 +821,62 @@ function createSendGauge() {
           align-items: center;
 
           .count-icon {
-            top: 3px;
             position: relative;
+            top: 2px;
             display: grid;
             align-items: center;
-            padding: 14px;
-            border-radius: 8px;
-            background: var(--el-color-primary-light-9);
-            color: var(--el-color-primary);
+            padding: 13px;
+            border-radius: 2px;
+            background: rgba(204, 0, 0, 0.07);
+            color: #CC0000;
           }
         }
-
       }
 
       .delete-ratio {
         width: 100%;
         display: grid;
-        grid-template-columns:  auto auto;
+        grid-template-columns: auto auto;
         justify-content: start;
-        gap: 20px;
-        padding-top: 5px;
-        font-size: 14px;
+        gap: 18px;
+        padding-top: 10px;
+        margin-top: 8px;
+        border-top: 1px solid var(--el-border-color);
+        font-size: 12px;
+        opacity: 0.75;
 
         .normal {
-          width: fit-content;
           color: var(--el-color-success);
-          font-weight: bold;;
+          font-weight: 600;
           margin-left: 3px;
         }
 
         .deleted {
-          width: fit-content;
-          color: var(--el-color-danger);
-          font-weight: bold;;
+          color: #CC0000;
+          font-weight: 600;
           margin-left: 3px;
         }
       }
-
     }
   }
 
+  /* ── Chart panels ───────────────────────────── */
   .picture {
     display: grid;
     grid-template-columns: 500px 1fr;
-    gap: 20px;
+    gap: 16px;
     @media (max-width: 1620px) {
       grid-template-columns: 1fr;
     }
     @media (max-width: 1024px) {
-      gap: 15px;
+      gap: 14px;
     }
 
     .picture-item {
       background: var(--el-bg-color);
-      border-radius: 8px;
+      border-radius: 2px;
       border: 1px solid var(--el-border-color);
+      border-top: 3px solid #CC0000;
 
       .source-button {
         padding-right: 15px;
@@ -896,16 +907,17 @@ function createSendGauge() {
   .picture-cs {
     display: grid;
     grid-template-columns: 1fr 500px;
-    gap: 20px;
+    gap: 16px;
     @media (max-width: 1620px) {
       grid-template-columns: 1fr;
-      gap: 15px;
+      gap: 14px;
     }
 
     .picture-cs-item {
       background: var(--el-bg-color);
-      border-radius: 8px;
+      border-radius: 2px;
       border: 1px solid var(--el-border-color);
+      border-top: 3px solid #CC0000;
 
       .send-count {
         height: 350px;
@@ -923,7 +935,6 @@ function createSendGauge() {
     }
   }
 }
-
 </style>
 
 
