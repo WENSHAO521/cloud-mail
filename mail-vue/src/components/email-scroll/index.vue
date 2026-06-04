@@ -321,6 +321,7 @@ import {useUiStore} from "@/store/ui.js";
 import {useSettingStore} from "@/store/setting.js";
 import {sleep} from "@/utils/time-utils.js"
 import { avatarBg, avatarLetter, storedAvatar, gravatarCandidate, markGravatarMiss } from '@/utils/avatar.js'
+import { useAvatarCacheStore } from '@/store/avatar-cache.js'
 import {fromNow} from "@/utils/day.js";
 import {useI18n} from "vue-i18n";
 import {EmailUnreadEnum} from "@/enums/email-enum.js";
@@ -701,9 +702,15 @@ function cleanSpace(text) {
       .trim();
 }
 
+const avatarCache = useAvatarCacheStore()
+
 function senderBg(item) { return avatarBg(item.sendEmail || item.name || '') }
 function senderLetter(item) { return avatarLetter(item.name, item.sendEmail) }
-function senderImg(item) { return storedAvatar(item.sendEmail) || gravatarCandidate(item.sendEmail) }
+function senderImg(item) {
+    return avatarCache.get(item.sendEmail)   // server (cross-device, reactive)
+        || storedAvatar(item.sendEmail)      // local cache
+        || gravatarCandidate(item.sendEmail) // gravatar fallback
+}
 
 function starChange(email) {
 

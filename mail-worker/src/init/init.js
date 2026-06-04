@@ -37,8 +37,15 @@ const dbInit = {
 		await this.v3_6DB(c);
 		await this.v3_7DB(c);
 		await this.v3_8DB(c);
+		await this.v3_9DB(c);
 		await settingService.refresh(c);
 		return c.text('success');
+	},
+
+	async v3_9DB(c) {
+		try {
+			await c.env.db.prepare(`ALTER TABLE user ADD COLUMN avatar TEXT NOT NULL DEFAULT '';`).run();
+		} catch (e) { console.warn(`跳过：${e.message}`); }
 	},
 
 	async v3_8DB(c) {

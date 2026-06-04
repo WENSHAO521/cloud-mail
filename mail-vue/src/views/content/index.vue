@@ -102,6 +102,7 @@ import {useUiStore} from "@/store/ui.js";
 import {useI18n} from "vue-i18n";
 import {EmailUnreadEnum} from "@/enums/email-enum.js";
 import {avatarBg, storedAvatar, gravatarCandidate, markGravatarMiss} from "@/utils/avatar.js";
+import {useAvatarCacheStore} from "@/store/avatar-cache.js";
 import {computed} from "vue";
 
 const uiStore = useUiStore();
@@ -110,7 +111,12 @@ const accountStore = useAccountStore();
 const emailStore = useEmailStore();
 const router = useRouter()
 const email = emailStore.contentData.email
-const metaAvatarImg = computed(() => storedAvatar(email.sendEmail) || gravatarCandidate(email.sendEmail))
+const avatarCache = useAvatarCacheStore()
+const metaAvatarImg = computed(() =>
+    avatarCache.get(email.sendEmail)        // server (cross-device, reactive)
+    || storedAvatar(email.sendEmail)        // local cache
+    || gravatarCandidate(email.sendEmail)   // gravatar fallback
+)
 const metaAvatarBg = computed(() => avatarBg(email.sendEmail || email.name || ''))
 const showPreview = ref(false)
 const srcList = reactive([])

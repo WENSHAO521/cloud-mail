@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import {loginUserInfo, updateSignature} from "@/request/my.js";
+import { loginUserInfo, updateSignature, saveAvatar as apiSaveAvatar, clearAvatar as apiClearAvatar } from '@/request/my.js'
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -14,25 +14,32 @@ export const useUserStore = defineStore('user', {
         refreshUserInfo() {
             loginUserInfo().then(user => {
                 this.user = user
-                this.loadAvatar()
+                this.avatar = user.avatar || localStorage.getItem(`psg_avatar_${user.email}`) || ''
             })
         },
         loadAvatar() {
-            const email = this.user?.email
-            if (!email) return
-            this.avatar = localStorage.getItem(`psg_avatar_${email}`) || ''
+            const avatar = this.user?.avatar
+            if (avatar) {
+                this.avatar = avatar
+            } else {
+                // fallback: legacy localStorage key
+                const email = this.user?.email
+                this.avatar = email ? (localStorage.getItem(`psg_avatar_${email}`) || '') : ''
+            }
         },
-        saveAvatar(base64) {
-            const email = this.user?.email
-            if (!email) return
+        async saveAvatar(base64) {
             this.avatar = base64
-            localStorage.setItem(`psg_avatar_${email}`, base64)
-        },
-        clearAvatar() {
+            // Persist to server (cross-device)
+            await apiSaveAvatar(base64)
+            // Also keep localStorage as instant-load cache
             const email = this.user?.email
-            if (!email) return
+            if (email) localStorage.setItem(`psg_avatar_${email}`, base64)
+        },
+        async clearAvatar() {
             this.avatar = ''
-            localStorage.removeItem(`psg_avatar_${email}`)
+            await apiClearAvatar()
+            const email = this.user?.email
+            if (email) localStorage.removeItem(`psg_avatar_${email}`)
         },
         async saveSignature(signature) {
             await updateSignature(signature)

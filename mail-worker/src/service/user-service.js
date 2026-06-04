@@ -46,23 +46,53 @@ const userService = {
 		user.role = roleRow;
 		user.type = userRow.type;
 
-		// signature is in a separate column added by v3_2DB migration;
-		// fall back to '' gracefully if the column doesn't exist yet.
 		try {
-			const sigRow = await c.env.db
-				.prepare('SELECT signature FROM user WHERE user_id = ?')
+			const row = await c.env.db
+				.prepare('SELECT signature, avatar FROM user WHERE user_id = ?')
 				.bind(userId).first();
-			user.signature = sigRow?.signature || '';
+			user.signature = row?.signature || '';
+			user.avatar    = row?.avatar    || '';
 		} catch {
 			user.signature = '';
+			user.avatar    = '';
 		}
 
 		if (c.env.admin === userRow.email) {
-			user.role = constant.ADMIN_ROLE
+			user.role = constant.ADMIN_ROLE;
 			user.type = 0;
 		}
 
 		return user;
+	},
+
+	async saveAvatar(c, base64, userId) {
+		try {
+			await c.env.db.prepare(`ALTER TABLE user ADD COLUMN avatar TEXT NOT NULL DEFAULT '';`).run();
+		} catch {}
+		await c.env.db
+			.prepare('UPDATE user SET avatar = ? WHERE user_id = ?')
+			.bind(base64 ?? '', userId).run();
+	},
+
+	async clearAvatar(c, userId) {
+		try {
+			await c.env.db
+				.prepare('UPDATE user SET avatar = ? WHERE user_id = ?')
+				.bind('', userId).run();
+		} catch {}
+	},
+
+	// Returns avatar for any registered email — used for cross-account lookup
+	async getAvatarByEmail(c, email) {
+		if (!email) return '';
+		try {
+			const row = await c.env.db
+				.prepare('SELECT avatar FROM user WHERE email = ? AND is_del = 0 LIMIT 1')
+				.bind(email).first();
+			return row?.avatar || '';
+		} catch {
+			return '';
+		}
 	},
 
 

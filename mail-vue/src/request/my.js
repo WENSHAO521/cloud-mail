@@ -20,3 +20,15 @@ export function getDirectory() {
     return http.get('/my/directory')
 }
 
+export function saveAvatar(avatar) {
+    return http.put('/my/avatar', { avatar })
+}
+
+export function clearAvatar() {
+    return http.delete('/my/avatar')
+}
+
+export function getAvatarByEmail(email) {
+    return http.get('/my/avatar', { params: { email } })
+}
+

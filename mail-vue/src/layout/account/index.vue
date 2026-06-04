@@ -172,18 +172,22 @@ import {useAccountStore} from "@/store/account.js";
 import {useEmailStore} from "@/store/email.js";
 import {useUserStore} from "@/store/user.js";
 import {storedAvatar} from "@/utils/avatar.js";
+import {useAvatarCacheStore} from "@/store/avatar-cache.js";
 import {hasPerm} from "@/perm/perm.js"
 import {useI18n} from "vue-i18n";
 import {AccountAllReceiveEnum} from "@/enums/account-enum.js";
 
 const {t} = useI18n();
 const userStore = useUserStore();
+const avatarCache = useAvatarCacheStore();
 
-// Each account has its own independent avatar stored under its email key.
-// For the currently active account, fall back to userStore.avatar if no key exists yet.
 function accountPhoto(item) {
-  return storedAvatar(item.email)
-    || (item.accountId === userStore.user.account?.accountId ? userStore.avatar : '')
+    // 1. Server avatar (cross-device, reactive — fetches lazily)
+    // 2. localStorage cache (instant on same device)
+    // 3. userStore.avatar for the currently active account
+    return avatarCache.get(item.email)
+        || storedAvatar(item.email)
+        || (item.accountId === userStore.user.account?.accountId ? userStore.avatar : '')
 }
 const accountStore = useAccountStore();
 const settingStore = useSettingStore();

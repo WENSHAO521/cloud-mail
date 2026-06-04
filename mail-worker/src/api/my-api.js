@@ -28,4 +28,22 @@ app.delete('/my/delete', async (c) => {
 	return c.json(result.ok());
 });
 
+app.put('/my/avatar', async (c) => {
+	const { avatar } = await c.req.json();
+	await userService.saveAvatar(c, avatar, userContext.getUserId(c));
+	return c.json(result.ok());
+});
+
+app.delete('/my/avatar', async (c) => {
+	await userService.clearAvatar(c, userContext.getUserId(c));
+	return c.json(result.ok());
+});
+
+// Any authenticated user can fetch another user's avatar by email
+app.get('/my/avatar', async (c) => {
+	const email = c.req.query('email');
+	const avatar = await userService.getAvatarByEmail(c, email);
+	return c.json(result.ok({ avatar }));
+});
+
 
