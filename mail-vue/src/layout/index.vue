@@ -226,6 +226,8 @@ onBeforeUnmount(() => {
   min-height: 0;
   overflow: hidden;
   background: var(--psg-bg, #f7f7f7);
+  display: flex;
+  flex-direction: column;
 
   @media (max-width: 1024px) {
     height: 100dvh;
