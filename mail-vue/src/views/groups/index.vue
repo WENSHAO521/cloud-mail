@@ -29,12 +29,14 @@
                 </div>
               </div>
               <div class="card-right" @click.stop>
-                <button class="act-btn" :title="$t('change')" @click="openEdit(g)">
-                  <Icon icon="material-symbols:edit-outline-rounded" width="14" height="14"/>
-                </button>
-                <button class="act-btn danger" :title="$t('delete')" @click="deleteGroup(g.groupId)">
-                  <Icon icon="material-symbols:delete-outline-rounded" width="14" height="14"/>
-                </button>
+                <div class="card-actions">
+                  <button class="act-btn" :title="$t('change')" @click="openEdit(g)">
+                    <Icon icon="material-symbols:edit-outline-rounded" width="14" height="14"/>
+                  </button>
+                  <button class="act-btn danger" :title="$t('delete')" @click="deleteGroup(g.groupId)">
+                    <Icon icon="material-symbols:delete-outline-rounded" width="14" height="14"/>
+                  </button>
+                </div>
                 <span class="chevron" :class="{ open: expandedIds.has(g.groupId) }">
                   <Icon icon="ep:arrow-down" width="13" height="13"/>
                 </span>
@@ -221,8 +223,8 @@ async function deleteGroup(groupId) {
 
 .add-btn {
   display: flex; align-items: center; gap: 6px;
-  font-size: 12.5px; font-weight: 700;
-  height: 32px; padding: 0 14px;
+  font-size: 13px; font-weight: 600;
+  height: 36px; padding: 0 16px;
   border-radius: 8px !important;
 }
 
@@ -253,7 +255,14 @@ async function deleteGroup(groupId) {
   justify-content: space-between;
   padding: 13px 16px; cursor: pointer;
   transition: background 0.12s ease;
-  &:hover { background: var(--base-fill); }
+
+  @media (hover: hover) {
+    .card-actions { opacity: 0; }
+    &:hover {
+      background: var(--base-fill);
+      .card-actions { opacity: 1; }
+    }
+  }
 }
 
 .card-left {
@@ -262,10 +271,10 @@ async function deleteGroup(groupId) {
 }
 
 .group-avatar {
-  width: 34px; height: 34px; border-radius: 3px;
+  width: 32px; height: 32px; border-radius: 3px;
   background: rgba(204,0,0,0.08);
   border: 1px solid rgba(204,0,0,0.15);
-  color: #CC0000; font-size: 14px; font-weight: 800;
+  color: #CC0000; font-size: 13px; font-weight: 800;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
@@ -285,16 +294,19 @@ async function deleteGroup(groupId) {
   flex-shrink: 0; margin-left: 12px;
 }
 
+.card-actions {
+  display: flex; gap: 2px; flex-shrink: 0;
+  transition: opacity 0.14s;
+}
+
 .act-btn {
   display: flex; align-items: center; justify-content: center;
   width: 28px; height: 28px;
   border: none; background: transparent;
   border-radius: 3px; cursor: pointer;
   color: var(--secondary-text-color);
-  opacity: 0;
-  transition: background 0.10s, color 0.10s, opacity 0.14s;
+  transition: background 0.10s, color 0.10s;
 
-  .group-card:hover & { opacity: 1; }
   &:hover { background: var(--base-fill); color: var(--el-text-color-primary); }
   &.danger:hover { background: rgba(204,0,0,0.08); color: #CC0000; }
 }

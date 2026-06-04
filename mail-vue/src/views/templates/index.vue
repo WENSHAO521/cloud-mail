@@ -243,8 +243,10 @@ async function deleteTpl(templateId) {
 }
 
 .item-icon {
-  width: 30px; height: 30px; border-radius: 3px;
-  background: rgba(204,0,0,0.07); color: #CC0000;
+  width: 32px; height: 32px; border-radius: 3px;
+  background: rgba(204,0,0,0.08);
+  border: 1px solid rgba(204,0,0,0.15);
+  color: #CC0000;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
