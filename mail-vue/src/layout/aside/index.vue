@@ -436,22 +436,20 @@ function clickLogout() {
 }
 
 .sidebar-more-button {
-  width: 40px;
-  height: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 8px;
-  background: transparent;
-}
-
-/* ── Force icon colors inside dark sidebar footer ── */
-.sidebar-footer .icon-button,
-.sidebar-footer .sidebar-more-button {
-  color: rgba(255, 255, 255, 0.68) !important;
+  width: 40px !important;
+  height: 40px !important;
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  border-radius: 8px !important;
+  background: #111111 !important;
+  color: #ffffff !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 
   @media (hover: hover) {
     &:hover {
-      background: rgba(255, 255, 255, 0.07);
-      color: #fff !important;
+      background: #1e1e1e !important;
+      border-color: rgba(255, 255, 255, 0.80) !important;
     }
   }
 }
