@@ -84,15 +84,15 @@
         <!-- Cc -->
         <div class="field-row" v-show="showCc">
           <span class="field-label">{{ $t('cc') }}</span>
-          <el-input-tag class="field-tag" v-model="form.cc" tag-type="primary"
-                        @add-tag="addCcTag" size="default"/>
+          <el-input-tag ref="ccTagRef" class="field-tag" v-model="form.cc" tag-type="primary"
+                        @add-tag="addCcTag" @input="v => ccPending = v" size="default"/>
         </div>
 
         <!-- Bcc -->
         <div class="field-row" v-show="showBcc">
           <span class="field-label">{{ $t('bcc') }}</span>
-          <el-input-tag class="field-tag" v-model="form.bcc" tag-type="primary"
-                        @add-tag="addBccTag" size="default"/>
+          <el-input-tag ref="bccTagRef" class="field-tag" v-model="form.bcc" tag-type="primary"
+                        @add-tag="addBccTag" @input="v => bccPending = v" size="default"/>
         </div>
 
         <!-- Subject -->
@@ -328,6 +328,28 @@ const form = reactive({
 
 const selectRecipientList = ref([])
 
+// Track unconfirmed text in CC / BCC input-tag fields
+const ccPending  = ref('')
+const bccPending = ref('')
+
+// Commit any pending (unconfirmed) text before sending
+function commitPendingInputs() {
+  if (ccPending.value.trim()) {
+    const emails = ccPending.value.split(/[,，\s]+/).map(e => e.trim()).filter(e => e)
+    emails.forEach(e => {
+      if (isEmail(e) && !form.cc.includes(e)) form.cc.push(e)
+    })
+    ccPending.value = ''
+  }
+  if (bccPending.value.trim()) {
+    const emails = bccPending.value.split(/[,，\s]+/).map(e => e.trim()).filter(e => e)
+    emails.forEach(e => {
+      if (isEmail(e) && !form.bcc.includes(e)) form.bcc.push(e)
+    })
+    bccPending.value = ''
+  }
+}
+
 const senderInitial = computed(() => {
   const name = form.name?.trim()
   if (name) return name[0].toUpperCase()
@@ -500,6 +522,9 @@ function chooseFile() {
 
 async function sendEmail() {
 
+  // Commit any text typed but not yet confirmed as a tag (user skipped pressing Enter)
+  commitPendingInputs()
+
   if (form.receiveEmail.length === 0) {
     ElMessage({
       message: t('emptyRecipientMsg'),
@@ -622,6 +647,8 @@ function resetForm() {
   form.receiveEmail = []
   form.cc = []
   form.bcc = []
+  ccPending.value = ''
+  bccPending.value = ''
   form.subject = ''
   form.content = ''
   form.manyType = null

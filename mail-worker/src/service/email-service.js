@@ -351,8 +351,10 @@ const emailService = {
 		const userRow = await userService.selectById(c, userId);
 		const roleRow = await roleService.selectById(c, userRow.type);
 
-		//判断接收方是不是全部为站内邮箱
-		const allInternal = receiveEmail.every(email => {
+		// CC / BCC must be included — if any external recipient exists in ANY field,
+		// the email must go through SMTP/Resend, not just on-site DB delivery.
+		const allRecipients = [...receiveEmail, ...cc, ...bcc];
+		const allInternal = allRecipients.every(email => {
 			const domain = '@' + emailUtils.getDomain(email);
 			return domainList.includes(domain);
 		});
@@ -535,9 +537,10 @@ const emailService = {
 		const attList = await attService.selectByEmailIds(c, [emailResult.emailId]);
 		emailResult.attList = attList;
 
-		//如果全是站内接收方，直接写入数据库
+		//如果全是站内接收方，直接写入数据库（包括 CC / BCC 站内收件人）
 		if (allInternal) {
-			await this.HandleOnSiteEmail(c, receiveEmail, emailResult, attList);
+			const allInternalRecipients = [...new Set([...receiveEmail, ...cc, ...bcc])];
+			await this.HandleOnSiteEmail(c, allInternalRecipients, emailResult, attList);
 		}
 
 		const dateStr = dayjs().format('YYYY-MM-DD');
