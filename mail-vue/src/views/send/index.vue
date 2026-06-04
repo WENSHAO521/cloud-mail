@@ -23,7 +23,8 @@
 
 <script setup>
 import {useAccountStore} from "@/store/account.js";
-import {useEmailStore} from "@/store/email.js";
+import {useEmailStore} from "@/store/email.js"
+import {useUiStore} from "@/store/ui.js";
 import emailScroll from "@/components/email-scroll/index.vue"
 import {emailList, emailDelete} from "@/request/email.js";
 import {starAdd, starCancel} from "@/request/star.js";
@@ -36,6 +37,7 @@ defineOptions({
 })
 
 const emailStore = useEmailStore();
+const uiStore = useUiStore();
 const accountStore = useAccountStore();
 const sendScroll = ref({})
 const params = reactive({
@@ -60,7 +62,7 @@ function jumpContent(email) {
   emailStore.contentData.delType = 'logic'
   emailStore.contentData.showStar = true
   emailStore.contentData.showReply = true
-  router.push('/message')
+  uiStore.mobileDetailOpen = true
 }
 
 function addStar(email) {

@@ -26,7 +26,8 @@
 
 <script setup>
 import {useAccountStore} from "@/store/account.js";
-import {useEmailStore} from "@/store/email.js";
+import {useEmailStore} from "@/store/email.js"
+import {useUiStore} from "@/store/ui.js";
 import {useSettingStore} from "@/store/setting.js";
 import emailScroll from "@/components/email-scroll/index.vue"
 import {emailList, emailDelete, emailLatest, emailRead, emailMarkSpam, emailArchive} from "@/request/email.js";
@@ -44,6 +45,7 @@ defineOptions({
 
 const route = useRoute();
 const emailStore = useEmailStore();
+const uiStore = useUiStore();
 const accountStore = useAccountStore();
 const settingStore = useSettingStore();
 const scroll = ref({})
@@ -73,7 +75,7 @@ function jumpContent(email) {
   emailStore.contentData.showUnread = true
   emailStore.contentData.showStar = true
   emailStore.contentData.showReply = true
-  router.push('/message')
+  uiStore.mobileDetailOpen = true
 }
 
 const existIds = new Set();

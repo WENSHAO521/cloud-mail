@@ -22,16 +22,6 @@ const routes = [
                 }
             },
             {
-                path: '/message',
-                name: 'content',
-                component: () => import('@/views/content/index.vue'),
-                meta: {
-                    title: 'message',
-                    name: 'content',
-                    menu: false
-                }
-            },
-            {
                 path: '/settings',
                 name: 'setting',
                 component: () => import('@/views/setting/index.vue'),
@@ -172,28 +162,13 @@ function loadBackground(next) {
 
 }
 
-router.afterEach((to) => {
-
+router.afterEach(() => {
     clearTimeout(timer)
     if (first) {
         removeLoading()
     } else {
         NProgress.done();
     }
-
-    const uiStore = useUiStore()
-    if (to.meta.menu) {
-        if (['content', 'email', 'send'].includes(to.meta.name)) {
-            uiStore.accountShow = window.innerWidth > 767;
-        } else {
-            uiStore.accountShow = false
-        }
-    }
-
-    if (window.innerWidth < 1025) {
-        uiStore.asideShow = false
-    }
-
     first = false
 })
 

@@ -5,7 +5,8 @@ export const useUiStore = defineStore('ui', {
         asideShow: window.innerWidth > 1024,
         asideCollapsed: false,
         commandPaletteShow: false,
-        accountShow: false,   // never persist — not in vfasky pattern
+        accountShow: false,
+        mobileDetailOpen: false,
         backgroundLoading: true,
         changeNotice: 0,
         writerRef: null,

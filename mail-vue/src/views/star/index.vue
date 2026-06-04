@@ -16,7 +16,8 @@
 import emailScroll from "@/components/email-scroll/index.vue"
 import {emailDelete} from "@/request/email.js";
 import {starAdd, starCancel, starList} from "@/request/star.js";
-import {useEmailStore} from "@/store/email.js";
+import {useEmailStore} from "@/store/email.js"
+import {useUiStore} from "@/store/ui.js";
 import {defineOptions, onMounted, ref} from "vue";
 import router from "@/router/index.js";
 
@@ -26,13 +27,14 @@ defineOptions({
 
 const scroll = ref({})
 const emailStore = useEmailStore();
+const uiStore = useUiStore();
 
 function jumpContent(email) {
   emailStore.contentData.email = email
   emailStore.contentData.delType = 'logic'
   emailStore.contentData.showStar = true
   emailStore.contentData.showReply = true
-  router.push('/message')
+  uiStore.mobileDetailOpen = true
 }
 
 function cancelStar(email) {

@@ -92,6 +92,7 @@ import {starAdd, starCancel} from "@/request/star.js";
 import emailScroll from "@/components/email-scroll/index.vue"
 import {computed, defineOptions, reactive, ref, watch, onMounted} from "vue";
 import {useEmailStore} from "@/store/email.js";
+import {useUiStore} from "@/store/ui.js";
 import {
   allEmailList,
   allEmailDelete,
@@ -113,6 +114,7 @@ defineOptions({
 const route = useRoute()
 const {t} = useI18n();
 const emailStore = useEmailStore();
+const uiStore = useUiStore();
 const settingStore = useSettingStore();
 const clearTime = ref('')
 const sysEmailScroll = ref({})
@@ -284,7 +286,7 @@ function jumpContent(email) {
   emailStore.contentData.delType = 'physics'
   emailStore.contentData.showStar = false
   emailStore.contentData.showReply = false
-  router.push({name: 'content'})
+  uiStore.mobileDetailOpen = true
 }
 
 

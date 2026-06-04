@@ -1,58 +1,95 @@
 <template>
   <CommandPalette ref="cmdPaletteRef"/>
-  <el-container class="layout">
-    <el-aside
-        class="aside"
-        :class="uiStore.asideShow ? 'aside-show' : 'el-aside-hide'">
-      <Aside />
-    </el-aside>
-    <div
-        :class="(uiStore.asideShow && isMobile)? 'overlay-show':'overlay-hide'"
-        @click="uiStore.asideShow = false"
-    ></div>
-    <el-container class="main-container">
-      <el-main>
-        <el-header>
-            <Header />
-        </el-header>
-        <Main />
-      </el-main>
-    </el-container>
-  </el-container>
-  <writer ref="writerRef" />
+
+  <div class="app-shell"
+       :data-mode="isMailRoute ? 'mail' : 'workspace'"
+       :data-collapsed="String(sidebarCollapsed)"
+       :data-mobile-detail="String(uiStore.mobileDetailOpen)">
+
+    <!-- Mobile sidebar backdrop -->
+    <div class="sidebar-backdrop"
+         :data-open="String(uiStore.asideShow)"
+         @click="uiStore.asideShow = false"/>
+
+    <!-- Sidebar ─ always column 1 -->
+    <Aside />
+
+    <!-- ── Mail mode: list (col 2) + reading pane (col 3) ── -->
+    <template v-if="isMailRoute">
+      <section class="mail-list-pane">
+        <router-view v-slot="{ Component, route: r }">
+          <keep-alive :include="keepAliveList">
+            <component :is="Component" :key="r.name"/>
+          </keep-alive>
+        </router-view>
+      </section>
+      <section class="mail-detail-pane">
+        <ContentPane @back="uiStore.mobileDetailOpen = false"/>
+      </section>
+    </template>
+
+    <!-- ── Workspace mode: header + content (col 2) ── -->
+    <main v-else class="workspace-pane">
+      <header class="workspace-header">
+        <Header />
+      </header>
+      <div class="workspace-body">
+        <router-view v-slot="{ Component, route: r }">
+          <keep-alive :include="keepAliveWorkspace">
+            <component :is="Component" :key="r.name"/>
+          </keep-alive>
+        </router-view>
+      </div>
+    </main>
+
+  </div>
+
+  <writer ref="writerRef"/>
 </template>
 
 <script setup>
 import Aside from '@/layout/aside/index.vue'
 import Header from '@/layout/header/index.vue'
-import Main from '@/layout/main/index.vue'
+import ContentPane from '@/views/content/index.vue'
 import CommandPalette from '@/components/command-palette/index.vue'
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-import {useUiStore} from "@/store/ui.js";
-import {useNotificationStore} from "@/store/notification.js";
-import {useEmailStore} from "@/store/email.js";
-import {emailArchive} from "@/request/email.js";
 import writer from '@/layout/write/index.vue'
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { useUiStore } from '@/store/ui.js'
+import { useNotificationStore } from '@/store/notification.js'
+import { useEmailStore } from '@/store/email.js'
+import { emailArchive } from '@/request/email.js'
 
-const uiStore = useUiStore();
-const notificationStore = useNotificationStore();
-const emailStore = useEmailStore();
+const route = useRoute()
+const uiStore = useUiStore()
+const notificationStore = useNotificationStore()
+const emailStore = useEmailStore()
 const writerRef = ref({})
 const cmdPaletteRef = ref(null)
-const isMobile = ref(window.innerWidth < 1025)
-const handleResize = () => {
-  isMobile.value = window.innerWidth < 1025
-  uiStore.asideShow = window.innerWidth > 1024;
-}
 
+const MAIL_ROUTES = new Set(['email', 'send', 'draft', 'star', 'archive', 'spam', 'all-email'])
+const isMailRoute = computed(() => MAIL_ROUTES.has(route.meta?.name))
+const sidebarCollapsed = computed(() => uiStore.asideCollapsed && window.innerWidth >= 1025)
+
+const keepAliveList = ['email', 'all-email', 'send', 'star', 'draft', 'archive', 'spam']
+const keepAliveWorkspace = ['sys-setting', 'analysis', 'user', 'role', 'reg-key', 'setting', 'templates', 'groups']
+
+// Clear selected email when switching mail folders
+watch(isMailRoute, (is) => { if (!is) emailStore.contentData.email = null })
+watch(() => route.name, (name, prev) => {
+  if (MAIL_ROUTES.has(name) && MAIL_ROUTES.has(prev) && name !== prev) {
+    emailStore.contentData.email = null
+    uiStore.mobileDetailOpen = false
+  }
+})
+
+// Keyboard shortcuts
 function handleKeydown(e) {
-  /* Ctrl+K / Cmd+K → command palette */
   if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
     e.preventDefault()
     cmdPaletteRef.value?.open()
     return
   }
-
   const tag = e.target.tagName
   if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable) return
   if (e.ctrlKey || e.metaKey || e.altKey) return
@@ -72,13 +109,17 @@ function handleKeydown(e) {
   }
 }
 
+// Responsive sidebar
+function handleResize() {
+  if (window.innerWidth < 1025) uiStore.asideShow = false
+  else uiStore.asideShow = true
+}
+
 onMounted(() => {
   uiStore.writerRef = writerRef
-
   window.addEventListener('resize', handleResize)
   window.addEventListener('keydown', handleKeydown)
   handleResize()
-
   notificationStore.requestPermission()
 })
 
@@ -89,78 +130,131 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss" scoped>
-.el-aside-hide {
+/* ── Shell: CSS grid, replaces el-container/el-aside ───────── */
+.app-shell {
+  height: 100vh;
+  overflow: hidden;
+  display: grid;
   position: fixed;
-  left: 0;
-  height: 100%;
-  z-index: 100;
-  transform: translateX(-100%);
-  transition: all 100ms ease;
-}
+  inset: 0;
 
-.aside-show {
-  -webkit-box-shadow: var(--aside-right-border);
-  box-shadow: var(--aside-right-border);
-  transform: translateX(0);
-  transition: all 100ms ease;
-  z-index: 101;
-  @media (max-width: 1025px) {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 101;
-    height: 100%;
-    background: var(--el-bg-color);
+  /* Mail mode: sidebar | list | detail */
+  &[data-mode="mail"] {
+    grid-template-columns: 260px minmax(360px, 520px) minmax(420px, 1fr);
+
+    &[data-collapsed="true"] {
+      grid-template-columns: 72px minmax(360px, 520px) minmax(420px, 1fr);
+    }
+  }
+
+  /* Workspace mode: sidebar | content */
+  &[data-mode="workspace"] {
+    grid-template-columns: 260px minmax(0, 1fr);
+
+    &[data-collapsed="true"] {
+      grid-template-columns: 72px minmax(0, 1fr);
+    }
+  }
+
+  /* Tablet: reduce list width */
+  @media (max-width: 1280px) {
+    &[data-mode="mail"] {
+      grid-template-columns: 260px minmax(320px, 400px) minmax(0, 1fr);
+      &[data-collapsed="true"] {
+        grid-template-columns: 72px minmax(320px, 400px) minmax(0, 1fr);
+      }
+    }
+  }
+
+  /* Mobile: single column */
+  @media (max-width: 1024px) {
+    display: block !important;
+    height: 100dvh;
   }
 }
 
-.el-aside {
-  width: auto;
-  transition: all 220ms cubic-bezier(0.22,1,0.36,1);
-}
-
-.layout {
-  height: 100%;
+/* ── Sidebar backdrop (mobile) ─────────────────────────────── */
+.sidebar-backdrop {
+  display: none;
   position: fixed;
-  width: 100%;
-  top: 0;
-  left: 0;
-  overflow: hidden;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0);
+  opacity: 0;
+  transition: opacity 160ms ease, background 160ms ease;
+
+  @media (max-width: 1024px) {
+    display: block;
+
+    &[data-open="true"] {
+      pointer-events: auto;
+      background: rgba(0, 0, 0, 0.4);
+      opacity: 1;
+    }
+  }
 }
 
-.main-container {
-  min-height: 100%;
-  background: var(--el-bg-color);
+/* ── Mail panes ────────────────────────────────────────────── */
+.mail-list-pane {
+  min-height: 0;
+  overflow: hidden;
+  border-right: 1px solid var(--separator, #e5e7eb);
+  background: var(--psg-bg, #f7f7f7);
+
+  @media (max-width: 1024px) {
+    height: 100dvh;
+  }
+}
+
+.mail-detail-pane {
+  min-height: 0;
+  overflow: hidden;
+  background: var(--psg-bg, #f7f7f7);
+  padding: 14px;
+
+  @media (max-width: 1024px) {
+    height: 100dvh;
+    padding: 0;
+  }
+}
+
+/* Mobile: hide/show panes based on detail state */
+@media (max-width: 760px) {
+  .app-shell[data-mobile-detail="true"] .mail-list-pane { display: none; }
+  .app-shell[data-mobile-detail="false"] .mail-detail-pane { display: none; }
+}
+
+/* ── Workspace pane ────────────────────────────────────────── */
+.workspace-pane {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--psg-bg, #f7f7f7);
+
+  @media (max-width: 1024px) {
+    height: 100dvh;
+  }
+}
+
+.workspace-header {
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--separator, #e5e7eb);
+
+  :global(.dark) & {
+    background: rgba(18, 18, 18, 0.92);
+    border-bottom-color: rgba(255,255,255,0.08);
+  }
+}
+
+.workspace-body {
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-}
-
-.el-main {
-  padding: 0;
-}
-
-.el-header {
-  background: var(--el-bg-color);
-  border-bottom: solid 1px var(--el-border-color-lighter);
-  padding: 0;
-}
-
-.overlay-show {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(17, 17, 17, 0.38);
-  backdrop-filter: blur(4px) saturate(0.85);
-  -webkit-backdrop-filter: blur(4px) saturate(0.85);
-  z-index: 99;
-  transition: opacity 0.25s ease;
-}
-
-.overlay-hide {
-  display: flex;
-  pointer-events: none;
-  opacity: 0;
 }
 </style>

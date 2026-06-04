@@ -37,7 +37,7 @@ function jumpContent(email) {
   emailStore.contentData.delType = 'logic'
   emailStore.contentData.showStar = false
   emailStore.contentData.showReply = false
-  router.push('/message')
+  uiStore.mobileDetailOpen = true
 }
 
 function getSpamList(emailId, size) {

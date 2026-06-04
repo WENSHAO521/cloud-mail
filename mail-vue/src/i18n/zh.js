@@ -1,5 +1,6 @@
 const zh = {
     compose: '发邮件',
+    selectEmailHint: '选择一封邮件查看',
     commandPlaceholder: '搜索操作或快速跳转…',
     navigate: '快速跳转',
     appearance: '外观',

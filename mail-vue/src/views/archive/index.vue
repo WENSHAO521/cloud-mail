@@ -35,7 +35,7 @@ function jumpContent(email) {
   emailStore.contentData.delType = 'logic'
   emailStore.contentData.showStar = true
   emailStore.contentData.showReply = false
-  router.push('/message')
+  uiStore.mobileDetailOpen = true
 }
 
 function getArchiveList(emailId, size) {
