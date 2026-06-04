@@ -5,27 +5,60 @@
     </div>
     <el-scrollbar class="scroll" v-if="!firstLoading">
       <div class="scroll-body">
-        <div class="card-grid">
+        <div class="settings-shell">
+          <nav class="settings-sidebar" aria-label="System settings sections">
+            <button
+                v-for="item in systemSettingNav"
+                :key="item.key"
+                class="settings-nav-item"
+                :class="{ active: activeSettingSection === item.key }"
+                type="button"
+                @click="activeSettingSection = item.key"
+            >
+              <Icon class="settings-nav-icon" :icon="item.icon" width="20" height="20"/>
+              <span>{{ item.label }}</span>
+            </button>
+          </nav>
+          <main class="settings-panel">
+            <div class="settings-panel-header">
+              <div>
+                <h1>{{ activeSettingMeta.label }}</h1>
+                <p>{{ activeSettingMeta.desc }}</p>
+              </div>
+              <el-button class="settings-save-button" type="primary" :loading="settingLoading" @click="saveActiveSetting">
+                {{ $t('save') }}
+              </el-button>
+            </div>
+            <div class="card-grid">
           <!-- Website Settings Card -->
-          <div class="settings-card">
+          <div v-show="activeSettingSection === 'website'" class="settings-card">
             <div class="card-title">{{ $t('websiteSetting') }}</div>
             <div class="card-content">
               <div class="setting-item">
-                <div><span>{{ $t('websiteReg') }}</span></div>
+                <div>
+                  <span>{{ $t('websiteReg') }}</span>
+                  <p>{{ $t('sysWebsiteRegDesc') }}</p>
+                </div>
                 <div>
                   <el-switch @change="change" :before-change="beforeChange" :active-value="0" :inactive-value="1"
-                             v-model="setting.register"/>
+                             :active-text="$t('enabled')" :inactive-text="$t('disabled')" v-model="setting.register"/>
                 </div>
               </div>
               <div class="setting-item">
-                <div><span>{{ $t('loginDomain') }}</span></div>
+                <div>
+                  <span>{{ $t('loginDomain') }}</span>
+                  <p>{{ $t('sysLoginDomainDesc') }}</p>
+                </div>
                 <div>
                   <el-switch @change="change" :before-change="beforeChange" :active-value="1" :inactive-value="0"
-                             v-model="setting.loginDomain"/>
+                             :active-text="$t('enabled')" :inactive-text="$t('disabled')" v-model="setting.loginDomain"/>
                 </div>
               </div>
               <div class="setting-item">
-                <div><span>{{ $t('regKey') }}</span></div>
+                <div>
+                  <span>{{ $t('regKey') }}</span>
+                  <p>{{ $t('sysRegKeyDesc') }}</p>
+                </div>
                 <div>
                   <el-select
                       @change="change"
@@ -43,10 +76,13 @@
                 </div>
               </div>
               <div class="setting-item">
-                <div><span>{{ $t('addAccount') }}</span></div>
+                <div>
+                  <span>{{ $t('addAccount') }}</span>
+                  <p>{{ $t('sysAddAccountDesc') }}</p>
+                </div>
                 <div>
                   <el-switch @change="change" :before-change="beforeChange" :active-value="0" :inactive-value="1"
-                             v-model="setting.addEmail"/>
+                             :active-text="$t('enabled')" :inactive-text="$t('disabled')" v-model="setting.addEmail"/>
                 </div>
               </div>
               <div class="setting-item">
@@ -55,27 +91,36 @@
                   <el-tooltip effect="dark" :content="$t('multipleEmailDesc')">
                     <Icon class="warning" icon="fe:warning" width="18" height="18"/>
                   </el-tooltip>
+                  <p>{{ $t('multipleEmailDesc') }}</p>
                 </div>
                 <div>
                   <el-switch @change="change" :before-change="beforeChange" :active-value="0" :inactive-value="1"
-                             v-model="setting.manyEmail"/>
+                             :active-text="$t('enabled')" :inactive-text="$t('disabled')" v-model="setting.manyEmail"/>
                 </div>
               </div>
               <div class="setting-item">
                 <div>
-                  <span>{{ $t('emailPrefix') }}</span>
+                  <span>{{ $t('minEmailPrefix', {msg: minEmailPrefix}) }}</span>
+                  <p>{{ $t('sysEmailPrefixLengthDesc') }}</p>
                 </div>
-                <div class="forward">
-                  <el-button class="opt-button" size="small" type="primary" @click="openEmailPrefix">
-                    <Icon icon="fluent:settings-48-regular" width="18" height="18"/>
-                  </el-button>
+                <div>
+                  <el-input-number class="setting-number" v-model="minEmailPrefix" :min="1" :max="20"/>
+                </div>
+              </div>
+              <div class="setting-item">
+                <div>
+                  <span>{{ $t('mustNotContain') }}</span>
+                  <p>{{ $t('mustNotContainDesc') }}</p>
+                </div>
+                <div>
+                  <el-input-tag class="setting-tag-input" :placeholder="$t('mustNotContainDesc')" v-model="emailPrefixFilter"/>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- Personalization Settings Card -->
-          <div class="settings-card">
+          <div v-show="activeSettingSection === 'customization'" class="settings-card">
             <div class="card-title">{{ $t('customization') }}</div>
             <div class="card-content">
               <div class="setting-item">
@@ -131,7 +176,7 @@
           </div>
 
           <!-- Email Sending Settings Card -->
-          <div class="settings-card">
+          <div v-show="activeSettingSection === 'email'" class="settings-card">
             <div class="card-title">{{ $t('emailSetting') }}</div>
             <div class="card-content">
               <div class="setting-item">
@@ -212,7 +257,7 @@
           </div>
 
           <!-- Object Storage Card -->
-          <div class="settings-card">
+          <div v-show="activeSettingSection === 'storage'" class="settings-card">
             <div class="card-title">{{ $t('oss') }}</div>
             <div class="card-content">
               <div class="r2domain-item">
@@ -252,7 +297,7 @@
             </div>
           </div>
 
-          <div class="settings-card">
+          <div v-show="activeSettingSection === 'push'" class="settings-card">
             <div class="card-title">{{ $t('emailPush') }}</div>
             <div class="card-content">
               <div class="setting-item">
@@ -286,7 +331,7 @@
           </div>
 
           <!-- Turnstile Verification Card -->
-          <div class="settings-card">
+          <div v-show="activeSettingSection === 'verify'" class="settings-card">
             <div class="card-title">{{ $t('turnstileSetting') }}</div>
             <div class="card-content">
               <div class="setting-item">
@@ -348,7 +393,7 @@
             </div>
           </div>
 
-          <div class="settings-card">
+          <div v-show="activeSettingSection === 'notice'" class="settings-card">
             <div class="card-title">{{ $t('noticeTitle') }}</div>
             <div class="card-content">
               <div class="setting-item">
@@ -371,7 +416,7 @@
             </div>
           </div>
 
-          <div class="settings-card">
+          <div v-show="activeSettingSection === 'ai'" class="settings-card">
             <div class="card-title">Workers AI</div>
             <div class="card-content">
               <div class="setting-item">
@@ -392,7 +437,7 @@
             </div>
           </div>
 
-          <div class="settings-card about">
+          <div v-show="activeSettingSection === 'about'" class="settings-card about">
             <div class="card-title">{{ $t('about') }}</div>
             <div class="card-content">
               <div class="concerning-item">
@@ -443,6 +488,8 @@
               </div>
             </div>
           </div>
+            </div>
+          </main>
         </div>
       </div>
 
@@ -838,6 +885,7 @@ let getUpdateErrorCount = 1;
 const {t, locale} = useI18n();
 const firstLoading = ref(true)
 const settingReady = ref(false)
+const activeSettingSection = ref('website')
 const backgroundImage = ref('')
 const localUpShow = ref(false)
 const accountStore = useAccountStore();
@@ -943,6 +991,20 @@ const tgMsgFromOption = [{label: t('show'), value: 'show'}, {label: t('hide'), v
 const tgMsgToOption = [{label: t('show'), value: 'show'}, {label: t('hide'), value: 'hide'}]
 const tgMsgTextOption = [{label: t('show'), value: 'show'}, {label: t('hide'), value: 'hide'}]
 const tgMsgLabelWidth = computed(() => locale.value === 'en' ? '120px' : '100px');
+const systemSettingNav = computed(() => [
+  {key: 'website', label: t('websiteSetting'), icon: 'lucide:globe-2', desc: t('sysWebsiteDesc')},
+  {key: 'customization', label: t('customization'), icon: 'lucide:palette', desc: t('sysCustomizationDesc')},
+  {key: 'email', label: t('emailSetting'), icon: 'lucide:mail', desc: t('sysEmailDesc')},
+  {key: 'storage', label: t('oss'), icon: 'lucide:database', desc: t('sysStorageDesc')},
+  {key: 'push', label: t('emailPush'), icon: 'lucide:send', desc: t('sysPushDesc')},
+  {key: 'verify', label: t('turnstileSetting'), icon: 'lucide:shield-check', desc: t('sysVerifyDesc')},
+  {key: 'notice', label: t('noticeTitle'), icon: 'lucide:megaphone', desc: t('sysNoticeDesc')},
+  {key: 'ai', label: 'Workers AI', icon: 'lucide:sparkles', desc: t('sysAiDesc')},
+  {key: 'about', label: t('about'), icon: 'lucide:info', desc: t('sysAboutDesc')},
+])
+const activeSettingMeta = computed(() => {
+  return systemSettingNav.value.find(item => item.key === activeSettingSection.value) || systemSettingNav.value[0]
+})
 
 getSettings()
 getUpdate()
@@ -1475,6 +1537,25 @@ function change(e) {
   editSetting(settingForm, false)
 }
 
+function saveActiveSetting() {
+  if (activeSettingSection.value === 'website') {
+    const settingForm = {
+      ...setting.value,
+      minEmailPrefix: minEmailPrefix.value,
+      emailPrefixFilter: emailPrefixFilter.value + ''
+    }
+    delete settingForm.siteKey
+    delete settingForm.secretKey
+    delete settingForm.s3AccessKey
+    delete settingForm.s3SecretKey
+    delete settingForm.tgBotToken
+    delete settingForm.resendTokens
+    editSetting(settingForm, false)
+    return
+  }
+  change()
+}
+
 function changeField(key, value) {
   if (!settingReady.value) return
   setting.value[key] = value
@@ -1570,26 +1651,142 @@ function editSetting(settingForm, refreshStatus = true) {
   }
 
   .scroll-body {
-    max-width: 1240px;
+    max-width: 980px;
     margin: 0 auto;
-    padding: 24px 32px 56px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    padding: 16px 20px 36px;
 
-    @media (max-width: 960px)  { padding: 20px 24px 40px; }
-    @media (max-width: 640px)  { padding: 16px 16px 32px; gap: 14px; }
+    @media (max-width: 960px)  { padding: 14px 16px 32px; }
+    @media (max-width: 640px)  { padding: 12px 12px 28px; }
   }
 }
 
-.card-grid {
+.settings-shell {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
-  gap: 20px;
+  grid-template-columns: 270px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
 
-  @media (max-width: 540px) {
+  @media (max-width: 820px) {
     grid-template-columns: 1fr;
-    gap: 14px;
+    gap: 12px;
+  }
+}
+
+.settings-sidebar,
+.settings-panel {
+  background: var(--surface, #ffffff);
+  border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 92%, transparent);
+  border-radius: 24px;
+  box-shadow: 0 16px 36px rgba(17, 17, 17, 0.08), 0 1px 2px rgba(17, 17, 17, 0.04);
+  overflow: hidden;
+}
+
+.settings-sidebar {
+  position: sticky;
+  top: 16px;
+  min-height: min(630px, calc(100vh - 32px));
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  @media (max-width: 820px) {
+    position: static;
+    min-height: 0;
+    flex-direction: row;
+    overflow-x: auto;
+    border-radius: 18px;
+  }
+}
+
+.settings-nav-item {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 16px;
+  color: var(--psg-text-secondary, #6b7280);
+  font-size: 16px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background 160ms var(--ease-out, ease), color 160ms var(--ease-out, ease), transform 160ms var(--ease-out, ease);
+
+  &:hover {
+    background: color-mix(in srgb, var(--surface-secondary, #f3f3f3) 86%, transparent);
+    color: var(--el-text-color-primary);
+  }
+
+  &.active {
+    background: var(--surface-secondary, #eeeeee);
+    color: var(--el-text-color-primary);
+  }
+
+  &:active {
+    transform: scale(0.985);
+  }
+
+  @media (max-width: 820px) {
+    width: auto;
+    white-space: nowrap;
+    flex: 0 0 auto;
+  }
+}
+
+.settings-nav-icon {
+  flex: 0 0 auto;
+  color: currentColor;
+}
+
+.settings-panel-header {
+  min-height: 84px;
+  padding: 18px 20px 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--separator, #e5e7eb);
+
+  h1 {
+    margin: 0 0 4px;
+    color: var(--el-text-color-primary);
+    font-size: 20px;
+    font-weight: 750;
+    line-height: 1.2;
+  }
+
+  p {
+    margin: 0;
+    max-width: 38rem;
+    color: var(--psg-text-secondary, #6b7280);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  @media (max-width: 520px) {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+.settings-save-button {
+  flex: 0 0 auto;
+  min-width: 68px;
+  height: 42px !important;
+  border-radius: 18px !important;
+  margin: 0 !important;
+}
+
+.card-grid {
+  display: block;
+}
+
+.dark {
+  .settings-sidebar,
+  .settings-panel {
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.38), 0 1px 2px rgba(0, 0, 0, 0.4);
   }
 }
 
@@ -1615,61 +1812,115 @@ function editSetting(settingForm, refreshStatus = true) {
 }
 
 .settings-card {
-  background: var(--surface, #ffffff);
-  border-radius: 24px;
-  border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
-  overflow: hidden;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .card-title {
-  font-size: 16px;
-  font-weight: 600;
-  padding: 16px 24px;
-  border-bottom: 1px solid var(--separator, #e5e7eb);
-  color: var(--el-text-color-primary);
+  display: none;
 }
 
 .card-content {
-  padding: 16px 24px;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
 }
 
 .setting-item {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 10px;
-  font-weight: normal;
+  grid-template-columns: minmax(190px, 1fr) minmax(150px, auto);
+  min-height: 80px;
+  gap: 20px;
+  padding: 14px 20px;
+  align-items: center;
+  border-bottom: 1px solid var(--separator, #e5e7eb);
+  font-weight: 650;
 
   > div:first-child {
     display: flex;
-    align-items: center;
-    gap: 5px;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px;
+    min-width: 0;
+
+    span {
+      color: var(--el-text-color-primary);
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    p {
+      flex-basis: 100%;
+      margin: 1px 0 0;
+      color: var(--psg-text-secondary, #6b7280);
+      font-size: 13px;
+      font-weight: 550;
+      line-height: 1.35;
+    }
   }
 
   > div:last-child {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    justify-items: flex-end;
-    font-weight: normal;
+    min-width: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color: var(--el-text-color-primary);
+    font-weight: 650;
+    text-align: right;
+  }
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  @media (max-width: 560px) {
+    grid-template-columns: 1fr;
+    gap: 10px;
+
+    > div:last-child {
+      justify-content: flex-start;
+      text-align: left;
+    }
   }
 }
 
 .r2domain-item {
-  display: flex;
-  gap: 10px;
+  min-height: 80px;
+  padding: 14px 20px;
+  display: grid;
+  grid-template-columns: minmax(190px, 1fr) minmax(150px, auto);
+  gap: 20px;
+  align-items: center;
+  border-bottom: 1px solid var(--separator, #e5e7eb);
+
   > div:first-child {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
+
+    span {
+      color: var(--el-text-color-primary);
+      font-size: 16px;
+      font-weight: 650;
+      line-height: 1.35;
+    }
   }
 
   > div:last-child {
-    flex: 1;
+    min-width: 0;
     text-align: right;
   }
+}
+
+.setting-number {
+  width: 178px;
+}
+
+.setting-tag-input {
+  width: min(220px, 100%);
 }
 
 .title-icon.warning {
