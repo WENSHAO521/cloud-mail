@@ -1,47 +1,80 @@
 <template>
 
-  <!-- ── List mode ── -->
-  <div class="page" v-if="!editorMode">
+  <!-- ═══════════════════════════ LIST MODE ═══════════════════════════ -->
+  <div class="page-outer" v-if="!editorMode">
     <header class="page-head">
       <h1 class="page-h1">{{ $t('templates') }}</h1>
-      <el-button class="add-btn" @click="openAdd">
-        <Icon icon="ep:plus" width="13" height="13"/>
-        {{ $t('addTemplate') }}
-      </el-button>
     </header>
 
-    <!-- Empty -->
-    <div v-if="!tplList.length" class="empty-state">
-      <Icon icon="material-symbols:description-outline-rounded" width="34" height="34" class="empty-icon"/>
-      <div class="empty-title">{{ $t('noTemplates') }}</div>
-      <div class="empty-desc">{{ $t('noTemplatesDesc') }}</div>
-    </div>
+    <div class="page-grid">
 
-    <!-- Card grid -->
-    <div v-else class="card-grid">
-      <div class="tpl-card" v-for="tpl in tplList" :key="tpl.templateId">
-        <div class="card-top">
-          <div class="card-icon">
-            <Icon icon="material-symbols:description-outline-rounded" width="18" height="18"/>
-          </div>
-          <div class="card-actions">
-            <button class="act-btn" :title="$t('change')" @click="openEdit(tpl)">
-              <Icon icon="material-symbols:edit-outline-rounded" width="14" height="14"/>
-            </button>
-            <button class="act-btn danger" :title="$t('delete')" @click="deleteTpl(tpl.templateId)">
-              <Icon icon="material-symbols:delete-outline-rounded" width="14" height="14"/>
-            </button>
+      <!-- Left — main content -->
+      <div class="page-main">
+        <div class="list-toolbar">
+          <el-button class="add-btn" @click="openAdd">
+            <Icon icon="ep:plus" width="13" height="13"/>
+            {{ $t('addTemplate') }}
+          </el-button>
+        </div>
+
+        <div v-if="!tplList.length" class="empty-state">
+          <Icon icon="material-symbols:description-outline-rounded" width="32" height="32" class="empty-icon"/>
+          <div class="empty-title">{{ $t('noTemplates') }}</div>
+          <div class="empty-desc">{{ $t('noTemplatesDesc') }}</div>
+        </div>
+
+        <div v-else class="item-list">
+          <div class="item-row" v-for="tpl in tplList" :key="tpl.templateId">
+            <div class="item-icon">
+              <Icon icon="material-symbols:description-outline-rounded" width="16" height="16"/>
+            </div>
+            <div class="item-body">
+              <div class="item-name">{{ tpl.name }}</div>
+              <div class="item-sub" v-if="tpl.subject">{{ tpl.subject }}</div>
+              <div class="item-sub placeholder" v-else>{{ $t('noSubject') }}</div>
+            </div>
+            <div class="item-actions">
+              <button class="act-btn" :title="$t('change')" @click="openEdit(tpl)">
+                <Icon icon="material-symbols:edit-outline-rounded" width="14" height="14"/>
+              </button>
+              <button class="act-btn danger" :title="$t('delete')" @click="deleteTpl(tpl.templateId)">
+                <Icon icon="material-symbols:delete-outline-rounded" width="14" height="14"/>
+              </button>
+            </div>
           </div>
         </div>
-        <div class="card-name">{{ tpl.name }}</div>
-        <div class="card-subject" v-if="tpl.subject">{{ tpl.subject }}</div>
-        <div class="card-subject placeholder" v-else>{{ $t('noSubject') }}</div>
       </div>
+
+      <!-- Right — info sidebar -->
+      <aside class="page-sidebar">
+        <div class="sidebar-block">
+          <div class="sb-label">{{ $t('aboutTemplates') }}</div>
+          <p class="sb-text">{{ $t('templatesAboutText') }}</p>
+        </div>
+
+        <div class="sidebar-block">
+          <div class="sb-label">{{ $t('howToUse') }}</div>
+          <ul class="sb-list">
+            <li>{{ $t('templateTip1') }}</li>
+            <li>{{ $t('templateTip2') }}</li>
+            <li>{{ $t('templateTip3') }}</li>
+          </ul>
+        </div>
+
+        <div class="sidebar-block last">
+          <div class="sb-label">{{ $t('templateCount') }}</div>
+          <div class="sb-stat">
+            <span class="sb-stat-num">{{ tplList.length }}</span>
+            <span class="sb-stat-unit">{{ $t('templateUnit') }}</span>
+          </div>
+        </div>
+      </aside>
+
     </div>
   </div>
 
-  <!-- ── Editor mode ── -->
-  <div class="page editor-page" v-else>
+  <!-- ═══════════════════════════ EDITOR MODE ═══════════════════════════ -->
+  <div class="page-outer editor-mode" v-else>
     <div class="editor-nav">
       <button class="back-btn" @click="cancelEdit">
         <Icon icon="ep:arrow-left" width="14" height="14"/>
@@ -55,8 +88,8 @@
       </el-button>
     </div>
 
-    <div class="editor-grid">
-      <div class="editor-left">
+    <div class="page-grid editor-grid">
+      <div class="editor-fields">
         <div class="field-block">
           <label class="field-label">{{ $t('templateName') }}</label>
           <el-input v-model="tplForm.name" :placeholder="$t('templateName')" size="large"/>
@@ -65,9 +98,7 @@
           <label class="field-label">{{ $t('templateSubject') }}</label>
           <el-input v-model="tplForm.subject" :placeholder="$t('subjectInputDesc')" size="large"/>
         </div>
-      </div>
-      <div class="editor-right">
-        <div class="field-block stretch">
+        <div class="field-block">
           <label class="field-label">{{ $t('message') }}</label>
           <div class="editor-frame">
             <tinyEditor ref="tplEditorRef" :def-value="tplForm.content" editor-id="tpl-editor"
@@ -76,6 +107,24 @@
           </div>
         </div>
       </div>
+
+      <aside class="page-sidebar">
+        <div class="sidebar-block">
+          <div class="sb-label">{{ $t('editorTipsLabel') }}</div>
+          <ul class="sb-list">
+            <li>{{ $t('editorTip1') }}</li>
+            <li>{{ $t('editorTip2') }}</li>
+            <li>{{ $t('editorTip3') }}</li>
+          </ul>
+        </div>
+        <div class="sidebar-block last">
+          <div class="sb-label">{{ $t('shortcut') }}</div>
+          <div class="sb-shortcut-row">
+            <kbd>Ctrl</kbd><span>+</span><kbd>K</kbd>
+            <span class="sb-shortcut-desc">{{ $t('openCommandPalette') }}</span>
+          </div>
+        </div>
+      </aside>
     </div>
   </div>
 
@@ -140,234 +189,256 @@ async function deleteTpl(templateId) {
 </script>
 
 <style lang="scss" scoped>
-.page {
-  padding: 28px 40px 40px;
-  max-width: 1100px;
+/* ── Outer shell ── */
+.page-outer {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 28px 32px 56px;
 
-  @media (max-width: 960px) { padding: 20px 24px 28px; }
-  @media (max-width: 640px) { padding: 16px 16px 20px; }
+  @media (max-width: 960px)  { padding: 20px 24px 40px; }
+  @media (max-width: 640px)  { padding: 16px 16px 32px; }
 }
 
-.editor-page {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
+.editor-mode { display: flex; flex-direction: column; gap: 0; }
 
-/* ── Header ── */
+/* ── Page heading ── */
 .page-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
   padding-bottom: 14px;
   border-bottom: 2px solid var(--el-text-color-primary);
-  margin-bottom: 20px;
+  margin-bottom: 28px;
+}
+.page-h1 {
+  font-size: 24px; font-weight: 900;
+  letter-spacing: -0.04em; text-transform: uppercase;
+  color: var(--el-text-color-primary); line-height: 1;
 }
 
-.page-h1 {
-  font-size: 24px;
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  text-transform: uppercase;
-  color: var(--el-text-color-primary);
-  line-height: 1;
+/* ── Two-column grid ── */
+.page-grid {
+  display: grid;
+  grid-template-columns: minmax(760px, 860px) 320px;
+  gap: 28px;
+  align-items: start;
+
+  @media (max-width: 1160px) {
+    grid-template-columns: 1fr;
+  }
 }
+
+.editor-grid { margin-top: 0; }
+
+/* ── Main column ── */
+.page-main { display: flex; flex-direction: column; gap: 16px; }
+
+.list-toolbar { display: flex; justify-content: flex-end; }
 
 .add-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12.5px;
-  font-weight: 700;
-  height: 32px;
-  padding: 0 14px;
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12.5px; font-weight: 700;
+  height: 32px; padding: 0 14px;
   border-radius: 2px !important;
-  flex-shrink: 0;
 }
 
-/* ── Empty ── */
+/* Empty state */
 .empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 48px 0;
-  text-align: center;
+  display: flex; flex-direction: column;
+  align-items: flex-start; gap: 6px;
+  padding: 32px 0;
 }
 .empty-icon { color: var(--secondary-text-color); opacity: 0.35; }
 .empty-title { font-size: 14px; font-weight: 700; color: var(--el-text-color-primary); }
 .empty-desc  { font-size: 12.5px; color: var(--secondary-text-color); }
 
-/* ── Card grid ── */
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-
-  @media (max-width: 640px) {
-    grid-template-columns: 1fr;
-  }
-}
-
-.tpl-card {
+/* Item list */
+.item-list {
   border: 1px solid var(--light-border-color);
-  border-radius: 4px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  transition: border-color 0.14s cubic-bezier(0.22,1,0.36,1),
-              box-shadow 0.14s cubic-bezier(0.22,1,0.36,1);
-  cursor: default;
+  border-top: 2px solid var(--el-text-color-primary);
+  border-radius: 0;
+  overflow: hidden;
+}
 
-  &:hover {
-    border-color: var(--el-border-color);
-    box-shadow: var(--card-shadow-hover);
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--light-border-color);
+  transition: background 0.12s ease;
+
+  &:last-child { border-bottom: none; }
+
+  @media (hover: hover) {
+    .item-actions { opacity: 0; }
+    &:hover {
+      background: var(--base-fill);
+      .item-actions { opacity: 1; }
+    }
   }
 }
 
-.card-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.card-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
-  background: rgba(204,0,0,0.07);
-  color: #CC0000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.item-icon {
+  width: 30px; height: 30px; border-radius: 3px;
+  background: rgba(204,0,0,0.07); color: #CC0000;
+  display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
 
-.card-actions {
-  display: flex;
-  gap: 2px;
-  opacity: 0;
-  transition: opacity 0.15s;
+.item-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 
-  .tpl-card:hover & { opacity: 1; }
+.item-name {
+  font-size: 13.5px; font-weight: 700;
+  color: var(--el-text-color-primary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.item-sub {
+  font-size: 12px; color: var(--secondary-text-color);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  &.placeholder { font-style: italic; }
+}
+
+.item-actions {
+  display: flex; gap: 2px; flex-shrink: 0;
+  transition: opacity 0.14s;
 }
 
 .act-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border: none;
-  background: transparent;
-  border-radius: 4px;
-  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px;
+  border: none; background: transparent;
+  border-radius: 3px; cursor: pointer;
   color: var(--secondary-text-color);
-  transition: background 0.12s, color 0.12s;
+  transition: background 0.10s, color 0.10s;
+
   &:hover { background: var(--base-fill); color: var(--el-text-color-primary); }
   &.danger:hover { background: rgba(204,0,0,0.08); color: #CC0000; }
 }
 
-.card-name {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--el-text-color-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.card-subject {
-  font-size: 12.5px;
-  color: var(--regular-text-color);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-  &.placeholder { color: var(--secondary-text-color); font-style: italic; }
-}
-
 /* ── Editor mode ── */
 .editor-nav {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 0 0 20px;
+  display: flex; align-items: center; gap: 16px;
+  padding-bottom: 20px;
   border-bottom: 1px solid var(--light-border-color);
   margin-bottom: 24px;
 }
 
 .back-btn {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 12.5px;
-  font-weight: 700;
-  color: var(--secondary-text-color);
-  padding: 0;
-  transition: color 0.12s;
-  white-space: nowrap;
-  font-family: inherit;
+  display: flex; align-items: center; gap: 5px;
+  background: transparent; border: none; cursor: pointer;
+  font-size: 12.5px; font-weight: 700;
+  color: var(--secondary-text-color); padding: 0;
+  transition: color 0.12s; white-space: nowrap; font-family: inherit;
   &:hover { color: var(--el-text-color-primary); }
 }
 
 .editor-crumb {
-  flex: 1;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--el-text-color-primary);
+  flex: 1; font-size: 14px; font-weight: 700; color: var(--el-text-color-primary);
 }
 
 .save-btn { border-radius: 2px !important; font-weight: 700 !important; }
 
-/* ── Editor two-column ── */
-.editor-grid {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 32px;
-  align-items: start;
+.editor-fields { display: flex; flex-direction: column; gap: 16px; }
 
-  @media (max-width: 760px) {
-    grid-template-columns: 1fr;
-  }
-}
-
-.editor-left {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.editor-right {
-  display: flex;
-  flex-direction: column;
-}
-
-.field-block {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-
-  &.stretch { flex: 1; }
-}
+.field-block { display: flex; flex-direction: column; gap: 7px; }
 
 .field-label {
-  font-size: 10px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.10em;
+  font-size: 10px; font-weight: 900;
+  text-transform: uppercase; letter-spacing: 0.10em;
   color: var(--secondary-text-color);
 }
 
 .editor-frame {
   height: 320px;
   border: 1px solid var(--light-border-color);
-  border-radius: 2px;
-  overflow: hidden;
+  border-radius: 2px; overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════
+   RIGHT SIDEBAR
+═══════════════════════════════════════════ */
+.page-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: sticky;
+  top: 24px;
+
+  @media (max-width: 1160px) { display: none; }
+}
+
+.sidebar-block {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--light-border-color);
+
+  &:first-child { padding-top: 0; }
+  &.last { border-bottom: none; }
+}
+
+.sb-label {
+  font-size: 9.5px; font-weight: 900;
+  text-transform: uppercase; letter-spacing: 0.16em;
+  color: var(--secondary-text-color);
+  margin-bottom: 10px;
+}
+
+.sb-text {
+  font-size: 12.5px; line-height: 1.7;
+  color: var(--regular-text-color); margin: 0;
+}
+
+.sb-list {
+  list-style: none; padding: 0; margin: 0;
+  display: flex; flex-direction: column; gap: 7px;
+
+  li {
+    font-size: 12.5px; line-height: 1.55;
+    color: var(--regular-text-color);
+    padding-left: 12px;
+    position: relative;
+
+    &::before {
+      content: '—';
+      position: absolute; left: 0;
+      color: #CC0000;
+      font-weight: 700;
+    }
+  }
+}
+
+.sb-stat {
+  display: flex; align-items: baseline; gap: 6px;
+}
+
+.sb-stat-num {
+  font-size: 32px; font-weight: 900;
+  letter-spacing: -0.04em;
+  color: var(--el-text-color-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.sb-stat-unit {
+  font-size: 12px; color: var(--secondary-text-color);
+}
+
+.sb-shortcut-row {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 12px;
+
+  kbd {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; font-weight: 700;
+    background: var(--base-fill);
+    border: 1px solid var(--light-border-color);
+    border-radius: 3px;
+    padding: 2px 6px;
+    color: var(--el-text-color-primary);
+  }
+
+  span { color: var(--secondary-text-color); }
+}
+
+.sb-shortcut-desc {
+  font-size: 12px; color: var(--regular-text-color);
+  margin-left: 6px;
 }
 </style>
