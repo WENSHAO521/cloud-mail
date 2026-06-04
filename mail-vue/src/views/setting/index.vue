@@ -1,86 +1,114 @@
 <template>
-  <div class="settings-page">
+  <div class="settings-outer">
 
+    <!-- Full-width heading -->
     <header class="page-head">
       <h1 class="page-h1">{{ $t('settings') }}</h1>
     </header>
 
-    <!-- ── Bento top row ── -->
-    <div class="bento-row">
+    <!-- Two-column grid -->
+    <div class="settings-grid">
 
-      <!-- LEFT: Profile card -->
-      <div class="bento-card profile-card">
-        <div class="card-label">{{ $t('profile') }}</div>
+      <!-- ══════════════════════════════════════
+           LEFT — main settings
+      ══════════════════════════════════════ -->
+      <div class="settings-main">
 
-        <div class="avatar-strip">
-          <div class="avatar-wrap" @click="triggerUpload">
-            <img v-if="userStore.avatar" :src="userStore.avatar" class="avatar-img"/>
-            <div v-else class="avatar-init">{{ userInitial }}</div>
-            <div class="avatar-lens">
-              <Icon icon="solar:camera-add-bold" width="18" height="18"/>
-            </div>
-            <input ref="fileInputRef" type="file" accept="image/*"
-                   style="display:none" @change="handleFileChange"/>
+        <!-- ── PROFILE ── -->
+        <section class="section" id="s-profile">
+          <div class="section-head">
+            <span class="section-label">{{ $t('profile') }}</span>
           </div>
-          <div class="avatar-meta">
-            <div class="meta-name">{{ userStore.user.name || userStore.user.email }}</div>
-            <div class="meta-email">{{ userStore.user.email }}</div>
-            <div class="meta-role" v-if="userStore.user.role?.name">{{ userStore.user.role.name }}</div>
-            <div class="avatar-links">
-              <button class="link-btn" @click="triggerUpload">{{ $t('uploadAvatar') }}</button>
-              <button class="link-btn dim" v-if="userStore.avatar" @click="removeAvatar">{{ $t('removeAvatar') }}</button>
-            </div>
-          </div>
-        </div>
 
-        <div class="data-table">
-          <div class="data-row">
-            <span class="data-key">{{ $t('username') }}</span>
-            <div class="data-val">
-              <template v-if="setNameShow">
-                <el-input v-model="accountName" size="small" style="width:140px"/>
-                <button class="link-btn" @click="setName">{{ $t('save') }}</button>
-                <button class="link-btn dim" @click="setNameShow = false">{{ $t('cancel') }}</button>
-              </template>
-              <template v-else>
-                <span class="val-str">{{ userStore.user.name || '—' }}</span>
-                <button class="link-btn" @click="showSetName">{{ $t('change') }}</button>
-              </template>
+          <div class="avatar-strip">
+            <div class="avatar-wrap" @click="triggerUpload">
+              <img v-if="userStore.avatar" :src="userStore.avatar" class="avatar-img"/>
+              <div v-else class="avatar-init">{{ userInitial }}</div>
+              <div class="avatar-lens">
+                <Icon icon="solar:camera-add-bold" width="18" height="18"/>
+              </div>
+              <input ref="fileInputRef" type="file" accept="image/*"
+                     style="display:none" @change="handleFileChange"/>
+            </div>
+            <div class="avatar-meta">
+              <div class="meta-name">{{ userStore.user.name || userStore.user.email }}</div>
+              <div class="meta-email">{{ userStore.user.email }}</div>
+              <div class="meta-role" v-if="userStore.user.role?.name">{{ userStore.user.role.name }}</div>
+              <div class="avatar-links">
+                <button class="link-btn" @click="triggerUpload">{{ $t('uploadAvatar') }}</button>
+                <button class="link-btn dim" v-if="userStore.avatar" @click="removeAvatar">{{ $t('removeAvatar') }}</button>
+              </div>
             </div>
           </div>
-          <div class="data-row">
-            <span class="data-key">{{ $t('emailAccount') }}</span>
-            <span class="val-str mono">{{ userStore.user.email }}</span>
-          </div>
-          <div class="data-row last">
-            <span class="data-key">{{ $t('password') }}</span>
-            <div class="data-val">
-              <span class="val-str">••••••••</span>
-              <button class="link-btn" @click="pwdShow = true">{{ $t('changePwdBtn') }}</button>
+
+          <div class="data-table">
+            <div class="data-row">
+              <span class="data-key">{{ $t('username') }}</span>
+              <div class="data-val">
+                <template v-if="setNameShow">
+                  <el-input v-model="accountName" size="small" style="width:160px"/>
+                  <button class="link-btn" @click="setName">{{ $t('save') }}</button>
+                  <button class="link-btn dim" @click="setNameShow = false">{{ $t('cancel') }}</button>
+                </template>
+                <template v-else>
+                  <span class="val-str">{{ userStore.user.name || '—' }}</span>
+                  <button class="link-btn" @click="showSetName">{{ $t('change') }}</button>
+                </template>
+              </div>
+            </div>
+            <div class="data-row">
+              <span class="data-key">{{ $t('emailAccount') }}</span>
+              <span class="val-str mono">{{ userStore.user.email }}</span>
+            </div>
+            <div class="data-row last">
+              <span class="data-key">{{ $t('password') }}</span>
+              <div class="data-val">
+                <span class="val-str">••••••••</span>
+                <button class="link-btn" @click="pwdShow = true">{{ $t('changePwdBtn') }}</button>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </section>
 
-      <!-- RIGHT column: Language + Auto-reply -->
-      <div class="bento-right">
-
-        <!-- Language card -->
-        <div class="bento-card">
-          <div class="card-label">{{ $t('language') }}</div>
-          <el-select :model-value="langSelect" style="width:180px" @change="changeLang">
+        <!-- ── LANGUAGE ── -->
+        <section class="section" id="s-language">
+          <div class="section-head">
+            <span class="section-label">{{ $t('language') }}</span>
+          </div>
+          <el-select :model-value="langSelect" style="width:200px" @change="changeLang">
             <el-option label="中文" value="zh" @pointerdown.prevent.stop="changeLang('zh')"/>
             <el-option label="English" value="en" @pointerdown.prevent.stop="changeLang('en')"/>
           </el-select>
-        </div>
+        </section>
 
-        <!-- Auto-reply card -->
-        <div class="bento-card autoreply-card">
-          <div class="card-label-row">
-            <div class="card-label">{{ $t('autoReply') }}</div>
+        <!-- ── SIGNATURE ── -->
+        <section class="section" id="s-signature">
+          <div class="section-head">
+            <span class="section-label">{{ $t('signature') }}</span>
+            <el-button type="primary" size="small" :loading="signatureLoading" @click="saveSignature" class="head-action">
+              {{ $t('save') }}
+            </el-button>
+          </div>
+          <div class="section-desc">{{ $t('signatureDesc') }}</div>
+          <div class="editor-shell">
+            <tinyEditor
+              ref="signatureEditorRef"
+              :def-value="signatureText"
+              editor-id="signature-editor"
+              toolbar="bold italic underline | forecolor | link | code"
+              height="160px"
+              @change="onSignatureChange"
+            />
+          </div>
+        </section>
+
+        <!-- ── AUTO-REPLY ── -->
+        <section class="section" id="s-autoreply">
+          <div class="section-head">
+            <span class="section-label">{{ $t('autoReply') }}</span>
             <el-switch v-model="autoReplyEnabled" @change="saveAutoReply"/>
           </div>
-          <div class="card-sub">{{ $t('autoReplyDesc') }}</div>
+          <div class="section-desc">{{ $t('autoReplyDesc') }}</div>
           <transition name="expand">
             <div class="autoreply-body" v-if="autoReplyEnabled">
               <el-input
@@ -89,54 +117,86 @@
                 :placeholder="$t('autoReplyMessage')"
                 resize="none"
               />
-              <div class="row-action-bar">
+              <div class="section-action-bar">
                 <el-button type="primary" size="small" :loading="autoReplySaving" @click="saveAutoReply">
                   {{ $t('save') }}
                 </el-button>
               </div>
             </div>
           </transition>
+        </section>
+
+        <!-- ── DANGER ZONE ── -->
+        <section class="section danger-section" id="s-danger" v-perm="'my:delete'">
+          <div class="section-head">
+            <span class="section-label danger-label">{{ $t('dangerZone') }}</span>
+          </div>
+          <div class="danger-inner">
+            <div class="danger-text">
+              <div class="danger-heading">{{ $t('deleteUserBtn') }}</div>
+              <div class="danger-desc-text">{{ $t('delAccountMsg') }}</div>
+            </div>
+            <el-button type="danger" size="small" @click="deleteConfirm">
+              {{ $t('deleteUserBtn') }}
+            </el-button>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ══════════════════════════════════════
+           RIGHT — editorial info sidebar
+      ══════════════════════════════════════ -->
+      <aside class="settings-sidebar">
+
+        <!-- About -->
+        <div class="sidebar-block">
+          <div class="sidebar-block-label">{{ $t('settingsAboutLabel') }}</div>
+          <p class="sidebar-block-text">{{ $t('settingsAboutText') }}</p>
         </div>
 
-      </div>
-    </div>
-
-    <!-- ── Signature (full width) ── -->
-    <div class="bento-card full-card">
-      <div class="card-label-row">
-        <div class="card-label">{{ $t('signature') }}</div>
-        <el-button type="primary" size="small" :loading="signatureLoading" @click="saveSignature">
-          {{ $t('save') }}
-        </el-button>
-      </div>
-      <div class="card-sub">{{ $t('signatureDesc') }}</div>
-      <div class="editor-shell">
-        <tinyEditor
-          ref="signatureEditorRef"
-          :def-value="signatureText"
-          editor-id="signature-editor"
-          toolbar="bold italic underline | forecolor | link | code"
-          height="160px"
-          @change="onSignatureChange"
-        />
-      </div>
-    </div>
-
-    <!-- ── Danger zone ── -->
-    <div class="bento-card danger-card-wrap" v-perm="'my:delete'">
-      <div class="card-label red">{{ $t('dangerZone') }}</div>
-      <div class="danger-inner">
-        <div class="danger-text">
-          <div class="danger-heading">{{ $t('deleteUserBtn') }}</div>
-          <div class="danger-sub">{{ $t('delAccountMsg') }}</div>
+        <!-- Page index -->
+        <div class="sidebar-block">
+          <div class="sidebar-block-label">{{ $t('onThisPage') }}</div>
+          <nav class="page-index">
+            <a class="index-item" href="#s-profile">{{ $t('profile') }}</a>
+            <a class="index-item" href="#s-language">{{ $t('language') }}</a>
+            <a class="index-item" href="#s-signature">{{ $t('signature') }}</a>
+            <a class="index-item" href="#s-autoreply">{{ $t('autoReply') }}</a>
+            <a class="index-item danger-link" href="#s-danger" v-perm="'my:delete'">{{ $t('dangerZone') }}</a>
+          </nav>
         </div>
-        <el-button type="danger" size="small" @click="deleteConfirm">
-          {{ $t('deleteUserBtn') }}
-        </el-button>
-      </div>
-    </div>
 
-    <!-- Change password dialog -->
+        <!-- Account meta -->
+        <div class="sidebar-block">
+          <div class="sidebar-block-label">{{ $t('accountStatus') }}</div>
+          <dl class="meta-list">
+            <div class="meta-pair">
+              <dt>{{ $t('role') }}</dt>
+              <dd>{{ userStore.user.role?.name || '—' }}</dd>
+            </div>
+            <div class="meta-pair">
+              <dt>{{ $t('emailAccount') }}</dt>
+              <dd class="mono">{{ userStore.user.email }}</dd>
+            </div>
+            <div class="meta-pair">
+              <dt>{{ $t('system') }}</dt>
+              <dd>PSG Mail</dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Help note -->
+        <div class="sidebar-note">
+          <Icon icon="material-symbols:info-outline-rounded" width="14" height="14" class="note-icon"/>
+          <span>{{ $t('settingsHelpNote') }}</span>
+        </div>
+
+      </aside>
+
+    </div><!-- /settings-grid -->
+
+    <!-- Password dialog -->
     <el-dialog v-model="pwdShow" :title="$t('changePassword')" width="380">
       <div class="pwd-form">
         <div class="pwd-field">
@@ -318,26 +378,23 @@ function submitPwd() {
 </script>
 
 <style scoped lang="scss">
-/* ═══════════════════════════════════════
-   PAGE SHELL
-═══════════════════════════════════════ */
-.settings-page {
-  max-width: 860px;
-  padding: 28px 48px 40px;
+/* ═══════════════════════════════════════════════
+   OUTER SHELL — max-width 1240px, centered
+═══════════════════════════════════════════════ */
+.settings-outer {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 28px 32px 56px;
 
-  @media (max-width: 960px) {
-    padding: 20px 24px 32px;
-  }
-  @media (max-width: 640px) {
-    padding: 16px 16px 24px;
-  }
+  @media (max-width: 960px)  { padding: 20px 24px 40px; }
+  @media (max-width: 640px)  { padding: 16px 16px 32px; }
 }
 
-/* ── Page heading ── */
+/* ── Full-width heading ── */
 .page-head {
   padding-bottom: 14px;
-  margin-bottom: 0;
   border-bottom: 2px solid var(--el-text-color-primary);
+  margin-bottom: 28px;
 }
 
 .page-h1 {
@@ -349,76 +406,88 @@ function submitPwd() {
   line-height: 1;
 }
 
-/* ═══════════════════════════════════════
-   BENTO GRID
-═══════════════════════════════════════ */
-.bento-row {
+/* ═══════════════════════════════════════════════
+   TWO-COLUMN GRID
+   Left: minmax(760px,860px) | Right: 320px
+═══════════════════════════════════════════════ */
+.settings-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  grid-template-columns: minmax(760px, 860px) 320px;
+  gap: 28px;
   align-items: start;
-  margin-bottom: 12px;
 
-  @media (max-width: 760px) {
+  @media (max-width: 1160px) {
     grid-template-columns: 1fr;
   }
 }
 
-.bento-right {
+/* ═══════════════════════════════════════════════
+   LEFT — main settings column
+═══════════════════════════════════════════════ */
+.settings-main {
   display: flex;
   flex-direction: column;
+  gap: 0;
+}
+
+/* ── Section ── */
+.section {
+  padding: 24px 0;
+  border-bottom: 1px solid var(--light-border-color);
+
+  &:last-child { border-bottom: none; }
+  &.danger-section { border-bottom: none; }
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 12px;
+  margin-bottom: 16px;
 }
 
-.bento-card {
-  border: 1px solid var(--light-border-color);
-  border-radius: 4px;
-  padding: 18px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-
-  &.full-card { margin-bottom: 12px; }
-}
-
-.card-label {
+.section-label {
   font-size: 10.5px;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.14em;
   color: var(--el-text-color-primary);
-
-  &.red { color: #CC0000; }
+  border-left: 3px solid #CC0000;
+  padding-left: 8px;
+  line-height: 1.2;
 }
 
-.card-label-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+.danger-label {
+  color: #CC0000;
 }
 
-.card-sub {
-  font-size: 12px;
+.head-action {
+  border-radius: 2px !important;
+  font-size: 12px !important;
+  flex-shrink: 0;
+}
+
+.section-desc {
+  font-size: 12.5px;
   color: var(--secondary-text-color);
-  margin-top: -8px;
-  line-height: 1.5;
+  margin-bottom: 14px;
+  line-height: 1.55;
 }
 
-/* ═══════════════════════════════════════
-   PROFILE SECTION
-═══════════════════════════════════════ */
+/* ── Avatar strip ── */
 .avatar-strip {
   display: flex;
   align-items: flex-start;
   gap: 20px;
+  margin-bottom: 16px;
 }
 
 .avatar-wrap {
   position: relative;
-  width: 80px;
-  height: 80px;
-  border-radius: 6px;
+  width: 76px;
+  height: 76px;
+  border-radius: 4px;
   overflow: hidden;
   cursor: pointer;
   flex-shrink: 0;
@@ -427,17 +496,13 @@ function submitPwd() {
   &:hover .avatar-lens { opacity: 1; }
 }
 
-.avatar-img {
-  width: 100%; height: 100%;
-  object-fit: cover; display: block;
-}
+.avatar-img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 .avatar-init {
   width: 100%; height: 100%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 28px; font-weight: 900;
-  letter-spacing: -0.04em;
-  color: #fff; user-select: none;
+  font-size: 26px; font-weight: 900;
+  letter-spacing: -0.04em; color: #fff; user-select: none;
 }
 
 .avatar-lens {
@@ -445,7 +510,7 @@ function submitPwd() {
   background: rgba(0,0,0,0.54);
   display: flex; align-items: center; justify-content: center;
   opacity: 0;
-  transition: opacity 0.15s cubic-bezier(0.22,1,0.36,1);
+  transition: opacity 0.14s ease;
   color: #fff;
 }
 
@@ -456,11 +521,10 @@ function submitPwd() {
 }
 
 .meta-name {
-  font-size: 17px; font-weight: 800;
-  letter-spacing: -0.025em;
+  font-size: 16px; font-weight: 800;
+  letter-spacing: -0.02em;
   color: var(--el-text-color-primary);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  line-height: 1.2;
 }
 
 .meta-email {
@@ -477,20 +541,19 @@ function submitPwd() {
   color: #CC0000;
   background: rgba(204,0,0,0.07);
   border: 1px solid rgba(204,0,0,0.18);
-  padding: 2px 7px; border-radius: 2px;
+  padding: 2px 6px; border-radius: 2px;
   width: fit-content; margin-top: 4px;
 }
 
 .avatar-links {
-  display: flex; align-items: center; gap: 14px;
-  margin-top: 10px;
+  display: flex; align-items: center; gap: 12px;
+  margin-top: 8px;
 }
 
-/* ── Data table — no borders, pure whitespace separation ── */
+/* ── Data table ── */
 .data-table {
   display: flex;
   flex-direction: column;
-  /* No outer border — card bg does the grouping */
 }
 
 .data-row {
@@ -499,18 +562,13 @@ function submitPwd() {
   align-items: center;
   min-height: 44px;
   padding: 9px 0;
-  /* No border-bottom — breathing room only */
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  border-bottom: 1px solid rgba(0,0,0,0.04);
   gap: 16px;
-  transition: background 0.14s cubic-bezier(0.22,1,0.36,1);
-  border-radius: 3px;
+  transition: background 0.12s ease, padding 0.12s ease;
+  border-radius: 2px;
 
   &:hover { background: var(--base-fill); padding: 9px 6px; }
   &.last { border-bottom: none; }
-
-  @media (max-width: 480px) {
-    grid-template-columns: 72px 1fr;
-  }
 }
 
 .data-key {
@@ -539,7 +597,6 @@ function submitPwd() {
   background: transparent; border: none; cursor: pointer;
   font-size: 12px; font-weight: 700;
   color: #CC0000; padding: 0;
-  letter-spacing: 0.02em;
   transition: opacity 0.12s; user-select: none;
   font-family: inherit;
 
@@ -547,60 +604,39 @@ function submitPwd() {
   &.dim { color: var(--secondary-text-color); font-weight: 600; }
 }
 
-/* ═══════════════════════════════════════
-   SIGNATURE / EDITOR
-═══════════════════════════════════════ */
+/* ── Editor ── */
 .editor-shell {
   border: 1px solid var(--light-border-color);
   border-radius: 2px; overflow: hidden;
   height: 160px;
 }
 
-.row-action-bar {
+/* ── Auto-reply ── */
+.autoreply-body {
+  display: flex; flex-direction: column; gap: 12px;
+  overflow: hidden; margin-top: 4px;
+}
+
+.section-action-bar {
   display: flex; justify-content: flex-end;
 }
 
-/* ═══════════════════════════════════════
-   AUTO-REPLY
-═══════════════════════════════════════ */
-.toggle-line {
-  display: flex; align-items: center; gap: 12px;
-}
-
-.toggle-text {
-  font-size: 13px; color: var(--regular-text-color);
-}
-
-.autoreply-body {
-  display: flex; flex-direction: column; gap: 12px;
-  overflow: hidden;
-}
-
-/* expand/collapse animation */
 .expand-enter-active {
-  transition: opacity 0.24s cubic-bezier(0.22,1,0.36,1),
-              transform 0.24s cubic-bezier(0.22,1,0.36,1),
-              max-height 0.28s cubic-bezier(0.22,1,0.36,1);
+  transition: opacity 0.22s ease, transform 0.22s ease, max-height 0.26s ease;
 }
 .expand-leave-active {
-  transition: opacity 0.16s ease,
-              transform 0.16s ease,
-              max-height 0.20s ease;
+  transition: opacity 0.14s ease, transform 0.14s ease, max-height 0.18s ease;
 }
 .expand-enter-from, .expand-leave-to {
-  opacity: 0; transform: translateY(-8px); max-height: 0;
+  opacity: 0; transform: translateY(-6px); max-height: 0;
 }
 .expand-enter-to, .expand-leave-from {
   opacity: 1; transform: translateY(0); max-height: 300px;
 }
 
-/* ═══════════════════════════════════════
-   DANGER ZONE
-═══════════════════════════════════════ */
-.danger-card-wrap {
-  border-color: rgba(204,0,0,0.22) !important;
-  border-left: 3px solid #CC0000 !important;
-  background: rgba(204,0,0,0.02);
+/* ── Danger zone ── */
+.danger-section {
+  padding-top: 20px;
 }
 
 .danger-inner {
@@ -608,28 +644,149 @@ function submitPwd() {
   align-items: center;
   justify-content: space-between;
   gap: 20px;
+  padding: 16px 18px;
+  border: 1px solid rgba(204,0,0,0.20);
+  border-left: 3px solid #CC0000;
+  border-radius: 2px;
+  background: rgba(204,0,0,0.02);
 
   @media (max-width: 520px) {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: column; align-items: flex-start;
   }
 }
 
 .danger-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.danger-heading { font-size: 13.5px; font-weight: 700; color: var(--el-text-color-primary); }
+.danger-desc-text { font-size: 12.5px; line-height: 1.5; color: var(--regular-text-color); }
 
-.danger-heading {
-  font-size: 13.5px; font-weight: 700;
-  color: var(--el-text-color-primary);
+/* ═══════════════════════════════════════════════
+   RIGHT — info sidebar
+═══════════════════════════════════════════════ */
+.settings-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: sticky;
+  top: 24px;
+
+  @media (max-width: 1160px) {
+    display: none; /* hidden on single-col layout */
+  }
 }
 
-.danger-sub {
-  font-size: 12.5px; line-height: 1.5;
+.sidebar-block {
+  padding: 18px 0 18px;
+  border-bottom: 1px solid var(--light-border-color);
+
+  &:first-child { padding-top: 0; }
+  &:last-of-type { border-bottom: none; }
+}
+
+.sidebar-block-label {
+  font-size: 9.5px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--secondary-text-color);
+  margin-bottom: 10px;
+}
+
+.sidebar-block-text {
+  font-size: 12.5px;
+  line-height: 1.7;
   color: var(--regular-text-color);
+  margin: 0;
 }
 
-/* ═══════════════════════════════════════
-   PASSWORD DIALOG
-═══════════════════════════════════════ */
+/* Page index navigation */
+.page-index {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.index-item {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--regular-text-color);
+  text-decoration: none;
+  padding: 5px 0 5px 10px;
+  border-left: 2px solid transparent;
+  transition: border-color 0.12s, color 0.12s;
+
+  &:hover {
+    color: var(--el-text-color-primary);
+    border-left-color: #CC0000;
+  }
+
+  &.danger-link:hover { color: #CC0000; }
+}
+
+/* Account meta-list */
+.meta-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+}
+
+.meta-pair {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 8px;
+  align-items: baseline;
+
+  dt {
+    font-size: 9.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--secondary-text-color);
+  }
+
+  dd {
+    font-size: 12.5px;
+    color: var(--el-text-color-primary);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &.mono {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11.5px;
+      color: var(--regular-text-color);
+    }
+  }
+}
+
+/* Help note */
+.sidebar-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 14px 12px;
+  border: 1px solid var(--light-border-color);
+  border-left: 3px solid var(--light-border-color);
+  border-radius: 2px;
+  margin-top: 20px;
+  background: var(--extra-light-fill);
+
+  .note-icon {
+    color: var(--secondary-text-color);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  span {
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--secondary-text-color);
+  }
+}
+
+/* ── Password dialog ── */
 .pwd-form {
   display: flex; flex-direction: column; gap: 16px;
   padding: 4px 0 8px;
