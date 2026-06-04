@@ -213,8 +213,12 @@ function formatName(email) {
   height: 100%;
   align-items: center;
   padding: 0 14px 0 6px;
-  background: var(--el-bg-color);
-  border-bottom: 1px solid var(--light-border-color);
+  /* Frosted glass header — GPU composited, zero CPU scroll cost */
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(12px) saturate(1.5);
+  -webkit-backdrop-filter: blur(12px) saturate(1.5);
+  border-bottom: 1px solid rgba(229, 231, 235, 0.75);
+  will-change: transform;
   gap: 8px;
 }
 

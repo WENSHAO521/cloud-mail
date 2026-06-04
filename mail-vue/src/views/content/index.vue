@@ -244,15 +244,18 @@ const handleDelete = () => {
   background: var(--psg-bg, #f7f7f7);
 }
 
-/* ── Toolbar ── */
+/* ── Toolbar — frosted glass sticky bar ── */
 .header-actions {
   padding: 0 20px;
   height: 48px;
   display: flex;
   align-items: center;
   gap: 4px;
-  border-bottom: 1px solid var(--psg-border, #e5e7eb);
-  background: #ffffff;
+  border-bottom: 1px solid rgba(229, 231, 235, 0.75);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px) saturate(1.4);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  will-change: transform;
 }
 
 .header-divider {
