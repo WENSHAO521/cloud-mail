@@ -204,6 +204,12 @@ button, input, select, textarea {
     --psg-text-primary: #111111;
     --psg-text-secondary: #6b7280;
 
+    /* vfasky-compatible surface tokens */
+    --surface: #ffffff;
+    --surface-secondary: #f3f3f3;
+    --separator: #e5e7eb;
+    --muted: #9ca3af;
+
     /* Light-mode surfaces */
     --extra-light-fill: #f7f7f7;
     --light-ill: #efefef;
@@ -255,6 +261,11 @@ button, input, select, textarea {
 }
 
 .dark {
+    --surface: #1e1e1e;
+    --surface-secondary: #282828;
+    --separator: #333333;
+    --muted: #6b7280;
+
     --red-accent: #b00000;
     --red-accent-dark: #8f0000;
     --red-accent-subtle: rgba(176, 0, 0, 0.10);

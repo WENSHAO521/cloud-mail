@@ -1,97 +1,117 @@
 <template>
-  <div class="box">
-    <div class="header-actions">
-      <Icon class="icon" icon="material-symbols-light:arrow-back-ios-new" width="20" height="20" @click="handleBack"/>
-      <div class="header-divider"></div>
-      <Icon v-perm="'email:delete'" class="icon danger" icon="material-symbols:delete-outline-rounded" width="19" height="19" @click="handleDelete"/>
-      <Icon class="icon" @click="changeStar" v-if="emailStore.contentData.showStar && email.isStar" icon="fluent-color:star-16" width="20" height="20"/>
-      <Icon class="icon" @click="changeStar" v-if="emailStore.contentData.showStar && !email.isStar" icon="solar:star-line-duotone" width="18" height="18"/>
-      <div class="header-divider" v-if="emailStore.contentData.showReply"></div>
-      <Icon class="icon" v-if="emailStore.contentData.showReply" v-perm="'email:send'" @click="openReply" icon="la:reply" width="21" height="21" />
-      <Icon class="icon" v-if="emailStore.contentData.showReply" v-perm="'email:send'" @click="openReplyAll" icon="la:reply-all" width="22" height="22" />
-      <Icon class="icon" v-if="emailStore.contentData.showReply" v-perm="'email:send'" @click="openForward" icon="iconoir:arrow-up-right" width="20" height="20" />
-      <div class="header-spacer"></div>
-      <span class="page-counter" v-if="emailStore.contentData.emailTotal > 0">
-        {{ emailStore.contentData.emailIndex }}&thinsp;/&thinsp;{{ emailStore.contentData.emailTotal }}
-      </span>
-    </div>
-    <div></div>
-    <el-scrollbar class="scrollbar">
-      <div class="container">
-        <div class="email-title">
-          {{ email.subject }}
+  <!-- Outer pane — same bg as page, provides 14px inset like vfasky mail-detail-pane -->
+  <div class="detail-pane">
+    <!-- surface-card: rounded-24px floating card, matches vfasky article.surface-card -->
+    <article class="surface-card">
+
+      <!-- Header: min-h-16 (64px), icon-buttons circular -->
+      <header class="detail-header">
+        <div class="header-left">
+          <button class="icon-btn" @click="handleBack">
+            <Icon icon="material-symbols-light:arrow-back-ios-new" width="20" height="20" />
+          </button>
+          <button v-perm="'email:delete'" class="icon-btn icon-danger" @click="handleDelete">
+            <Icon icon="material-symbols:delete-outline-rounded" width="19" height="19" />
+          </button>
+          <button class="icon-btn" @click="changeStar" v-if="emailStore.contentData.showStar">
+            <Icon :icon="email.isStar ? 'fluent-color:star-16' : 'solar:star-line-duotone'"
+                  :width="email.isStar ? 20 : 18" :height="email.isStar ? 20 : 18" />
+          </button>
+          <template v-if="emailStore.contentData.showReply">
+            <button class="icon-btn" v-perm="'email:send'" @click="openReply">
+              <Icon icon="la:reply" width="21" height="21" />
+            </button>
+            <button class="icon-btn" v-perm="'email:send'" @click="openReplyAll">
+              <Icon icon="la:reply-all" width="22" height="22" />
+            </button>
+            <button class="icon-btn" v-perm="'email:send'" @click="openForward">
+              <Icon icon="iconoir:arrow-up-right" width="20" height="20" />
+            </button>
+          </template>
         </div>
-        <div class="content">
-          <div class="email-meta">
-            <div class="meta-avatar" :style="{ background: metaAvatarBg, border: 'none' }">
-              <span>{{ (email.name || email.sendEmail || '?')[0].toUpperCase() }}</span>
-              <img v-if="metaAvatarImg"
-                   :src="metaAvatarImg"
-                   class="meta-avatar-img"
-                   @error="e => { e.target.style.display='none'; markGravatarMiss(email.sendEmail) }"/>
-            </div>
-            <div class="meta-body">
-              <div class="meta-top">
-                <div class="meta-identity">
-                  <span class="meta-sender-name">{{ email.name }}</span>
-                  <span class="meta-sender-email">{{ email.sendEmail }}</span>
+        <span class="page-counter" v-if="emailStore.contentData.emailTotal > 0">
+          {{ emailStore.contentData.emailIndex }}&thinsp;/&thinsp;{{ emailStore.contentData.emailTotal }}
+        </span>
+      </header>
+
+      <!-- Scrollable content: px-7 py-7 like vfasky ScrollShadow -->
+      <el-scrollbar class="detail-scroll">
+        <div class="detail-content">
+
+          <!-- Subject: text-[28px] font-semibold leading-tight mb-9 -->
+          <h1 class="email-title">{{ email.subject }}</h1>
+
+          <!-- Meta: avatar + sender info | date + reply actions -->
+          <div class="meta-section">
+            <div class="meta-left">
+              <div class="meta-avatar" :style="{ background: metaAvatarBg }">
+                <span class="meta-initial">{{ (email.name || email.sendEmail || '?')[0].toUpperCase() }}</span>
+                <img v-if="metaAvatarImg" :src="metaAvatarImg" class="meta-avatar-img"
+                     @error="e => { e.target.style.display='none'; markGravatarMiss(email.sendEmail) }" />
+              </div>
+              <div class="meta-info">
+                <div class="meta-sender-name">{{ email.name || email.sendEmail }}</div>
+                <div class="meta-sender-email">{{ email.sendEmail }}</div>
+                <div class="meta-to" v-if="formateReceive(email.recipient)">
+                  <span class="meta-label">{{ $t('recipient') }}:</span>
+                  <span class="meta-value">{{ formateReceive(email.recipient) }}</span>
                 </div>
-                <div class="meta-date">{{ formatDetailDate(email.createTime) }}</div>
+                <div class="meta-to" v-if="parsedCc.length > 0">
+                  <span class="meta-label">{{ $t('cc') }}:</span>
+                  <span class="meta-value">{{ parsedCc.join(', ') }}</span>
+                </div>
+                <div class="meta-to" v-if="parsedBcc.length > 0">
+                  <span class="meta-label">{{ $t('bcc') }}:</span>
+                  <span class="meta-value">{{ parsedBcc.join(', ') }}</span>
+                </div>
               </div>
-              <div class="meta-to">
-                <span class="meta-label">{{ $t('recipient') }}</span>
-                <span class="meta-recipients">{{ formateReceive(email.recipient) }}</span>
-              </div>
-              <div class="meta-to" v-if="parsedCc.length > 0">
-                <span class="meta-label">{{ $t('cc') }}</span>
-                <span class="meta-recipients">{{ parsedCc.join(', ') }}</span>
-              </div>
-              <div class="meta-to" v-if="parsedBcc.length > 0">
-                <span class="meta-label">{{ $t('bcc') }}</span>
-                <span class="meta-recipients">{{ parsedBcc.join(', ') }}</span>
-              </div>
-              <el-alert v-if="email.status === 3" :closable="false" :title="toMessage(email.message)" class="email-msg" type="error" show-icon />
-              <el-alert v-if="email.status === 4" :closable="false" :title="$t('complained')" class="email-msg" type="warning" show-icon />
-              <el-alert v-if="email.status === 5" :closable="false" :title="$t('delayed')" class="email-msg" type="warning" show-icon />
+            </div>
+            <div class="meta-right">
+              <span class="meta-date">{{ formatDetailDate(email.createTime) }}</span>
+              <el-alert v-if="email.status === 3" :closable="false" :title="toMessage(email.message)"
+                        class="email-msg" type="error" show-icon />
+              <el-alert v-if="email.status === 4" :closable="false" :title="$t('complained')"
+                        class="email-msg" type="warning" show-icon />
+              <el-alert v-if="email.status === 5" :closable="false" :title="$t('delayed')"
+                        class="email-msg" type="warning" show-icon />
             </div>
           </div>
-          <el-scrollbar class="htm-scrollbar" :class="email.attList.length === 0 ? 'bottom-distance' : ''">
-            <ShadowHtml class="shadow-html" :html="formatImage(email.content)" v-if="email.content" />
-            <pre v-else class="email-text" >{{email.text}}</pre>
-          </el-scrollbar>
-          <div class="att" v-if="email.attList.length > 0">
-            <div class="att-title">
-              <span>{{$t('attachments')}}</span>
-              <span>{{$t('attCount',{total: email.attList.length})}}</span>
-            </div>
-            <div class="att-box">
 
-              <div class="att-item" v-for="att in email.attList" :key="att.attId">
-                <div class="att-icon" @click="showImage(att.key)">
-                  <Icon v-bind="getIconByName(att.filename)" />
-                </div>
-                <div class="att-name" @click="showImage(att.key)">
-                  {{ att.filename }}
-                </div>
-                <div class="att-size">{{ formatBytes(att.size) }}</div>
-                <div class="opt-icon att-icon">
-                  <Icon v-if="isImage(att.filename)" icon="hugeicons:view" width="22" height="22" @click="showImage(att.key)"/>
-                  <a :href="cvtR2Url(att.key)" download>
-                    <Icon icon="system-uicons:push-down" width="22" height="22"/>
+          <!-- Body: text-[17px] leading-8 max-w-[980px] -->
+          <div class="email-body">
+            <ShadowHtml class="shadow-html" :html="formatImage(email.content)" v-if="email.content" />
+            <pre v-else class="email-text">{{ email.text }}</pre>
+          </div>
+
+          <!-- Attachments: rounded-2xl border p-4 -->
+          <div class="att-container" v-if="email.attList.length > 0">
+            <div class="att-header">
+              <span class="att-title-text">{{ $t('attachments') }}</span>
+              <span class="att-count">{{ $t('attCount', { total: email.attList.length }) }}</span>
+            </div>
+            <div class="att-list">
+              <div class="att-item" v-for="att in email.attList" :key="att.attId"
+                   @click="showImage(att.key)">
+                <Icon v-bind="getIconByName(att.filename)" class="att-icon-file" />
+                <span class="att-name">{{ att.filename }}</span>
+                <span class="att-size">{{ formatBytes(att.size) }}</span>
+                <div class="att-actions">
+                  <button v-if="isImage(att.filename)" class="icon-btn-sm" @click.stop="showImage(att.key)">
+                    <Icon icon="hugeicons:view" width="18" height="18" />
+                  </button>
+                  <a class="icon-btn-sm" :href="cvtR2Url(att.key)" download @click.stop>
+                    <Icon icon="material-symbols:download-rounded" width="18" height="18" />
                   </a>
                 </div>
               </div>
             </div>
           </div>
+
         </div>
-      </div>
-    </el-scrollbar>
-    <el-image-viewer
-        v-if="showPreview"
-        :url-list="srcList"
-        show-progress
-        @close="showPreview = false"
-    />
+      </el-scrollbar>
+    </article>
+
+    <el-image-viewer v-if="showPreview" :url-list="srcList" show-progress @close="showPreview = false" />
   </div>
 </template>
 <script setup>
@@ -261,343 +281,252 @@ const handleDelete = () => {
 }
 </script>
 <style scoped lang="scss">
-.box {
+/* ── Outer pane — same background as the app, 14px inset ── */
+.detail-pane {
   height: 100%;
   overflow: hidden;
   background: var(--psg-bg, #f7f7f7);
-}
-
-/* ── Toolbar — flat, no blur, fast rendering ── */
-.header-actions {
-  padding: 0 20px;
-  height: 48px;
+  padding: 14px;
   display: flex;
-  align-items: center;
-  gap: 4px;
-  border-bottom: 1px solid #e5e7eb;
-  background: #ffffff;
+  flex-direction: column;
+
+  @media (max-width: 767px) {
+    padding: 0;
+  }
 }
 
-.header-divider {
-  width: 1px;
-  height: 16px;
-  background: var(--light-border-color);
-  margin: 0 6px;
-  flex-shrink: 0;
-}
-
-.header-spacer {
+/* ── surface-card — mirrors vfasky article.surface-card ─── */
+.surface-card {
+  display: flex;
+  flex-direction: column;
   flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 24px;
+  background: var(--surface, #ffffff);
+  border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.05);
+
+  @media (max-width: 767px) {
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+  }
 }
 
-.page-counter {
-  font-family: 'IBM Plex Mono', 'Courier New', monospace;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: #9ca3af;
-  white-space: nowrap;
+/* ── Header: min-h-16, px-5, circular icon buttons ──────── */
+.detail-header {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--separator, #e5e7eb);
   flex-shrink: 0;
-  padding-right: 4px;
 }
 
-.star {
+.header-left {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 2px;
 }
 
-.icon {
-  display: flex;
+/* Circular icon buttons — matches vfasky .icon-button */
+.icon-btn {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 4px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
   cursor: pointer;
-  color: var(--regular-text-color);
-  transition: background 0.14s var(--ease-out), color 0.14s;
+  color: var(--muted, #9ca3af);
+  transition: background 0.12s ease, color 0.12s ease;
   flex-shrink: 0;
 
   @media (hover: hover) {
     &:hover {
-      background: var(--base-fill);
+      background: rgba(0, 0, 0, 0.07);
       color: var(--el-text-color-primary);
     }
-    &.danger:hover {
-      background: rgba(204, 0, 0, 0.07);
+
+    &.icon-danger:hover {
+      background: rgba(176, 0, 0, 0.10);
       color: #b00000;
     }
   }
 }
 
-/* ── Reading area ── */
-.scrollbar {
-  height: calc(100% - 48px);
-  width: 100%;
-}
+.icon-btn-sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--muted, #9ca3af);
+  text-decoration: none;
+  transition: background 0.12s ease, color 0.12s ease;
 
-/* White document card wrapper */
-.container {
-  font-size: 14.5px;
-  max-width: 860px;
-  margin: 24px auto;
-  padding: 0;
-  background: #ffffff;
-  border: 1px solid var(--psg-border, #e5e7eb);
-  border-radius: 3px;
-  border-top: 3px solid #b00000;
-  box-shadow: var(--card-shadow);
-  overflow: hidden;
-
-  /* inner content padding */
-  > * {
-    padding-left: 48px;
-    padding-right: 48px;
-  }
-  > .email-title { padding-top: 40px; }
-  > .att { padding-bottom: 32px; }
-  > .content { padding-bottom: 0; }
-
-  @media (max-width: 1200px) {
-    margin: 16px;
-    > * { padding-left: 28px; padding-right: 28px; }
-    > .email-title { padding-top: 28px; }
-  }
-  @media (max-width: 767px) {
-    margin: 8px;
-    border-radius: 0;
-    > * { padding-left: 16px; padding-right: 16px; }
-    > .email-title { padding-top: 20px; }
+  @media (hover: hover) {
+    &:hover { background: rgba(0,0,0,0.07); color: var(--el-text-color-primary); }
   }
 }
 
-/* ── Subject ── */
+.page-counter {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--muted, #9ca3af);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Scrollable content: px-7 py-7 ─────────────────────── */
+.detail-scroll {
+  flex: 1;
+  min-height: 0;
+}
+
+.detail-content {
+  padding: 28px;
+  max-width: 980px;
+
+  @media (max-width: 1024px) { padding: 20px; }
+  @media (max-width: 767px)  { padding: 14px; }
+}
+
+/* ── Subject: 28px semibold, mb-9 ──────────────────────── */
 .email-title {
   font-size: 28px;
-  font-weight: 800;
-  line-height: 1.25;
-  letter-spacing: -0.03em;
+  font-weight: 600;
+  line-height: 1.3;
   color: var(--el-text-color-primary);
-  margin-bottom: 32px;
+  margin: 0 0 32px;
   word-break: break-word;
 }
 
-/* ── Sender meta card ── */
-.email-meta {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 14px 0;
-  margin: 0 0 24px;
-  border-bottom: 1px solid var(--psg-border, #e5e7eb);
-  background: transparent;
-  transition: border-color 0.15s;
-}
-
-.meta-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  background: rgba(204, 0, 0, 0.09);
-  color: #b00000;
-  font-size: 16px;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  letter-spacing: -0.02em;
-  margin-top: 2px;
-  position: relative;
-  overflow: hidden;
-}
-
-.meta-avatar-img {
-  position: absolute;
-  inset: 0;
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  display: block;
-  border-radius: 8px;
-}
-
-.meta-body {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.meta-top {
+/* ── Meta section: avatar-left | date-right ─────────────── */
+.meta-section {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 16px;
+  gap: 20px;
+  margin-bottom: 32px;
   flex-wrap: wrap;
 }
 
-.meta-identity {
+.meta-left {
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 6px;
+  align-items: flex-start;
+  gap: 16px;
   min-width: 0;
+  flex: 1;
+}
+
+/* size-14 = 56px circle, matches email list avatars */
+.meta-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+
+  .meta-initial {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .meta-avatar-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+}
+
+.meta-info {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .meta-sender-name {
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 17px;
+  font-weight: 600;
   color: var(--el-text-color-primary);
-  white-space: nowrap;
   overflow: hidden;
+  white-space: nowrap;
   text-overflow: ellipsis;
 }
 
 .meta-sender-email {
-  font-size: 12px;
-  font-family: 'IBM Plex Mono', monospace;
-  color: var(--secondary-text-color);
-  white-space: nowrap;
+  font-size: 13px;
+  color: var(--muted, #9ca3af);
   overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.meta-date {
-  font-size: 11.5px;
-  font-family: 'IBM Plex Mono', monospace;
-  color: var(--secondary-text-color);
   white-space: nowrap;
-  flex-shrink: 0;
-  margin-top: 2px;
+  text-overflow: ellipsis;
 }
 
 .meta-to {
   display: flex;
   align-items: baseline;
-  gap: 8px;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--muted, #9ca3af);
   flex-wrap: wrap;
 }
 
 .meta-label {
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.09em;
-  color: var(--secondary-text-color);
+  font-weight: 500;
+  color: var(--muted, #9ca3af);
   flex-shrink: 0;
 }
 
-.meta-recipients {
-  font-size: 12.5px;
-  color: var(--regular-text-color);
+.meta-value {
+  color: var(--el-text-color-primary);
   word-break: break-word;
 }
 
-.email-msg {
-  margin-top: 8px;
-  border-radius: 2px !important;
-}
-
-/* ── Content area ── */
-.content {
+.meta-right {
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
-/* ── Attachments ── */
-.att {
-  margin-top: 32px;
-  margin-bottom: 0;
-  border: 1px solid var(--psg-border, #e5e7eb);
-  border-top: 2px solid #111111;
-  width: fit-content;
+.meta-date {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--muted, #9ca3af);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
 
-  .att-box {
-    min-width: min(420px, calc(100vw - 80px));
-    max-width: 600px;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
+.email-msg { margin-top: 4px; }
 
-  .att-title {
-    padding: 12px 14px 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 10.5px;
-    text-transform: uppercase;
-    letter-spacing: 0.10em;
-    font-weight: 700;
-    color: var(--el-text-color-primary);
-    border-bottom: 1px solid var(--light-border-color);
-
-    span:last-child {
-      color: var(--secondary-text-color);
-      font-weight: 400;
-      text-transform: none;
-      letter-spacing: 0;
-    }
-  }
-
-  .att-item {
-    cursor: pointer;
-    background: transparent;
-    padding: 10px 14px;
-    border-left: 2px solid transparent;
-    border-bottom: 1px solid var(--light-border-color);
-    display: grid;
-    grid-template-columns: auto 1fr auto auto;
-    align-items: center;
-    transition: border-color 0.14s var(--ease-out), background 0.14s;
-
-    &:last-child { border-bottom: none; }
-
-    &:hover {
-      background: var(--base-fill);
-      border-left-color: #b00000;
-    }
-
-    .att-icon { display: grid; color: var(--regular-text-color); }
-
-    .att-size {
-      color: var(--secondary-text-color);
-      font-size: 11.5px;
-      font-family: 'IBM Plex Mono', monospace;
-    }
-
-    .att-name {
-      margin-left: 10px;
-      margin-right: 10px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-size: 13px;
-      color: var(--el-text-color-primary);
-    }
-
-    .opt-icon {
-      padding-left: 12px;
-      color: var(--secondary-text-color);
-      align-items: center;
-      display: flex;
-      gap: 8px;
-      transition: color 0.12s;
-
-      &:hover { color: #b00000; }
-
-      a {
-        color: var(--secondary-text-color);
-        align-items: center;
-        display: flex;
-        transition: color 0.12s;
-        &:hover { color: #b00000; }
-      }
-    }
-  }
+/* ── Body: 17px / line-height 2 ────────────────────────── */
+.email-body {
+  font-size: 17px;
+  line-height: 2;
+  color: var(--el-text-color-primary);
+  word-break: break-word;
 }
 
 .shadow-html::after {
@@ -613,19 +542,86 @@ const handleDelete = () => {
   white-space: pre-wrap;
   word-break: break-word;
   margin: 0;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.8;
-  color: var(--regular-text-color);
+  color: var(--muted, #9ca3af);
 }
 
-.bottom-distance {
-  margin-bottom: 40px;
+/* ── Attachments: rounded-2xl border p-4 ───────────────── */
+.att-container {
+  margin-top: 40px;
+  max-width: 560px;
+  border-radius: 16px;
+  border: 1px solid var(--separator, #e5e7eb);
+  padding: 16px;
 }
 
-/* Subject styling in card context */
-.email-title {
-  color: #111111;
-  letter-spacing: -0.02em;
+.att-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.att-title-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--el-text-color-primary);
+}
+
+.att-count {
+  font-size: 13px;
+  color: var(--muted, #9ca3af);
+}
+
+.att-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Each att item: rounded-xl bg-surface-secondary px-3 py-2 */
+.att-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 10px;
+  background: var(--surface-secondary, #f3f3f3);
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background 0.12s ease;
+
+  @media (hover: hover) {
+    &:hover { background: color-mix(in srgb, var(--surface-secondary, #f3f3f3) 70%, var(--separator, #e5e7eb)); }
+  }
+
+  .att-icon-file { flex-shrink: 0; color: var(--muted, #9ca3af); }
+
+  .att-name {
+    flex: 1;
+    min-width: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--el-text-color-primary);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .att-size {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--muted, #9ca3af);
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .att-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
+  }
 }
 </style>
 

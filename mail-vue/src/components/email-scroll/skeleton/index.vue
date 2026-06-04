@@ -1,149 +1,111 @@
 <template>
-  <div v-for="item in rows" style="background: var(--el-bg-color)">
-    <div :class="'email-row ' + type ">
-      <el-checkbox disabled :class=" props.type === 'all-email' ? 'all-email-checkbox' : 'checkbox'"
-      ></el-checkbox>
-      <div class="row-avatar-skel"></div>
-      <div class="title" :class="accountShow ? 'title-column' : 'title-column'">
+  <div v-for="i in rows" :key="i" class="mail-row-wrap">
+    <div class="mail-row skel">
+      <!-- Col 1: Avatar placeholder -->
+      <div class="skel-avatar" />
 
-        <div class="email-sender">
-          <div class="email-status" v-if="showStatus">
-
-          </div>
-          <div v-else></div>
-          <span class="name">
-             <span>
-               <el-skeleton animated>
-                 <template #template>
-                   <el-skeleton-item variant="text" class="name-skeleton"/>
-                 </template>
-               </el-skeleton>
-             </span>
-             <span></span>
-          </span>
-          <span class="phone-time">
-            <el-skeleton animated>
-              <template #template>
-                <el-skeleton-item variant="text" style="width: 50px;height: 1rem;"/>
-              </template>
-            </el-skeleton>
-          </span>
+      <!-- Col 2: Content -->
+      <div class="skel-content">
+        <div class="skel-row-1">
+          <div class="skel-name" />
         </div>
-        <div>
-          <div class="email-text-skeleton">
-            <el-skeleton animated>
-              <template #template>
-                <el-skeleton-item variant="text" class="text-skeleton-one"/>
-                <el-skeleton-item variant="text" class="text-skeleton-two"/>
-              </template>
-            </el-skeleton>
-          </div>
-          <div class="user-info" v-if="showUserInfo">
-            <div class="user">
-              <el-skeleton animated>
-                <template #template>
-                  <el-skeleton-item variant="text"
-                                    style="width: 180px;margin-right: 5px;height: 1rem;margin-bottom: 4px;"/>
-                </template>
-              </el-skeleton>
-            </div>
-            <div class="account">
-              <el-skeleton animated>
-                <template #template>
-                  <el-skeleton-item variant="text"
-                                    style="width: 180px;margin-right: 5px;height: 1rem;margin-bottom: 4px;"/>
-                </template>
-              </el-skeleton>
-            </div>
-            <div class="del-status" v-if="item.isDel">
-              <el-tag type="danger" size="small">{{ $t('deleted') }}</el-tag>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="email-right-skeleton" :style="showUserInfo ? 'align-self: start;':''">
         <el-skeleton animated>
           <template #template>
-            <el-skeleton-item variant="text" style="width: 60px;margin-right: 15px;height: 1rem;"/>
+            <el-skeleton-item variant="text" class="skel-subject" />
+          </template>
+        </el-skeleton>
+        <el-skeleton animated>
+          <template #template>
+            <el-skeleton-item variant="text" class="skel-preview" />
+          </template>
+        </el-skeleton>
+        <template v-if="showUserInfo">
+          <el-skeleton animated>
+            <template #template>
+              <el-skeleton-item variant="text" class="skel-user" />
+            </template>
+          </el-skeleton>
+        </template>
+      </div>
+
+      <!-- Col 3: Right -->
+      <div class="skel-right">
+        <el-skeleton animated>
+          <template #template>
+            <el-skeleton-item variant="text" class="skel-time" />
           </template>
         </el-skeleton>
       </div>
     </div>
   </div>
 </template>
+
 <script setup>
-const props = defineProps({
-  rows: {
-    type: Number,
-    default: 1
-  },
-  showStar: {
-    type: Boolean,
-    default: true
-  },
-  accountShow: {
-    type: Boolean,
-    default: false
-  },
-  showStatus: {
-    type: Boolean,
-    default: false
-  },
-  showUserInfo: {
-    type: Boolean,
-    default: false
-  },
-  type: {
-    type: String,
-    default: ''
-  }
+defineProps({
+  rows:        { type: Number,  default: 1 },
+  showStar:    { type: Boolean, default: true },
+  accountShow: { type: Boolean, default: false },
+  showStatus:  { type: Boolean, default: false },
+  showUserInfo:{ type: Boolean, default: false },
+  type:        { type: String,  default: '' },
 })
-import {Icon} from "@iconify/vue";
 </script>
 
-<style scoped lang="scss">
-
-.phone-star {
-  display: none;
+<style lang="scss" scoped>
+.mail-row-wrap {
+  padding: 0 16px 8px;
 }
 
-.pc-star {
-  display: flex;
-  width: 40px;
+.mail-row.skel {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: 12px;
+  min-height: 96px;
+  padding: 14px;
+  border-radius: 18px;
+  background: transparent;
+  pointer-events: none;
 }
 
-.row-avatar-skel {
-  width: 34px;
-  height: 34px;
+.skel-avatar {
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  background: var(--el-border-color);
+  background: var(--separator, #e5e7eb);
   flex-shrink: 0;
-  margin-right: 8px;
-  opacity: 0.5;
+  align-self: flex-start;
+  margin-top: 2px;
+  opacity: 0.6;
+}
 
-  @media (max-width: 1366px) {
-    display: none;
+.skel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+
+  .skel-row-1 { display: flex; align-items: center; gap: 8px; }
+
+  .skel-name {
+    height: 16px;
+    width: 120px;
+    background: var(--separator, #e5e7eb);
+    border-radius: 4px;
+    opacity: 0.7;
   }
 }
 
-:deep(.el-skeleton__item) {
-  position: relative;
-  top: 2px;
+.skel-subject { width: 75% !important; height: 14px !important; }
+.skel-preview { width: 55% !important; height: 13px !important; }
+.skel-user    { width: 160px !important; height: 12px !important; }
+
+.skel-right {
+  display: flex;
+  align-items: flex-start;
+  padding-top: 2px;
 }
 
-@media (max-width: 1366px) {
-  .pc-star {
-    display: none;
-  }
-  .phone-star {
-    display: block;
-    align-self: end;
-    padding-right: 16px;
-    padding-top: 8px;
-  }
-  .star-pd {
-    padding-top: 6px !important;
-  }
-}
+.skel-time { width: 44px !important; height: 12px !important; }
 
+:deep(.el-skeleton__item) { border-radius: 4px !important; }
 </style>
