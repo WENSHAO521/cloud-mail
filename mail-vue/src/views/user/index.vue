@@ -1071,6 +1071,11 @@ function adjustWidth() {
 .user-box {
   overflow: hidden;
   height: 100%;
+  background: var(--psg-bg, #f7f7f7);
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 0;
 }
 
 :deep(.el-dialog) {
@@ -1092,14 +1097,15 @@ function adjustWidth() {
 }
 
 .header-actions {
-  padding: 0 14px;
-  height: 44px;
+  padding: 0 16px;
+  height: 52px;
   display: flex;
-  gap: 12px;
+  gap: 8px;
   flex-wrap: wrap;
   align-items: center;
-  border-bottom: 1px solid #E8E8E8;
-  background: #FAFAFA;
+  border-bottom: 1px solid var(--separator, #e5e7eb);
+  background: var(--surface, #fff);
+  border-radius: 16px 16px 0 0;
 
   .search-input {
     width: min(220px, calc(100vw - 160px));
@@ -1107,13 +1113,20 @@ function adjustWidth() {
 
   .icon {
     cursor: pointer;
-    color: #555555;
-    display: flex;
+    color: var(--muted, #9ca3af);
+    display: inline-flex;
     align-items: center;
-    transition: color 0.12s;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    transition: background 0.12s, color 0.12s;
 
     @media (hover: hover) {
-      &:hover { color: #E61919; }
+      &:hover {
+        background: rgba(0,0,0,0.07);
+        color: var(--el-text-color-primary);
+      }
     }
   }
 }
@@ -1135,12 +1148,15 @@ function adjustWidth() {
 }
 
 .scrollbar {
+  flex: 1;
+  min-height: 0;
   width: 100%;
   overflow: auto;
-  height: calc(100% - 50px);
-  @media (max-width: 464px) {
-    height: calc(100% - 90px);
-  }
+  background: var(--surface, #fff);
+  border-radius: 0 0 16px 16px;
+  border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+  border-top: none;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
 }
 
 .details {

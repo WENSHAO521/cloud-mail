@@ -203,14 +203,16 @@ async function deleteTpl(templateId) {
 
 /* ── Page heading ── */
 .page-head {
-  padding-bottom: 14px;
-  border-bottom: 2px solid var(--el-text-color-primary);
-  margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--separator, #e5e7eb);
+  margin-bottom: 24px;
 }
 .page-h1 {
-  font-size: 24px; font-weight: 900;
-  letter-spacing: -0.04em; text-transform: uppercase;
-  color: var(--el-text-color-primary); line-height: 1;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--el-text-color-primary);
+  line-height: 1.2;
 }
 
 /* ── Two-column grid ── */
@@ -234,9 +236,9 @@ async function deleteTpl(templateId) {
 
 .add-btn {
   display: flex; align-items: center; gap: 6px;
-  font-size: 12.5px; font-weight: 700;
-  height: 32px; padding: 0 14px;
-  border-radius: 2px !important;
+  font-size: 13px; font-weight: 600;
+  height: 36px; padding: 0 16px;
+  border-radius: 8px !important;
 }
 
 /* Empty state */

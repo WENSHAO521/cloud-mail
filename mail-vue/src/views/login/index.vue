@@ -664,13 +664,13 @@ function submitRegister() {
   }
 
   .btn {
-    height: 38px;
+    height: 44px;
     width: 100%;
-    border-radius: 2px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    font-size: 13px;
+    border-radius: 12px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    font-size: 14px;
+    margin-top: 4px;
   }
 
   .form-desc {
@@ -707,8 +707,8 @@ function submitRegister() {
   }
 
   :deep(.el-input__wrapper) {
-    border-radius: 3px !important;
-    height: 42px;
+    border-radius: 12px !important;
+    height: 48px;
     background: var(--el-bg-color) !important;
   }
   :deep(.el-input__inner) {

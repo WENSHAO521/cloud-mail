@@ -781,55 +781,60 @@ function createSendGauge() {
     }
 
     .number-item {
-      background: var(--el-bg-color);
-      border-radius: 2px;
-      border: 1px solid var(--el-border-color);
-      border-left: 3px solid #CC0000;
-      padding: 20px 20px 16px;
+      background: var(--surface, #ffffff);
+      border-radius: 16px;
+      border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.04);
+      padding: 20px;
+      transition: box-shadow 0.14s ease;
+
+      @media (hover: hover) {
+        &:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05); }
+      }
 
       .top {
-        display: grid;
+        display: flex;
         justify-content: space-between;
-        align-content: center;
-        grid-template-columns: auto auto;
+        align-items: flex-start;
+        gap: 12px;
 
         .left {
-          display: grid;
-          gap: 4px;
-          grid-auto-rows: min-content;
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+          min-width: 0;
 
           > div:first-child {
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            opacity: 0.5;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--muted, #9ca3af);
+            letter-spacing: 0;
+            text-transform: none;
+            opacity: 1;
           }
 
-          > div:last-child {
-            font-size: 13px;
-          }
+          > div:last-child { font-size: 13px; }
 
           :deep(.el-statistic__number) {
-            font-size: 30px;
-            font-weight: 700;
-            letter-spacing: -0.02em;
+            font-size: 30px !important;
+            font-weight: 600 !important;
+            letter-spacing: -0.02em !important;
+            line-height: 1.1 !important;
           }
         }
 
         .right {
-          display: grid;
-          align-items: center;
+          flex-shrink: 0;
 
           .count-icon {
-            position: relative;
-            top: 2px;
-            display: grid;
+            width: 48px;
+            height: 48px;
+            display: flex;
             align-items: center;
-            padding: 13px;
-            border-radius: 2px;
-            background: rgba(204, 0, 0, 0.07);
-            color: #CC0000;
+            justify-content: center;
+            border-radius: 12px;
+            background: rgba(14, 165, 233, 0.10);
+            color: rgb(14, 165, 233);
           }
         }
       }
@@ -874,10 +879,11 @@ function createSendGauge() {
     }
 
     .picture-item {
-      background: var(--el-bg-color);
-      border-radius: 2px;
-      border: 1px solid var(--el-border-color);
-      border-top: 3px solid #CC0000;
+      background: var(--surface, #ffffff);
+      border-radius: 16px;
+      border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+      padding: 16px;
 
       .source-button {
         padding-right: 15px;
@@ -915,10 +921,11 @@ function createSendGauge() {
     }
 
     .picture-cs-item {
-      background: var(--el-bg-color);
-      border-radius: 2px;
-      border: 1px solid var(--el-border-color);
-      border-top: 3px solid #CC0000;
+      background: var(--surface, #ffffff);
+      border-radius: 16px;
+      border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+      padding: 16px;
 
       .send-count {
         height: 350px;

@@ -207,15 +207,24 @@ function formatName(email) {
 </style>
 <style lang="scss" scoped>
 
-/* Header — flat solid, no blur (blur above scroll = GPU recomposite every frame) */
 .header {
   display: flex;
-  height: 100%;
+  min-height: 64px;
   align-items: center;
-  padding: 0 14px 0 6px;
-  background: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
-  gap: 8px;
+  padding: 0 20px 0 8px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--separator, #e5e7eb);
+  gap: 4px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+
+  :global(.dark) & {
+    background: rgba(18, 18, 18, 0.92);
+    border-bottom-color: rgba(255,255,255,0.08);
+  }
 }
 
 .header-left {
@@ -232,15 +241,14 @@ function formatName(email) {
 }
 
 .breadcrumb-item {
-  font-weight: 700;
-  font-size: 13.5px;
+  font-size: 22px;
+  font-weight: 600;
   color: var(--el-text-color-primary);
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  margin-left: 6px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  margin-left: 8px;
+  letter-spacing: -0.01em;
 }
 
 /* Right toolbar */
@@ -251,20 +259,20 @@ function formatName(email) {
 }
 
 .icon-btn {
-  width: 34px;
-  height: 34px;
-  border-radius: 2px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--secondary-text-color);
+  color: var(--muted, #9ca3af);
   transition: background 0.12s, color 0.12s;
   flex-shrink: 0;
 
   @media (hover: hover) {
     &:hover {
-      background: var(--base-fill);
+      background: rgba(0, 0, 0, 0.07);
       color: var(--el-text-color-primary);
     }
   }
@@ -275,20 +283,20 @@ function formatName(email) {
   display: flex;
   align-items: center;
   cursor: pointer;
-  padding: 3px 4px 3px 4px;
-  border-radius: 2px;
+  padding: 3px 6px 3px 3px;
+  border-radius: 999px;
   transition: background 0.12s;
-  gap: 2px;
+  gap: 4px;
 
   @media (hover: hover) {
-    &:hover { background: var(--base-fill); }
+    &:hover { background: rgba(0, 0, 0, 0.06); }
   }
 }
 
 .avatar-circle {
-  width: 30px;
-  height: 30px;
-  border-radius: 2px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   background: #111111;
   color: #ffffff;
   display: flex;
@@ -298,7 +306,7 @@ function formatName(email) {
   font-weight: 700;
   flex-shrink: 0;
   user-select: none;
-  letter-spacing: 0.02em;
+  overflow: hidden;
 }
 
 .chevron {
@@ -309,21 +317,21 @@ function formatName(email) {
 /* User details dropdown */
 .user-details {
   width: 280px;
-  padding-bottom: 10px;
+  padding-bottom: 12px;
 
   .details-head {
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 16px 20px 14px;
-    border-bottom: 2px solid #111111;
-    background: #FAFAFA;
+    padding: 18px 20px 16px;
+    border-bottom: 1px solid var(--separator, #e5e7eb);
+    background: var(--surface-secondary, #f3f3f3);
   }
 
   .details-avatar {
-    width: 42px;
-    height: 42px;
-    border-radius: 2px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
     background: #111111;
     color: #ffffff;
     font-size: 17px;
@@ -332,6 +340,7 @@ function formatName(email) {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    overflow: hidden;
   }
 
   .details-info {
@@ -411,7 +420,10 @@ function formatName(email) {
 }
 
 :deep(.el-popper.is-pure) {
-  border-radius: 3px;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10), 0 1px 3px rgba(0,0,0,0.06) !important;
+  border: 1px solid var(--separator, #e5e7eb) !important;
 }
 
 .el-tooltip__trigger:first-child:focus-visible {

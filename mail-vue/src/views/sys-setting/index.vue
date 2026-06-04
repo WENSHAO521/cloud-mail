@@ -1537,7 +1537,7 @@ function editSetting(settingForm, refreshStatus = true) {
 .settings-container {
   height: 100%;
   overflow: hidden;
-  background: #F8F8F8 !important;
+  background: var(--psg-bg, #f7f7f7) !important;
   position: relative;
 
   .loading {
@@ -1584,12 +1584,12 @@ function editSetting(settingForm, refreshStatus = true) {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
   padding: 24px;
-  gap: 16px;
+  gap: 20px;
 
   @media (max-width: 500px) {
     grid-template-columns: 1fr;
     padding: 16px;
-    gap: 12px;
+    gap: 14px;
   }
 
   @media (max-width: 1023px) {
@@ -1636,26 +1636,26 @@ function editSetting(settingForm, refreshStatus = true) {
 }
 
 .settings-card {
-  background-color: var(--el-bg-color);
-  border-radius: 8px;
-  border: 1px solid var(--el-border-color);
-  transition: all 300ms;
+  background: var(--surface, #ffffff);
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
   overflow: hidden;
 }
 
-
 .card-title {
-  font-size: 15px;
-  font-weight: bold;
-  padding: 10px 20px;
-  border-bottom: 1px solid var(--el-border-color);
+  font-size: 16px;
+  font-weight: 600;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--separator, #e5e7eb);
+  color: var(--el-text-color-primary);
 }
 
 .card-content {
-  padding: 20px;
+  padding: 16px 24px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .setting-item {

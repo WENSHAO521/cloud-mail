@@ -419,9 +419,20 @@ window.onresize = () => {
   height: 100%;
   overflow: hidden;
   width: 100%;
+  background: var(--psg-bg, #f7f7f7);
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 0;
 
   .perm-scrollbar {
-    height: 100%;
+    flex: 1;
+    min-height: 0;
+    background: var(--surface, #fff);
+    border-radius: 0 0 16px 16px;
+    border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+    border-top: none;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.04);
   }
 }
 
@@ -439,23 +450,31 @@ window.onresize = () => {
 }
 
 .header-actions {
-  padding: 0 14px;
-  height: 44px;
+  padding: 0 16px;
+  height: 52px;
   display: flex;
   align-items: center;
-  gap: 12px;
-  border-bottom: 1px solid #E8E8E8;
-  background: #FAFAFA;
+  gap: 8px;
+  border-bottom: 1px solid var(--separator, #e5e7eb);
+  background: var(--surface, #fff);
+  border-radius: 16px 16px 0 0;
 
   .icon {
     cursor: pointer;
-    color: #555555;
-    display: flex;
+    color: var(--muted, #9ca3af);
+    display: inline-flex;
     align-items: center;
-    transition: color 0.12s;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    transition: background 0.12s, color 0.12s;
 
     @media (hover: hover) {
-      &:hover { color: #E61919; }
+      &:hover {
+        background: rgba(0,0,0,0.07);
+        color: var(--el-text-color-primary);
+      }
     }
   }
 }

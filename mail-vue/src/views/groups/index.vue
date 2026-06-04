@@ -225,14 +225,16 @@ async function deleteGroup(groupId) {
 }
 
 .page-head {
-  padding-bottom: 14px;
-  border-bottom: 2px solid var(--el-text-color-primary);
-  margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--separator, #e5e7eb);
+  margin-bottom: 24px;
 }
 .page-h1 {
-  font-size: 24px; font-weight: 900;
-  letter-spacing: -0.04em; text-transform: uppercase;
-  color: var(--el-text-color-primary); line-height: 1;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--el-text-color-primary);
+  line-height: 1.2;
 }
 
 .page-grid {
@@ -265,8 +267,10 @@ async function deleteGroup(groupId) {
 
 /* Group list */
 .group-list {
-  border: 1px solid var(--light-border-color);
-  border-top: 2px solid var(--el-text-color-primary);
+  background: var(--surface, #fff);
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
   overflow: hidden;
 }
 
