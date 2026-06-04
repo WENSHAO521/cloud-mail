@@ -13,8 +13,9 @@
         <div class="item" :class="itemBg(item.accountId)" v-for="(item, index) in accounts" :key="item.accountId"
              @click="changeAccount(item)">
           <div class="item-avatar">
-            <img v-if="item.accountId === userStore.user.account?.accountId && userStore.avatar"
-                 :src="userStore.avatar" class="avatar-photo"/>
+            <img v-if="storedAvatar(item.email) || (item.accountId === userStore.user.account?.accountId && userStore.avatar)"
+                 :src="storedAvatar(item.email) || userStore.avatar"
+                 class="avatar-photo"/>
             <span v-else>{{ emailInitial(item.email, item.name) }}</span>
           </div>
           <div class="item-info">
@@ -172,6 +173,7 @@ import {useSettingStore} from "@/store/setting.js";
 import {useAccountStore} from "@/store/account.js";
 import {useEmailStore} from "@/store/email.js";
 import {useUserStore} from "@/store/user.js";
+import {storedAvatar} from "@/utils/avatar.js";
 import {hasPerm} from "@/perm/perm.js"
 import {useI18n} from "vue-i18n";
 import {AccountAllReceiveEnum} from "@/enums/account-enum.js";
@@ -474,6 +476,9 @@ function getAccountList() {
     }
 
     accounts.push(...list)
+
+    // Register all loaded account emails so avatar syncs everywhere
+    userStore.registerOwnEmails(accounts.map(a => a.email).filter(Boolean))
 
     loading.value = false
     followLoading.value = false
