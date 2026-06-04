@@ -511,9 +511,9 @@ const list = computed(() => {
 
 const itemHeight = computed(() => {
     if (props.type === 'all-email') {
-      return isMobile.value ? 132 : 65;
+      return isMobile.value ? 140 : 72;
     } else  {
-      return isMobile.value ? 83 : 48;
+      return isMobile.value ? 88 : 60;
     }
 })
 
@@ -1086,22 +1086,21 @@ function loadData() {
   display: grid;
   grid-template-rows: auto auto 1fr;
   padding: 0;
-  background: var(--psg-bg, #f7f7f7);
+  background: #ffffff;
   font-size: 14px;
   color: var(--el-text-color-primary);
   overflow: hidden;
   height: 100%;
 }
 
+/* Flat search bar — no blur, no transparency overhead */
 .search-bar {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 6px 12px;
-  border-bottom: 1px solid var(--light-border-color);
-  background: rgba(255, 255, 255, 0.90);
-  backdrop-filter: blur(10px) saturate(1.4);
-  -webkit-backdrop-filter: blur(10px) saturate(1.4);
+  border-bottom: 1px solid #f0f0f0;
+  background: #ffffff;
 
   .search-bar-icon {
     color: var(--secondary-text-color);
@@ -1193,31 +1192,29 @@ function loadData() {
 
 :deep(.email-row) {
   display: flex;
-  padding: 6px 0;
+  padding: 0;
   justify-content: space-between;
-  /* Card-style: white on #f7f7f7 canvas */
   background: #ffffff;
-  border: 1px solid #e5e7eb;
   border-left: 3px solid transparent;
-  border-radius: 3px;
-  margin: 2px 8px;
+  border-bottom: 1px solid #f3f4f6;
   cursor: pointer;
   align-items: center;
   position: relative;
-  transition: background 0.12s ease, border-left-color 0.12s ease, box-shadow 0.12s ease;
-  height: 48px;
+  /* Only transition background — fastest possible hover */
+  transition: background 0.08s ease, border-left-color 0.10s ease;
+  height: 60px;
 
   @media (max-width: 1366px) {
-    height: 83px;
+    height: 88px;
   }
 
   @media (pointer: coarse) {
     user-select: none;
   }
   &.all-email {
-    height: 65px;
+    height: 72px;
     @media (max-width: 1366px) {
-      height: 132px;
+      height: 140px;
     }
   }
   .user-info {
@@ -1501,39 +1498,45 @@ function loadData() {
 
   &:hover {
     background: #fafafa;
-    border-color: #d1d5db;
-    border-left-color: rgba(176, 0, 0, 0.35);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-    z-index: 1;
+    border-left-color: rgba(176, 0, 0, 0.25);
   }
 
-  /* Unread: deep red left accent + bold text */
+  /* Unread — red left bar + strong typography */
   &.is-unread {
     border-left-color: #b00000;
-    background: #fff;
+    background: #fffafa;
     .name { color: #111111 !important; font-weight: 700 !important; }
-    .subject-text { color: var(--el-text-color-primary) !important; }
+    .subject-text { color: #111111 !important; font-weight: 600 !important; }
+    .email-time { color: #b00000 !important; font-weight: 600 !important; }
   }
 
-  /* Read: dimmer */
+  /* Read */
   &:not(.is-unread) {
-    .name { color: var(--regular-text-color) !important; font-weight: 500 !important; }
+    .name { color: #4b5563 !important; font-weight: 500 !important; }
+    .subject-text { color: #6b7280 !important; }
   }
 
+  /* Sender name — German editorial style: precise, uppercase-capable */
   .name {
+    font-size: 13px !important;
     font-weight: 500 !important;
+    letter-spacing: 0.01em !important;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   .email-content {
-    font-size: 12.5px !important;
-    color: var(--email-scroll-content-color) !important;
+    font-size: 12px !important;
+    color: #9ca3af !important;
+    letter-spacing: 0;
   }
 
   .email-time {
     font-family: 'IBM Plex Mono', monospace !important;
-    font-size: 11px !important;
-    letter-spacing: 0.02em !important;
-    color: var(--secondary-text-color) !important;
+    font-size: 10.5px !important;
+    letter-spacing: 0.03em !important;
+    color: #9ca3af !important;
   }
 
   /*&[data-checked="true"] {

@@ -207,16 +207,14 @@ function formatName(email) {
 </style>
 <style lang="scss" scoped>
 
-/* Header: left | spacer | right */
+/* Header — flat solid, no blur (blur above scroll = GPU recomposite every frame) */
 .header {
   display: flex;
   height: 100%;
   align-items: center;
   padding: 0 14px 0 6px;
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(12px) saturate(1.5);
-  -webkit-backdrop-filter: blur(12px) saturate(1.5);
-  border-bottom: 1px solid rgba(229, 231, 235, 0.75);
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
   gap: 8px;
 }
 
