@@ -36,6 +36,21 @@ export function permsToRouter(permKeys) {
     return routerList;
 }
 
+export function preloadAdminRoutes(permKeys) {
+    const load = () => {
+        Object.keys(routers).forEach(perm => {
+            if (permKeys.includes(perm) || permKeys.includes('*')) {
+                routers[perm].forEach(route => route.component())
+            }
+        })
+    }
+    if (typeof requestIdleCallback !== 'undefined') {
+        requestIdleCallback(load, { timeout: 5000 })
+    } else {
+        setTimeout(load, 2000)
+    }
+}
+
 const routers = {
     'email:send': [
         {

@@ -69,7 +69,37 @@ export default defineConfig(({mode}) => {
             target: 'es2022',
             outDir: env.VITE_OUT_DIR || 'dist',
             emptyOutDir: true,
-            assetsInclude: ['**/*.json']
+            assetsInclude: ['**/*.json'],
+            rollupOptions: {
+                output: {
+                    manualChunks(id) {
+                        // ECharts gets its own cacheable chunk
+                        if (id.includes('node_modules/echarts') || id.includes('node_modules/zrender')) {
+                            return 'vendor-echarts';
+                        }
+                        // Element Plus UI in its own chunk
+                        if (id.includes('node_modules/element-plus') || id.includes('node_modules/@element-plus')) {
+                            return 'vendor-element-plus';
+                        }
+                        // Vue core
+                        if (id.includes('node_modules/vue') || id.includes('node_modules/@vue') || id.includes('node_modules/pinia')) {
+                            return 'vendor-vue';
+                        }
+                        // VueUse utilities
+                        if (id.includes('node_modules/@vueuse')) {
+                            return 'vendor-vueuse';
+                        }
+                        // Iconify icon runtime
+                        if (id.includes('node_modules/@iconify')) {
+                            return 'vendor-iconify';
+                        }
+                        // Date/time utilities
+                        if (id.includes('node_modules/dayjs')) {
+                            return 'vendor-dayjs';
+                        }
+                    }
+                }
+            }
         }
     }
 })
