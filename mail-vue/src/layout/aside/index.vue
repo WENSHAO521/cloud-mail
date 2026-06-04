@@ -90,7 +90,7 @@ onUnmounted(() => window.removeEventListener('resize', onResize))
 const collapsed = computed(() => uiStore.asideCollapsed && !isMobile.value)
 
 const navItems = [
-  { name: 'email',     labelKey: 'inbox',         icon: 'hugeicons:mailbox-01' },
+  { name: 'email',     labelKey: 'inbox',         icon: 'mdi:email-outline' },
   { name: 'send',      labelKey: 'sent',          icon: 'cil:send',                       perm: 'email:send' },
   { name: 'draft',     labelKey: 'drafts',        icon: 'ep:document',                    perm: 'email:send' },
   { name: 'star',      labelKey: 'starred',       icon: 'solar:star-line-duotone' },
