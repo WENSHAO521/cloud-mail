@@ -13,7 +13,7 @@
           <el-dropdown trigger="click" @command="selectSender" :disabled="senderAccounts.length <= 1">
             <div class="wh-sender" :class="{ selectable: senderAccounts.length > 1 }">
               <div class="wh-avatar">
-                <img v-if="userStore.avatar" :src="userStore.avatar" class="wh-avatar-img"/>
+                <img v-if="currentSenderAvatar" :src="currentSenderAvatar" class="wh-avatar-img"/>
                 <span v-else>{{ senderInitial }}</span>
               </div>
               <div class="wh-info">
@@ -32,8 +32,11 @@
                   :class="{ 'is-active-sender': acc.accountId === form.accountId }"
                 >
                   <div class="sender-option">
-                    <div class="sender-opt-avatar">
-                      {{ (acc.name || acc.email || '?')[0].toUpperCase() }}
+                    <div class="sender-opt-avatar"
+                         :style="storedAvatar(acc.email) ? { background: 'transparent', border: 'none', padding: 0, overflow: 'hidden' }
+                                                         : { background: avatarBg(acc.email) + '18', borderColor: avatarBg(acc.email) + '40' }">
+                      <img v-if="storedAvatar(acc.email)" :src="storedAvatar(acc.email)" class="opt-avatar-img"/>
+                      <span v-else>{{ (acc.name || acc.email || '?')[0].toUpperCase() }}</span>
                     </div>
                     <div class="sender-opt-info">
                       <span class="sender-opt-name" v-if="acc.name">{{ acc.name }}</span>
@@ -241,6 +244,7 @@ import sendPercent from "@/components/send-percent/index.vue"
 import {toOssDomain} from "@/utils/convert.js";
 import {formatDetailDate} from "@/utils/day.js";
 import {useSettingStore} from "@/store/setting.js";
+import {avatarBg, storedAvatar} from "@/utils/avatar.js";
 import {userDraftStore} from "@/store/draft.js";
 import {useWriterStore} from "@/store/writer.js";
 import db from "@/db/db.js";
@@ -329,6 +333,9 @@ const senderInitial = computed(() => {
   if (name) return name[0].toUpperCase()
   return form.sendEmail?.[0]?.toUpperCase() || '?'
 })
+
+// avatar of the currently selected sender account (switches on account change)
+const currentSenderAvatar = computed(() => storedAvatar(form.sendEmail) || userStore.avatar)
 
 const contacts = computed(() => writerStore.sendRecipientRecord.map(item => ({email: item})))
 
@@ -1039,6 +1046,15 @@ function close() {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.opt-avatar-img {
+  width: 28px;
+  height: 28px;
+  object-fit: cover;
+  display: block;
+  border-radius: 5px;
 }
 
 .sender-opt-info {

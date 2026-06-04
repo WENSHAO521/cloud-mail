@@ -3,10 +3,7 @@
     <div :class="'email-row ' + type ">
       <el-checkbox disabled :class=" props.type === 'all-email' ? 'all-email-checkbox' : 'checkbox'"
       ></el-checkbox>
-      <div class="pc-star" v-if="showStar">
-        <Icon style="color: var(--el-border-color)" icon="solar:star-line-duotone" width="18" height="18"/>
-      </div>
-      <div v-if="!showStar"></div>
+      <div class="row-avatar-skel"></div>
       <div class="title" :class="accountShow ? 'title-column' : 'title-column'">
 
         <div class="email-sender">
@@ -113,6 +110,20 @@ import {Icon} from "@iconify/vue";
 .pc-star {
   display: flex;
   width: 40px;
+}
+
+.row-avatar-skel {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--el-border-color);
+  flex-shrink: 0;
+  margin-right: 8px;
+  opacity: 0.5;
+
+  @media (max-width: 1366px) {
+    display: none;
+  }
 }
 
 :deep(.el-skeleton__item) {

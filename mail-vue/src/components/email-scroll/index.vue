@@ -64,11 +64,16 @@
             >
               <el-checkbox :class=" props.type === 'all-email' ? 'all-email-checkbox' : 'checkbox'"
                            v-model="item.checked" @click.stop></el-checkbox>
-              <div @click.stop="starChange(item)" class="pc-star" v-if="showStar">
-                <Icon v-if="item.isStar" icon="fluent-color:star-16" width="20" height="20"/>
-                <Icon v-else icon="solar:star-line-duotone" width="18" height="18"/>
+              <div class="row-avatar"
+                   :class="{ 'rva-clickable': showStar }"
+                   :style="{ background: senderImg(item) ? 'transparent' : senderBg(item) }"
+                   @click.stop="showStar && starChange(item)">
+                <img v-if="senderImg(item)" :src="senderImg(item)" class="rva-img"/>
+                <span v-else class="rva-letter">{{ senderLetter(item) }}</span>
+                <div v-if="showStar && item.isStar" class="rva-star">
+                  <Icon icon="fluent-color:star-16" width="10" height="10"/>
+                </div>
               </div>
-              <div v-if="!showStar"></div>
               <div class="title" :class="accountShow ? 'title-column' : 'title-column'">
 
                 <div class="email-sender" :style=" (showStatus ? 'gap: 10px;' : '') + ((item.unread === EmailUnreadEnum.UNREAD && showUnread)  ? 'font-weight: bold' : '')">
@@ -312,6 +317,7 @@ import {useEmailStore} from "@/store/email.js";
 import {useUiStore} from "@/store/ui.js";
 import {useSettingStore} from "@/store/setting.js";
 import {sleep} from "@/utils/time-utils.js"
+import { avatarBg, avatarLetter, storedAvatar } from '@/utils/avatar.js'
 import {fromNow} from "@/utils/day.js";
 import {useI18n} from "vue-i18n";
 import {EmailUnreadEnum} from "@/enums/email-enum.js";
@@ -691,6 +697,10 @@ function cleanSpace(text) {
       .replace(/\s+/g, ' ')                   // 多空白合并成一个空格
       .trim();
 }
+
+function senderBg(item) { return avatarBg(item.sendEmail || item.name || '') }
+function senderLetter(item) { return avatarLetter(item.name, item.sendEmail) }
+function senderImg(item) { return storedAvatar(item.sendEmail) }
 
 function starChange(email) {
 
@@ -1514,6 +1524,56 @@ function loadData() {
 
 .phone-star {
   display: none;
+}
+
+.row-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-right: 8px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  user-select: none;
+
+  &.rva-clickable { cursor: pointer; }
+
+  .rva-img {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .rva-letter {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0;
+  }
+
+  .rva-star {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 15px;
+    height: 15px;
+    background: var(--el-bg-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 1px var(--el-border-color);
+  }
+
+  @media (max-width: 1366px) {
+    display: none;
+  }
 }
 
 .pc-star {
