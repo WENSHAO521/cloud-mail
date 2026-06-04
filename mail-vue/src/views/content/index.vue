@@ -10,6 +10,10 @@
       <Icon class="icon" v-if="emailStore.contentData.showReply" v-perm="'email:send'" @click="openReply" icon="la:reply" width="21" height="21" />
       <Icon class="icon" v-if="emailStore.contentData.showReply" v-perm="'email:send'" @click="openReplyAll" icon="la:reply-all" width="22" height="22" />
       <Icon class="icon" v-if="emailStore.contentData.showReply" v-perm="'email:send'" @click="openForward" icon="iconoir:arrow-up-right" width="20" height="20" />
+      <div class="header-spacer"></div>
+      <span class="page-counter" v-if="emailStore.contentData.emailTotal > 0">
+        {{ emailStore.contentData.emailIndex }}&thinsp;/&thinsp;{{ emailStore.contentData.emailTotal }}
+      </span>
     </div>
     <div></div>
     <el-scrollbar class="scrollbar">
@@ -280,6 +284,21 @@ const handleDelete = () => {
   background: var(--light-border-color);
   margin: 0 6px;
   flex-shrink: 0;
+}
+
+.header-spacer {
+  flex: 1;
+}
+
+.page-counter {
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: #9ca3af;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding-right: 4px;
 }
 
 .star {

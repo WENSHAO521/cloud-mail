@@ -21,23 +21,21 @@
       </div>
 
       <div class="header-right">
-        <span class="email-count" v-if="total && !searchActive">{{ $t('emailCount', {total: total}) }}</span>
-        <span class="email-count" v-if="searchActive && searchQuery">{{ $t('searchResultCount', {count: searchResultCount}) }}</span>
-        <Icon class="icon search-toggle" :class="{ 'search-toggle-active': searchActive }"
-              width="17" height="17" icon="iconoir:search" @click="toggleSearch"/>
+        <span class="email-count" v-if="total && !searchQuery.trim()">{{ $t('emailCount', {total: total}) }}</span>
+        <span class="email-count" v-if="searchQuery.trim()">{{ $t('searchResultCount', {count: searchResultCount}) }}</span>
         <Icon v-if="showAccountIcon" class="more-icon icon" width="16" height="16" icon="akar-icons:dot-grid-fill"
               @click="changeAccountShow"/>
       </div>
     </div>
 
-    <div class="search-bar" v-show="searchActive">
+    <div class="search-bar">
       <Icon icon="iconoir:search" width="14" height="14" class="search-bar-icon"/>
       <input
         ref="searchInputRef"
         v-model="searchQuery"
         class="search-input"
         :placeholder="$t('searchPlaceholder')"
-        @keydown.esc="clearSearch"
+        @keydown.esc="searchQuery = ''"
       />
       <Icon v-if="searchQuery" icon="material-symbols:close-rounded" width="16" height="16"
             class="search-clear-icon" @click="searchQuery = ''"/>
@@ -422,7 +420,6 @@ const dropdownCloseLock = ref(false);
 const dropdownShow = ref(false);
 const rightClickEmail = ref({});
 const searchQuery = ref('');
-const searchActive = ref(false);
 const searchInputRef = ref(null);
 const checkedEmailCount = ref(0);
 let timer = null
@@ -953,6 +950,11 @@ function jumpDetails(email) {
       return
     }
   }
+
+  const idx = emailList.findIndex(e => e.emailId === email.emailId)
+  emailStore.contentData.emailIndex = idx + 1
+  emailStore.contentData.emailTotal = total.value
+
   emit('jump', email)
 }
 
@@ -1057,23 +1059,9 @@ function refreshList() {
   checkAll.value = false;
   isIndeterminate.value = false;
   searchQuery.value = '';
-  searchActive.value = false;
   getEmailList(true);
 }
 
-function toggleSearch() {
-  searchActive.value = !searchActive.value;
-  if (searchActive.value) {
-    nextTick(() => searchInputRef.value?.focus());
-  } else {
-    searchQuery.value = '';
-  }
-}
-
-function clearSearch() {
-  searchQuery.value = '';
-  searchActive.value = false;
-}
 
 function loadData() {
   getEmailList()
@@ -1125,13 +1113,6 @@ function loadData() {
   }
 }
 
-.search-toggle {
-  &:hover { color: var(--el-text-color-primary) !important; }
-}
-
-.search-toggle-active {
-  color: #b00000 !important;
-}
 
 .scroll {
   margin: 0;
