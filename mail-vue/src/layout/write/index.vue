@@ -809,6 +809,8 @@ async function loadSenderAccounts() {
     const list = await accountList(0, 30, null)
     senderAccounts.value = Array.isArray(list) ? list : []
     senderLoaded.value = true
+    // Sync all bound account emails so avatar shows everywhere
+    userStore.registerOwnEmails(senderAccounts.value.map(a => a.email).filter(Boolean))
   } catch {}
 }
 
