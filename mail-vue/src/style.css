@@ -300,6 +300,68 @@ button, input, select, textarea {
     --compose-shadow: 0 8px 40px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
+/* ══════════════════════════════════════════════════════════════
+   Global vfasky-compatible utility classes
+   ══════════════════════════════════════════════════════════════ */
+
+/* Pill tab list — matches vfasky .settings-tab-list */
+.settings-tab-list {
+    display: inline-flex;
+    max-width: 100%;
+    gap: 4px;
+    overflow-x: auto;
+    padding: 4px;
+    border-radius: 999px;
+    background: var(--surface-secondary, #f3f3f3);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+}
+
+.settings-tab-button {
+    min-width: 108px;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+    padding: 11px 22px;
+    transition: background 140ms ease, box-shadow 140ms ease, color 140ms ease;
+    white-space: nowrap;
+    color: rgba(0, 0, 0, 0.55);
+    font-family: inherit;
+
+    &[data-active="true"] {
+        background: var(--surface, #ffffff);
+        color: var(--el-text-color-primary);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.08);
+    }
+}
+
+.dark .settings-tab-button { color: rgba(255, 255, 255, 0.50); }
+.dark .settings-tab-button[data-active="true"] { color: var(--el-text-color-primary); }
+
+/* Settings detail grid — matches vfasky .settings-detail-grid */
+.settings-detail-grid {
+    display: grid;
+    width: 100%;
+    max-width: 1180px;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+    gap: 20px;
+    align-items: start;
+
+    @media (max-width: 1100px) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* Sticky danger card */
+.settings-danger-sticky {
+    position: sticky;
+    top: 88px;
+}
+
 /* ── Dark mode email: unread=white, read=dim — class-based, no :has() ── */
 .dark .email-row:not(.is-unread) .name,
 .dark .email-row:not(.is-unread) .subject-text {

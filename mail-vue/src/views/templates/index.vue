@@ -2,14 +2,8 @@
 
   <!-- ═══════════════════════════ LIST MODE ═══════════════════════════ -->
   <div class="page-outer" v-if="!editorMode">
-    <header class="page-head">
-      <h1 class="page-h1">{{ $t('templates') }}</h1>
-    </header>
 
-    <div class="page-grid">
-
-      <!-- Left — main content -->
-      <div class="page-main">
+    <div class="page-main-only">
         <div class="list-toolbar">
           <el-button class="add-btn" @click="openAdd">
             <Icon icon="ep:plus" width="13" height="13"/>
@@ -44,31 +38,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Right — info sidebar -->
-      <aside class="page-sidebar">
-        <div class="sidebar-block">
-          <div class="sb-label">{{ $t('aboutTemplates') }}</div>
-          <p class="sb-text">{{ $t('templatesAboutText') }}</p>
-        </div>
-
-        <div class="sidebar-block">
-          <div class="sb-label">{{ $t('howToUse') }}</div>
-          <ul class="sb-list">
-            <li>{{ $t('templateTip1') }}</li>
-            <li>{{ $t('templateTip2') }}</li>
-            <li>{{ $t('templateTip3') }}</li>
-          </ul>
-        </div>
-
-        <div class="sidebar-block last">
-          <div class="sb-label">{{ $t('templateCount') }}</div>
-          <div class="sb-stat">
-            <span class="sb-stat-num">{{ tplList.length }}</span>
-            <span class="sb-stat-unit">{{ $t('templateUnit') }}</span>
-          </div>
-        </div>
-      </aside>
 
     </div>
   </div>
@@ -108,23 +77,6 @@
         </div>
       </div>
 
-      <aside class="page-sidebar">
-        <div class="sidebar-block">
-          <div class="sb-label">{{ $t('editorTipsLabel') }}</div>
-          <ul class="sb-list">
-            <li>{{ $t('editorTip1') }}</li>
-            <li>{{ $t('editorTip2') }}</li>
-            <li>{{ $t('editorTip3') }}</li>
-          </ul>
-        </div>
-        <div class="sidebar-block last">
-          <div class="sb-label">{{ $t('shortcut') }}</div>
-          <div class="sb-shortcut-row">
-            <kbd>Ctrl</kbd><span>+</span><kbd>K</kbd>
-            <span class="sb-shortcut-desc">{{ $t('openCommandPalette') }}</span>
-          </div>
-        </div>
-      </aside>
     </div>
   </div>
 
@@ -216,15 +168,18 @@ async function deleteTpl(templateId) {
 }
 
 /* ── Two-column grid ── */
+/* Full-width main (no sidebar) */
+.page-main-only {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 900px;
+}
+
 .page-grid {
   display: grid;
-  grid-template-columns: minmax(760px, 860px) 320px;
-  gap: 28px;
-  align-items: start;
-
-  @media (max-width: 1160px) {
-    grid-template-columns: 1fr;
-  }
+  grid-template-columns: 1fr;
+  gap: 20px;
 }
 
 .editor-grid { margin-top: 0; }
@@ -253,9 +208,10 @@ async function deleteTpl(templateId) {
 
 /* Item list */
 .item-list {
-  border: 1px solid var(--light-border-color);
-  border-top: 2px solid var(--el-text-color-primary);
-  border-radius: 0;
+  background: var(--surface, #fff);
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
   overflow: hidden;
 }
 

@@ -1,13 +1,7 @@
 <template>
   <div class="page-outer">
-    <header class="page-head">
-      <h1 class="page-h1">{{ $t('contactGroups') }}</h1>
-    </header>
 
-    <div class="page-grid">
-
-      <!-- Left — main content -->
-      <div class="page-main">
+    <div class="page-main-only">
         <div class="list-toolbar">
           <el-button class="add-btn" @click="openAdd">
             <Icon icon="ep:plus" width="13" height="13"/>
@@ -63,37 +57,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Right — info sidebar -->
-      <aside class="page-sidebar">
-        <div class="sidebar-block">
-          <div class="sb-label">{{ $t('aboutGroups') }}</div>
-          <p class="sb-text">{{ $t('groupsAboutText') }}</p>
-        </div>
-
-        <div class="sidebar-block">
-          <div class="sb-label">{{ $t('howToUse') }}</div>
-          <ul class="sb-list">
-            <li>{{ $t('groupTip1') }}</li>
-            <li>{{ $t('groupTip2') }}</li>
-            <li>{{ $t('groupTip3') }}</li>
-          </ul>
-        </div>
-
-        <div class="sidebar-block last">
-          <div class="sb-label">{{ $t('groupStats') }}</div>
-          <div class="sb-stat-pair">
-            <div class="sb-stat">
-              <span class="sb-stat-num">{{ groupList.length }}</span>
-              <span class="sb-stat-unit">{{ $t('groupUnit') }}</span>
-            </div>
-            <div class="sb-stat">
-              <span class="sb-stat-num">{{ totalContacts }}</span>
-              <span class="sb-stat-unit">{{ $t('contactUnit') }}</span>
-            </div>
-          </div>
-        </div>
-      </aside>
 
     </div>
 
@@ -237,13 +200,12 @@ async function deleteGroup(groupId) {
   line-height: 1.2;
 }
 
-.page-grid {
-  display: grid;
-  grid-template-columns: minmax(760px, 860px) 320px;
-  gap: 28px;
-  align-items: start;
-
-  @media (max-width: 1160px) { grid-template-columns: 1fr; }
+/* Full-width main (no sidebar) */
+.page-main-only {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 900px;
 }
 
 .page-main { display: flex; flex-direction: column; gap: 16px; }

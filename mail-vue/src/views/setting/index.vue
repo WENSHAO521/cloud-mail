@@ -1,17 +1,22 @@
 <template>
+  <el-scrollbar style="height: 100%">
   <div class="settings-outer">
 
-    <!-- Full-width heading -->
-    <header class="page-head">
-      <h1 class="page-h1">{{ $t('settings') }}</h1>
-    </header>
+    <!-- Pill tabs — matches vfasky settings-tab-list -->
+    <div class="settings-tab-list">
+      <button class="settings-tab-button" :data-active="String(activeTab === 'details')" @click="activeTab = 'details'">
+        {{ $t('details') }}
+      </button>
+      <button class="settings-tab-button" :data-active="String(activeTab === 'mail')" @click="activeTab = 'mail'">
+        {{ $t('mailManagement') }}
+      </button>
+    </div>
 
-    <!-- Two-column grid -->
-    <div class="settings-grid">
+    <!-- ── Details tab ─────────────────────────────────── -->
+    <template v-if="activeTab === 'details'">
+    <div class="settings-detail-grid">
 
-      <!-- ══════════════════════════════════════
-           LEFT — main settings
-      ══════════════════════════════════════ -->
+      <!-- LEFT — main settings -->
       <div class="settings-main">
 
         <!-- ── PROFILE ── -->
@@ -126,75 +131,33 @@
           </transition>
         </section>
 
-        <!-- ── DANGER ZONE ── -->
-        <section class="section danger-section" id="s-danger" v-perm="'my:delete'">
-          <div class="section-head">
-            <span class="section-label danger-label">{{ $t('dangerZone') }}</span>
-          </div>
-          <div class="danger-inner">
-            <div class="danger-text">
-              <div class="danger-heading">{{ $t('deleteUserBtn') }}</div>
-              <div class="danger-desc-text">{{ $t('delAccountMsg') }}</div>
-            </div>
-            <el-button type="danger" size="small" @click="deleteConfirm">
-              {{ $t('deleteUserBtn') }}
-            </el-button>
-          </div>
-        </section>
-
       </div>
 
-      <!-- ══════════════════════════════════════
-           RIGHT — editorial info sidebar
-      ══════════════════════════════════════ -->
-      <aside class="settings-sidebar">
-
-        <!-- About -->
-        <div class="sidebar-block">
-          <div class="sidebar-block-label">{{ $t('settingsAboutLabel') }}</div>
-          <p class="sidebar-block-text">{{ $t('settingsAboutText') }}</p>
+      <!-- RIGHT — danger card (sticky, matches vfasky settings-danger-card) -->
+      <section class="section danger-section settings-danger-sticky" v-perm="'my:delete'">
+        <div class="section-head">
+          <span class="section-label danger-label">{{ $t('dangerZone') }}</span>
         </div>
-
-        <!-- Page index -->
-        <div class="sidebar-block">
-          <div class="sidebar-block-label">{{ $t('onThisPage') }}</div>
-          <nav class="page-index">
-            <a class="index-item" href="#s-profile">{{ $t('profile') }}</a>
-            <a class="index-item" href="#s-language">{{ $t('language') }}</a>
-            <a class="index-item" href="#s-signature">{{ $t('signature') }}</a>
-            <a class="index-item" href="#s-autoreply">{{ $t('autoReply') }}</a>
-            <a class="index-item danger-link" href="#s-danger" v-perm="'my:delete'">{{ $t('dangerZone') }}</a>
-          </nav>
+        <div class="danger-inner" style="padding: 0 24px 20px">
+          <div class="danger-text">
+            <div class="danger-heading">{{ $t('deleteUserBtn') }}</div>
+            <div class="danger-desc-text">{{ $t('delAccountMsg') }}</div>
+          </div>
+          <el-button type="danger" size="small" @click="deleteConfirm">
+            {{ $t('deleteUserBtn') }}
+          </el-button>
         </div>
+      </section>
 
-        <!-- Account meta -->
-        <div class="sidebar-block">
-          <div class="sidebar-block-label">{{ $t('accountStatus') }}</div>
-          <dl class="meta-list">
-            <div class="meta-pair">
-              <dt>{{ $t('role') }}</dt>
-              <dd>{{ userStore.user.role?.name || '—' }}</dd>
-            </div>
-            <div class="meta-pair">
-              <dt>{{ $t('emailAccount') }}</dt>
-              <dd class="mono">{{ userStore.user.email }}</dd>
-            </div>
-            <div class="meta-pair">
-              <dt>{{ $t('system') }}</dt>
-              <dd>PSG Mail</dd>
-            </div>
-          </dl>
-        </div>
+    </div><!-- /settings-detail-grid -->
+    </template>
 
-        <!-- Help note -->
-        <div class="sidebar-note">
-          <Icon icon="material-symbols:info-outline-rounded" width="14" height="14" class="note-icon"/>
-          <span>{{ $t('settingsHelpNote') }}</span>
-        </div>
-
-      </aside>
-
-    </div><!-- /settings-grid -->
+    <!-- ── Mail management tab ────────────────────────── -->
+    <template v-else-if="activeTab === 'mail'">
+      <section class="section mail-panel">
+        <Account />
+      </section>
+    </template>
 
     <!-- Password dialog -->
     <el-dialog v-model="pwdShow" :title="$t('changePassword')" width="380">
@@ -214,10 +177,12 @@
     </el-dialog>
 
   </div>
+  </el-scrollbar>
 </template>
 
 <script setup>
 import { reactive, ref, computed, defineOptions, onMounted } from 'vue'
+import Account from '@/layout/account/index.vue'
 import { resetPassword, userDelete } from "@/request/my.js"
 import { useUserStore } from "@/store/user.js"
 import router from "@/router/index.js"
@@ -248,6 +213,8 @@ const autoReplyMessage = ref('')
 const autoReplySaving = ref(false)
 
 defineOptions({ name: 'setting' })
+
+const activeTab = ref('details')
 
 onMounted(() => {
   userStore.loadAvatar()
@@ -378,51 +345,17 @@ function submitPwd() {
 </script>
 
 <style scoped lang="scss">
-/* ═══════════════════════════════════════════════
-   OUTER SHELL — max-width 1240px, centered
-═══════════════════════════════════════════════ */
+/* ─── Outer shell ──────────────────────────────────── */
 .settings-outer {
   max-width: 1240px;
   margin: 0 auto;
-  padding: 28px 32px 56px;
+  padding: 24px 32px 56px;
 
-  @media (max-width: 960px)  { padding: 20px 24px 40px; }
+  @media (max-width: 960px)  { padding: 20px 20px 40px; }
   @media (max-width: 640px)  { padding: 16px 16px 32px; }
 }
 
-/* ── Full-width heading ── */
-.page-head {
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--separator, #e5e7eb);
-  margin-bottom: 24px;
-}
-
-.page-h1 {
-  font-size: 24px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--el-text-color-primary);
-  line-height: 1.2;
-}
-
-/* ═══════════════════════════════════════════════
-   TWO-COLUMN GRID
-   Left: minmax(760px,860px) | Right: 320px
-═══════════════════════════════════════════════ */
-.settings-grid {
-  display: grid;
-  grid-template-columns: minmax(760px, 860px) 320px;
-  gap: 28px;
-  align-items: start;
-
-  @media (max-width: 1160px) {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ═══════════════════════════════════════════════
-   LEFT — main settings column
-═══════════════════════════════════════════════ */
+/* ─── Left settings column ─────────────────────────── */
 .settings-main {
   display: flex;
   flex-direction: column;
@@ -648,16 +581,15 @@ function submitPwd() {
   padding-top: 20px;
 }
 
+.mail-panel {
+  padding: 20px;
+}
+
 .danger-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  padding: 16px 18px;
-  border: 1px solid rgba(204,0,0,0.20);
-  border-left: 3px solid #CC0000;
-  border-radius: 2px;
-  background: rgba(204,0,0,0.02);
 
   @media (max-width: 520px) {
     flex-direction: column; align-items: flex-start;

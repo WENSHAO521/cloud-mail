@@ -1075,7 +1075,7 @@ function adjustWidth() {
   display: flex;
   flex-direction: column;
   padding: 20px;
-  gap: 0;
+  gap: 16px;
 }
 
 :deep(.el-dialog) {
@@ -1103,9 +1103,11 @@ function adjustWidth() {
   gap: 8px;
   flex-wrap: wrap;
   align-items: center;
-  border-bottom: 1px solid var(--separator, #e5e7eb);
   background: var(--surface, #fff);
-  border-radius: 16px 16px 0 0;
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  flex-shrink: 0;
 
   .search-input {
     width: min(220px, calc(100vw - 160px));
@@ -1153,10 +1155,10 @@ function adjustWidth() {
   width: 100%;
   overflow: auto;
   background: var(--surface, #fff);
-  border-radius: 0 0 16px 16px;
+  border-radius: 16px;
   border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
-  border-top: none;
   box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+  overflow: hidden;
 }
 
 .details {

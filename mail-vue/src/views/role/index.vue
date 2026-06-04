@@ -423,15 +423,15 @@ window.onresize = () => {
   display: flex;
   flex-direction: column;
   padding: 20px;
-  gap: 0;
+  gap: 16px;
 
   .perm-scrollbar {
     flex: 1;
     min-height: 0;
+    overflow: hidden;
     background: var(--surface, #fff);
-    border-radius: 0 0 16px 16px;
+    border-radius: 16px;
     border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
-    border-top: none;
     box-shadow: 0 4px 14px rgba(0,0,0,0.04);
   }
 }
@@ -455,9 +455,11 @@ window.onresize = () => {
   display: flex;
   align-items: center;
   gap: 8px;
-  border-bottom: 1px solid var(--separator, #e5e7eb);
   background: var(--surface, #fff);
-  border-radius: 16px 16px 0 0;
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  flex-shrink: 0;
 
   .icon {
     cursor: pointer;
