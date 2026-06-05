@@ -289,7 +289,12 @@ const dropdownRef = ref(null);
 const dropdownCloseLock = ref(false);
 const dropdownShow = ref(false);
 const rightClickEmail = ref({});
-const searchQuery = ref('');
+// Search term is shared with the desktop top bar via the UI store,
+// so a single search field drives the active folder on any viewport.
+const searchQuery = computed({
+  get: () => uiStore.mailSearch,
+  set: (v) => { uiStore.mailSearch = v }
+})
 const searchInputRef = ref(null);
 const checkedEmailCount = ref(0);
 let timer = null
@@ -605,6 +610,11 @@ function loadData() { getEmailList() }
 .search-area {
   padding: 12px 16px;
   background: var(--psg-bg, #f7f7f7);
+}
+
+/* Desktop: the global top-bar search owns this — avoid duplication */
+@media (min-width: 1025px) {
+  .search-area { display: none; }
 }
 
 .search-pill {

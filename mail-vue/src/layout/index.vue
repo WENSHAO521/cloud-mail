@@ -11,8 +11,11 @@
          :data-open="String(uiStore.asideShow)"
          @click="uiStore.asideShow = false"/>
 
-    <!-- Sidebar ─ always column 1 -->
-    <Aside />
+    <!-- Sidebar ─ always column 1, full height -->
+    <Aside class="grid-aside" />
+
+    <!-- ── Desktop top bar (search · compose · sync · notifications · user) ── -->
+    <DesktopTopbar class="app-topbar" />
 
     <!-- ── Mobile top bar (hidden on desktop) ── -->
     <div class="mobile-chrome mobile-chrome--top">
@@ -58,6 +61,7 @@
 import Aside from '@/layout/aside/index.vue'
 import ContentPane from '@/views/content/index.vue'
 import CommandPalette from '@/components/command-palette/index.vue'
+import DesktopTopbar from '@/layout/topbar/index.vue'
 import MobileHeader from '@/layout/mobile-header/index.vue'
 import MobileTabbar from '@/layout/mobile-tabbar/index.vue'
 import writer from '@/layout/write/index.vue'
@@ -109,12 +113,16 @@ const sidebarCollapsed = computed(() => uiStore.asideCollapsed && window.innerWi
 const keepAliveList = ['email', 'all-email', 'send', 'star', 'draft', 'archive', 'spam']
 const keepAliveWorkspace = ['sys-setting', 'analysis', 'user', 'role', 'reg-key', 'setting', 'templates', 'groups']
 
-// Clear selected email when switching mail folders
-watch(isMailRoute, (is) => { if (!is) emailStore.contentData.email = null })
+// Clear selected email + search when switching mail folders
+watch(isMailRoute, (is) => {
+  if (!is) emailStore.contentData.email = null
+  uiStore.mailSearch = ''
+})
 watch(() => route.name, (name, prev) => {
   if (MAIL_ROUTES.has(name) && MAIL_ROUTES.has(prev) && name !== prev) {
     emailStore.contentData.email = null
     uiStore.mobileDetailOpen = false
+    uiStore.mailSearch = ''
   }
 })
 
@@ -165,13 +173,15 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss" scoped>
-/* ── Shell: CSS grid, replaces el-container/el-aside ───────── */
+/* ── Shell: CSS grid — sidebar (full height) · top bar · content ── */
 .app-shell {
+  --topbar-h: 56px;
   height: 100vh;
   overflow: hidden;
   display: grid;
   position: fixed;
   inset: 0;
+  grid-template-rows: var(--topbar-h) minmax(0, 1fr);
 
   /* Mail mode: sidebar | list | detail */
   &[data-mode="mail"] {
@@ -201,11 +211,30 @@ onBeforeUnmount(() => {
     }
   }
 
-  /* Mobile: single column */
+  /* Mobile: single column (chrome handled by fixed header / tab bar) */
   @media (max-width: 1024px) {
     display: block !important;
     height: 100dvh;
   }
+}
+
+/* ── Desktop grid placement ────────────────────────────────── */
+.grid-aside { grid-column: 1; grid-row: 1 / 3; }
+
+.app-topbar {
+  grid-row: 1;
+  z-index: 6;
+  .app-shell[data-mode="mail"] & { grid-column: 2 / 4; }
+  .app-shell[data-mode="workspace"] & { grid-column: 2 / 3; }
+}
+
+.app-shell[data-mode="mail"] .mail-list-pane   { grid-column: 2; grid-row: 2; }
+.app-shell[data-mode="mail"] .mail-detail-pane { grid-column: 3; grid-row: 2; }
+.app-shell[data-mode="workspace"] .workspace-pane { grid-column: 2; grid-row: 2; }
+
+/* Top bar is desktop-only */
+@media (max-width: 1024px) {
+  .app-topbar { display: none; }
 }
 
 /* ── Sidebar backdrop (mobile) ─────────────────────────────── */

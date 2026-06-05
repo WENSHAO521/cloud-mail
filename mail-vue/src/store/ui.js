@@ -6,6 +6,7 @@ export const useUiStore = defineStore('ui', {
         asideCollapsed: false,
         commandPaletteShow: false,
         accountShow: false,
+        mailSearch: '',
         mobileDetailOpen: false,
         backgroundLoading: true,
         changeNotice: 0,

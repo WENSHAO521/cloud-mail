@@ -39,14 +39,14 @@
       </div>
     </div>
 
-    <!-- ── Primary nav ──────────────────────────────────── -->
+    <!-- ── Mailbox ──────────────────────────────────────── -->
     <nav class="sidebar-nav">
-      <el-tooltip v-for="item in navItems" :key="item.name"
+      <el-tooltip v-for="item in mailboxItems" :key="item.name"
                   :content="$t(item.labelKey)" placement="right" :disabled="!collapsed">
         <div v-if="!item.perm || hasPerm(item.perm)"
              class="sidebar-nav-link"
              :class="{ active: route.meta.name === item.name }"
-             @click="router.push({ name: item.name })">
+             @click="navigate(item.name)">
           <span class="sidebar-nav-content">
             <Icon :icon="item.icon" width="20" height="20" class="nav-icon" />
             <span class="sidebar-label">{{ $t(item.labelKey) }}</span>
@@ -55,16 +55,34 @@
       </el-tooltip>
     </nav>
 
-    <!-- ── Admin section ────────────────────────────────── -->
+    <!-- ── Editorial ────────────────────────────────────── -->
+    <div class="sidebar-section-separator"></div>
+    <div class="sidebar-section-title">{{ $t('editorial') }}</div>
+    <nav class="sidebar-nav">
+      <el-tooltip v-for="item in editorialItems" :key="item.name"
+                  :content="$t(item.labelKey)" placement="right" :disabled="!collapsed">
+        <div v-if="!item.perm || hasPerm(item.perm)"
+             class="sidebar-nav-link"
+             :class="{ active: route.meta.name === item.name }"
+             @click="navigate(item.name)">
+          <span class="sidebar-nav-content">
+            <Icon :icon="item.icon" width="20" height="20" class="nav-icon" />
+            <span class="sidebar-label">{{ $t(item.labelKey) }}</span>
+          </span>
+        </div>
+      </el-tooltip>
+    </nav>
+
+    <!-- ── Administration ───────────────────────────────── -->
     <template v-if="visibleAdminItems.length">
       <div class="sidebar-section-separator"></div>
-      <div class="sidebar-section-title">{{ $t('manage') }}</div>
+      <div class="sidebar-section-title">{{ $t('administration') }}</div>
       <nav class="sidebar-nav">
         <el-tooltip v-for="item in visibleAdminItems" :key="item.name"
                     :content="$t(item.labelKey)" placement="right" :disabled="!collapsed">
           <div class="sidebar-nav-link"
                :class="{ active: route.meta.name === item.name }"
-               @click="router.push({ name: item.name })">
+               @click="navigate(item.name)">
             <span class="sidebar-nav-content">
               <Icon :icon="item.icon" width="20" height="20" class="nav-icon" />
               <span class="sidebar-label">{{ $t(item.labelKey) }}</span>
@@ -151,13 +169,18 @@ const acctInitial  = computed(() => avatarLetter(userStore.user?.name, userStore
 const canSend = computed(() => hasPerm('email:send'));
 
 /* ── Nav items ── */
-const navItems = [
+/* Mailbox — primary folders */
+const mailboxItems = [
   { name: 'email',     labelKey: 'inbox',         icon: 'psg:inbox' },
   { name: 'send',      labelKey: 'sent',          icon: 'psg:send',     perm: 'email:send' },
   { name: 'draft',     labelKey: 'drafts',        icon: 'psg:draft',    perm: 'email:send' },
   { name: 'star',      labelKey: 'starred',       icon: 'psg:bookmark' },
   { name: 'archive',   labelKey: 'archiveFolder', icon: 'psg:archive' },
   { name: 'spam',      labelKey: 'spam',          icon: 'psg:spam' },
+];
+
+/* Editorial — workspace tools */
+const editorialItems = [
   { name: 'templates', labelKey: 'templates',     icon: 'psg:template' },
   { name: 'groups',    labelKey: 'contactGroups', icon: 'psg:group' },
   { name: 'setting',   labelKey: 'settings',      icon: 'psg:settings' },
@@ -177,6 +200,12 @@ const visibleAdminItems = computed(() =>
 );
 
 /* ── Actions ── */
+function navigate(name) {
+  if (route.meta?.name !== name) router.push({ name });
+  // Close the drawer after navigating on mobile/tablet
+  if (window.innerWidth <= 1024) uiStore.asideShow = false;
+}
+
 function openCompose() {
   uiStore.writerRef?.open?.();
 }
