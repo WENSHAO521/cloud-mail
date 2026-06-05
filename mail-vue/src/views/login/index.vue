@@ -1,33 +1,61 @@
 <template>
-  <div id="login-box" :style=" background ? 'background: var(--el-bg-color)' : ''" v-loading="oauthLoading" element-loading-text="登录中...">
-    <div id="background-wrap" v-if="!settingStore.settings.background">
-      <div class="x1 cloud"></div>
-      <div class="x2 cloud"></div>
-      <div class="x3 cloud"></div>
-      <div class="x4 cloud"></div>
-      <div class="x5 cloud"></div>
-    </div>
-    <div v-else :style="background"></div>
+  <div id="login-box" :class="{ 'has-bg': !!background }" v-loading="oauthLoading" element-loading-text="登录中...">
+    <!-- Optional admin-configured background image -->
+    <div v-if="background" class="custom-bg" :style="background"></div>
 
-    <!-- Left branding panel — editorial typographic treatment -->
+    <!-- ── Left brand panel — light, editorial, structural lines ── -->
     <div class="brand-panel">
+      <!-- Precise structural grid / registration marks (Bauhaus restraint) -->
+      <svg class="brand-grid" viewBox="0 0 600 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <g stroke="#E5E5E5" stroke-width="1">
+          <line x1="80" y1="0" x2="80" y2="800"/>
+          <line x1="220" y1="0" x2="220" y2="800"/>
+          <line x1="360" y1="0" x2="360" y2="800"/>
+          <line x1="500" y1="0" x2="500" y2="800"/>
+          <line x1="0" y1="160" x2="600" y2="160"/>
+          <line x1="0" y1="400" x2="600" y2="400"/>
+          <line x1="0" y1="640" x2="600" y2="640"/>
+        </g>
+        <g stroke="#111111" stroke-width="1">
+          <path d="M40 40 H70 M40 40 V70" fill="none"/>
+          <path d="M560 760 H530 M560 760 V730" fill="none"/>
+        </g>
+        <rect x="500" y="160" width="14" height="14" fill="#B00000"/>
+        <circle cx="80" cy="640" r="6" fill="none" stroke="#111111" stroke-width="1"/>
+      </svg>
+
       <div class="brand-editorial">
-        <div class="brand-wordmark">
-          <span class="wm-line">PANORAMA</span>
-          <span class="wm-line muted">SCHOLARLY</span>
-          <span class="wm-line accent">GROUP</span>
+        <div class="brand-lockup">
+          <div class="brand-mark">PSG</div>
+          <div class="brand-eyebrow">{{ $t('institutionalMail') }}</div>
         </div>
+        <h1 class="brand-wordmark">Panorama<br/>Scholarly Group</h1>
         <div class="brand-divider"></div>
-        <p class="brand-caption">Internal Mail System</p>
+        <p class="brand-caption">{{ $t('brandPanelLine') }}</p>
       </div>
+
+      <div class="brand-footnote">EST · EDITORIAL · PEER REVIEW · ACADEMIC PRESS</div>
     </div>
 
+    <!-- ── Right auth column ── -->
     <div class="form-wrapper">
       <div class="container">
-        <span class="form-title">{{ settingStore.settings.title }}</span>
-        <span class="form-desc" v-if="show === 'login'">{{ $t('loginTitle') }}</span>
-        <span class="form-desc" v-else>{{ $t('regTitle') }}</span>
+
+        <!-- Compact brand header (shown when brand panel is hidden) -->
+        <div class="card-brand">
+          <div class="card-brand-mark">PSG</div>
+          <div class="card-brand-meta">
+            <span class="card-brand-name">Panorama Scholarly Group</span>
+            <span class="card-brand-sub">{{ $t('institutionalMail') }}</span>
+          </div>
+        </div>
+
+        <span class="form-eyebrow">{{ $t('institutionalMail') }}</span>
+        <span class="form-title">{{ show === 'login' ? $t('loginHeading') : $t('regBtn') }}</span>
+        <span class="form-desc">{{ show === 'login' ? $t('loginSubtitle') : $t('regTitle') }}</span>
+
         <div v-show="show === 'login'">
+          <label class="field-label">{{ $t('emailAccount') }}</label>
           <el-input :class="!hideLoginDomain ? 'email-input' : ''" v-model="form.email"
                     type="text" :placeholder="$t('emailAccount')" autocomplete="off">
             <template #append v-if="!hideLoginDomain">
@@ -53,12 +81,26 @@
               </div>
             </template>
           </el-input>
-          <el-input v-model="form.password" :placeholder="$t('password')" type="password" autocomplete="off">
+          <label class="field-label">{{ $t('password') }}</label>
+          <el-input v-model="form.password" :placeholder="$t('password')" type="password" autocomplete="off"
+                    @keyup.enter="submit">
           </el-input>
+
+          <div class="form-options">
+            <el-checkbox v-model="rememberMe" class="remember-check">{{ $t('rememberMe') }}</el-checkbox>
+            <span class="text-link" @click="forgotPassword">{{ $t('forgotPassword') }}</span>
+          </div>
+
           <el-button class="btn" type="primary" @click="submit" :loading="loginLoading"
           >{{ $t('loginBtn') }}
           </el-button>
-          <el-button class="btn" v-if="settingStore.settings.linuxdoSwitch"  style="margin-top: 10px"  @click="linuxDoLogin">
+
+          <button class="twofactor-entry" @click="twoFactor">
+            <Icon icon="fluent:fingerprint-20-filled" width="17" height="17"/>
+            <span>{{ $t('twoFactorEntry') }}</span>
+          </button>
+
+          <el-button class="btn btn-oauth" v-if="settingStore.settings.linuxdoSwitch" @click="linuxDoLogin">
             <el-avatar src="/image/linuxdo.webp" :size="18" style="margin-right: 10px" />LinuxDo
           </el-button>
         </div>
@@ -109,7 +151,7 @@
           <el-button class="btn" style="margin: 0" type="primary" @click="submitRegister" :loading="registerLoading"
           >{{ $t('regBtn') }}
           </el-button>
-          <el-button v-if="settingStore.settings.linuxdoSwitch" class="btn" style="margin-top: 10px"  @click="linuxDoLogin">
+          <el-button v-if="settingStore.settings.linuxdoSwitch" class="btn btn-oauth" style="margin-top: 10px"  @click="linuxDoLogin">
             <el-avatar src="/image/linuxdo.webp" :size="18" style="margin-right: 10px" />LinuxDo
           </el-button>
         </div>
@@ -119,6 +161,8 @@
           <div class="switch" @click="show = 'login'" v-else>{{ $t('hasAccount') }} <span>{{ $t('loginSwitch') }}</span>
           </div>
         </template>
+
+        <div class="authorized-note">{{ $t('authorizedNote') }}</div>
       </div>
     </div>
     <el-dialog class="bind-dialog" v-model="showBindForm"  title="注册邮箱" >
@@ -189,6 +233,29 @@ const bindLoading = ref(false)
 const oauthLoading = ref(false);
 const showBindForm = ref(false);
 const show = ref('login')
+const rememberMe = ref(false)
+
+function persistRemember() {
+  if (rememberMe.value && form.email) {
+    localStorage.setItem('rememberLogin', JSON.stringify({ email: form.email, suffix: suffix.value }))
+  } else {
+    localStorage.removeItem('rememberLogin')
+  }
+}
+
+function forgotPassword() {
+  ElMessageBox.alert(t('forgotPasswordMsg'), t('forgotPassword'), {
+    confirmButtonText: t('confirm'),
+    type: 'info',
+  }).catch(() => {})
+}
+
+function twoFactor() {
+  ElMessageBox.alert(t('twoFactorMsg'), t('twoFactorEntry'), {
+    confirmButtonText: t('confirm'),
+    type: 'info',
+  }).catch(() => {})
+}
 
 const bindForm = reactive({
   email: '',
@@ -213,6 +280,16 @@ const registerForm = reactive({
 const domainList = settingStore.domainList;
 const registerLoading = ref(false)
 suffix.value = domainList[0]
+
+// Restore remembered institutional address (local only — never the password)
+try {
+  const remembered = JSON.parse(localStorage.getItem('rememberLogin') || 'null')
+  if (remembered && remembered.email) {
+    rememberMe.value = true
+    form.email = remembered.email
+    if (remembered.suffix && domainList.includes(remembered.suffix)) suffix.value = remembered.suffix
+  }
+} catch (e) { /* ignore malformed cache */ }
 const verifyShow = ref(false)
 let verifyToken = ''
 let turnstileId = null
@@ -419,6 +496,7 @@ const submit = () => {
     return
   }
 
+  persistRemember()
   loginLoading.value = true
   login(email, form.password).then(async data => {
     await saveToken(data.token)
@@ -619,138 +697,405 @@ function submitRegister() {
 }
 </style>
 
-<style lang="scss" scoped>
 
-.form-wrapper {
-  position: fixed;
-  right: 0;
+<style lang="scss" scoped>
+/* ═══════════════════════════════════════════════════════════
+   PSG Institutional Mail — Sign in
+   German minimalist · light · black / white / deep red
+   ═══════════════════════════════════════════════════════════ */
+
+#login-box {
   height: 100%;
-  z-index: 10;
+  width: 100%;
+  display: flex;
+  background: #F7F7F7;
+  overflow: hidden;
+  position: relative;
+  font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.custom-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* ── Left brand panel ───────────────────────────────────────── */
+.brand-panel {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 60px 64px;
+  background: #FFFFFF;
+  border-right: 1px solid #E5E5E5;
+  overflow: hidden;
+
+  @media (max-width: 980px) { display: none; }
+}
+
+.brand-grid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.brand-editorial {
+  position: relative;
+  z-index: 1;
+  margin: auto 0;
+  max-width: 480px;
+}
+
+.brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 30px;
+}
+
+.brand-mark {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  @media (max-width: 767px) {
-    width: 100%;
-  }
+  background: #B00000;
+  color: #FFFFFF;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  border-radius: 3px;
+}
+
+.brand-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #666666;
+}
+
+.brand-wordmark {
+  margin: 0;
+  font-size: clamp(34px, 3.6vw, 50px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: #111111;
+}
+
+.brand-divider {
+  width: 48px;
+  height: 3px;
+  background: #B00000;
+  margin: 30px 0 22px;
+}
+
+.brand-caption {
+  margin: 0;
+  max-width: 380px;
+  font-size: 15px;
+  line-height: 1.62;
+  color: #666666;
+}
+
+.brand-footnote {
+  position: relative;
+  z-index: 1;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #B3B3B3;
+}
+
+/* ── Right auth column ──────────────────────────────────────── */
+.form-wrapper {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+
+  @media (max-width: 980px) { flex: 1 1 auto; }
+  @media (max-width: 767px) { padding: 20px; }
 }
 
 .container {
-  background: #ffffff;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  padding-left: 40px;
-  padding-right: 40px;
+  width: 100%;
+  max-width: 408px;
+  background: #FFFFFF;
+  border: 1px solid #E5E5E5;
+  border-top: 3px solid #B00000;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 14px 44px rgba(0, 0, 0, 0.07);
+  padding: 40px 36px 26px;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 767px) { padding: 32px 22px 22px; }
+}
+
+/* Compact in-card brand (shown when side panel is hidden) */
+.card-brand {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 22px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #EEEEEE;
+
+  @media (max-width: 980px) { display: flex; }
+}
+
+.card-brand-mark {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  width: 450px;
-  height: 100%;
-  border-left: 4px solid #CC0000;
-  box-shadow: -24px 0 60px rgba(0, 0, 0, 0.5);
-  @media (max-width: 1024px) {
-    padding: 20px 18px;
-    width: 384px;
-    margin-left: 18px;
-  }
-  @media (max-width: 767px) {
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 4px;
-    padding: 32px 24px;
-    height: fit-content;
-    width: 100%;
-    margin-right: 18px;
-    margin-left: 18px;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
-  }
+  background: #B00000;
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-radius: 3px;
+}
 
-  .btn {
-    height: 44px;
-    width: 100%;
-    border-radius: 12px;
+.card-brand-meta { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.card-brand-name { font-size: 14px; font-weight: 700; color: #111111; }
+.card-brand-sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #666666;
+}
+
+.form-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #B00000;
+  margin-bottom: 12px;
+}
+
+.form-title {
+  font-weight: 700;
+  font-size: 26px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: #111111;
+}
+
+.form-desc {
+  margin-top: 10px;
+  margin-bottom: 28px;
+  color: #666666;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.field-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #111111;
+  letter-spacing: 0.01em;
+  margin: 2px 0 7px;
+}
+
+/* ── Inputs ─────────────────────────────────────────────────── */
+.el-input {
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+:deep(.el-input__wrapper) {
+  border-radius: 3px !important;
+  height: 46px;
+  background: #FFFFFF !important;
+  box-shadow: 0 0 0 1px #DADADA !important;
+  transition: box-shadow 0.15s ease !important;
+}
+:deep(.el-input__wrapper:hover) {
+  box-shadow: 0 0 0 1px #666666 !important;
+}
+:deep(.el-input__wrapper.is-focus) {
+  box-shadow: 0 0 0 1px #B00000, 0 0 0 3px rgba(176, 0, 0, 0.10) !important;
+}
+:deep(.el-input__inner) {
+  font-size: 14px !important;
+  color: #111111 !important;
+}
+
+/* ── Email + domain group ───────────────────────────────────── */
+.email-input :deep(.el-input__wrapper) {
+  box-shadow: none !important;
+  border-top:    1px solid #DADADA !important;
+  border-bottom: 1px solid #DADADA !important;
+  border-left:   1px solid #DADADA !important;
+  border-right:  none !important;
+  border-radius: 3px 0 0 3px !important;
+  background: #FFFFFF !important;
+  height: 46px;
+  transition: border-color 0.15s !important;
+}
+.email-input :deep(.el-input__wrapper.is-focus) {
+  border-color: #B00000 !important;
+  box-shadow: none !important;
+}
+.email-input :deep(.el-input-group__append) {
+  box-shadow: none !important;
+  border-top:    1px solid #DADADA !important;
+  border-right:  1px solid #DADADA !important;
+  border-bottom: 1px solid #DADADA !important;
+  border-left:   1px solid #EBEBEB !important;
+  border-radius: 0 3px 3px 0 !important;
+  background: #F5F5F5 !important;
+  padding: 0 12px !important;
+  height: 46px;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  white-space: nowrap;
+  color: #555555 !important;
+}
+.email-input:focus-within :deep(.el-input-group__append) {
+  border-top-color:    #B00000 !important;
+  border-right-color:  #B00000 !important;
+  border-bottom-color: #B00000 !important;
+}
+
+/* ── Options row ────────────────────────────────────────────── */
+.form-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 4px 0 20px;
+}
+.remember-check :deep(.el-checkbox__label) {
+  font-size: 13px;
+  color: #444444;
+  padding-left: 7px;
+}
+.text-link {
+  font-size: 13px;
+  font-weight: 500;
+  color: #B00000;
+  cursor: pointer;
+  transition: color 0.12s;
+}
+.text-link:hover { color: #8A0000; text-decoration: underline; }
+
+/* ── Buttons ────────────────────────────────────────────────── */
+.btn {
+  height: 46px;
+  width: 100%;
+  border-radius: 3px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  font-size: 14px;
+}
+.btn-oauth { margin-top: 12px; }
+
+:deep(.el-button--primary) {
+  background: #B00000 !important;
+  border-color: #B00000 !important;
+  color: #FFFFFF !important;
+  font-weight: 600 !important;
+  border-radius: 3px !important;
+  letter-spacing: 0.02em !important;
+
+  &:hover, &:focus {
+    background: #8A0000 !important;
+    border-color: #8A0000 !important;
+  }
+  &.is-loading { opacity: 0.75; }
+}
+
+/* ── Two-factor entry ───────────────────────────────────────── */
+.twofactor-entry {
+  margin-top: 14px;
+  width: 100%;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #FFFFFF;
+  border: 1px solid #DADADA;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: #111111;
+  transition: border-color 0.15s, background 0.15s;
+
+  svg { color: #B00000; }
+
+  &:hover { border-color: #111111; background: #FAFAFA; }
+}
+
+/* ── Switch + note ──────────────────────────────────────────── */
+.switch {
+  margin-top: 22px;
+  text-align: center;
+  font-size: 13px;
+  color: #666666;
+  cursor: pointer;
+
+  span {
+    color: #B00000;
+    cursor: pointer;
     font-weight: 600;
-    letter-spacing: 0.01em;
-    font-size: 14px;
-    margin-top: 4px;
   }
+}
 
-  .form-desc {
-    margin-top: 6px;
-    margin-bottom: 28px;
-    color: #888888;
-    font-size: 13px;
-    line-height: 1.6;
-  }
+.authorized-note {
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid #EEEEEE;
+  font-size: 11px;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+  color: #999999;
+  text-align: center;
+}
 
-  .form-title {
-    font-weight: 800;
-    font-size: 22px !important;
-    letter-spacing: -0.02em;
-    font-family: 'IBM Plex Sans', sans-serif;
-    color: #111111;
-  }
+/* ── Has custom background: drop the panel, float the card ───── */
+#login-box.has-bg .brand-panel { display: none; }
+#login-box.has-bg .form-wrapper { flex: 1 1 auto; }
+#login-box.has-bg .card-brand { display: flex; }
 
-  .switch {
-    margin-top: 20px;
-    text-align: center;
+/* ── Misc (preserved) ───────────────────────────────────────── */
+.setting-icon {
+  position: relative;
+  top: 6px;
+}
 
-    span {
-      color: var(--login-switch-color);
-      cursor: pointer;
-      font-weight: 600;
-    }
-  }
+.select {
+  position: absolute;
+  right: 30px;
+  width: 100px;
+  opacity: 0;
+  pointer-events: none;
+}
 
-  /* ── All inputs ── */
-  .el-input {
-    width: 100%;
-    margin-bottom: 12px;
-  }
-
-  :deep(.el-input__wrapper) {
-    border-radius: 12px !important;
-    height: 48px;
-    background: var(--el-bg-color) !important;
-  }
-  :deep(.el-input__inner) {
-    font-size: 13.5px !important;
-  }
-
-  /* ── Email + domain group — coordinated border system ── */
-  .email-input :deep(.el-input__wrapper) {
-    box-shadow: none !important;
-    border-top:    1px solid #DADADA !important;
-    border-bottom: 1px solid #DADADA !important;
-    border-left:   1px solid #DADADA !important;
-    border-right:  none !important;
-    border-radius: 3px 0 0 3px !important;
-    background: var(--el-bg-color) !important;
-    height: 42px;
-    transition: border-color 0.15s !important;
-  }
-  .email-input :deep(.el-input__wrapper.is-focus) {
-    border-color: #CC0000 !important;
-    box-shadow: none !important;
-  }
-  .email-input :deep(.el-input-group__append) {
-    box-shadow: none !important;
-    border-top:    1px solid #DADADA !important;
-    border-right:  1px solid #DADADA !important;
-    border-bottom: 1px solid #DADADA !important;
-    border-left:   1px solid #EBEBEB !important;
-    border-radius: 0 3px 3px 0 !important;
-    background: #F5F5F5 !important;
-    padding: 0 12px !important;
-    height: 42px;
-    font-size: 13px !important;
-    font-weight: 500 !important;
-    white-space: nowrap;
-    color: #555 !important;
-  }
-  .email-input:focus-within :deep(.el-input-group__append) {
-    border-top-color:    #CC0000 !important;
-    border-right-color:  #CC0000 !important;
-    border-bottom-color: #CC0000 !important;
-  }
+.register-turnstile {
+  margin-bottom: 18px;
 }
 
 :deep(.el-select-dropdown__item) {
@@ -772,9 +1117,8 @@ function submitRegister() {
   gap: 15px;
 }
 
-.setting-icon {
-  position: relative;
-  top: 6px;
+:deep(.el-button + .el-button) {
+  margin: 0;
 }
 
 .psg-link {
@@ -799,129 +1143,4 @@ function submitRegister() {
     border-radius: 3px;
   }
 }
-
-
-:deep(.el-button+.el-button) {
-  margin: 0;
-}
-
-.register-turnstile {
-  margin-bottom: 18px;
-}
-
-.select {
-  position: absolute;
-  right: 30px;
-  width: 100px;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.custom-style {
-  margin-bottom: 10px;
-}
-
-.custom-style .el-segmented {
-  --el-border-radius-base: 6px;
-  width: 180px;
-}
-
-
-#login-box {
-  background: #111111;
-  font: 100% Arial, sans-serif;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: 1fr;
-  position: relative;
-}
-
-/* No decorative orbs — German austerity */
-#background-wrap { display: none; }
-.cloud { display: none; }
-
-/* ── Left branding panel ── */
-/* ── Left brand panel: editorial bottom-anchored typography ── */
-.brand-panel {
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 450px;
-  z-index: 5;
-  display: flex;
-  align-items: flex-end;
-  padding: 56px 60px;
-  border-right: 1px solid #1c1c1c;
-
-  @media (max-width: 1200px) {
-    right: 420px;
-    padding: 48px 48px;
-  }
-  @media (max-width: 1100px) {
-    display: none;
-  }
-}
-
-.brand-editorial {
-  width: 100%;
-}
-
-.brand-wordmark {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 28px;
-
-  .wm-line {
-    display: block;
-    font-family: 'IBM Plex Mono', 'Courier New', monospace;
-    font-size: clamp(20px, 3.2vw, 42px);
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    line-height: 1.18;
-    color: #ffffff;
-    text-transform: uppercase;
-
-    &.muted { color: rgba(255, 255, 255, 0.42); }
-    &.accent { color: #CC0000; }
-  }
-}
-
-.brand-divider {
-  width: 36px;
-  height: 2px;
-  background: #CC0000;
-  margin-bottom: 20px;
-}
-
-.brand-caption {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.28);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  margin: 0;
-}
-
-
-:deep(.el-button--primary) {
-  background: #CC0000 !important;
-  border-color: #CC0000 !important;
-  color: #ffffff !important;
-  font-weight: 700 !important;
-  border-radius: 2px !important;
-  letter-spacing: 0.04em !important;
-
-  &:hover, &:focus {
-    background: #A00000 !important;
-    border-color: #A00000 !important;
-  }
-
-  &.is-loading { opacity: 0.75; }
-}
-
 </style>
