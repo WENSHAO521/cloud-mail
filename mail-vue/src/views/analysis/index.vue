@@ -752,8 +752,8 @@ function createSendGauge() {
 
 .stat-card {
   background: var(--surface, #fff);
-  border-radius: 24px;
-  border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+  border-radius: 4px;
+  border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 80%, transparent);
   box-shadow: 0 4px 14px rgba(0,0,0,0.04);
   padding: 20px;
 
@@ -774,7 +774,7 @@ function createSendGauge() {
   .stat-label {
     font-size: 13px;
     font-weight: 500;
-    color: var(--muted, #9ca3af);
+    color: var(--muted, #666666);
   }
 
   .stat-value {
@@ -789,7 +789,7 @@ function createSendGauge() {
   .stat-icon {
     width: 48px;
     height: 48px;
-    border-radius: 14px;
+    border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -801,11 +801,11 @@ function createSendGauge() {
     gap: 12px;
     margin-top: 14px;
     font-size: 12px;
-    color: var(--secondary-text-color, #6b7280);
+    color: var(--secondary-text-color, #666666);
   }
 
-  .bd-normal { color: var(--secondary-text-color, #6b7280); }
-  .bd-del { color: var(--muted, #9ca3af); }
+  .bd-normal { color: var(--secondary-text-color, #666666); }
+  .bd-del { color: var(--muted, #666666); }
 }
 
 /* ── Chart cards ── */
@@ -818,8 +818,8 @@ function createSendGauge() {
 
 .chart-card {
   background: var(--surface, #fff);
-  border-radius: 24px;
-  border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+  border-radius: 4px;
+  border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 80%, transparent);
   box-shadow: 0 4px 14px rgba(0,0,0,0.04);
   padding: 20px;
 

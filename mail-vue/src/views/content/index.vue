@@ -274,16 +274,16 @@ function handleDelete() {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  border-radius: 24px;
+  border-radius: 4px;
   background: var(--surface, #ffffff);
-  border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+  border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 80%, transparent);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.05);
 
-  .empty-icon { color: var(--muted, #9ca3af); opacity: 0.5; }
+  .empty-icon { color: var(--muted, #666666); opacity: 0.5; }
 
   .empty-text {
     font-size: 14px;
-    color: var(--muted, #9ca3af);
+    color: var(--muted, #666666);
   }
 }
 
@@ -292,9 +292,9 @@ function handleDelete() {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border-radius: 24px;
+  border-radius: 4px;
   background: var(--surface, #ffffff);
-  border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+  border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 80%, transparent);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.05);
 
   @media (max-width: 760px) {
@@ -311,7 +311,7 @@ function handleDelete() {
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  border-bottom: 1px solid var(--separator, #e5e7eb);
+  border-bottom: 1px solid var(--separator, #e5e5e5);
   flex-shrink: 0;
 }
 
@@ -332,7 +332,7 @@ function handleDelete() {
   background: transparent;
   border-radius: 50%;
   cursor: pointer;
-  color: var(--muted, #9ca3af);
+  color: var(--muted, #666666);
   transition: background 0.12s ease, color 0.12s ease;
   flex-shrink: 0;
 
@@ -352,7 +352,7 @@ function handleDelete() {
   background: transparent;
   border-radius: 50%;
   cursor: pointer;
-  color: var(--muted, #9ca3af);
+  color: var(--muted, #666666);
   text-decoration: none;
   transition: background 0.12s ease, color 0.12s ease;
 
@@ -364,7 +364,7 @@ function handleDelete() {
 .page-counter {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 12px;
-  color: var(--muted, #9ca3af);
+  color: var(--muted, #666666);
   white-space: nowrap;
   letter-spacing: 0.02em;
   font-variant-numeric: tabular-nums;
@@ -425,15 +425,15 @@ function handleDelete() {
 }
 
 .meta-sender-email {
-  font-size: 13px; color: var(--muted, #9ca3af);
+  font-size: 13px; color: var(--muted, #666666);
   overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
 }
 
 .meta-to {
   display: flex; align-items: baseline; gap: 6px;
-  font-size: 13px; color: var(--muted, #9ca3af); flex-wrap: wrap;
+  font-size: 13px; color: var(--muted, #666666); flex-wrap: wrap;
 }
-.meta-label { font-weight: 500; color: var(--muted, #9ca3af); flex-shrink: 0; }
+.meta-label { font-weight: 500; color: var(--muted, #666666); flex-shrink: 0; }
 .meta-value { color: var(--el-text-color-primary); word-break: break-word; }
 
 .meta-right {
@@ -441,7 +441,7 @@ function handleDelete() {
 }
 .meta-date {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px; color: var(--muted, #9ca3af);
+  font-size: 12px; color: var(--muted, #666666);
   white-space: nowrap; font-variant-numeric: tabular-nums;
 }
 .email-msg { margin-top: 4px; }
@@ -457,33 +457,33 @@ function handleDelete() {
 .email-text {
   font-family: 'IBM Plex Mono', 'Courier New', monospace;
   white-space: pre-wrap; word-break: break-word;
-  margin: 0; font-size: 14px; line-height: 1.8; color: var(--muted, #9ca3af);
+  margin: 0; font-size: 14px; line-height: 1.8; color: var(--muted, #666666);
 }
 
 /* ── Attachments ─────────────────────────────────────────── */
 .att-container {
   margin-top: 40px; max-width: 560px;
-  border-radius: 16px; border: 1px solid var(--separator, #e5e7eb); padding: 16px;
+  border-radius: 4px; border: 1px solid var(--separator, #e5e5e5); padding: 16px;
 }
 .att-header {
   display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
 }
 .att-title-text { font-size: 14px; font-weight: 600; color: var(--el-text-color-primary); }
-.att-count { font-size: 13px; color: var(--muted, #9ca3af); }
+.att-count { font-size: 13px; color: var(--muted, #666666); }
 .att-list { display: flex; flex-direction: column; gap: 6px; }
 
 .att-item {
   display: flex; align-items: center; gap: 10px;
-  border-radius: 10px; background: var(--surface-secondary, #f3f3f3);
+  border-radius: 10px; background: var(--surface-secondary, #f0f0f0);
   padding: 8px 12px; cursor: pointer; transition: background 0.12s ease;
 
   @media (hover: hover) {
-    &:hover { background: color-mix(in srgb, var(--surface-secondary, #f3f3f3) 70%, var(--separator, #e5e7eb)); }
+    &:hover { background: color-mix(in srgb, var(--surface-secondary, #f0f0f0) 70%, var(--separator, #e5e5e5)); }
   }
 
-  .att-icon-file { flex-shrink: 0; color: var(--muted, #9ca3af); }
+  .att-icon-file { flex-shrink: 0; color: var(--muted, #666666); }
   .att-name { flex: 1; min-width: 0; font-size: 14px; font-weight: 500; color: var(--el-text-color-primary); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-  .att-size { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--muted, #9ca3af); flex-shrink: 0; white-space: nowrap; }
+  .att-size { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--muted, #666666); flex-shrink: 0; white-space: nowrap; }
   .att-actions { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
 }
 </style>
@@ -496,6 +496,6 @@ blockquote {
   border-left: 3px solid #b00000 !important;
   padding-left: 16px !important;
   margin: 16px 0 !important;
-  color: #6b7280 !important;
+  color: #666666 !important;
 }
 </style>

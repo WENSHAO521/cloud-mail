@@ -3,6 +3,15 @@
          :data-collapsed="String(collapsed)"
          :data-open="String(uiStore.asideShow)">
 
+    <!-- ── Brand ────────────────────────────────────────── -->
+    <div class="sidebar-brand">
+      <div class="brand-mark">PSG</div>
+      <div class="brand-meta">
+        <div class="brand-name">Panorama Scholarly Group</div>
+        <div class="brand-sub">Institutional Mail</div>
+      </div>
+    </div>
+
     <!-- ── Header ───────────────────────────────────────── -->
     <div class="sidebar-header">
       <div class="acct-section">
@@ -214,12 +223,63 @@ function clickLogout() {
   }
 }
 
+/* ── Brand ───────────────────────────────────────────────── */
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 22px 24px 16px;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.brand-mark {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #b00000;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  border-radius: 3px;
+}
+
+.brand-meta {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.brand-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.brand-sub {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.40);
+  white-space: nowrap;
+}
+
 /* ── Header ──────────────────────────────────────────────── */
 .sidebar-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 16px 20px 24px;
+  padding: 16px 16px 18px 24px;
   flex-shrink: 0;
   gap: 8px;
 }
@@ -499,6 +559,15 @@ function clickLogout() {
    ══════════════════════════════════════════════════════════ */
 .mail-sidebar[data-collapsed="true"] {
   width: 72px;
+
+  .sidebar-brand {
+    justify-content: center;
+    padding-inline: 12px;
+  }
+
+  .brand-meta {
+    display: none;
+  }
 
   .sidebar-header {
     flex-direction: column;

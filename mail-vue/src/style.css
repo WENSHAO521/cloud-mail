@@ -184,54 +184,54 @@ button, input, select, textarea {
 :root {
     /* PSG — Black / White / Deep Red — German scholarly publisher */
     --el-color-primary: #b00000;
-    --el-color-primary-dark-2: #8f0000;
+    --el-color-primary-dark-2: #8A0000;
     --el-color-primary-light-3: #c93333;
     --el-color-primary-light-5: #d46666;
     --el-color-primary-light-7: #e09999;
     --el-color-primary-light-9: #f5dddd;
 
     --red-accent: #b00000;
-    --red-accent-dark: #8f0000;
+    --red-accent-dark: #8A0000;
     --red-accent-subtle: rgba(176, 0, 0, 0.07);
 
-    /* PSG explicit brand tokens */
+    /* PSG explicit brand tokens — exact brief palette */
     --psg-red: #b00000;
-    --psg-red-hover: #8f0000;
+    --psg-red-hover: #8A0000;
     --psg-black: #111111;
     --psg-white: #ffffff;
     --psg-bg: #f7f7f7;
-    --psg-border: #e5e7eb;
+    --psg-border: #e5e5e5;
     --psg-text-primary: #111111;
-    --psg-text-secondary: #6b7280;
+    --psg-text-secondary: #666666;
 
-    /* vfasky-compatible surface tokens */
+    /* Surface tokens */
     --surface: #ffffff;
-    --surface-secondary: #f3f3f3;
-    --separator: #e5e7eb;
-    --muted: #9ca3af;
+    --surface-secondary: #f0f0f0;
+    --separator: #e5e5e5;
+    --muted: #666666;
 
     /* Light-mode surfaces */
     --extra-light-fill: #f7f7f7;
     --light-ill: #efefef;
-    --light-border: #e5e7eb;
-    --header-actions-border: inset 0 -1px 0 0 #e5e7eb;
+    --light-border: #e5e5e5;
+    --header-actions-border: inset 0 -1px 0 0 #e5e5e5;
     --aside-backgound: #111111;
     --loadding-background: rgba(255, 255, 255, 0.88);
     --dark-border: #c0c0c0;
     --base-fill: #f0f0f0;
-    --regular-text-color: #4b5563;
-    --light-border-color: #e5e7eb;
+    --regular-text-color: #444444;
+    --light-border-color: #e5e5e5;
     --aside-right-border: 1px 0 0 rgba(0, 0, 0, 0.10);
     --choose-account-background: #fdf2f2;
     --el-text-color-regular: var(--el-text-color-primary);
-    --email-scroll-content-color: #6b7280;
+    --email-scroll-content-color: #666666;
     --email-hover-background: #f0f0f0;
-    --login-border: 1px solid #e5e7eb;
-    --form-desc-color: #6b7280;
+    --login-border: 1px solid #e5e5e5;
+    --form-desc-color: #666666;
     --login-switch-color: #b00000;
     --scrollbar-track-color: #c0c0c0;
-    --base-border-color: #e5e7eb;
-    --secondary-text-color: #6b7280;
+    --base-border-color: #e5e5e5;
+    --secondary-text-color: #666666;
     --message-block-color: rgba(0, 0, 0, 0);
     --loading-hide-transition: all 200ms;
     --vt-x: 50%;
@@ -243,14 +243,14 @@ button, input, select, textarea {
     --card-shadow-hover: 0 2px 8px rgba(0, 0, 0, 0.09), 0 1px 3px rgba(0, 0, 0, 0.05);
     --compose-shadow: 0 8px 40px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(0, 0, 0, 0.08);
 
-    /* PSG Gradients — Black/White/Red palette only */
-    --psg-gradient-red:        linear-gradient(135deg, #c00000 0%, #7a0000 100%);
-    --psg-gradient-red-h:      linear-gradient(135deg, #a80000 0%, #680000 100%);
-    --psg-gradient-dark:       linear-gradient(180deg, #1c1c1c 0%, #0a0a0a 100%);
-    --psg-gradient-sidebar:    linear-gradient(180deg, #161616 0%, #0a0a0a 100%);
-    --psg-gradient-card-top:   linear-gradient(90deg, #b00000 0%, #7a0000 100%);
-    --psg-gradient-header-bar: linear-gradient(90deg, #0f0f0f 0%, #1a0000 100%);
-    --psg-gradient-surface:    linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+    /* Flat fills — German minimalist, no gradients (kept as vars for compatibility) */
+    --psg-gradient-red:        #b00000;
+    --psg-gradient-red-h:      #8A0000;
+    --psg-gradient-dark:       #111111;
+    --psg-gradient-sidebar:    #111111;
+    --psg-gradient-card-top:   #b00000;
+    --psg-gradient-header-bar: #111111;
+    --psg-gradient-surface:    #ffffff;
 
     /* Motion — never use 'all', only specific properties */
     --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
@@ -267,7 +267,7 @@ button, input, select, textarea {
     --muted: #6b7280;
 
     --red-accent: #b00000;
-    --red-accent-dark: #8f0000;
+    --red-accent-dark: #8A0000;
     --red-accent-subtle: rgba(176, 0, 0, 0.10);
 
     --extra-light-fill: #181818;
@@ -312,7 +312,7 @@ button, input, select, textarea {
     overflow-x: auto;
     padding: 4px;
     border-radius: 999px;
-    background: var(--surface-secondary, #f3f3f3);
+    background: var(--surface-secondary, #f0f0f0);
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
     margin-bottom: 20px;
 }
@@ -412,18 +412,17 @@ button, input, select, textarea {
     transform: scale(0.97) !important;
 }
 .el-button--primary {
-    background: var(--psg-gradient-red) !important;
+    background: #b00000 !important;
     border-color: #b00000 !important;
     color: #ffffff !important;
     font-size: 13px !important;
     font-weight: 600 !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.25) !important;
 }
 .el-button--primary:hover,
 .el-button--primary:focus {
-    background: var(--psg-gradient-red-h) !important;
-    border-color: #8f0000 !important;
-    box-shadow: 0 2px 8px rgba(176, 0, 0, 0.35) !important;
+    background: #8A0000 !important;
+    border-color: #8A0000 !important;
+    box-shadow: none !important;
 }
 .el-button--default {
     border-color: #CCCCCC !important;
@@ -601,7 +600,7 @@ button, input, select, textarea {
     border-radius: 3px !important;
     background: #ffffff !important;
     box-shadow: 0 4px 16px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.06) !important;
-    border: 1px solid #e5e7eb !important;
+    border: 1px solid #e5e5e5 !important;
     overflow: hidden !important;
 }
 .dark .el-dropdown__popper,
@@ -626,7 +625,7 @@ button, input, select, textarea {
 .el-select__popper,
 .el-select-dropdown {
     background: #ffffff !important;
-    border: 1px solid #e5e7eb !important;
+    border: 1px solid #e5e5e5 !important;
     box-shadow: 0 4px 16px rgba(0,0,0,0.10) !important;
     border-radius: 3px !important;
 }

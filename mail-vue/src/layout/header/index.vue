@@ -215,7 +215,7 @@ function formatName(email) {
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--separator, #e5e7eb);
+  border-bottom: 1px solid var(--separator, #e5e5e5);
   gap: 4px;
   position: sticky;
   top: 0;
@@ -266,7 +266,7 @@ function formatName(email) {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--muted, #9ca3af);
+  color: var(--muted, #666666);
   transition: background 0.12s, color 0.12s;
   flex-shrink: 0;
 
@@ -324,8 +324,8 @@ function formatName(email) {
     align-items: center;
     gap: 14px;
     padding: 18px 20px 16px;
-    border-bottom: 1px solid var(--separator, #e5e7eb);
-    background: var(--surface-secondary, #f3f3f3);
+    border-bottom: 1px solid var(--separator, #e5e5e5);
+    background: var(--surface-secondary, #f0f0f0);
   }
 
   .details-avatar {
@@ -420,10 +420,10 @@ function formatName(email) {
 }
 
 :deep(.el-popper.is-pure) {
-  border-radius: 14px;
+  border-radius: 4px;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0,0,0,0.10), 0 1px 3px rgba(0,0,0,0.06) !important;
-  border: 1px solid var(--separator, #e5e7eb) !important;
+  border: 1px solid var(--separator, #e5e5e5) !important;
 }
 
 .el-tooltip__trigger:first-child:focus-visible {

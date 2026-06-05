@@ -613,9 +613,9 @@ function loadData() { getEmailList() }
   gap: 12px;
   height: 52px;
   background: var(--surface, #fff);
-  border-radius: 16px;
+  border-radius: 4px;
   padding: 0 16px;
-  border: 1px solid var(--separator, #e5e7eb);
+  border: 1px solid var(--separator, #e5e5e5);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
   transition: box-shadow 0.14s ease;
 
@@ -624,7 +624,7 @@ function loadData() { getEmailList() }
     box-shadow: 0 0 0 3px rgba(176, 0, 0, 0.07), 0 1px 4px rgba(0, 0, 0, 0.06);
   }
 
-  .search-icon-pill { color: var(--muted, #9ca3af); flex-shrink: 0; }
+  .search-icon-pill { color: var(--muted, #666666); flex-shrink: 0; }
 
   .search-input {
     flex: 1;
@@ -634,11 +634,11 @@ function loadData() { getEmailList() }
     font-size: 15px;
     color: var(--el-text-color-primary);
     min-width: 0;
-    &::placeholder { color: var(--muted, #9ca3af); }
+    &::placeholder { color: var(--muted, #666666); }
   }
 
   .search-clear-icon {
-    color: var(--muted, #9ca3af);
+    color: var(--muted, #666666);
     cursor: pointer;
     flex-shrink: 0;
     &:hover { color: var(--el-text-color-primary); }
@@ -652,8 +652,8 @@ function loadData() { getEmailList() }
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
-  border-top: 1px solid var(--separator, #e5e7eb);
-  border-bottom: 1px solid var(--separator, #e5e7eb);
+  border-top: 1px solid var(--separator, #e5e5e5);
+  border-bottom: 1px solid var(--separator, #e5e5e5);
   background: var(--surface, #fff);
   flex-shrink: 0;
 
@@ -671,7 +671,7 @@ function loadData() { getEmailList() }
 
   .mail-count {
     font-size: 12px;
-    color: var(--muted, #9ca3af);
+    color: var(--muted, #666666);
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
   }
@@ -688,7 +688,7 @@ function loadData() { getEmailList() }
   background: transparent;
   border-radius: 50%;
   cursor: pointer;
-  color: var(--muted, #9ca3af);
+  color: var(--muted, #666666);
   transition: background 0.12s ease, color 0.12s ease;
   flex-shrink: 0;
 
@@ -726,7 +726,7 @@ function loadData() { getEmailList() }
     align-items: center;
     padding: 12px 0;
     font-size: 13px;
-    color: var(--muted, #9ca3af);
+    color: var(--muted, #666666);
   }
 }
 
@@ -737,12 +737,13 @@ function loadData() { getEmailList() }
 
 /* ── Mail row (mirrors vfasky .mail-row) ──────────────────── */
 :deep(.mail-row) {
+  position: relative;
   display: grid;
   grid-template-columns: 56px 1fr auto;
   gap: 12px;
   min-height: 96px;
   padding: 14px;
-  border-radius: 18px;
+  border-radius: 4px;
   background: transparent;
   cursor: pointer;
   transition: background 140ms ease, box-shadow 140ms ease, transform 140ms ease;
@@ -808,7 +809,7 @@ function loadData() { getEmailList() }
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 0 1px var(--separator, #e5e7eb);
+    box-shadow: 0 0 0 1px var(--separator, #e5e5e5);
   }
 }
 
@@ -858,7 +859,7 @@ function loadData() { getEmailList() }
 
   .mail-preview {
     font-size: 14px;
-    color: var(--muted, #9ca3af);
+    color: var(--muted, #666666);
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -876,7 +877,7 @@ function loadData() { getEmailList() }
       align-items: center;
       gap: 4px;
       font-size: 11px;
-      color: var(--muted, #9ca3af);
+      color: var(--muted, #666666);
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -915,9 +916,21 @@ function loadData() { getEmailList() }
   .mail-time { color: var(--el-text-color-primary) !important; font-weight: 700 !important; }
 }
 
+/* Subtle left red marker for unread rows (institutional accent) */
+:deep(.mail-row.is-unread)::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background: #b00000;
+}
+
 :deep(.mail-row:not(.is-unread)) {
-  .mail-name { color: #374151; }
-  .mail-subject { color: #6b7280; }
+  .mail-name { color: #444444; }
+  .mail-subject { color: #666666; }
 }
 
 /* ── Right column ─────────────────────────────────────────── */
@@ -940,7 +953,7 @@ function loadData() { getEmailList() }
   .mail-time {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 11px;
-    color: var(--muted, #9ca3af);
+    color: var(--muted, #666666);
     white-space: nowrap;
     letter-spacing: 0.02em;
     font-variant-numeric: tabular-nums;

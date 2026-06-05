@@ -155,7 +155,7 @@ async function deleteTpl(templateId) {
 /* ── Page heading ── */
 .page-head {
   padding-bottom: 16px;
-  border-bottom: 1px solid var(--separator, #e5e7eb);
+  border-bottom: 1px solid var(--separator, #e5e5e5);
   margin-bottom: 24px;
 }
 .page-h1 {
@@ -192,8 +192,8 @@ async function deleteTpl(templateId) {
   align-items: center;
   padding: 12px 16px;
   background: var(--surface, #fff);
-  border-radius: 24px;
-  border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+  border-radius: 4px;
+  border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 80%, transparent);
   box-shadow: 0 4px 14px rgba(0,0,0,0.04);
 }
 
@@ -217,8 +217,8 @@ async function deleteTpl(templateId) {
 /* Item list */
 .item-list {
   background: var(--surface, #fff);
-  border-radius: 24px;
-  border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+  border-radius: 4px;
+  border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 80%, transparent);
   box-shadow: 0 4px 14px rgba(0,0,0,0.04);
   overflow: hidden;
 }

@@ -779,17 +779,12 @@ path[fill="#ffdda1"] {
     transform: translateX(0);
   }
 
-  /* ── Selected — gradient background, no bar ── */
+  /* ── Selected — flat red wash + left indicator ── */
   .item-choose {
     border-color: transparent !important;
-    border-left-color: transparent !important;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
-    background: linear-gradient(
-      to right,
-      rgba(204, 0, 0, 0.13) 0%,
-      rgba(204, 0, 0, 0.05) 55%,
-      rgba(204, 0, 0, 0.00) 100%
-    ) !important;
+    border-left: 2px solid #b00000 !important;
+    box-shadow: none !important;
+    background: rgba(176, 0, 0, 0.06) !important;
 
     .item-name {
       font-weight: 700;

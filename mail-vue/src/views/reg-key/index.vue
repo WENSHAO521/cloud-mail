@@ -412,8 +412,8 @@ function openAdd() {
   flex-wrap: wrap;
   align-items: center;
   background: var(--surface, #fff);
-  border-radius: 24px;
-  border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+  border-radius: 4px;
+  border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 80%, transparent);
   box-shadow: 0 4px 14px rgba(0,0,0,0.04);
 
   .search-input {
@@ -422,7 +422,7 @@ function openAdd() {
 
   .icon {
     cursor: pointer;
-    color: var(--muted, #9ca3af);
+    color: var(--muted, #666666);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -451,8 +451,8 @@ function openAdd() {
 
     .code-item {
       background: var(--surface, #fff);
-      border-radius: 24px;
-      border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+      border-radius: 4px;
+      border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 80%, transparent);
       box-shadow: 0 4px 14px rgba(0,0,0,0.04);
       transition: box-shadow 0.14s ease;
       padding: 16px;
