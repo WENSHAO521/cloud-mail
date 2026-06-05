@@ -654,7 +654,7 @@ function submitRegister() {
   }
   @media (max-width: 767px) {
     border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 16px;
+    border-radius: 4px;
     padding: 32px 24px;
     height: fit-content;
     width: 100%;

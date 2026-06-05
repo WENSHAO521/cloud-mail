@@ -986,7 +986,7 @@ function close() {
   display: grid;
   grid-template-rows: auto 1fr;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.40), 0 4px 16px rgba(0,0,0,0.18);
-  border-radius: 16px;
+  border-radius: 4px;
   overflow: hidden;
 
   @media (max-width: 767px) {
@@ -1000,17 +1000,16 @@ function close() {
   }
 }
 
-/* ── Header — dark gradient editorial bar ──────── */
+/* ── Header — flat editorial bar ──────── */
 .wh {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 16px 0 20px;
-  background: linear-gradient(90deg, #111111 0%, #1c0000 100%);
+  background: #111111;
   height: 52px;
   flex-shrink: 0;
-  border-bottom: 3px solid transparent;
-  border-image: linear-gradient(90deg, #c00000 0%, #7a0000 100%) 1;
+  border-bottom: 2px solid #b00000;
 }
 
 .wh-left {
@@ -1273,7 +1272,7 @@ function close() {
 /* Subject row */
 .subject-row {
   min-height: 50px;
-  border-bottom: 1px solid var(--separator, #e5e7eb);
+  border-bottom: 1px solid var(--separator, #e5e5e5);
 }
 
 /* Editor fills remaining height */

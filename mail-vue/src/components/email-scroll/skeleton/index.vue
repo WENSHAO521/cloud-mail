@@ -62,7 +62,7 @@ defineProps({
   gap: 12px;
   min-height: 96px;
   padding: 14px;
-  border-radius: 18px;
+  border-radius: 4px;
   background: transparent;
   pointer-events: none;
 }
@@ -71,7 +71,7 @@ defineProps({
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: var(--separator, #e5e7eb);
+  background: var(--separator, #e5e5e5);
   flex-shrink: 0;
   align-self: flex-start;
   margin-top: 2px;
@@ -89,7 +89,7 @@ defineProps({
   .skel-name {
     height: 16px;
     width: 120px;
-    background: var(--separator, #e5e7eb);
+    background: var(--separator, #e5e5e5);
     border-radius: 4px;
     opacity: 0.7;
   }

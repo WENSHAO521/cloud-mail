@@ -1675,8 +1675,8 @@ function editSetting(settingForm, refreshStatus = true) {
 .settings-sidebar,
 .settings-panel {
   background: var(--surface, #ffffff);
-  border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 92%, transparent);
-  border-radius: 24px;
+  border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 92%, transparent);
+  border-radius: 4px;
   box-shadow: 0 16px 36px rgba(17, 17, 17, 0.08), 0 1px 2px rgba(17, 17, 17, 0.04);
   overflow: hidden;
 }
@@ -1695,7 +1695,7 @@ function editSetting(settingForm, refreshStatus = true) {
     min-height: 0;
     flex-direction: row;
     overflow-x: auto;
-    border-radius: 18px;
+    border-radius: 4px;
   }
 }
 
@@ -1706,15 +1706,15 @@ function editSetting(settingForm, refreshStatus = true) {
   display: flex;
   align-items: center;
   gap: 12px;
-  border-radius: 16px;
-  color: var(--psg-text-secondary, #6b7280);
+  border-radius: 4px;
+  color: var(--psg-text-secondary, #666666);
   font-size: 16px;
   font-weight: 650;
   cursor: pointer;
   transition: background 160ms var(--ease-out, ease), color 160ms var(--ease-out, ease), transform 160ms var(--ease-out, ease);
 
   &:hover {
-    background: color-mix(in srgb, var(--surface-secondary, #f3f3f3) 86%, transparent);
+    background: color-mix(in srgb, var(--surface-secondary, #f0f0f0) 86%, transparent);
     color: var(--el-text-color-primary);
   }
 
@@ -1746,7 +1746,7 @@ function editSetting(settingForm, refreshStatus = true) {
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
-  border-bottom: 1px solid var(--separator, #e5e7eb);
+  border-bottom: 1px solid var(--separator, #e5e5e5);
 
   h1 {
     margin: 0 0 4px;
@@ -1759,7 +1759,7 @@ function editSetting(settingForm, refreshStatus = true) {
   p {
     margin: 0;
     max-width: 38rem;
-    color: var(--psg-text-secondary, #6b7280);
+    color: var(--psg-text-secondary, #666666);
     font-size: 14px;
     font-weight: 500;
     line-height: 1.4;
@@ -1775,7 +1775,7 @@ function editSetting(settingForm, refreshStatus = true) {
   flex: 0 0 auto;
   min-width: 68px;
   height: 42px !important;
-  border-radius: 18px !important;
+  border-radius: 4px !important;
   margin: 0 !important;
 }
 
@@ -1835,7 +1835,7 @@ function editSetting(settingForm, refreshStatus = true) {
   gap: 20px;
   padding: 14px 20px;
   align-items: center;
-  border-bottom: 1px solid var(--separator, #e5e7eb);
+  border-bottom: 1px solid var(--separator, #e5e5e5);
   font-weight: 650;
 
   > div:first-child {
@@ -1854,7 +1854,7 @@ function editSetting(settingForm, refreshStatus = true) {
     p {
       flex-basis: 100%;
       margin: 1px 0 0;
-      color: var(--psg-text-secondary, #6b7280);
+      color: var(--psg-text-secondary, #666666);
       font-size: 13px;
       font-weight: 550;
       line-height: 1.35;
@@ -1893,7 +1893,7 @@ function editSetting(settingForm, refreshStatus = true) {
   grid-template-columns: minmax(190px, 1fr) minmax(150px, auto);
   gap: 20px;
   align-items: center;
-  border-bottom: 1px solid var(--separator, #e5e7eb);
+  border-bottom: 1px solid var(--separator, #e5e5e5);
 
   > div:first-child {
     display: flex;

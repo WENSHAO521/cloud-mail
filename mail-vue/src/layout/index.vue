@@ -222,7 +222,7 @@ onBeforeUnmount(() => {
 .mail-list-pane {
   min-height: 0;
   overflow: hidden;
-  border-right: 1px solid var(--separator, #e5e7eb);
+  border-right: 1px solid var(--separator, #e5e5e5);
   background: var(--psg-bg, #f7f7f7);
 
   @media (max-width: 1024px) {

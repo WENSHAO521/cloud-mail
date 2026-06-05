@@ -393,7 +393,7 @@ function submitPwd() {
   gap: 4px;
   padding: 4px;
   border-radius: 999px;
-  background: var(--surface-secondary, #f3f3f3);
+  background: var(--surface-secondary, #f0f0f0);
   box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
   margin-bottom: 20px;
 }
@@ -403,7 +403,7 @@ function submitPwd() {
   border: none;
   border-radius: 999px;
   background: transparent;
-  color: var(--secondary-text-color, #6b7280);
+  color: var(--secondary-text-color, #666666);
   cursor: pointer;
   font-size: 13.5px;
   font-weight: 700;
@@ -423,8 +423,8 @@ function submitPwd() {
 /* ── Section — surface-card ── */
 .section {
   background: var(--surface, #fff);
-  border-radius: 24px;
-  border: 1px solid color-mix(in srgb, var(--separator, #e5e7eb) 80%, transparent);
+  border-radius: 4px;
+  border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 80%, transparent);
   box-shadow: 0 4px 14px rgba(0,0,0,0.04);
   overflow: hidden;
   margin-bottom: 20px;
@@ -439,7 +439,7 @@ function submitPwd() {
   justify-content: space-between;
   gap: 12px;
   padding: 16px 24px;
-  border-bottom: 1px solid var(--separator, #e5e7eb);
+  border-bottom: 1px solid var(--separator, #e5e5e5);
 }
 
 .section-label {
@@ -563,7 +563,7 @@ function submitPwd() {
   align-items: center;
   min-height: 52px;
   padding: 12px 0;
-  border-bottom: 1px solid var(--separator, #e5e7eb);
+  border-bottom: 1px solid var(--separator, #e5e5e5);
   gap: 16px;
 
   &.last, &:last-child { border-bottom: none; }
@@ -578,7 +578,7 @@ function submitPwd() {
 .data-key {
   font-size: 13px;
   font-weight: 500;
-  color: var(--muted, #9ca3af);
+  color: var(--muted, #666666);
   flex-shrink: 0;
 }
 
