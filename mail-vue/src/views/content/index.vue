@@ -39,6 +39,8 @@
       </span>
     </header>
 
+    <!-- Body + right context panel -->
+    <div class="detail-split">
     <!-- Scrollable content -->
     <el-scrollbar class="detail-scroll">
       <div class="detail-content">
@@ -109,6 +111,60 @@
 
       </div>
     </el-scrollbar>
+
+      <!-- ── Right context panel (desktop only) ──────────── -->
+      <aside class="context-panel">
+        <div class="ctx-block">
+          <div class="ctx-label">{{ $t('ctxContact') }}</div>
+          <div class="ctx-contact">
+            <div class="ctx-avatar" :style="{ background: metaAvatarBg }">
+              <span>{{ (email.name || email.sendEmail || '?')[0].toUpperCase() }}</span>
+              <img v-if="metaAvatarImg" :src="metaAvatarImg" class="ctx-avatar-img"
+                   @error="e => e.target.style.display = 'none'" />
+            </div>
+            <div class="ctx-contact-meta">
+              <div class="ctx-name">{{ email.name || email.sendEmail }}</div>
+              <div class="ctx-email">{{ email.sendEmail }}</div>
+            </div>
+          </div>
+          <div class="ctx-rows">
+            <div class="ctx-row">
+              <span class="ctx-k">{{ $t('ctxOrg') }}</span>
+              <span class="ctx-v mono">{{ senderOrg }}</span>
+            </div>
+            <div class="ctx-row">
+              <span class="ctx-k">{{ $t('ctxLastContact') }}</span>
+              <span class="ctx-v">{{ lastContact }}</span>
+            </div>
+            <div class="ctx-row" v-if="manuscriptId">
+              <span class="ctx-k">{{ $t('ctxManuscript') }}</span>
+              <span class="ctx-v mono accent">{{ manuscriptId }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ctx-block" v-if="sendUsage">
+          <div class="ctx-label">{{ $t('ctxSendingToday') }}</div>
+          <div class="ctx-usage-num"><strong>{{ sendUsage.used }}</strong> / {{ sendUsage.total }}</div>
+          <div class="ctx-usage-bar"><div class="ctx-usage-fill" :style="{ width: sendUsage.pct + '%' }"></div></div>
+        </div>
+
+        <div class="ctx-block" v-if="emailStore.contentData.showReply">
+          <div class="ctx-label">{{ $t('ctxActions') }}</div>
+          <div class="ctx-actions">
+            <button class="ctx-btn primary" v-perm="'email:send'" @click="openReply">
+              <Icon icon="la:reply" width="17" height="17" />{{ $t('reply') }}
+            </button>
+            <button class="ctx-btn" v-perm="'email:send'" @click="openForward">
+              <Icon icon="iconoir:arrow-up-right" width="16" height="16" />{{ $t('forward') }}
+            </button>
+            <button class="ctx-btn" @click="archiveEmail">
+              <Icon icon="material-symbols:archive-outline-rounded" width="16" height="16" />{{ $t('archive') }}
+            </button>
+          </div>
+        </div>
+      </aside>
+    </div>
   </article>
 
   <el-image-viewer v-if="showPreview" :url-list="srcList" show-progress @close="showPreview = false" />
@@ -118,12 +174,14 @@
 import ShadowHtml from '@/components/shadow-html/index.vue'
 import { reactive, ref, watch, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { emailDelete, emailRead } from '@/request/email.js'
+import { emailDelete, emailRead, emailArchive } from '@/request/email.js'
 import { Icon } from '@iconify/vue'
 import { useEmailStore } from '@/store/email.js'
 import { useAccountStore } from '@/store/account.js'
 import { useUiStore } from '@/store/ui.js'
+import { useUserStore } from '@/store/user.js'
 import { useSettingStore } from '@/store/setting.js'
+import { hasPerm } from '@/perm/perm.js'
 import { formatDetailDate } from '@/utils/day.js'
 import { starAdd, starCancel } from '@/request/star.js'
 import { getExtName, formatBytes } from '@/utils/file-utils.js'
@@ -141,6 +199,7 @@ const uiStore = useUiStore()
 const settingStore = useSettingStore()
 const accountStore = useAccountStore()
 const emailStore = useEmailStore()
+const userStore = useUserStore()
 const avatarCache = useAvatarCacheStore()
 const { t } = useI18n()
 
@@ -159,6 +218,43 @@ const srcList = reactive([])
 
 const parsedCc  = computed(() => parseAddressList(email.value?.cc))
 const parsedBcc = computed(() => parseAddressList(email.value?.bcc))
+
+/* ── Right context panel (editorial metadata) ─────────────── */
+const senderOrg = computed(() => {
+  const at = (email.value?.sendEmail || '').split('@')[1]
+  return at || '—'
+})
+
+const lastContact = computed(() =>
+  email.value?.createTime ? formatDetailDate(email.value.createTime) : '—'
+)
+
+// Heuristic: surface a manuscript / submission reference if the subject carries one
+const manuscriptId = computed(() => {
+  const subject = email.value?.subject || ''
+  const m = subject.match(/\b([A-Za-z]{2,4}-\d{2,4}(?:-\d{2,6})?)\b/)
+  return m ? m[1].toUpperCase() : ''
+})
+
+const sendUsage = computed(() => {
+  if (!hasPerm('email:send')) return null
+  if (settingStore.settings.send === 1) return null
+  const role = userStore.user?.role
+  if (!role?.sendCount) return null
+  const used = userStore.user?.sendCount || 0
+  const total = role.sendCount
+  return { used, total, pct: Math.min(100, Math.round((used / total) * 100)) }
+})
+
+function archiveEmail() {
+  const e = email.value
+  if (!e?.emailId) return
+  emailArchive([e.emailId]).then(() => {
+    ElMessage({ message: t('archivedMsg'), type: 'success', plain: true })
+    emailStore.emailScroll?.deleteEmail?.([e.emailId])
+    emailStore.contentData.email = null
+  }).catch(() => {})
+}
 
 // Mark as read when email opens
 watch(email, (newEmail) => {
@@ -370,8 +466,93 @@ function handleDelete() {
   font-variant-numeric: tabular-nums;
 }
 
-/* ── Scroll ──────────────────────────────────────────────── */
+/* ── Body split: scrollable content + right context panel ── */
+.detail-split { flex: 1; min-height: 0; display: flex; }
 .detail-scroll { flex: 1; min-height: 0; }
+
+/* ── Right context panel — desktop (wide) only ───────────── */
+.context-panel {
+  display: none;
+  flex-shrink: 0;
+  width: 300px;
+  border-left: 1px solid var(--separator, #e5e5e5);
+  overflow-y: auto;
+  padding: 26px 22px;
+  background: var(--surface, #ffffff);
+
+  @media (min-width: 1400px) { display: block; }
+}
+
+.ctx-block {
+  padding-bottom: 22px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid var(--separator, #e5e5e5);
+
+  &:last-child { padding-bottom: 0; margin-bottom: 0; border-bottom: none; }
+}
+
+.ctx-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted, #666666);
+  margin-bottom: 14px;
+}
+
+.ctx-contact { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.ctx-avatar {
+  width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 700; font-size: 16px;
+}
+.ctx-avatar-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.ctx-contact-meta { min-width: 0; }
+.ctx-name {
+  font-size: 14px; font-weight: 600; color: var(--el-text-color-primary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ctx-email {
+  font-size: 12px; color: var(--muted, #666666); font-family: 'IBM Plex Mono', monospace;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.ctx-rows { display: flex; flex-direction: column; gap: 11px; }
+.ctx-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.ctx-k { font-size: 12px; color: var(--muted, #666666); flex-shrink: 0; }
+.ctx-v { font-size: 12.5px; color: var(--el-text-color-primary); text-align: right; word-break: break-word; }
+.ctx-v.mono { font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; }
+.ctx-v.accent { color: #b00000; font-weight: 700; }
+
+.ctx-usage-num {
+  font-family: 'IBM Plex Mono', monospace; font-size: 20px;
+  color: var(--el-text-color-primary); margin-bottom: 9px;
+  strong { font-weight: 700; }
+}
+.ctx-usage-bar {
+  height: 6px; border-radius: 3px;
+  background: var(--surface-secondary, #f0f0f0); overflow: hidden;
+}
+.ctx-usage-fill { height: 100%; background: #b00000; border-radius: 3px; transition: width 0.3s ease; }
+
+.ctx-actions { display: flex; flex-direction: column; gap: 8px; }
+.ctx-btn {
+  display: flex; align-items: center; gap: 9px;
+  height: 40px; padding: 0 14px;
+  border: 1px solid var(--separator, #e5e5e5); border-radius: 3px;
+  background: var(--surface, #ffffff);
+  font-family: inherit; font-size: 13px; font-weight: 600;
+  color: var(--el-text-color-primary); cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+
+  &:hover { border-color: var(--el-text-color-primary); background: var(--surface-secondary, #f0f0f0); }
+  &.primary {
+    background: #b00000; border-color: #b00000; color: #fff;
+    &:hover { background: #8a0000; border-color: #8a0000; }
+  }
+}
 
 .detail-content {
   padding: 28px;
