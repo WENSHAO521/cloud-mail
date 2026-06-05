@@ -297,7 +297,7 @@ function handleDelete() {
   border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 80%, transparent);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.05);
 
-  @media (max-width: 760px) {
+  @media (max-width: 1024px) {
     border-radius: 0;
     box-shadow: none;
     border: none;
@@ -317,9 +317,9 @@ function handleDelete() {
 
 .header-left { display: flex; align-items: center; gap: 2px; }
 
-/* Back button: hidden on desktop, visible on mobile */
+/* Back button: hidden on desktop, visible on mobile/tablet */
 .detail-back-btn {
-  @media (min-width: 761px) { display: none; }
+  @media (min-width: 1025px) { display: none; }
 }
 
 .icon-btn {

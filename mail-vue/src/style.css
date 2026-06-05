@@ -680,6 +680,42 @@ button, input, select, textarea {
 .dark ::-webkit-scrollbar-thumb { background: #444444; }
 .dark ::-webkit-scrollbar-thumb:hover { background: #666666; }
 
+/* ══════════════════════════════════════════════════════════════
+   Mobile safety — prevent horizontal overflow, responsive dialogs
+   ══════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+    html, body, #app {
+        overflow-x: hidden;
+        max-width: 100%;
+    }
+
+    /* Dialogs must never exceed the viewport on small screens */
+    .el-dialog {
+        max-width: calc(100vw - 24px) !important;
+    }
+
+    /* Message boxes (confirm/alert) fit the screen */
+    .el-message-box {
+        width: calc(100vw - 32px) !important;
+        max-width: 420px !important;
+    }
+
+    /* Element Plus overlay dialogs centre with breathing room */
+    .el-overlay-dialog {
+        padding: 0 8px;
+    }
+}
+
+/* Touch targets: comfortable tap size on coarse pointers */
+@media (pointer: coarse) and (max-width: 1024px) {
+    .el-button {
+        min-height: 40px;
+    }
+    .el-input__wrapper {
+        min-height: 42px;
+    }
+}
+
 /* ── View Transition ────────────────────────────── */
 html.dark,
 html:not(.dark) {

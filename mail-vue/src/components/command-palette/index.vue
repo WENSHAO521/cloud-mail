@@ -199,6 +199,11 @@ function scrollActive() {
 
 watch(query, () => { activeIdx.value = 0 })
 
+// Allow opening from anywhere (e.g. mobile header / tab bar) via the store flag
+watch(() => uiStore.commandPaletteShow, (v) => {
+  if (v) { open(); uiStore.commandPaletteShow = false }
+})
+
 defineExpose({ open, close })
 </script>
 

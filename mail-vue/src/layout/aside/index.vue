@@ -211,7 +211,7 @@ function clickLogout() {
   transition: width 0.22s cubic-bezier(0.22, 1, 0.36, 1);
 
   /* Mobile: fixed overlay, slides in */
-  @media (max-width: 1023px) {
+  @media (max-width: 1024px) {
     position: fixed;
     inset: 0 auto 0 0;
     z-index: 50;
@@ -384,7 +384,7 @@ function clickLogout() {
 
 /* Close button only shows on mobile */
 .sidebar-close-button { display: none; }
-@media (max-width: 1023px) {
+@media (max-width: 1024px) {
   .sidebar-close-button { display: flex; }
   .sidebar-collapse-button { display: none; }
 }

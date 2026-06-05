@@ -14,6 +14,11 @@
     <!-- Sidebar ─ always column 1 -->
     <Aside />
 
+    <!-- ── Mobile top bar (hidden on desktop) ── -->
+    <div class="mobile-chrome mobile-chrome--top">
+      <MobileHeader />
+    </div>
+
     <!-- ── Mail mode: list (col 2) + reading pane (col 3) ── -->
     <template v-if="isMailRoute">
       <section class="mail-list-pane">
@@ -39,6 +44,11 @@
       </div>
     </main>
 
+    <!-- ── Mobile bottom navigation (hidden on desktop) ── -->
+    <div class="mobile-chrome mobile-chrome--bottom">
+      <MobileTabbar />
+    </div>
+
   </div>
 
   <writer ref="writerRef"/>
@@ -48,6 +58,8 @@
 import Aside from '@/layout/aside/index.vue'
 import ContentPane from '@/views/content/index.vue'
 import CommandPalette from '@/components/command-palette/index.vue'
+import MobileHeader from '@/layout/mobile-header/index.vue'
+import MobileTabbar from '@/layout/mobile-tabbar/index.vue'
 import writer from '@/layout/write/index.vue'
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -225,8 +237,16 @@ onBeforeUnmount(() => {
   border-right: 1px solid var(--separator, #e5e5e5);
   background: var(--psg-bg, #f7f7f7);
 
+  /* Mobile: sit between the fixed header and the bottom tab bar */
   @media (max-width: 1024px) {
-    height: 100dvh;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: var(--m-header-h);
+    bottom: var(--m-tabbar-h);
+    height: auto;
+    border-right: none;
+    z-index: 5;
   }
 }
 
@@ -236,15 +256,19 @@ onBeforeUnmount(() => {
   background: var(--psg-bg, #f7f7f7);
   padding: 14px;
 
+  /* Mobile: a full-screen reading page (its own back button + actions) */
   @media (max-width: 1024px) {
-    height: 100dvh;
+    position: fixed;
+    inset: 0;
+    height: auto;
     padding: 0;
+    z-index: 35;
   }
 }
 
-/* Mobile: hide/show panes based on detail state */
-@media (max-width: 760px) {
-  .app-shell[data-mobile-detail="true"] .mail-list-pane { display: none; }
+/* Mobile: list and reading view are separate screens */
+@media (max-width: 1024px) {
+  .app-shell[data-mobile-detail="true"]  .mail-list-pane { display: none; }
   .app-shell[data-mobile-detail="false"] .mail-detail-pane { display: none; }
 }
 
@@ -257,7 +281,13 @@ onBeforeUnmount(() => {
   flex-direction: column;
 
   @media (max-width: 1024px) {
-    height: 100dvh;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: var(--m-header-h);
+    bottom: var(--m-tabbar-h);
+    height: auto;
+    z-index: 5;
   }
 }
 
@@ -265,6 +295,42 @@ onBeforeUnmount(() => {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+}
+
+/* ── Mobile chrome: top header + bottom tab bar ────────────── */
+.mobile-chrome { display: none; }
+
+@media (max-width: 1024px) {
+  .app-shell {
+    --m-header-h: 56px;
+    --m-tabbar-h: calc(56px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .mobile-chrome--top {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--m-header-h);
+    z-index: 30;
+  }
+
+  .mobile-chrome--bottom {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 30;
+  }
+
+  /* On the reading screen the detail view owns the chrome → hide global bars */
+  .app-shell[data-mobile-detail="true"] .mobile-chrome--top,
+  .app-shell[data-mobile-detail="true"] .mobile-chrome--bottom {
+    display: none;
+  }
 }
 </style>

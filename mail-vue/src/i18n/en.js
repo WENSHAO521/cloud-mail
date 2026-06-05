@@ -1,5 +1,7 @@
 const en = {
     compose: 'Compose',
+    search: 'Search',
+    menu: 'Menu',
     selectEmailHint: 'Select an email to read',
     commandPlaceholder: 'Search actions and navigate…',
     navigate: 'Navigate',
