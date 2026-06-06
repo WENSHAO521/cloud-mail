@@ -66,12 +66,12 @@ function openSearch() {
   height: 56px;
   padding: 0 6px 0 4px;
   background: #ffffff;
-  border-bottom: 1px solid var(--separator, #e5e5e5);
+  border-bottom: 1px solid #000000;
   gap: 8px;
 
   :global(.dark) & {
     background: #141414;
-    border-bottom-color: rgba(255, 255, 255, 0.08);
+    border-bottom-color: #2e2e2e;
   }
 }
 
@@ -96,19 +96,21 @@ function openSearch() {
   align-items: center;
   justify-content: center;
   height: 24px;
-  padding: 0 6px;
-  background: #b00000;
+  padding: 0 7px;
+  background: #bc0000;
   color: #ffffff;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.05em;
-  border-radius: 3px;
+  letter-spacing: 0.08em;
+  font-family: 'JetBrains Mono', monospace;
 }
 
 .m-title {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
   color: var(--el-text-color-primary);
   white-space: nowrap;
   overflow: hidden;
@@ -132,7 +134,6 @@ function openSearch() {
   justify-content: center;
   border: none;
   background: transparent;
-  border-radius: 50%;
   cursor: pointer;
   color: var(--muted, #666666);
   transition: background 0.12s, color 0.12s;
@@ -141,7 +142,7 @@ function openSearch() {
   &:active { background: rgba(0, 0, 0, 0.08); }
 }
 
-.m-compose { color: #b00000; }
+.m-compose { color: #bc0000; }
 
 /* NotificationPanel trigger sizing to match */
 :deep(.notif-trigger) {

@@ -1625,6 +1625,7 @@ function editSetting(settingForm, refreshStatus = true) {
 
 <style scoped lang="scss">
 .settings-container {
+  height: 100%;
   background: var(--psg-bg, #f7f7f7) !important;
   position: relative;
 
@@ -1654,6 +1655,7 @@ function editSetting(settingForm, refreshStatus = true) {
 
 .scroll {
   width: 100%;
+  height: 100%;
 
   :deep(.el-scrollbar__view) {
     min-height: 100%;
@@ -1684,9 +1686,9 @@ function editSetting(settingForm, refreshStatus = true) {
 .settings-sidebar,
 .settings-panel {
   background: var(--surface, #ffffff);
-  border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 92%, transparent);
-  border-radius: 4px;
-  box-shadow: 0 16px 36px rgba(17, 17, 17, 0.08), 0 1px 2px rgba(17, 17, 17, 0.04);
+  border: 1px solid var(--light-border, #000000);
+  border-radius: 0;
+  box-shadow: none;
   overflow: hidden;
 }
 
@@ -1694,7 +1696,7 @@ function editSetting(settingForm, refreshStatus = true) {
   position: sticky;
   top: 16px;
   min-height: min(630px, calc(100vh - 32px));
-  padding: 8px;
+  padding: 8px 0;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -1704,42 +1706,54 @@ function editSetting(settingForm, refreshStatus = true) {
     min-height: 0;
     flex-direction: row;
     overflow-x: auto;
-    border-radius: 4px;
+    border-radius: 0;
   }
 }
 
 .settings-nav-item {
   width: 100%;
-  min-height: 52px;
+  min-height: 44px;
   padding: 0 14px;
   display: flex;
   align-items: center;
   gap: 12px;
-  border-radius: 4px;
+  border-radius: 0;
+  border-left: 3px solid transparent;
   color: var(--psg-text-secondary, #666666);
-  font-size: 16px;
-  font-weight: 650;
+  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: background 160ms var(--ease-out, ease), color 160ms var(--ease-out, ease), transform 160ms var(--ease-out, ease);
+  transition: background 160ms var(--ease-out, ease), color 160ms var(--ease-out, ease);
 
   &:hover {
-    background: color-mix(in srgb, var(--surface-secondary, #f0f0f0) 86%, transparent);
+    background: rgba(0, 0, 0, 0.04);
     color: var(--el-text-color-primary);
+    :global(.dark) & {
+      background: rgba(255, 255, 255, 0.06);
+    }
   }
 
   &.active {
-    background: var(--surface-secondary, #eeeeee);
+    border-left-color: #bc0000;
+    background: rgba(188, 0, 0, 0.06);
     color: var(--el-text-color-primary);
-  }
-
-  &:active {
-    transform: scale(0.985);
   }
 
   @media (max-width: 820px) {
     width: auto;
     white-space: nowrap;
     flex: 0 0 auto;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+    padding: 0 12px;
+
+    &.active {
+      border-bottom-color: #bc0000;
+      background: rgba(188, 0, 0, 0.06);
+    }
   }
 }
 
@@ -1760,6 +1774,7 @@ function editSetting(settingForm, refreshStatus = true) {
   h1 {
     margin: 0 0 4px;
     color: var(--el-text-color-primary);
+    font-family: 'Hanken Grotesk', 'Inter', sans-serif;
     font-size: 20px;
     font-weight: 750;
     line-height: 1.2;
@@ -1784,7 +1799,7 @@ function editSetting(settingForm, refreshStatus = true) {
   flex: 0 0 auto;
   min-width: 68px;
   height: 42px !important;
-  border-radius: 4px !important;
+  border-radius: 0 !important;
   margin: 0 !important;
 }
 
@@ -1792,17 +1807,10 @@ function editSetting(settingForm, refreshStatus = true) {
   display: block;
 }
 
-.dark {
-  .settings-sidebar,
-  .settings-panel {
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.38), 0 1px 2px rgba(0, 0, 0, 0.4);
-  }
-}
-
 .background {
   width: 249px;
   height: 140px;
-  border-radius: 4px;
+  border-radius: 0;
   border: 1px solid var(--light-border);
   @media (max-width: 500px) {
     width: 160px;
@@ -1946,8 +1954,8 @@ function editSetting(settingForm, refreshStatus = true) {
 }
 
 .cropper {
-  border-radius: 4px;
-  border: 1px solid #D4D7DE;
+  border-radius: 0;
+  border: 1px solid var(--light-border, #000000);
   height: 397px;
   width: 705px;
   @media (max-width: 767px) {

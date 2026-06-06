@@ -43,42 +43,45 @@
     <el-scrollbar class="detail-scroll">
       <div class="detail-content">
 
-        <h1 class="email-title">{{ email.subject }}</h1>
+        <h1 class="email-title">{{ email.subject || $t('noSubject') }}</h1>
 
-        <div class="meta-section">
-          <div class="meta-left">
-            <div class="meta-avatar" :style="{ background: metaAvatarBg }">
-              <span class="meta-initial">{{ (email.name || email.sendEmail || '?')[0].toUpperCase() }}</span>
-              <img v-if="metaAvatarImg" :src="metaAvatarImg" class="meta-avatar-img"
-                   @error="e => { e.target.style.display='none'; markGravatarMiss(email.sendEmail) }" />
-            </div>
-            <div class="meta-info">
-              <div class="meta-sender-name">{{ email.name || email.sendEmail }}</div>
-              <div class="meta-sender-email">{{ email.sendEmail }}</div>
-              <div class="meta-to" v-if="formateReceive(email.recipient)">
-                <span class="meta-label">{{ $t('recipient') }}:</span>
-                <span class="meta-value">{{ formateReceive(email.recipient) }}</span>
-              </div>
-              <div class="meta-to" v-if="parsedCc.length > 0">
-                <span class="meta-label">{{ $t('cc') }}:</span>
-                <span class="meta-value">{{ parsedCc.join(', ') }}</span>
-              </div>
-              <div class="meta-to" v-if="parsedBcc.length > 0">
-                <span class="meta-label">{{ $t('bcc') }}:</span>
-                <span class="meta-value">{{ parsedBcc.join(', ') }}</span>
-              </div>
-            </div>
+        <!-- Meta card: sender + fields + date all in one bordered block -->
+        <div class="meta-card">
+          <div class="meta-avatar" :style="{ background: metaAvatarBg }">
+            <span class="meta-initial">{{ (email.name || email.sendEmail || '?')[0].toUpperCase() }}</span>
+            <img v-if="metaAvatarImg" :src="metaAvatarImg" class="meta-avatar-img"
+                 @error="e => { e.target.style.display='none'; markGravatarMiss(email.sendEmail) }" />
           </div>
-          <div class="meta-right">
-            <span class="meta-date">{{ formatDetailDate(email.createTime) }}</span>
+          <div class="meta-body">
+            <div class="meta-sender-row">
+              <span class="meta-sender-name">{{ email.name || email.sendEmail }}</span>
+              <span class="meta-date">{{ formatDetailDate(email.createTime) }}</span>
+            </div>
+            <div class="meta-sender-email" v-if="email.name">{{ email.sendEmail }}</div>
+            <div class="meta-fields">
+              <div class="meta-field" v-if="formateReceive(email.recipient)">
+                <span class="meta-field-label">{{ $t('recipient') }}</span>
+                <span class="meta-field-value">{{ formateReceive(email.recipient) }}</span>
+              </div>
+              <div class="meta-field" v-if="parsedCc.length > 0">
+                <span class="meta-field-label">{{ $t('cc') }}</span>
+                <span class="meta-field-value">{{ parsedCc.join(', ') }}</span>
+              </div>
+              <div class="meta-field" v-if="parsedBcc.length > 0">
+                <span class="meta-field-label">{{ $t('bcc') }}</span>
+                <span class="meta-field-value">{{ parsedBcc.join(', ') }}</span>
+              </div>
+            </div>
             <el-alert v-if="email.status === 3" :closable="false" :title="toMessage(email.message)"
-                      class="email-msg" type="error" show-icon />
+                      class="email-status-alert" type="error" show-icon />
             <el-alert v-if="email.status === 4" :closable="false" :title="$t('complained')"
-                      class="email-msg" type="warning" show-icon />
+                      class="email-status-alert" type="warning" show-icon />
             <el-alert v-if="email.status === 5" :closable="false" :title="$t('delayed')"
-                      class="email-msg" type="warning" show-icon />
+                      class="email-status-alert" type="warning" show-icon />
           </div>
         </div>
+
+        <div class="body-divider"></div>
 
         <div class="email-body">
           <ShadowHtml class="shadow-html" :html="formatImage(email.content)" v-if="email.content" />
@@ -274,15 +277,16 @@ function handleDelete() {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  border-radius: 4px;
   background: var(--surface, #ffffff);
-  border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 80%, transparent);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--light-border-color, #cfc4c5);
 
   .empty-icon { color: var(--muted, #666666); opacity: 0.5; }
 
   .empty-text {
-    font-size: 14px;
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
     color: var(--muted, #666666);
   }
 }
@@ -292,26 +296,22 @@ function handleDelete() {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border-radius: 4px;
   background: var(--surface, #ffffff);
-  border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 80%, transparent);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--light-border-color, #cfc4c5);
 
   @media (max-width: 1024px) {
-    border-radius: 0;
-    box-shadow: none;
     border: none;
   }
 }
 
 /* ── Header ──────────────────────────────────────────────── */
 .detail-header {
-  min-height: 64px;
+  min-height: 56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
-  border-bottom: 1px solid var(--separator, #e5e5e5);
+  padding: 0 16px;
+  border-bottom: 1px solid var(--light-border-color, #cfc4c5);
   flex-shrink: 0;
 }
 
@@ -330,7 +330,6 @@ function handleDelete() {
   height: 36px;
   border: none;
   background: transparent;
-  border-radius: 50%;
   cursor: pointer;
   color: var(--muted, #666666);
   transition: background 0.12s ease, color 0.12s ease;
@@ -338,7 +337,7 @@ function handleDelete() {
 
   @media (hover: hover) {
     &:hover { background: rgba(0,0,0,0.07); color: var(--el-text-color-primary); }
-    &.icon-danger:hover { background: rgba(176,0,0,0.10); color: #b00000; }
+    &.icon-danger:hover { background: rgba(176,0,0,0.08); color: #bc0000; }
   }
 }
 
@@ -350,7 +349,6 @@ function handleDelete() {
   height: 30px;
   border: none;
   background: transparent;
-  border-radius: 50%;
   cursor: pointer;
   color: var(--muted, #666666);
   text-decoration: none;
@@ -374,80 +372,167 @@ function handleDelete() {
 .detail-scroll { flex: 1; min-height: 0; }
 
 .detail-content {
-  padding: 28px;
-  max-width: 980px;
-  @media (max-width: 1024px) { padding: 20px; }
-  @media (max-width: 767px)  { padding: 14px; }
+  padding: 28px 32px 48px;
+  @media (max-width: 1280px) { padding: 24px 24px 40px; }
+  @media (max-width: 1024px) { padding: 20px 20px 36px; }
+  @media (max-width: 767px)  { padding: 16px 16px 32px; }
 }
 
 /* ── Subject ─────────────────────────────────────────────── */
 .email-title {
-  font-size: 28px;
-  font-weight: 600;
-  line-height: 1.3;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.35;
   color: var(--el-text-color-primary);
-  margin: 0 0 32px;
+  margin: 0 0 20px;
   word-break: break-word;
+  font-family: 'Hanken Grotesk', 'Inter', sans-serif;
+  letter-spacing: -0.01em;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+    margin-bottom: 14px;
+  }
 }
 
-/* ── Meta ────────────────────────────────────────────────── */
-.meta-section {
+/* ── Meta card ────────────────────────────────────────────── */
+.meta-card {
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
-  gap: 20px;
-  margin-bottom: 32px;
-  flex-wrap: wrap;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--light-border-color, #cfc4c5);
+  border-left: 3px solid var(--light-border, #000000);
+  margin-bottom: 0;
+  background: var(--surface-secondary, #f9f9f9);
+
+  @media (max-width: 767px) {
+    padding: 12px 14px;
+    gap: 10px;
+  }
 }
 
-.meta-left { display: flex; align-items: flex-start; gap: 16px; min-width: 0; flex: 1; }
-
 .meta-avatar {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
+  margin-top: 2px;
 
-  .meta-initial { color: #fff; font-size: 20px; font-weight: 700; line-height: 1; }
-  .meta-avatar-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+  .meta-initial { color: #fff; font-size: 15px; font-weight: 700; line-height: 1; }
+  .meta-avatar-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 }
 
-.meta-info { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.meta-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.meta-sender-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: nowrap;
+
+  @media (max-width: 540px) {
+    flex-wrap: wrap;
+    gap: 2px;
+  }
+}
 
 .meta-sender-name {
-  font-size: 17px; font-weight: 600; color: var(--el-text-color-primary);
-  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--el-text-color-primary);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+.meta-date {
+  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--muted, #7e7576);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
 }
 
 .meta-sender-email {
-  font-size: 13px; color: var(--muted, #666666);
-  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted, #7e7576);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
-.meta-to {
-  display: flex; align-items: baseline; gap: 6px;
-  font-size: 13px; color: var(--muted, #666666); flex-wrap: wrap;
+.meta-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--light-border-color, #cfc4c5);
 }
-.meta-label { font-weight: 500; color: var(--muted, #666666); flex-shrink: 0; }
-.meta-value { color: var(--el-text-color-primary); word-break: break-word; }
 
-.meta-right {
-  display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0;
+.meta-field {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 12.5px;
+  line-height: 1.5;
 }
-.meta-date {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px; color: var(--muted, #666666);
-  white-space: nowrap; font-variant-numeric: tabular-nums;
+
+.meta-field-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted, #7e7576);
+  flex-shrink: 0;
+  width: 28px;
 }
-.email-msg { margin-top: 4px; }
+
+.meta-field-value {
+  color: var(--el-text-color-primary);
+  word-break: break-word;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.email-status-alert {
+  margin-top: 10px;
+  :deep(.el-alert) { border-radius: 0 !important; }
+}
+
+/* ── Divider between meta and body ───────────────────────── */
+.body-divider {
+  height: 1px;
+  background: var(--light-border-color, #cfc4c5);
+  margin: 24px 0;
+
+  @media (max-width: 767px) { margin: 16px 0; }
+}
 
 /* ── Body ────────────────────────────────────────────────── */
-.email-body { font-size: 17px; line-height: 2; color: var(--el-text-color-primary); word-break: break-word; }
+.email-body {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--el-text-color-primary);
+  word-break: break-word;
+}
 
 .shadow-html::after {
   content: ""; position: absolute; inset: 0;
@@ -463,27 +548,34 @@ function handleDelete() {
 /* ── Attachments ─────────────────────────────────────────── */
 .att-container {
   margin-top: 40px; max-width: 560px;
-  border-radius: 4px; border: 1px solid var(--separator, #e5e5e5); padding: 16px;
+  border: 1px solid var(--light-border, #000000); padding: 16px;
 }
 .att-header {
   display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
 }
-.att-title-text { font-size: 14px; font-weight: 600; color: var(--el-text-color-primary); }
-.att-count { font-size: 13px; color: var(--muted, #666666); }
-.att-list { display: flex; flex-direction: column; gap: 6px; }
+.att-title-text {
+  font-size: 11px; font-weight: 700; color: var(--el-text-color-primary);
+  font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em;
+}
+.att-count {
+  font-size: 11px; color: var(--muted, #666666);
+  font-family: 'JetBrains Mono', monospace;
+}
+.att-list { display: flex; flex-direction: column; gap: 4px; }
 
 .att-item {
   display: flex; align-items: center; gap: 10px;
-  border-radius: 10px; background: var(--surface-secondary, #f0f0f0);
+  border: 1px solid var(--light-border-color, #cfc4c5);
+  background: var(--surface-secondary, #f3f3f3);
   padding: 8px 12px; cursor: pointer; transition: background 0.12s ease;
 
   @media (hover: hover) {
-    &:hover { background: color-mix(in srgb, var(--surface-secondary, #f0f0f0) 70%, var(--separator, #e5e5e5)); }
+    &:hover { background: var(--email-hover-background, #eeeeee); }
   }
 
   .att-icon-file { flex-shrink: 0; color: var(--muted, #666666); }
-  .att-name { flex: 1; min-width: 0; font-size: 14px; font-weight: 500; color: var(--el-text-color-primary); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-  .att-size { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--muted, #666666); flex-shrink: 0; white-space: nowrap; }
+  .att-name { flex: 1; min-width: 0; font-size: 13px; font-weight: 500; color: var(--el-text-color-primary); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .att-size { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted, #666666); flex-shrink: 0; white-space: nowrap; }
   .att-actions { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
 }
 </style>

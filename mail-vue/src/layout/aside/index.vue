@@ -39,30 +39,15 @@
       </div>
     </div>
 
-    <!-- ── Primary nav ──────────────────────────────────── -->
-    <nav class="sidebar-nav">
-      <el-tooltip v-for="item in navItems" :key="item.name"
-                  :content="$t(item.labelKey)" placement="right" :disabled="!collapsed">
-        <div v-if="!item.perm || hasPerm(item.perm)"
-             class="sidebar-nav-link"
-             :class="{ active: route.meta.name === item.name }"
-             @click="router.push({ name: item.name })">
-          <span class="sidebar-nav-content">
-            <Icon :icon="item.icon" width="20" height="20" class="nav-icon" />
-            <span class="sidebar-label">{{ $t(item.labelKey) }}</span>
-          </span>
-        </div>
-      </el-tooltip>
-    </nav>
+    <!-- ── Scrollable nav area ──────────────────────────── -->
+    <div class="sidebar-nav-scroll">
 
-    <!-- ── Admin section ────────────────────────────────── -->
-    <template v-if="visibleAdminItems.length">
-      <div class="sidebar-section-separator"></div>
-      <div class="sidebar-section-title">{{ $t('manage') }}</div>
+      <!-- Primary nav -->
       <nav class="sidebar-nav">
-        <el-tooltip v-for="item in visibleAdminItems" :key="item.name"
+        <el-tooltip v-for="item in navItems" :key="item.name"
                     :content="$t(item.labelKey)" placement="right" :disabled="!collapsed">
-          <div class="sidebar-nav-link"
+          <div v-if="!item.perm || hasPerm(item.perm)"
+               class="sidebar-nav-link"
                :class="{ active: route.meta.name === item.name }"
                @click="router.push({ name: item.name })">
             <span class="sidebar-nav-content">
@@ -72,7 +57,27 @@
           </div>
         </el-tooltip>
       </nav>
-    </template>
+
+      <!-- Admin section -->
+      <template v-if="visibleAdminItems.length">
+        <div class="sidebar-section-separator"></div>
+        <div class="sidebar-section-title">{{ $t('manage') }}</div>
+        <nav class="sidebar-nav">
+          <el-tooltip v-for="item in visibleAdminItems" :key="item.name"
+                      :content="$t(item.labelKey)" placement="right" :disabled="!collapsed">
+            <div class="sidebar-nav-link"
+                 :class="{ active: route.meta.name === item.name }"
+                 @click="router.push({ name: item.name })">
+              <span class="sidebar-nav-content">
+                <Icon :icon="item.icon" width="20" height="20" class="nav-icon" />
+                <span class="sidebar-label">{{ $t(item.labelKey) }}</span>
+              </span>
+            </div>
+          </el-tooltip>
+        </nav>
+      </template>
+
+    </div>
 
     <!-- ── Footer ───────────────────────────────────────── -->
     <div class="sidebar-footer">
@@ -197,20 +202,18 @@ function clickLogout() {
 
 <style lang="scss" scoped>
 /* ══════════════════════════════════════════════════════════
-   Sidebar root
-   Mirrors vfasky mail-sidebar — colors replaced with PSG palette
+   Sidebar — PSG Brutalist Academic (light / dark adaptive)
    ══════════════════════════════════════════════════════════ */
 .mail-sidebar {
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 260px;
-  background: #111111;
-  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  background: var(--aside-backgound, #f9f9f9);
+  border-right: 1px solid var(--light-border, #000000);
   overflow: hidden;
   transition: width 0.22s cubic-bezier(0.22, 1, 0.36, 1);
 
-  /* Mobile: fixed overlay, slides in */
   @media (max-width: 1024px) {
     position: fixed;
     inset: 0 auto 0 0;
@@ -228,24 +231,24 @@ function clickLogout() {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 22px 24px 16px;
+  padding: 20px 20px 16px;
   flex-shrink: 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid var(--light-border, #000000);
 }
 
 .brand-mark {
   flex-shrink: 0;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #b00000;
+  background: #bc0000;
   color: #ffffff;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  border-radius: 3px;
+  letter-spacing: 0.08em;
+  font-family: 'JetBrains Mono', monospace;
 }
 
 .brand-meta {
@@ -256,22 +259,23 @@ function clickLogout() {
 }
 
 .brand-name {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.01em;
-  color: #ffffff;
+  color: var(--el-text-color-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .brand-sub {
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 500;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.40);
+  color: var(--muted, #7e7576);
   white-space: nowrap;
+  font-family: 'JetBrains Mono', monospace;
 }
 
 /* ── Header ──────────────────────────────────────────────── */
@@ -279,23 +283,23 @@ function clickLogout() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 16px 18px 24px;
+  padding: 14px 12px 14px 20px;
   flex-shrink: 0;
   gap: 8px;
+  border-bottom: 1px solid var(--light-border-color, #cfc4c5);
 }
 
 .acct-section {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   min-width: 0;
   flex: 1;
 }
 
 .sidebar-account-avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
+  width: 36px;
+  height: 36px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -305,7 +309,7 @@ function clickLogout() {
 
   .acct-fallback {
     color: #fff;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
     line-height: 1;
   }
@@ -316,7 +320,6 @@ function clickLogout() {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 50%;
   }
 }
 
@@ -329,14 +332,14 @@ function clickLogout() {
   gap: 2px;
 
   @media (hover: hover) {
-    &:hover .acct-name { color: #ffffff; }
+    &:hover .acct-name { color: #bc0000; }
   }
 }
 
 .acct-name {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.88);
+  color: var(--el-text-color-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -344,9 +347,9 @@ function clickLogout() {
 }
 
 .acct-email {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.32);
+  color: var(--muted, #7e7576);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -359,25 +362,24 @@ function clickLogout() {
   flex-shrink: 0;
 }
 
-/* ── Icon button (shared) ────────────────────────────────── */
+/* ── Icon button ─────────────────────────────────────────── */
 .icon-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border: none;
   background: transparent;
   cursor: pointer;
-  color: rgba(255, 255, 255, 0.38);
-  border-radius: 8px;
+  color: var(--muted, #7e7576);
   transition: background 0.12s, color 0.12s;
   flex-shrink: 0;
 
   @media (hover: hover) {
     &:hover {
-      background: rgba(255, 255, 255, 0.08);
-      color: rgba(255, 255, 255, 0.80);
+      background: var(--email-hover-background, #eeeeee);
+      color: var(--el-text-color-primary);
     }
   }
 }
@@ -389,46 +391,58 @@ function clickLogout() {
   .sidebar-collapse-button { display: none; }
 }
 
+/* ── Scrollable nav wrapper ───────────────────────────────── */
+.sidebar-nav-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px 0;
+}
+
 /* ── Nav ─────────────────────────────────────────────────── */
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  margin-top: 4px;
+  gap: 1px;
 }
 
 .sidebar-nav-link {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin: 0 16px;
-  height: 44px;
-  border-radius: 10px;
-  padding: 0 14px;
-  font-size: 14px;
+  height: 40px;
+  margin: 0 10px;
+  padding: 0 10px 0 14px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
   cursor: pointer;
-  color: rgba(255, 255, 255, 0.68);
-  transition: background 0.10s ease, color 0.10s ease;
+  color: var(--psg-text-secondary, #4c4546);
+  border-left: 3px solid transparent;
+  transition: background 0.10s ease, color 0.10s ease, border-color 0.10s ease;
   user-select: none;
 
   @media (hover: hover) {
     &:not(.active):hover {
-      background: rgba(255, 255, 255, 0.07);
-      color: rgba(255, 255, 255, 0.90);
+      background: var(--email-hover-background, #eeeeee);
+      color: var(--el-text-color-primary);
     }
   }
 
   &.active {
-    background: rgba(204, 0, 0, 0.16);
-    color: #ffffff;
-    font-weight: 600;
+    border-left-color: #bc0000;
+    background: rgba(188, 0, 0, 0.06);
+    color: #bc0000;
+    font-weight: 700;
   }
 }
 
 .sidebar-nav-content {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   min-width: 0;
   flex: 1;
 }
@@ -444,25 +458,26 @@ function clickLogout() {
 /* ── Admin separator + title ─────────────────────────────── */
 .sidebar-section-separator {
   height: 1px;
-  background: rgba(255, 255, 255, 0.07);
-  margin: 16px 24px;
+  background: var(--light-border-color, #cfc4c5);
+  margin: 10px 16px;
 }
 
 .sidebar-section-title {
-  font-size: 12px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.28);
-  padding: 0 24px;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--muted, #7e7576);
+  padding: 0 20px;
   margin-bottom: 4px;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
+  font-family: 'JetBrains Mono', monospace;
 }
 
 /* ── Footer ──────────────────────────────────────────────── */
 .sidebar-footer {
-  margin-top: auto;
-  padding: 24px;
+  padding: 14px 16px;
   flex-shrink: 0;
+  border-top: 1px solid var(--light-border-color, #cfc4c5);
 }
 
 .sidebar-bottom-actions {
@@ -479,39 +494,39 @@ function clickLogout() {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  height: 40px;
+  height: 36px;
   border: none;
-  border-radius: 8px;
-  background: #cc0000;
+  background: #bc0000;
   color: #ffffff;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
   cursor: pointer;
   transition: background 0.14s ease;
 
   @media (hover: hover) {
-    &:hover { background: #a80000; }
+    &:hover { background: #000000; }
   }
-  &:active { background: #880000; }
+  &:active { background: #7a0000; }
 }
 
 .sidebar-more-button {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  border-radius: 8px;
-  background: #111111;
+  border: 1px solid var(--light-border, #000000);
+  background: transparent;
   cursor: pointer;
-  transition: background 0.12s, border-color 0.12s;
+  transition: background 0.12s;
 
   @media (hover: hover) {
     &:hover {
-      background: #222222;
-      border-color: rgba(255, 255, 255, 0.85);
+      background: var(--email-hover-background, #eeeeee);
     }
   }
 }
@@ -523,23 +538,21 @@ function clickLogout() {
 
   span {
     display: block;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: #ffffff;
+    width: 3.5px;
+    height: 3.5px;
+    background: var(--el-text-color-primary);
   }
 }
 
 .compose-icon-btn {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border: none;
-  background: #cc0000;
+  background: #bc0000;
   color: #ffffff;
-  border-radius: 8px;
 
   @media (hover: hover) {
-    &:hover { background: #a80000; }
+    &:hover { background: #000000; }
   }
 }
 
@@ -555,7 +568,43 @@ function clickLogout() {
 }
 
 /* ══════════════════════════════════════════════════════════
-   Collapsed state  (matches vfasky [data-collapsed="true"])
+   Dark mode overrides
+   ══════════════════════════════════════════════════════════ */
+:global(.dark) {
+  .sidebar-nav-link {
+    color: rgba(255, 255, 255, 0.55);
+
+    @media (hover: hover) {
+      &:not(.active):hover {
+        background: rgba(255, 255, 255, 0.06);
+        color: rgba(255, 255, 255, 0.90);
+      }
+    }
+
+    &.active {
+      background: rgba(188, 0, 0, 0.16);
+      color: rgba(255, 255, 255, 0.95);
+    }
+  }
+
+  .sidebar-more-button {
+    border-color: rgba(255, 255, 255, 0.30);
+    &:hover { background: rgba(255, 255, 255, 0.07); }
+  }
+
+  .more-dots span { background: rgba(255, 255, 255, 0.75); }
+
+  .icon-button {
+    color: rgba(255, 255, 255, 0.40);
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.88);
+    }
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   Collapsed state
    ══════════════════════════════════════════════════════════ */
 .mail-sidebar[data-collapsed="true"] {
   width: 72px;
@@ -565,16 +614,14 @@ function clickLogout() {
     padding-inline: 12px;
   }
 
-  .brand-meta {
-    display: none;
-  }
+  .brand-meta { display: none; }
 
   .sidebar-header {
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
     align-items: center;
     justify-content: center;
-    padding-inline: 12px;
+    padding-inline: 10px;
   }
 
   .acct-section {
@@ -588,14 +635,18 @@ function clickLogout() {
     display: none;
   }
 
-  .sidebar-collapse-button {
-    margin-left: 0;
-  }
+  .sidebar-collapse-button { margin-left: 0; }
 
   .sidebar-nav-link {
     justify-content: center;
-    margin-inline: 10px;
+    margin-inline: 8px;
     padding-inline: 0;
+    border-left: none;
+
+    &.active {
+      border-left: none;
+      border-bottom: 2px solid #bc0000;
+    }
   }
 
   .sidebar-nav-content {
@@ -604,13 +655,9 @@ function clickLogout() {
     flex: none;
   }
 
-  .sidebar-section-separator {
-    margin-inline: 16px;
-  }
+  .sidebar-section-separator { margin-inline: 14px; }
 
-  .sidebar-footer {
-    padding-inline: 14px;
-  }
+  .sidebar-footer { padding-inline: 10px; }
 
   .sidebar-bottom-actions {
     flex-direction: column;
@@ -618,8 +665,8 @@ function clickLogout() {
   }
 
   .sidebar-more-button {
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
   }
 }
 </style>

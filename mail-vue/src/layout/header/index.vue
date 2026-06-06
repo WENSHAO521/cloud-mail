@@ -261,7 +261,6 @@ function formatName(email) {
 .icon-btn {
   width: 36px;
   height: 36px;
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -284,7 +283,6 @@ function formatName(email) {
   align-items: center;
   cursor: pointer;
   padding: 3px 6px 3px 3px;
-  border-radius: 999px;
   transition: background 0.12s;
   gap: 4px;
 
@@ -296,7 +294,6 @@ function formatName(email) {
 .avatar-circle {
   width: 32px;
   height: 32px;
-  border-radius: 50%;
   background: #111111;
   color: #ffffff;
   display: flex;
@@ -331,7 +328,6 @@ function formatName(email) {
   .details-avatar {
     width: 44px;
     height: 44px;
-    border-radius: 50%;
     background: #111111;
     color: #ffffff;
     font-size: 17px;
@@ -420,7 +416,6 @@ function formatName(email) {
 }
 
 :deep(.el-popper.is-pure) {
-  border-radius: 4px;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0,0,0,0.10), 0 1px 3px rgba(0,0,0,0.06) !important;
   border: 1px solid var(--separator, #e5e5e5) !important;
@@ -434,13 +429,11 @@ function formatName(email) {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 3px;
 }
 
 .avatar-photo-lg {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 6px;
 }
 </style>

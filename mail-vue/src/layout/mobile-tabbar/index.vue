@@ -65,11 +65,11 @@ function openSearch() {
   height: calc(56px + env(safe-area-inset-bottom, 0px));
   padding-bottom: env(safe-area-inset-bottom, 0px);
   background: #ffffff;
-  border-top: 1px solid var(--separator, #e5e5e5);
+  border-top: 1px solid #000000;
 
   :global(.dark) & {
     background: #141414;
-    border-top-color: rgba(255, 255, 255, 0.08);
+    border-top-color: #2e2e2e;
   }
 }
 
@@ -85,10 +85,11 @@ function openSearch() {
   background: transparent;
   cursor: pointer;
   color: var(--muted, #666666);
-  font-family: inherit;
-  font-size: 10.5px;
+  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
   font-weight: 600;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   padding: 6px 2px;
   transition: color 0.12s;
 
@@ -99,36 +100,33 @@ function openSearch() {
     max-width: 100%;
   }
 
-  &:active { color: #111111; }
+  &:active { color: #000000; }
 
   &.active {
-    color: #b00000;
+    color: #bc0000;
     :global(.dark) & { color: #e03333; }
   }
 }
 
-/* Center compose — elevated red action */
+/* Center compose — brutalist square action */
 .m-tab-compose {
   flex: 0 0 64px;
   justify-content: flex-start;
-  padding-top: 8px;
+  padding-top: 6px;
 }
 
 .m-compose-fab {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  background: #b00000;
+  width: 44px;
+  height: 36px;
+  background: #bc0000;
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(176, 0, 0, 0.32);
-  transition: background 0.14s, transform 0.12s;
+  transition: background 0.14s;
 
   .m-tab-compose:active & {
-    background: #8a0000;
-    transform: scale(0.94);
+    background: #000000;
   }
 }
 </style>

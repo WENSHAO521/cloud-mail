@@ -793,6 +793,18 @@ function loadData() { getEmailList() }
     grid-template-columns: 44px 140px 1fr 88px;
   }
 
+  /* ── Mobile: stacked 2-row card layout ── */
+  @media (max-width: 768px) {
+    grid-template-columns: 40px 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 0 8px;
+    min-height: 56px;
+    padding: 8px 12px 8px 4px;
+    align-items: start;
+
+    &.all-email { min-height: 64px; }
+  }
+
   @media (hover: hover) {
     &:hover {
       background: #f3f3f3;
@@ -801,6 +813,34 @@ function loadData() { getEmailList() }
 
   &[data-active] {
     background: #eeeeee;
+  }
+}
+
+/* Mobile row cell placement */
+@media (max-width: 768px) {
+  :deep(.row-check) {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    align-self: center;
+  }
+  :deep(.row-sender) {
+    grid-column: 2;
+    grid-row: 1;
+    padding-top: 2px;
+  }
+  :deep(.row-meta) {
+    grid-column: 3;
+    grid-row: 1;
+    align-items: flex-start;
+    padding-top: 2px;
+  }
+  :deep(.row-subject-cell) {
+    grid-column: 2 / 4;
+    grid-row: 2;
+    padding-bottom: 4px;
+
+    /* Hide long preview on mobile to reduce clutter */
+    .mail-preview-inline { display: none; }
   }
 }
 

@@ -221,7 +221,6 @@ const en = {
     useHistory: 'Usage History',
     date: 'Date',
     roleDesc: 'Role',
-    noSubject: 'No subject',
     recipient: 'To',
     cc: 'Cc',
     bcc: 'Bcc',
