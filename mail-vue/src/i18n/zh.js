@@ -453,6 +453,8 @@ const zh = {
     character: '位',
     mustNotContain: '禁止包含',
     mustNotContainDesc: '输入多个值用,分开',
+    autoDeleteDays: '自动删除天数',
+    autoDeleteDaysDesc: '超过N天的邮件将自动删除，设置为0则关闭此功能（每日定时执行）',
     blackSubjectDesc: '邮件标题',
     blackContentDesc: '邮件内容',
     blackFromDesc: '发件人邮箱或域名',

@@ -27,7 +27,7 @@ html, body {
 }
 
 body {
-    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    font-family: 'Inter', 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
     line-height: 1.5;
     color: var(--el-text-color-primary);
     font-size: 14px;
@@ -39,7 +39,7 @@ body {
 .email-time, .phone-time, .email-count, .date, .send-source, .source,
 .manage-title, .header-right, [class*="-count"], [class*="date"],
 time, kbd, samp, code, pre {
-    font-family: 'IBM Plex Mono', 'Courier New', Courier, monospace;
+    font-family: 'JetBrains Mono', 'IBM Plex Mono', 'Courier New', Courier, monospace;
     font-variant-numeric: tabular-nums;
     letter-spacing: 0.02em;
 }
@@ -183,55 +183,55 @@ button, input, select, textarea {
 
 :root {
     /* PSG — Black / White / Deep Red — German scholarly publisher */
-    --el-color-primary: #b00000;
-    --el-color-primary-dark-2: #8A0000;
+    --el-color-primary: #bc0000;
+    --el-color-primary-dark-2: #8f0000;
     --el-color-primary-light-3: #c93333;
     --el-color-primary-light-5: #d46666;
     --el-color-primary-light-7: #e09999;
     --el-color-primary-light-9: #f5dddd;
 
-    --red-accent: #b00000;
-    --red-accent-dark: #8A0000;
-    --red-accent-subtle: rgba(176, 0, 0, 0.07);
+    --red-accent: #bc0000;
+    --red-accent-dark: #8f0000;
+    --red-accent-subtle: rgba(188, 0, 0, 0.07);
 
-    /* PSG explicit brand tokens — exact brief palette */
-    --psg-red: #b00000;
-    --psg-red-hover: #8A0000;
-    --psg-black: #111111;
+    /* PSG explicit brand tokens */
+    --psg-red: #bc0000;
+    --psg-red-hover: #8f0000;
+    --psg-black: #000000;
     --psg-white: #ffffff;
-    --psg-bg: #f7f7f7;
-    --psg-border: #e5e5e5;
-    --psg-text-primary: #111111;
-    --psg-text-secondary: #666666;
+    --psg-bg: #f9f9f9;
+    --psg-border: #000000;
+    --psg-text-primary: #1a1c1c;
+    --psg-text-secondary: #4c4546;
 
-    /* Surface tokens */
+    /* vfasky-compatible surface tokens */
     --surface: #ffffff;
-    --surface-secondary: #f0f0f0;
-    --separator: #e5e5e5;
-    --muted: #666666;
+    --surface-secondary: #f3f3f3;
+    --separator: #000000;
+    --muted: #7e7576;
 
     /* Light-mode surfaces */
-    --extra-light-fill: #f7f7f7;
-    --light-ill: #efefef;
-    --light-border: #e5e5e5;
-    --header-actions-border: inset 0 -1px 0 0 #e5e5e5;
-    --aside-backgound: #111111;
+    --extra-light-fill: #f9f9f9;
+    --light-ill: #eeeeee;
+    --light-border: #000000;
+    --header-actions-border: inset 0 -1px 0 0 #000000;
+    --aside-backgound: #f9f9f9;
     --loadding-background: rgba(255, 255, 255, 0.88);
-    --dark-border: #c0c0c0;
-    --base-fill: #f0f0f0;
-    --regular-text-color: #444444;
-    --light-border-color: #e5e5e5;
-    --aside-right-border: 1px 0 0 rgba(0, 0, 0, 0.10);
+    --dark-border: #000000;
+    --base-fill: #f3f3f3;
+    --regular-text-color: #4c4546;
+    --light-border-color: #cfc4c5;
+    --aside-right-border: 1px 0 0 #000000;
     --choose-account-background: #fdf2f2;
     --el-text-color-regular: var(--el-text-color-primary);
-    --email-scroll-content-color: #666666;
-    --email-hover-background: #f0f0f0;
-    --login-border: 1px solid #e5e5e5;
-    --form-desc-color: #666666;
-    --login-switch-color: #b00000;
+    --email-scroll-content-color: #4c4546;
+    --email-hover-background: #eeeeee;
+    --login-border: 1px solid #000000;
+    --form-desc-color: #4c4546;
+    --login-switch-color: #bc0000;
     --scrollbar-track-color: #c0c0c0;
-    --base-border-color: #e5e5e5;
-    --secondary-text-color: #666666;
+    --base-border-color: #cfc4c5;
+    --secondary-text-color: #4c4546;
     --message-block-color: rgba(0, 0, 0, 0);
     --loading-hide-transition: all 200ms;
     --vt-x: 50%;
@@ -243,14 +243,14 @@ button, input, select, textarea {
     --card-shadow-hover: 0 2px 8px rgba(0, 0, 0, 0.09), 0 1px 3px rgba(0, 0, 0, 0.05);
     --compose-shadow: 0 8px 40px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(0, 0, 0, 0.08);
 
-    /* Flat fills — German minimalist, no gradients (kept as vars for compatibility) */
-    --psg-gradient-red:        #b00000;
-    --psg-gradient-red-h:      #8A0000;
-    --psg-gradient-dark:       #111111;
-    --psg-gradient-sidebar:    #111111;
-    --psg-gradient-card-top:   #b00000;
-    --psg-gradient-header-bar: #111111;
-    --psg-gradient-surface:    #ffffff;
+    /* PSG Gradients — Black/White/Red palette only */
+    --psg-gradient-red:        #bc0000;
+    --psg-gradient-red-h:      #000000;
+    --psg-gradient-dark:       linear-gradient(180deg, #1c1c1c 0%, #0a0a0a 100%);
+    --psg-gradient-sidebar:    linear-gradient(180deg, #f9f9f9 0%, #f3f3f3 100%);
+    --psg-gradient-card-top:   linear-gradient(90deg, #bc0000 0%, #7a0000 100%);
+    --psg-gradient-header-bar: linear-gradient(90deg, #000000 0%, #000000 100%);
+    --psg-gradient-surface:    linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
 
     /* Motion — never use 'all', only specific properties */
     --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
@@ -267,7 +267,7 @@ button, input, select, textarea {
     --muted: #6b7280;
 
     --red-accent: #b00000;
-    --red-accent-dark: #8A0000;
+    --red-accent-dark: #8f0000;
     --red-accent-subtle: rgba(176, 0, 0, 0.10);
 
     --extra-light-fill: #181818;
@@ -312,7 +312,7 @@ button, input, select, textarea {
     overflow-x: auto;
     padding: 4px;
     border-radius: 999px;
-    background: var(--surface-secondary, #f0f0f0);
+    background: var(--surface-secondary, #f3f3f3);
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
     margin-bottom: 20px;
 }
@@ -401,76 +401,80 @@ button, input, select, textarea {
    Bauhaus · Editorial · Precise · German publisher
    ═══════════════════════════════════════════════════ */
 
-/* Buttons */
+/* Buttons — Brutalist Academic */
 .el-button {
-    border-radius: 3px !important;
+    border-radius: 0 !important;
     font-weight: 500 !important;
-    letter-spacing: 0.02em !important;
-    transition: background 0.15s var(--ease-out), box-shadow 0.15s var(--ease-out), border-color 0.15s, transform 0.12s var(--ease-spring) !important;
-}
-.el-button:active {
-    transform: scale(0.97) !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+    font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace !important;
+    font-size: 12px !important;
+    transition: background 0.15s ease, border-color 0.15s, color 0.15s !important;
 }
 .el-button--primary {
-    background: #b00000 !important;
-    border-color: #b00000 !important;
+    background: #bc0000 !important;
+    border-color: #bc0000 !important;
     color: #ffffff !important;
-    font-size: 13px !important;
-    font-weight: 600 !important;
+    font-weight: 500 !important;
 }
 .el-button--primary:hover,
 .el-button--primary:focus {
-    background: #8A0000 !important;
-    border-color: #8A0000 !important;
+    background: #000000 !important;
+    border-color: #000000 !important;
     box-shadow: none !important;
 }
 .el-button--default {
-    border-color: #CCCCCC !important;
+    border-color: #000000 !important;
+    color: #000000 !important;
 }
 .el-button--default:hover {
-    border-color: #111111 !important;
-    color: #111111 !important;
-    background: #F5F5F5 !important;
+    border-color: #bc0000 !important;
+    color: #bc0000 !important;
+    background: transparent !important;
+}
+.dark .el-button--default {
+    border-color: #ffffff !important;
+    color: #ffffff !important;
 }
 .dark .el-button--default:hover {
-    border-color: #888888 !important;
-    color: #EEEEEE !important;
-    background: #282828 !important;
+    border-color: #bc0000 !important;
+    color: #bc0000 !important;
+    background: transparent !important;
 }
 .el-button--danger {
-    border-radius: 3px !important;
+    border-radius: 0 !important;
 }
 .el-button--small {
-    border-radius: 2px !important;
+    border-radius: 0 !important;
 }
 
-/* Inputs */
+/* Inputs — Brutalist Academic */
 .el-input__wrapper {
-    border-radius: 3px !important;
-    box-shadow: 0 0 0 1px #DADADA !important;
-    transition: box-shadow 0.15s var(--ease-out) !important;
+    border-radius: 0 !important;
+    box-shadow: 0 0 0 1px #000000 !important;
+    transition: box-shadow 0.15s ease !important;
 }
 .el-input__wrapper:hover {
-    box-shadow: 0 0 0 1px #666666 !important;
+    box-shadow: 0 0 0 1px #bc0000 !important;
 }
 .el-input__wrapper.is-focus {
-    box-shadow: 0 0 0 2px rgba(176, 0, 0, 0.15), 0 0 0 1px #b00000 !important;
+    box-shadow: 0 0 0 2px #bc0000 !important;
 }
 .dark .el-input__wrapper {
-    box-shadow: 0 0 0 1px #383838 !important;
+    box-shadow: 0 0 0 1px #555555 !important;
 }
 .dark .el-input__wrapper:hover {
-    box-shadow: 0 0 0 1px #666666 !important;
+    box-shadow: 0 0 0 1px #bc0000 !important;
 }
 .dark .el-input__wrapper.is-focus {
-    box-shadow: 0 0 0 2px rgba(176, 0, 0, 0.20), 0 0 0 1px #b00000 !important;
+    box-shadow: 0 0 0 2px #bc0000 !important;
 }
 .el-input-group__append,
 .el-input-group__prepend {
-    border-radius: 0 3px 3px 0 !important;
+    border-radius: 0 !important;
 }
 .el-input-group .el-input__wrapper {
-    border-radius: 3px 0 0 3px !important;
+    border-radius: 0 !important;
 }
 
 /* Tables */
@@ -501,92 +505,101 @@ button, input, select, textarea {
     background: #1E1E1E !important;
 }
 
-/* Cards */
+/* Cards — Brutalist Academic */
 .el-card {
-    border-radius: 3px !important;
-    border: 1px solid #E8E8E8 !important;
-    box-shadow: var(--card-shadow) !important;
-    transition: box-shadow 0.18s var(--ease-out) !important;
+    border-radius: 0 !important;
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
 }
 .dark .el-card {
-    border-color: #2E2E2E !important;
+    border-color: #555555 !important;
 }
 
-/* Dialogs */
+/* Dialogs — Brutalist Academic */
 .el-overlay {
-    background: rgba(17, 17, 17, 0.50) !important;
+    background: rgba(0, 0, 0, 0.50) !important;
 }
 .el-dialog {
-    border-radius: 4px !important;
-    border: none !important;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.22) !important;
+    border-radius: 0 !important;
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
     overflow: hidden !important;
-    border-top: 3px solid #b00000 !important;
+    border-top: 3px solid #bc0000 !important;
 }
 .el-dialog__header {
-    border-bottom: 1px solid #EEEEEE !important;
+    border-bottom: 1px solid #000000 !important;
     padding: 16px 24px 14px !important;
-    background: #FAFAFA !important;
+    background: #f3f3f3 !important;
 }
 .dark .el-dialog__header {
-    border-bottom-color: #2a2a2a !important;
-    background: #181818 !important;
+    border-bottom-color: #555555 !important;
+    background: #1a1a1a !important;
 }
 .el-dialog__title {
     font-weight: 700 !important;
-    letter-spacing: 0.03em !important;
-    font-size: 14px !important;
+    letter-spacing: 0.06em !important;
+    font-size: 13px !important;
     text-transform: uppercase !important;
-    color: #111111 !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    color: #000000 !important;
 }
 .dark .el-dialog__title {
     color: #EEEEEE !important;
 }
 
-/* Tags */
+/* Tags — Brutalist Academic */
 .el-tag {
-    border-radius: 2px !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.04em !important;
-    font-size: 10.5px !important;
+    border-radius: 0 !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.06em !important;
+    font-size: 10px !important;
     text-transform: uppercase !important;
-    padding: 0 7px !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    padding: 0 6px !important;
 }
 .el-tag--primary {
-    background: rgba(176, 0, 0, 0.08) !important;
-    border-color: rgba(176, 0, 0, 0.25) !important;
-    color: #b00000 !important;
+    background: transparent !important;
+    border-color: #bc0000 !important;
+    color: #bc0000 !important;
 }
 .dark .el-tag--primary {
-    background: rgba(176, 0, 0, 0.14) !important;
-    border-color: rgba(176, 0, 0, 0.30) !important;
-    color: #E03333 !important;
+    background: transparent !important;
+    border-color: #bc0000 !important;
+    color: #bc0000 !important;
 }
 
-/* Pagination */
+/* Pagination — Brutalist Academic */
 .el-pagination .el-pager li.is-active {
-    background: #b00000 !important;
-    border-radius: 2px !important;
+    background: #bc0000 !important;
+    border-radius: 0 !important;
     color: #fff !important;
     font-weight: 700 !important;
 }
 .el-pagination button,
 .el-pagination .el-pager li {
-    border-radius: 2px !important;
+    border-radius: 0 !important;
 }
 
-/* Checkbox */
+/* Checkbox — Brutalist Academic */
 .el-checkbox__input.is-checked .el-checkbox__inner {
-    background: #b00000 !important;
-    border-color: #b00000 !important;
-    border-radius: 2px !important;
+    background: #000000 !important;
+    border-color: #000000 !important;
+    border-radius: 0 !important;
 }
 .el-checkbox__inner {
-    border-radius: 2px !important;
+    border-radius: 0 !important;
+    border-color: #000000 !important;
 }
 .el-radio__input.is-checked .el-radio__inner {
-    border-color: #b00000 !important;
-    background: #b00000 !important;
+    border-color: #bc0000 !important;
+    background: #bc0000 !important;
+}
+.dark .el-checkbox__inner {
+    border-color: #888888 !important;
+}
+.dark .el-checkbox__input.is-checked .el-checkbox__inner {
+    background: #ffffff !important;
+    border-color: #ffffff !important;
 }
 
 /* Select */
@@ -600,7 +613,7 @@ button, input, select, textarea {
     border-radius: 3px !important;
     background: #ffffff !important;
     box-shadow: 0 4px 16px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.06) !important;
-    border: 1px solid #e5e5e5 !important;
+    border: 1px solid #e5e7eb !important;
     overflow: hidden !important;
 }
 .dark .el-dropdown__popper,
@@ -625,7 +638,7 @@ button, input, select, textarea {
 .el-select__popper,
 .el-select-dropdown {
     background: #ffffff !important;
-    border: 1px solid #e5e5e5 !important;
+    border: 1px solid #e5e7eb !important;
     box-shadow: 0 4px 16px rgba(0,0,0,0.10) !important;
     border-radius: 3px !important;
 }
@@ -645,31 +658,40 @@ button, input, select, textarea {
     background: rgba(255, 255, 255, 0.07) !important;
 }
 
-/* Tooltip */
+/* Tooltip — Brutalist Academic */
 .el-tooltip__popper {
-    background: #111111 !important;
-    border: 1px solid #333333 !important;
-    border-radius: 3px !important;
+    background: #000000 !important;
+    border: 1px solid #000000 !important;
+    border-radius: 0 !important;
     color: #ffffff !important;
-    font-size: 11.5px !important;
-    letter-spacing: 0.01em !important;
+    font-size: 11px !important;
+    letter-spacing: 0.04em !important;
+    text-transform: uppercase !important;
+    font-family: 'JetBrains Mono', monospace !important;
 }
 
-/* Notification */
+/* Notification — Brutalist Academic */
 .el-notification {
-    border-radius: 3px !important;
-    border-left: 3px solid #b00000 !important;
-    box-shadow: var(--card-shadow) !important;
+    border-radius: 0 !important;
+    border-left: 4px solid #bc0000 !important;
+    border: 1px solid #000000 !important;
+    border-left: 4px solid #bc0000 !important;
+    box-shadow: none !important;
 }
 .el-message {
-    border-radius: 3px !important;
-    box-shadow: var(--card-shadow) !important;
+    border-radius: 0 !important;
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+}
+.dark .el-notification,
+.dark .el-message {
+    border-color: #555555 !important;
 }
 
 /* Switch */
 .el-switch.is-checked .el-switch__core {
-    background: #b00000 !important;
-    border-color: #b00000 !important;
+    background: #bc0000 !important;
+    border-color: #bc0000 !important;
 }
 
 /* Scrollbar */
@@ -679,42 +701,6 @@ button, input, select, textarea {
 ::-webkit-scrollbar-thumb:hover { background: #999999; }
 .dark ::-webkit-scrollbar-thumb { background: #444444; }
 .dark ::-webkit-scrollbar-thumb:hover { background: #666666; }
-
-/* ══════════════════════════════════════════════════════════════
-   Mobile safety — prevent horizontal overflow, responsive dialogs
-   ══════════════════════════════════════════════════════════════ */
-@media (max-width: 1024px) {
-    html, body, #app {
-        overflow-x: hidden;
-        max-width: 100%;
-    }
-
-    /* Dialogs must never exceed the viewport on small screens */
-    .el-dialog {
-        max-width: calc(100vw - 24px) !important;
-    }
-
-    /* Message boxes (confirm/alert) fit the screen */
-    .el-message-box {
-        width: calc(100vw - 32px) !important;
-        max-width: 420px !important;
-    }
-
-    /* Element Plus overlay dialogs centre with breathing room */
-    .el-overlay-dialog {
-        padding: 0 8px;
-    }
-}
-
-/* Touch targets: comfortable tap size on coarse pointers */
-@media (pointer: coarse) and (max-width: 1024px) {
-    .el-button {
-        min-height: 40px;
-    }
-    .el-input__wrapper {
-        min-height: 42px;
-    }
-}
 
 /* ── View Transition ────────────────────────────── */
 html.dark,

@@ -116,6 +116,15 @@
                   <el-input-tag class="setting-tag-input" :placeholder="$t('mustNotContainDesc')" v-model="emailPrefixFilter"/>
                 </div>
               </div>
+              <div class="setting-item">
+                <div>
+                  <span>{{ $t('autoDeleteDays') }}</span>
+                  <p>{{ $t('autoDeleteDaysDesc') }}</p>
+                </div>
+                <div>
+                  <el-input-number class="setting-number" @change="change" v-model="setting.autoDeleteDays" :min="0" :max="365" :step="1"/>
+                </div>
+              </div>
             </div>
           </div>
 

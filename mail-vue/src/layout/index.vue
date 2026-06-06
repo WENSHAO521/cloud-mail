@@ -234,8 +234,8 @@ onBeforeUnmount(() => {
 .mail-list-pane {
   min-height: 0;
   overflow: hidden;
-  border-right: 1px solid var(--separator, #e5e5e5);
-  background: var(--psg-bg, #f7f7f7);
+  border-right: 1px solid #000000;
+  background: #f9f9f9;
 
   /* Mobile: sit between the fixed header and the bottom tab bar */
   @media (max-width: 1024px) {
@@ -252,9 +252,10 @@ onBeforeUnmount(() => {
 
 .mail-detail-pane {
   min-height: 0;
-  overflow: hidden;
-  background: var(--psg-bg, #f7f7f7);
-  padding: 14px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: #f9f9f9;
+  padding: 0;
 
   /* Mobile: a full-screen reading page (its own back button + actions) */
   @media (max-width: 1024px) {
@@ -276,7 +277,7 @@ onBeforeUnmount(() => {
 .workspace-pane {
   min-height: 0;
   overflow: hidden;
-  background: var(--psg-bg, #f7f7f7);
+  background: #f9f9f9;
   display: flex;
   flex-direction: column;
 
@@ -297,6 +298,7 @@ onBeforeUnmount(() => {
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
 }
 
 /* ── Mobile chrome: top header + bottom tab bar ────────────── */

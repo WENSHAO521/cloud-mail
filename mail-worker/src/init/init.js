@@ -38,8 +38,15 @@ const dbInit = {
 		await this.v3_7DB(c);
 		await this.v3_8DB(c);
 		await this.v3_9DB(c);
+		await this.v4_0DB(c);
 		await settingService.refresh(c);
 		return c.text('success');
+	},
+
+	async v4_0DB(c) {
+		try {
+			await c.env.db.prepare(`ALTER TABLE setting ADD COLUMN auto_delete_days INTEGER NOT NULL DEFAULT 0;`).run();
+		} catch (e) { console.warn(`跳过：${e.message}`); }
 	},
 
 	async v3_9DB(c) {

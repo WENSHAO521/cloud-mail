@@ -1215,6 +1215,17 @@ const emailService = {
 			.set({ unread: emailConst.unread.READ })
 			.where(and(readAccessCond, inArray(email.emailId, emailIds)))
 			.run();
+	},
+
+	async deleteOldEmails(c) {
+		const setting = await settingService.query(c);
+		const days = Number(setting.autoDeleteDays);
+		if (!days || days <= 0) return;
+		const cutoff = dayjs().subtract(days, 'day').format('YYYY-MM-DD HH:mm:ss');
+		await orm(c)
+			.delete(email)
+			.where(lt(email.createTime, cutoff))
+			.run();
 	}
 };
 

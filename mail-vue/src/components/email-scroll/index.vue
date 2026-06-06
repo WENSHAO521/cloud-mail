@@ -58,7 +58,7 @@
       >
         <template #default="{ data: item }">
 
-          <!-- ── Mail row ── -->
+          <!-- ── Mail row (Brutalist table layout) ── -->
           <div class="mail-row-wrap" v-if="!item.expand">
             <div
               class="mail-row"
@@ -67,71 +67,57 @@
               @click="jumpDetails(item)"
               @contextmenu="handleContextmenu($event, item)"
             >
-              <!-- Col 1: Avatar -->
-              <div class="row-avatar" :style="{ background: senderBg(item) }">
-                <span class="rva-letter">{{ senderLetter(item) }}</span>
-                <img v-if="senderImg(item)" :src="senderImg(item)" class="rva-img"
-                     @error="e => { e.target.style.display='none'; markGravatarMiss(item.sendEmail) }" />
-                <div v-if="item.isStar && showStar" class="rva-star">
-                  <Icon icon="fluent-color:star-16" width="10" height="10" />
+              <!-- Col 1: Checkbox + unread dot -->
+              <div class="row-check">
+                <div class="unread-indicator" :class="{ visible: item.unread === EmailUnreadEnum.UNREAD && showUnread }"></div>
+                <el-checkbox class="mail-cb" v-model="item.checked" @click.stop />
+              </div>
+
+              <!-- Col 2: Sender -->
+              <div class="row-sender">
+                <div class="email-status-inline" v-if="showStatus">
+                  <el-tooltip effect="dark" :content="item.statusIcon?.content">
+                    <Icon :icon="item.statusIcon?.icon" :style="`color: ${item.statusIcon?.color}`"
+                          width="14" height="14" />
+                  </el-tooltip>
+                </div>
+                <span class="mail-name">
+                  <slot name="name" :email="item">{{ item.name }}</slot>
+                </span>
+                <Icon v-if="item.isStar && showStar" icon="fluent-color:star-16" width="12" height="12" class="sender-star" />
+              </div>
+
+              <!-- Col 3: Subject + snippet -->
+              <div class="row-subject-cell">
+                <span v-if="item.code" class="code-tag" @click.stop="copyCode(item.code)">
+                  [{{ t('codeLabel') }}{{ item.code }}]
+                </span>
+                <span class="subject-text">
+                  <slot name="subject" :email="item">{{ item.subject || '​' }}</slot>
+                </span>
+                <span class="mail-preview-inline">{{ item.formatText ? ' — ' + item.formatText : '' }}</span>
+                <div class="user-info-inline" v-if="showUserInfo">
+                  <span>{{ item.userEmail }}</span>
+                  <span>→ {{ item.type === 0 ? item.toEmail : item.sendEmail }}</span>
                 </div>
               </div>
 
-              <!-- Col 2: Content -->
-              <div class="mail-content">
-                <div class="mail-sender-row">
-                  <el-checkbox class="mail-cb" v-model="item.checked" @click.stop />
-                  <div class="email-status-inline" v-if="showStatus">
-                    <el-tooltip effect="dark" :content="item.statusIcon?.content">
-                      <Icon :icon="item.statusIcon?.icon" :style="`color: ${item.statusIcon?.color}`"
-                            width="15" height="15" />
-                    </el-tooltip>
-                  </div>
-                  <span class="mail-name">
-                    <slot name="name" :email="item">{{ item.name }}</slot>
-                  </span>
-                </div>
-                <div class="mail-subject">
-                  <div class="unread-dot" v-if="item.unread === EmailUnreadEnum.UNREAD && showUnread" />
-                  <span v-if="item.code" class="code-tag" @click.stop="copyCode(item.code)">
-                    [{{ t('codeLabel') }}{{ item.code }}]
-                  </span>
-                  <span class="subject-text">
-                    <slot name="subject" :email="item">{{ item.subject || '​' }}</slot>
-                  </span>
-                </div>
-                <div class="mail-preview">{{ item.formatText || '​' }}</div>
-                <div class="user-info" v-if="showUserInfo">
-                  <div class="user-info-row">
-                    <Icon icon="mynaui:user" width="13" height="13" />
-                    <span>{{ item.userEmail }}</span>
-                  </div>
-                  <div class="user-info-row">
-                    <Icon icon="mdi-light:email" width="13" height="13" />
-                    <span>{{ item.type === 0 ? item.toEmail : item.sendEmail }}</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Col 3: Right -->
-              <div class="mail-right">
-                <div class="mail-time-row">
-                  <span class="mail-time">{{ item.formatCreateTime }}</span>
-                  <span v-if="item.unread === EmailUnreadEnum.UNREAD && showUnread" class="unread-badge" />
-                </div>
+              <!-- Col 4: Time + actions -->
+              <div class="row-meta">
+                <span class="mail-time">{{ item.formatCreateTime }}</span>
                 <div class="mail-actions">
                   <button v-if="archiveEmail" class="icon-btn" :title="$t('archive')"
                           @click.stop="archiveEmail(item.emailId)">
-                    <Icon icon="material-symbols:archive-outline-rounded" width="15" height="15" />
+                    <Icon icon="material-symbols:archive-outline-rounded" width="14" height="14" />
                   </button>
                   <button v-if="showStar" class="icon-btn" :title="$t('star')"
                           @click.stop="starChange(item)">
                     <Icon :icon="item.isStar ? 'fluent-color:star-16' : 'solar:star-line-duotone'"
-                          :width="item.isStar ? 16 : 14" :height="item.isStar ? 16 : 14" />
+                          :width="14" :height="14" />
                   </button>
                   <button v-perm="'email:delete'" class="icon-btn icon-danger" :title="$t('delete')"
                           @click.stop="rightDelete(item.emailId)">
-                    <Icon icon="material-symbols:delete-outline-rounded" width="15" height="15" />
+                    <Icon icon="material-symbols:delete-outline-rounded" width="14" height="14" />
                   </button>
                 </div>
               </div>
@@ -337,8 +323,8 @@ const list = computed(() => {
 })
 
 const itemHeight = computed(() => {
-  if (props.type === 'all-email') return isMobile.value ? 148 : 116;
-  return isMobile.value ? 108 : 104;
+  if (props.type === 'all-email') return isMobile.value ? 60 : 56;
+  return isMobile.value ? 52 : 44;
 })
 
 watch(emailList, () => { nextTick(() => {}) })
@@ -596,65 +582,85 @@ function loadData() { getEmailList() }
   grid-template-rows: auto auto 1fr;
   height: 100%;
   overflow: hidden;
-  background: var(--psg-bg, #f7f7f7);
+  background: #f9f9f9;
   font-size: 14px;
   color: var(--el-text-color-primary);
 }
 
+.dark .email-container {
+  background: #0a0a0a;
+}
+
 /* ── Search area ──────────────────────────────────────────── */
 .search-area {
-  padding: 12px 16px;
-  background: var(--psg-bg, #f7f7f7);
+  padding: 10px 16px;
+  background: #f9f9f9;
+  border-bottom: 1px solid #000000;
+}
+
+.dark .search-area {
+  background: #0a0a0a;
+  border-bottom-color: #333333;
 }
 
 .search-pill {
   display: flex;
   align-items: center;
-  gap: 12px;
-  height: 52px;
-  background: var(--surface, #fff);
-  border-radius: 4px;
-  padding: 0 16px;
-  border: 1px solid var(--separator, #e5e5e5);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-  transition: box-shadow 0.14s ease;
+  gap: 8px;
+  height: 36px;
+  background: #ffffff;
+  border-radius: 0;
+  padding: 0 12px;
+  border: 1px solid #000000;
+  transition: border-color 0.12s ease;
 
   &:focus-within {
-    border-color: rgba(176, 0, 0, 0.35);
-    box-shadow: 0 0 0 3px rgba(176, 0, 0, 0.07), 0 1px 4px rgba(0, 0, 0, 0.06);
+    border-color: #bc0000;
   }
 
-  .search-icon-pill { color: var(--muted, #666666); flex-shrink: 0; }
+  .search-icon-pill { color: #7e7576; flex-shrink: 0; }
 
   .search-input {
     flex: 1;
     border: none;
     outline: none;
     background: transparent;
-    font-size: 15px;
-    color: var(--el-text-color-primary);
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #000000;
     min-width: 0;
-    &::placeholder { color: var(--muted, #666666); }
+    &::placeholder {
+      color: #7e7576;
+      text-transform: uppercase;
+    }
   }
 
   .search-clear-icon {
-    color: var(--muted, #666666);
+    color: #7e7576;
     cursor: pointer;
     flex-shrink: 0;
-    &:hover { color: var(--el-text-color-primary); }
+    &:hover { color: #000000; }
   }
+}
+
+.dark .search-pill {
+  background: #111111;
+  border-color: #555555;
+  &:focus-within { border-color: #bc0000; }
+  .search-input { color: #ffffff; }
 }
 
 /* ── Toolbar ──────────────────────────────────────────────── */
 .mail-toolbar {
-  height: 48px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
-  border-top: 1px solid var(--separator, #e5e5e5);
-  border-bottom: 1px solid var(--separator, #e5e5e5);
-  background: var(--surface, #fff);
+  padding: 0 12px;
+  border-bottom: 1px solid #000000;
+  background: #f3f3f3;
   flex-shrink: 0;
 
   .toolbar-left {
@@ -670,37 +676,63 @@ function loadData() { getEmailList() }
   }
 
   .mail-count {
-    font-size: 12px;
-    color: var(--muted, #666666);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #7e7576;
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
+    border: 1px solid #cfc4c5;
+    padding: 2px 6px;
   }
 }
 
-/* ── Icon button (circular — matches vfasky icon-button) ─── */
+.dark .mail-toolbar {
+  background: #111111;
+  border-bottom-color: #333333;
+  .mail-count { border-color: #444444; }
+}
+
+/* ── Icon button (brutalist square) ──────────────────────── */
 .icon-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: none;
+  width: 28px;
+  height: 28px;
+  border: 1px solid transparent;
   background: transparent;
-  border-radius: 50%;
+  border-radius: 0;
   cursor: pointer;
-  color: var(--muted, #666666);
-  transition: background 0.12s ease, color 0.12s ease;
+  color: #7e7576;
+  transition: background 0.10s ease, color 0.10s ease, border-color 0.10s;
   flex-shrink: 0;
 
   @media (hover: hover) {
     &:hover {
-      background: rgba(0, 0, 0, 0.07);
-      color: var(--el-text-color-primary);
+      border-color: #000000;
+      color: #000000;
     }
 
     &.icon-danger:hover {
-      background: rgba(176, 0, 0, 0.10);
-      color: #b00000;
+      border-color: #bc0000;
+      color: #bc0000;
+    }
+  }
+}
+
+.dark .icon-btn {
+  color: #555555;
+  @media (hover: hover) {
+    &:hover {
+      border-color: #ffffff;
+      color: #ffffff;
+    }
+    &.icon-danger:hover {
+      border-color: #bc0000;
+      color: #bc0000;
     }
   }
 }
@@ -709,7 +741,7 @@ function loadData() { getEmailList() }
 .scroll {
   height: 100%;
   overflow: hidden;
-  background: var(--psg-bg, #f7f7f7);
+  background: var(--psg-bg, #f9f9f9);
 
   .virtual { will-change: scroll-position; }
 
@@ -725,112 +757,93 @@ function loadData() { getEmailList() }
     justify-content: center;
     align-items: center;
     padding: 12px 0;
-    font-size: 13px;
-    color: var(--muted, #666666);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted, #7e7576);
   }
 }
 
-/* ── Mail row wrapper (provides pb-2 spacing) ─────────────── */
+/* ── Mail row wrapper ─────────────────────────────────────── */
 :deep(.mail-row-wrap) {
-  padding: 0 16px 8px;
+  padding: 0;
 }
 
-/* ── Mail row (mirrors vfasky .mail-row) ──────────────────── */
+/* ── Mail row: Brutalist table layout (Stitch) ────────────── */
 :deep(.mail-row) {
-  position: relative;
   display: grid;
-  grid-template-columns: 56px 1fr auto;
-  gap: 12px;
-  min-height: 96px;
-  padding: 14px;
-  border-radius: 4px;
-  background: transparent;
+  grid-template-columns: 52px 180px 1fr 110px;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 16px 8px 8px;
+  border-radius: 0;
+  border-bottom: 1px solid var(--light-border-color, #cfc4c5);
+  background: #ffffff;
   cursor: pointer;
-  transition: background 140ms ease, box-shadow 140ms ease, transform 140ms ease;
+  align-items: center;
+  transition: background 100ms ease;
 
-  &.all-email { min-height: 116px; }
+  &.all-email {
+    grid-template-columns: 52px 180px 1fr 110px;
+    min-height: 56px;
+  }
+
+  @media (max-width: 1280px) {
+    grid-template-columns: 44px 140px 1fr 88px;
+  }
 
   @media (hover: hover) {
     &:hover {
-      background: var(--surface, #fff);
-      transform: translateY(-1px);
-      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+      background: #f3f3f3;
     }
   }
 
   &[data-active] {
-    background: var(--surface, #fff);
-    transform: translateY(-1px);
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+    background: #eeeeee;
   }
 }
 
-/* ── Avatar ───────────────────────────────────────────────── */
-:deep(.row-avatar) {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  flex-shrink: 0;
+.dark :deep(.mail-row) {
+  background: #111111;
+  border-bottom-color: #202020;
+
+  &:hover { background: #1a1a1a; }
+  &[data-active] { background: #1e1e1e; }
+}
+
+/* ── Col 1: Checkbox + unread indicator ───────────────────── */
+:deep(.row-check) {
   display: flex;
   align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: visible;
-  user-select: none;
-  align-self: flex-start;
-  margin-top: 2px;
+  gap: 6px;
+  flex-shrink: 0;
+  padding-left: 8px;
 
-  .rva-img {
-    position: absolute;
-    inset: 0;
-    width: 56px;
-    height: 56px;
+  .unread-indicator {
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    object-fit: cover;
-    display: block;
-  }
+    background: transparent;
+    flex-shrink: 0;
+    transition: background 0.1s;
 
-  .rva-letter {
-    color: #fff;
-    font-size: 18px;
-    font-weight: 700;
-    line-height: 1;
-    letter-spacing: 0;
-  }
-
-  .rva-star {
-    position: absolute;
-    bottom: -2px;
-    right: -2px;
-    width: 17px;
-    height: 17px;
-    background: var(--surface, #fff);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 0 1px var(--separator, #e5e5e5);
+    &.visible { background: #bc0000; }
   }
 }
 
-/* ── Content column ───────────────────────────────────────── */
-:deep(.mail-content) {
-  min-width: 0;
+/* ── Col 2: Sender ────────────────────────────────────────── */
+:deep(.row-sender) {
   display: flex;
-  flex-direction: column;
-  gap: 3px;
-
-  .mail-sender-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-width: 0;
-  }
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
 
   .mail-name {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--el-text-color-primary);
+    font-size: 14px;
+    font-weight: 400;
+    color: #4c4546;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -838,140 +851,128 @@ function loadData() { getEmailList() }
     min-width: 0;
   }
 
-  .mail-subject {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 14px;
-    color: var(--el-text-color-primary);
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    min-width: 0;
-
-    .subject-text {
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      min-width: 0;
-    }
-  }
-
-  .mail-preview {
-    font-size: 14px;
-    color: var(--muted, #666666);
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    min-width: 0;
-  }
-
-  .user-info {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px 16px;
-    margin-top: 2px;
-
-    .user-info-row {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      color: var(--muted, #666666);
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      max-width: 220px;
-    }
-  }
+  .sender-star { flex-shrink: 0; }
 
   .email-status-inline {
     display: flex;
     align-items: center;
     flex-shrink: 0;
   }
+}
+
+/* ── Col 3: Subject + snippet ─────────────────────────────── */
+:deep(.row-subject-cell) {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+
+  .subject-text {
+    font-size: 14px;
+    font-weight: 400;
+    color: #4c4546;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  .mail-preview-inline {
+    font-size: 13px;
+    color: #7e7576;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 2;
+    min-width: 0;
+  }
 
   .code-tag {
-    font-size: 12px;
-    color: #b00000;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #bc0000;
     cursor: pointer;
     white-space: nowrap;
     flex-shrink: 0;
+    border: 1px solid #bc0000;
+    padding: 0 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
   }
 
-  .unread-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #b00000;
+  .user-info-inline {
+    display: flex;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #7e7576;
     flex-shrink: 0;
-    box-shadow: 0 0 0 2px rgba(176, 0, 0, 0.15);
+    white-space: nowrap;
   }
 }
 
-/* ── Unread state ─────────────────────────────────────────── */
-:deep(.mail-row.is-unread) {
-  .mail-name { font-weight: 700 !important; }
-  .mail-subject { font-weight: 600 !important; }
-  .mail-time { color: var(--el-text-color-primary) !important; font-weight: 700 !important; }
-}
-
-/* Subtle left red marker for unread rows (institutional accent) */
-:deep(.mail-row.is-unread)::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 12px;
-  bottom: 12px;
-  width: 3px;
-  border-radius: 0 2px 2px 0;
-  background: #b00000;
-}
-
-:deep(.mail-row:not(.is-unread)) {
-  .mail-name { color: #444444; }
-  .mail-subject { color: #666666; }
-}
-
-/* ── Right column ─────────────────────────────────────────── */
-:deep(.mail-right) {
+/* ── Col 4: Time + actions ────────────────────────────────── */
+:deep(.row-meta) {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  justify-content: space-between;
-  flex-shrink: 0;
+  justify-content: center;
   gap: 4px;
-  padding-top: 2px;
-
-  .mail-time-row {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    justify-content: flex-end;
-  }
+  flex-shrink: 0;
 
   .mail-time {
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
-    color: var(--muted, #666666);
+    color: #7e7576;
     white-space: nowrap;
     letter-spacing: 0.02em;
     font-variant-numeric: tabular-nums;
-  }
-
-  .unread-badge {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #b00000;
-    flex-shrink: 0;
   }
 
   .mail-actions {
     display: flex;
     align-items: center;
     gap: 0;
+    opacity: 0;
+    transition: opacity 0.1s;
   }
+}
+
+:deep(.mail-row:hover .row-meta .mail-actions),
+:deep(.mail-row[data-active] .row-meta .mail-actions) {
+  opacity: 1;
+}
+
+/* ── Unread state ─────────────────────────────────────────── */
+:deep(.mail-row.is-unread) {
+  background: #ffffff;
+
+  .row-sender .mail-name {
+    font-weight: 700 !important;
+    color: #1a1c1c !important;
+  }
+  .row-subject-cell .subject-text {
+    font-weight: 700 !important;
+    color: #1a1c1c !important;
+  }
+  .row-meta .mail-time {
+    font-weight: 700 !important;
+    color: #1a1c1c !important;
+  }
+}
+
+.dark :deep(.mail-row.is-unread) {
+  background: #0f0f0f;
+  .row-sender .mail-name { color: #ffffff !important; }
+  .row-subject-cell .subject-text { color: #ffffff !important; }
+  .row-meta .mail-time { color: #cccccc !important; }
+}
+
+:deep(.mail-row:not(.is-unread)) {
+  .row-sender .mail-name { opacity: 0.65; }
+  .row-subject-cell .subject-text { opacity: 0.65; }
 }
 
 /* ── Context menu ─────────────────────────────────────────── */
