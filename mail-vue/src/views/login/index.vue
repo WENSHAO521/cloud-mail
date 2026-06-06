@@ -20,13 +20,13 @@
           <path d="M40 40 H70 M40 40 V70" fill="none"/>
           <path d="M560 760 H530 M560 760 V730" fill="none"/>
         </g>
-        <rect x="500" y="160" width="14" height="14" fill="#B00000"/>
+        <rect x="500" y="160" width="14" height="14" fill="#bc0000"/>
         <circle cx="80" cy="640" r="6" fill="none" stroke="#111111" stroke-width="1"/>
       </svg>
 
       <div class="brand-editorial">
         <div class="brand-lockup">
-          <div class="brand-mark">PSG</div>
+          <img src="/favicon.svg" class="brand-logo" alt="PSG"/>
           <div class="brand-eyebrow">{{ $t('institutionalMail') }}</div>
         </div>
         <h1 class="brand-wordmark">Panorama<br/>Scholarly Group</h1>
@@ -43,7 +43,7 @@
 
         <!-- Compact brand header (shown when brand panel is hidden) -->
         <div class="card-brand">
-          <div class="card-brand-mark">PSG</div>
+          <img src="/favicon.svg" class="card-brand-logo" alt="PSG"/>
           <div class="card-brand-meta">
             <span class="card-brand-name">Panorama Scholarly Group</span>
             <span class="card-brand-sub">{{ $t('institutionalMail') }}</span>
@@ -758,19 +758,12 @@ function submitRegister() {
   margin-bottom: 30px;
 }
 
-.brand-mark {
+.brand-logo {
   width: 44px;
   height: 44px;
   flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #B00000;
-  color: #FFFFFF;
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  border-radius: 3px;
+  display: block;
+  border-radius: 0;
 }
 
 .brand-eyebrow {
@@ -793,7 +786,7 @@ function submitRegister() {
 .brand-divider {
   width: 48px;
   height: 3px;
-  background: #B00000;
+  background: #bc0000;
   margin: 30px 0 22px;
 }
 
@@ -833,10 +826,10 @@ function submitRegister() {
   width: 100%;
   max-width: 408px;
   background: #FFFFFF;
-  border: 1px solid #E5E5E5;
-  border-top: 3px solid #B00000;
-  border-radius: 4px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 14px 44px rgba(0, 0, 0, 0.07);
+  border: 1px solid #000000;
+  border-top: 3px solid #bc0000;
+  border-radius: 0;
+  box-shadow: none;
   padding: 40px 36px 26px;
   display: flex;
   flex-direction: column;
@@ -856,19 +849,12 @@ function submitRegister() {
   @media (max-width: 980px) { display: flex; }
 }
 
-.card-brand-mark {
+.card-brand-logo {
   width: 38px;
   height: 38px;
   flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #B00000;
-  color: #FFFFFF;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  border-radius: 3px;
+  display: block;
+  border-radius: 0;
 }
 
 .card-brand-meta { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
@@ -887,7 +873,7 @@ function submitRegister() {
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #B00000;
+  color: #bc0000;
   margin-bottom: 12px;
 }
 
@@ -923,7 +909,7 @@ function submitRegister() {
 }
 
 :deep(.el-input__wrapper) {
-  border-radius: 3px !important;
+  border-radius: 0 !important;
   height: 46px;
   background: #FFFFFF !important;
   box-shadow: 0 0 0 1px #DADADA !important;
@@ -933,7 +919,7 @@ function submitRegister() {
   box-shadow: 0 0 0 1px #666666 !important;
 }
 :deep(.el-input__wrapper.is-focus) {
-  box-shadow: 0 0 0 1px #B00000, 0 0 0 3px rgba(176, 0, 0, 0.10) !important;
+  box-shadow: 0 0 0 1px #bc0000, 0 0 0 3px rgba(188, 0, 0, 0.10) !important;
 }
 :deep(.el-input__inner) {
   font-size: 14px !important;
@@ -947,13 +933,13 @@ function submitRegister() {
   border-bottom: 1px solid #DADADA !important;
   border-left:   1px solid #DADADA !important;
   border-right:  none !important;
-  border-radius: 3px 0 0 3px !important;
+  border-radius: 0 !important;
   background: #FFFFFF !important;
   height: 46px;
   transition: border-color 0.15s !important;
 }
 .email-input :deep(.el-input__wrapper.is-focus) {
-  border-color: #B00000 !important;
+  border-color: #bc0000 !important;
   box-shadow: none !important;
 }
 .email-input :deep(.el-input-group__append) {
@@ -962,7 +948,7 @@ function submitRegister() {
   border-right:  1px solid #DADADA !important;
   border-bottom: 1px solid #DADADA !important;
   border-left:   1px solid #EBEBEB !important;
-  border-radius: 0 3px 3px 0 !important;
+  border-radius: 0 !important;
   background: #F5F5F5 !important;
   padding: 0 12px !important;
   height: 46px;
@@ -972,9 +958,9 @@ function submitRegister() {
   color: #555555 !important;
 }
 .email-input:focus-within :deep(.el-input-group__append) {
-  border-top-color:    #B00000 !important;
-  border-right-color:  #B00000 !important;
-  border-bottom-color: #B00000 !important;
+  border-top-color:    #bc0000 !important;
+  border-right-color:  #bc0000 !important;
+  border-bottom-color: #bc0000 !important;
 }
 
 /* ── Options row ────────────────────────────────────────────── */
@@ -992,7 +978,7 @@ function submitRegister() {
 .text-link {
   font-size: 13px;
   font-weight: 500;
-  color: #B00000;
+  color: #bc0000;
   cursor: pointer;
   transition: color 0.12s;
 }
@@ -1002,7 +988,7 @@ function submitRegister() {
 .btn {
   height: 46px;
   width: 100%;
-  border-radius: 3px;
+  border-radius: 0;
   font-weight: 600;
   letter-spacing: 0.02em;
   font-size: 14px;
@@ -1010,11 +996,11 @@ function submitRegister() {
 .btn-oauth { margin-top: 12px; }
 
 :deep(.el-button--primary) {
-  background: #B00000 !important;
-  border-color: #B00000 !important;
+  background: #bc0000 !important;
+  border-color: #bc0000 !important;
   color: #FFFFFF !important;
   font-weight: 600 !important;
-  border-radius: 3px !important;
+  border-radius: 0 !important;
   letter-spacing: 0.02em !important;
 
   &:hover, &:focus {
@@ -1035,7 +1021,7 @@ function submitRegister() {
   gap: 8px;
   background: #FFFFFF;
   border: 1px solid #DADADA;
-  border-radius: 3px;
+  border-radius: 0;
   cursor: pointer;
   font-family: inherit;
   font-size: 13px;
@@ -1044,7 +1030,7 @@ function submitRegister() {
   color: #111111;
   transition: border-color 0.15s, background 0.15s;
 
-  svg { color: #B00000; }
+  svg { color: #bc0000; }
 
   &:hover { border-color: #111111; background: #FAFAFA; }
 }
@@ -1058,7 +1044,7 @@ function submitRegister() {
   cursor: pointer;
 
   span {
-    color: #B00000;
+    color: #bc0000;
     cursor: pointer;
     font-weight: 600;
   }
@@ -1140,7 +1126,7 @@ function submitRegister() {
     height: 28px;
     width: 28px;
     display: block;
-    border-radius: 3px;
+    border-radius: 0;
   }
 }
 </style>

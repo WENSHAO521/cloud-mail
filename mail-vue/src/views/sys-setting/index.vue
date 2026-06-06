@@ -447,53 +447,48 @@
           </div>
 
           <div v-show="activeSettingSection === 'about'" class="settings-card about">
-            <div class="card-title">{{ $t('about') }}</div>
             <div class="card-content">
-              <div class="concerning-item">
-                <span>{{ $t('version') }} :</span>
-                <el-badge is-dot :hidden="!hasUpdate">
-                  <el-button @click="jump('https://github.com/maillab/cloud-mail/releases')">
-                    {{ currentVersion }}
-                    <template #icon>
-                      <Icon icon="qlementine-icons:version-control-16" style="font-size: 20px" color="#1890FF"/>
-                    </template>
-                  </el-button>
-                </el-badge>
+              <div class="about-row">
+                <span class="about-label">{{ $t('version') }}</span>
+                <div class="about-actions">
+                  <el-badge is-dot :hidden="!hasUpdate">
+                    <el-button class="about-btn" @click="jump('https://github.com/maillab/cloud-mail/releases')">
+                      <template #icon><Icon icon="qlementine-icons:version-control-16" width="16" height="16" color="#1890FF"/></template>
+                      {{ currentVersion }}
+                    </el-button>
+                  </el-badge>
+                </div>
               </div>
-              <div class="concerning-item">
-                <span>{{ $t('community') }} : </span>
-                <div class="community">
-                  <el-button @click="jump('https://panorama-sg.com')">
+              <div class="about-row">
+                <span class="about-label">{{ $t('community') }}</span>
+                <div class="about-actions">
+                  <el-button class="about-btn" @click="jump('https://panorama-sg.com')">
+                    <template #icon><img src="/favicon.svg" width="16" height="16" style="display:block"/></template>
                     PSG
-                    <template #icon>
-                      <img src="/favicon.svg" width="20" height="20" style="display:block;border-radius:2px;"/>
-                    </template>
                   </el-button>
-                  <el-button @click="jump('https://t.me/cloud_mail_tg')">
+                  <el-button class="about-btn" @click="jump('https://t.me/cloud_mail_tg')">
+                    <template #icon><Icon icon="logos:telegram" width="18" height="18"/></template>
                     Telegram
-                    <template #icon>
-                      <Icon icon="logos:telegram" width="30" height="30"/>
-                    </template>
                   </el-button>
                 </div>
               </div>
-              <div class="concerning-item">
-                <span>{{ $t('support') }} : </span>
-                <el-button @click="jump('https://doc.skymail.ink/support.html')">
-                  {{ t('supportDesc') }}
-                  <template #icon>
-                    <Icon color="#79D6B5" icon="simple-icons:buymeacoffee" width="20" height="20"/>
-                  </template>
-                </el-button>
+              <div class="about-row">
+                <span class="about-label">{{ $t('support') }}</span>
+                <div class="about-actions">
+                  <el-button class="about-btn" @click="jump('https://doc.skymail.ink/support.html')">
+                    <template #icon><Icon color="#79D6B5" icon="simple-icons:buymeacoffee" width="18" height="18"/></template>
+                    {{ t('supportDesc') }}
+                  </el-button>
+                </div>
               </div>
-              <div class="concerning-item">
-                <span>{{ $t('help') }} : </span>
-                <el-button @click="jump('https://doc.skymail.ink')">
-                  {{ t('document') }}
-                  <template #icon>
-                    <Icon color="#79D6B5" icon="fluent-color:document-32" width="18" height="18"/>
-                  </template>
-                </el-button>
+              <div class="about-row">
+                <span class="about-label">{{ $t('help') }}</span>
+                <div class="about-actions">
+                  <el-button class="about-btn" @click="jump('https://doc.skymail.ink')">
+                    <template #icon><Icon color="#79D6B5" icon="fluent-color:document-32" width="18" height="18"/></template>
+                    {{ t('document') }}
+                  </el-button>
+                </div>
               </div>
             </div>
           </div>
@@ -2217,30 +2212,38 @@ function editSetting(settingForm, refreshStatus = true) {
   }
 }
 
-.concerning-item {
+.about-row {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  min-height: 76px;
+  padding: 16px 20px;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 1px solid var(--separator, #e5e5e5);
+
+  &:last-child { border-bottom: none; }
+}
+
+.about-label {
+  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--psg-text-secondary, #666666);
+  white-space: nowrap;
+}
+
+.about-actions {
   display: flex;
   align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 
-  .community {
-    display: flex;
-    row-gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  :deep(.el-button) {
-    padding: 0 10px;
-    font-weight: normal;
-
-    i {
-      font-size: 22px;
-    }
-  }
-
-  > span:first-child {
-    font-weight: normal;
-    padding-right: 20px;
-    white-space: nowrap;
-  }
+.about-btn {
+  font-weight: 500;
+  font-size: 13px;
 }
 
 .email-title {

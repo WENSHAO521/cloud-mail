@@ -666,7 +666,7 @@ function loadData() { getEmailList() }
   .toolbar-left {
     display: flex;
     align-items: center;
-    gap: 2px;
+    gap: 6px;
   }
 
   .toolbar-right {
@@ -1021,7 +1021,7 @@ function loadData() { getEmailList() }
   align-items: center;
   gap: 10px;
 
-  &.danger { color: #b00000; }
+  &.danger { color: #bc0000; }
 }
 
 :deep(.el-dropdown-menu__item:last-child) { padding-bottom: 8px; }

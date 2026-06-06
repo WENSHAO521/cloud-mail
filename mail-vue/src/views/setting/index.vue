@@ -389,48 +389,49 @@ function submitPwd() {
 
 /* ── Tab list ── */
 .settings-tab-list {
-  display: inline-flex;
-  gap: 4px;
-  padding: 4px;
-  border-radius: 999px;
-  background: var(--surface-secondary, #f0f0f0);
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--light-border, #000000);
   margin-bottom: 20px;
 }
 
 .settings-tab-button {
   min-width: 108px;
   border: none;
-  border-radius: 999px;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  border-radius: 0;
   background: transparent;
-  color: var(--secondary-text-color, #666666);
+  color: var(--psg-text-secondary, #666666);
   cursor: pointer;
-  font-size: 13.5px;
-  font-weight: 700;
-  line-height: 1;
-  padding: 11px 22px;
-  transition: background 140ms ease, box-shadow 140ms ease, color 140ms ease;
+  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 12px 20px;
+  transition: color 0.12s, border-color 0.12s;
   white-space: nowrap;
-  font-family: inherit;
+
+  &:hover { color: var(--el-text-color-primary); }
 
   &[data-active="true"] {
-    background: var(--surface, #fff);
     color: var(--el-text-color-primary);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.08);
+    border-bottom-color: #bc0000;
   }
 }
 
 /* ── Section — surface-card ── */
 .section {
   background: var(--surface, #fff);
-  border-radius: 4px;
-  border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 80%, transparent);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+  border-radius: 0;
+  border: 1px solid var(--light-border, #000000);
+  box-shadow: none;
   overflow: hidden;
   margin-bottom: 20px;
 
   &:last-child { margin-bottom: 0; }
-  &.danger-section { border-color: rgba(204,0,0,0.25); }
+  &.danger-section { border-color: #cc0000; }
 }
 
 .section-head {
@@ -443,13 +444,12 @@ function submitPwd() {
 }
 
 .section-label {
-  font-size: 15px;
-  font-weight: 600;
+  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--el-text-color-primary);
-  letter-spacing: 0;
-  text-transform: none;
-  border-left: none;
-  padding-left: 0;
   line-height: 1.4;
 }
 
@@ -458,7 +458,7 @@ function submitPwd() {
 }
 
 .head-action {
-  border-radius: 2px !important;
+  border-radius: 0 !important;
   font-size: 12px !important;
   flex-shrink: 0;
 }
@@ -487,7 +487,7 @@ function submitPwd() {
   position: relative;
   width: 76px;
   height: 76px;
-  border-radius: 4px;
+  border-radius: 0;
   overflow: hidden;
   cursor: pointer;
   flex-shrink: 0;
@@ -612,7 +612,7 @@ function submitPwd() {
 /* ── Editor ── */
 .editor-shell {
   border: 1px solid var(--light-border-color);
-  border-radius: 2px; overflow: hidden;
+  border-radius: 0; overflow: hidden;
   height: 160px;
 }
 

@@ -414,13 +414,13 @@ async function latest() {
 
 .search-type {
   display: flex;
+  align-items: center;
+  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--el-text-color-regular);
-}
-
-/* ── Toolbar height — one source of truth ─────── */
-:deep(.header-actions) {
-  height: 46px;
-  min-height: 46px;
 }
 
 /* ── Unify all interactive control heights ─────── */
@@ -475,16 +475,28 @@ async function latest() {
 }
 
 .icon {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid transparent;
+  background: transparent;
   cursor: pointer;
   flex-shrink: 0;
-  color: var(--el-text-color-regular);
-  transition: color 0.14s ease;
+  color: #7e7576;
+  transition: border-color 0.10s, color 0.10s;
 
   @media (hover: hover) {
-    &:hover { color: #CC0000; }
+    &:hover {
+      border-color: #000000;
+      color: #000000;
+    }
+
+    &.clear:hover {
+      border-color: #bc0000;
+      color: #bc0000;
+    }
   }
 }
 
