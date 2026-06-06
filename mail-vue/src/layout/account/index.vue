@@ -608,7 +608,7 @@ path[fill="#ffdda1"] {
       cursor: pointer;
       width: 28px;
       height: 28px;
-      border-radius: 2px;
+      border-radius: 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -662,13 +662,12 @@ path[fill="#ffdda1"] {
     gap: 10px;
     padding: 10px 10px 10px 10px;
     margin: 3px 6px;
-    border-radius: 4px;
+    border-radius: 0;
     cursor: pointer;
     background: transparent;
     border-left: 3px solid transparent;
     border: 1px solid transparent;
-    transition: background 0.15s ease, border-color 0.15s ease,
-                box-shadow 0.15s ease;
+    transition: background 0.15s ease, border-color 0.15s ease;
     position: relative;
 
     &:first-child { margin-top: 6px; }
@@ -678,7 +677,6 @@ path[fill="#ffdda1"] {
       &:hover:not(.item-choose) {
         background: var(--el-bg-color);
         border-color: var(--light-border-color);
-        box-shadow: 0 1px 4px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
       }
     }
   }
@@ -695,7 +693,7 @@ path[fill="#ffdda1"] {
     flex-shrink: 0;
     width: 32px;
     height: 32px;
-    border-radius: 2px;
+    border-radius: 0;
     background: #1a1a1a;
     color: rgba(255,255,255,0.85);
     font-family: 'IBM Plex Mono', monospace;
@@ -757,7 +755,7 @@ path[fill="#ffdda1"] {
       justify-content: center;
       width: 24px;
       height: 24px;
-      border-radius: 50%;
+      border-radius: 0;
       transition: color 0.12s, background 0.12s;
 
       @media (hover: hover) {
@@ -769,7 +767,7 @@ path[fill="#ffdda1"] {
     }
 
     .action-active {
-      color: #CC0000;
+      color: #bc0000;
     }
   }
 
@@ -782,9 +780,9 @@ path[fill="#ffdda1"] {
   /* ── Selected — flat red wash + left indicator ── */
   .item-choose {
     border-color: transparent !important;
-    border-left: 2px solid #b00000 !important;
+    border-left: 2px solid #bc0000 !important;
     box-shadow: none !important;
-    background: rgba(176, 0, 0, 0.06) !important;
+    background: rgba(188, 0, 0, 0.06) !important;
 
     .item-name {
       font-weight: 700;
@@ -812,7 +810,7 @@ path[fill="#ffdda1"] {
     border-bottom: 1px solid var(--base-border-color) !important;
     border-left:   1px solid var(--base-border-color) !important;
     border-right:  none !important;
-    border-radius: 3px 0 0 3px !important;
+    border-radius: 0 !important;
     box-shadow: none !important;
     background: var(--el-bg-color) !important;
     transition: border-color 0.15s !important;
@@ -820,7 +818,7 @@ path[fill="#ffdda1"] {
 
   /* Focus: turn all visible borders red */
   .el-input__wrapper.is-focus {
-    border-color: #CC0000 !important;
+    border-color: #bc0000 !important;
     box-shadow: none !important;
   }
 
@@ -830,7 +828,7 @@ path[fill="#ffdda1"] {
     border-right:  1px solid var(--base-border-color) !important;
     border-bottom: 1px solid var(--base-border-color) !important;
     border-left:   1px solid var(--light-border-color) !important;
-    border-radius: 0 3px 3px 0 !important;
+    border-radius: 0 !important;
     box-shadow: none !important;
     background: var(--extra-light-fill) !important;
     padding: 0 12px !important;
@@ -844,15 +842,15 @@ path[fill="#ffdda1"] {
 /* Focus-within: red border on append too */
 :deep(.el-input.el-input-group:focus-within) {
   .el-input-group__append {
-    border-top-color:    #CC0000 !important;
-    border-right-color:  #CC0000 !important;
-    border-bottom-color: #CC0000 !important;
+    border-top-color:    #bc0000 !important;
+    border-right-color:  #bc0000 !important;
+    border-bottom-color: #bc0000 !important;
   }
 }
 
 :deep(.el-dialog) {
   width: 400px !important;
-  border-radius: 4px !important;
+  border-radius: 0 !important;
 
   @media (max-width: 440px) {
     width: calc(100% - 40px) !important;
@@ -877,13 +875,13 @@ path[fill="#ffdda1"] {
   :deep(.el-input:not(.el-input-group)) {
     .el-input__wrapper {
       border: 1px solid var(--base-border-color) !important;
-      border-radius: 3px !important;
+      border-radius: 0 !important;
       box-shadow: none !important;
       background: var(--el-bg-color) !important;
       transition: border-color 0.15s !important;
     }
     .el-input__wrapper.is-focus {
-      border-color: #CC0000 !important;
+      border-color: #bc0000 !important;
       box-shadow: none !important;
     }
   }

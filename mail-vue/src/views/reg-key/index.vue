@@ -412,9 +412,9 @@ function openAdd() {
   flex-wrap: wrap;
   align-items: center;
   background: var(--surface, #fff);
-  border-radius: 4px;
-  border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 80%, transparent);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+  border-radius: 0;
+  border: 1px solid var(--light-border, #000000);
+  box-shadow: none;
 
   .search-input {
     width: min(200px, calc(100vw - 160px));
@@ -428,7 +428,7 @@ function openAdd() {
     justify-content: center;
     width: 32px;
     height: 32px;
-    border-radius: 50%;
+    border-radius: 0;
     transition: background 0.12s, color 0.12s;
 
     @media (hover: hover) {
@@ -451,15 +451,10 @@ function openAdd() {
 
     .code-item {
       background: var(--surface, #fff);
-      border-radius: 4px;
-      border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 80%, transparent);
-      box-shadow: 0 4px 14px rgba(0,0,0,0.04);
-      transition: box-shadow 0.14s ease;
+      border-radius: 0;
+      border: 1px solid var(--light-border, #000000);
+      box-shadow: none;
       padding: 16px;
-
-      @media (hover: hover) {
-        &:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
-      }
 
       .code-info {
         display: flex;

@@ -564,7 +564,7 @@ function clickLogout() {
 }
 
 :deep(.logout-item) {
-  color: #cc0000 !important;
+  color: #bc0000 !important;
 }
 
 /* ══════════════════════════════════════════════════════════

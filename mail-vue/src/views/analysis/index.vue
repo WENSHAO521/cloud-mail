@@ -362,7 +362,7 @@ function createSenderPie() {
         labelLine: {
           show: true
         },
-        color: ['#CC0000', '#8B0000', '#E57373', '#333333', '#666666', '#A0A0A0']
+        color: ['#bc0000', '#8B0000', '#E57373', '#333333', '#666666', '#A0A0A0']
       }
     ]
   }
@@ -489,22 +489,22 @@ function createIncreaseLine() {
         smooth: 0.1,
         symbol: 'none',
         lineStyle: {
-          color: '#CC0000',
+          color: '#bc0000',
           width: 2
         },
         areaStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
             {
               offset: 0,
-              color: 'rgba(204, 0, 0, 0.18)'
+              color: 'rgba(188, 0, 0, 0.18)'
             },
             {
               offset: 1,
-              color: 'rgba(204, 0, 0, 0.02)'
+              color: 'rgba(188, 0, 0, 0.02)'
             }
           ])
         },
-        color: ['#CC0000'],
+        color: ['#bc0000'],
       }
     ]
   };
@@ -612,7 +612,7 @@ function createEmailColumnChart() {
         },
         data: emailColumnData.receiveData,
         itemStyle: {
-          color: '#CC0000',
+          color: '#bc0000',
         }
       },
       {
@@ -657,12 +657,12 @@ function createSendGauge() {
         show: true,
         roundCap: true,
         itemStyle: {
-          color: '#CC0000'
+          color: '#bc0000'
         }
       },
       pointer: {
         itemStyle: {
-          color: '#CC0000'
+          color: '#bc0000'
         }
       },
       axisLabel: {
@@ -701,7 +701,7 @@ function createSendGauge() {
         }
       }]
     }],
-    color: ['#CC0000']
+    color: ['#bc0000']
   };
   sendGauge.setOption(option);
 }
@@ -752,9 +752,9 @@ function createSendGauge() {
 
 .stat-card {
   background: var(--surface, #fff);
-  border-radius: 4px;
-  border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 80%, transparent);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+  border-radius: 0;
+  border: 1px solid var(--light-border, #000000);
+  box-shadow: none;
   padding: 20px;
 
   .stat-body {
@@ -789,7 +789,7 @@ function createSendGauge() {
   .stat-icon {
     width: 48px;
     height: 48px;
-    border-radius: 4px;
+    border-radius: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -818,9 +818,9 @@ function createSendGauge() {
 
 .chart-card {
   background: var(--surface, #fff);
-  border-radius: 4px;
-  border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 80%, transparent);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+  border-radius: 0;
+  border: 1px solid var(--light-border, #000000);
+  box-shadow: none;
   padding: 20px;
 
   .chart-title {

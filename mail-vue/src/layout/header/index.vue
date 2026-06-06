@@ -364,7 +364,7 @@ function formatName(email) {
     margin-top: 3px;
     font-family: 'IBM Plex Mono', monospace;
     @media (hover: hover) {
-      &:hover { color: #CC0000; }
+      &:hover { color: #bc0000; }
     }
   }
 
@@ -417,6 +417,7 @@ function formatName(email) {
 
 :deep(.el-popper.is-pure) {
   overflow: hidden;
+  border-radius: 0 !important;
   box-shadow: 0 8px 24px rgba(0,0,0,0.10), 0 1px 3px rgba(0,0,0,0.06) !important;
   border: 1px solid var(--separator, #e5e5e5) !important;
 }

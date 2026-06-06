@@ -337,7 +337,7 @@ function handleDelete() {
 
   @media (hover: hover) {
     &:hover { background: rgba(0,0,0,0.07); color: var(--el-text-color-primary); }
-    &.icon-danger:hover { background: rgba(176,0,0,0.08); color: #bc0000; }
+    &.icon-danger:hover { background: rgba(188,0,0,0.08); color: #bc0000; }
   }
 }
 
@@ -585,7 +585,7 @@ function handleDelete() {
 .psg-shadow-blockquote,
 .shadow-html-host blockquote,
 blockquote {
-  border-left: 3px solid #b00000 !important;
+  border-left: 3px solid #bc0000 !important;
   padding-left: 16px !important;
   margin: 16px 0 !important;
   color: #666666 !important;

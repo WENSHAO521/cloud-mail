@@ -431,7 +431,7 @@ function submitPwd() {
   margin-bottom: 20px;
 
   &:last-child { margin-bottom: 0; }
-  &.danger-section { border-color: #cc0000; }
+  &.danger-section { border-color: #bc0000; }
 }
 
 .section-head {
@@ -454,7 +454,7 @@ function submitPwd() {
 }
 
 .danger-label {
-  color: #CC0000;
+  color: #bc0000;
 }
 
 .head-action {
@@ -538,10 +538,10 @@ function submitPwd() {
   display: inline-flex; align-items: center;
   font-size: 9px; font-weight: 900;
   letter-spacing: 0.14em; text-transform: uppercase;
-  color: #CC0000;
-  background: rgba(204,0,0,0.07);
-  border: 1px solid rgba(204,0,0,0.18);
-  padding: 2px 6px; border-radius: 2px;
+  color: #bc0000;
+  background: rgba(188,0,0,0.07);
+  border: 1px solid rgba(188,0,0,0.18);
+  padding: 2px 6px; border-radius: 0;
   width: fit-content; margin-top: 4px;
 }
 
@@ -601,7 +601,7 @@ function submitPwd() {
 .link-btn {
   background: transparent; border: none; cursor: pointer;
   font-size: 12px; font-weight: 700;
-  color: #CC0000; padding: 0;
+  color: #bc0000; padding: 0;
   transition: opacity 0.12s; user-select: none;
   font-family: inherit;
 
@@ -773,7 +773,7 @@ function submitPwd() {
   padding: 14px 12px;
   border: 1px solid var(--light-border-color);
   border-left: 3px solid var(--light-border-color);
-  border-radius: 2px;
+  border-radius: 0;
   margin-top: 20px;
   background: var(--extra-light-fill);
 

@@ -229,7 +229,7 @@ defineExpose({ open, close })
   backdrop-filter: blur(24px) saturate(200%);
   -webkit-backdrop-filter: blur(24px) saturate(200%);
   border: 1px solid rgba(0, 0, 0, 0.10);
-  border-radius: 10px;
+  border-radius: 0;
   box-shadow: 0 8px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.10);
   overflow: hidden;
   display: flex;
@@ -274,7 +274,7 @@ defineExpose({ open, close })
   color: var(--secondary-text-color);
   background: var(--base-fill);
   border: 1px solid var(--light-border-color);
-  border-radius: 4px;
+  border-radius: 0;
   padding: 2px 6px;
   flex-shrink: 0;
   cursor: default;
@@ -317,16 +317,16 @@ defineExpose({ open, close })
   padding: 9px 10px;
   background: transparent;
   border: none;
-  border-radius: 6px;
+  border-radius: 0;
   cursor: pointer;
   text-align: left;
   transition: background 0.10s;
   font-family: inherit;
 
   &.active, &:hover {
-    background: rgba(204,0,0,0.07);
+    background: rgba(188,0,0,0.07);
   }
-  &.active .result-icon { color: #CC0000; }
+  &.active .result-icon { color: #bc0000; }
 }
 
 .result-icon {
@@ -353,7 +353,7 @@ defineExpose({ open, close })
   color: var(--secondary-text-color);
   background: var(--base-fill);
   border: 1px solid var(--light-border-color);
-  border-radius: 4px;
+  border-radius: 0;
   padding: 2px 6px;
   flex-shrink: 0;
   user-select: none;

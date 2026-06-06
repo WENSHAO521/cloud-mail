@@ -192,16 +192,16 @@ async function deleteTpl(templateId) {
   align-items: center;
   padding: 12px 16px;
   background: var(--surface, #fff);
-  border-radius: 4px;
-  border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 80%, transparent);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+  border-radius: 0;
+  border: 1px solid var(--light-border, #000000);
+  box-shadow: none;
 }
 
 .add-btn {
   display: flex; align-items: center; gap: 6px;
   font-size: 13px; font-weight: 600;
   height: 36px; padding: 0 16px;
-  border-radius: 8px !important;
+  border-radius: 0 !important;
 }
 
 /* Empty state */
@@ -217,9 +217,9 @@ async function deleteTpl(templateId) {
 /* Item list */
 .item-list {
   background: var(--surface, #fff);
-  border-radius: 4px;
-  border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 80%, transparent);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+  border-radius: 0;
+  border: 1px solid var(--light-border, #000000);
+  box-shadow: none;
   overflow: hidden;
 }
 
@@ -243,10 +243,10 @@ async function deleteTpl(templateId) {
 }
 
 .item-icon {
-  width: 32px; height: 32px; border-radius: 3px;
-  background: rgba(204,0,0,0.08);
-  border: 1px solid rgba(204,0,0,0.15);
-  color: #CC0000;
+  width: 32px; height: 32px; border-radius: 0;
+  background: rgba(188,0,0,0.08);
+  border: 1px solid rgba(188,0,0,0.15);
+  color: #bc0000;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
@@ -274,12 +274,12 @@ async function deleteTpl(templateId) {
   display: flex; align-items: center; justify-content: center;
   width: 28px; height: 28px;
   border: none; background: transparent;
-  border-radius: 3px; cursor: pointer;
+  border-radius: 0; cursor: pointer;
   color: var(--secondary-text-color);
   transition: background 0.10s, color 0.10s;
 
   &:hover { background: var(--base-fill); color: var(--el-text-color-primary); }
-  &.danger:hover { background: rgba(204,0,0,0.08); color: #CC0000; }
+  &.danger:hover { background: rgba(188,0,0,0.08); color: #bc0000; }
 }
 
 /* ── Editor mode ── */
@@ -303,7 +303,7 @@ async function deleteTpl(templateId) {
   flex: 1; font-size: 14px; font-weight: 700; color: var(--el-text-color-primary);
 }
 
-.save-btn { border-radius: 2px !important; font-weight: 700 !important; }
+.save-btn { border-radius: 0 !important; font-weight: 700 !important; }
 
 .editor-fields { display: flex; flex-direction: column; gap: 16px; }
 
@@ -318,7 +318,7 @@ async function deleteTpl(templateId) {
 .editor-frame {
   height: 320px;
   border: 1px solid var(--light-border-color);
-  border-radius: 2px; overflow: hidden;
+  border-radius: 0; overflow: hidden;
 }
 
 /* ═══════════════════════════════════════════
@@ -367,7 +367,7 @@ async function deleteTpl(templateId) {
     &::before {
       content: '—';
       position: absolute; left: 0;
-      color: #CC0000;
+      color: #bc0000;
       font-weight: 700;
     }
   }

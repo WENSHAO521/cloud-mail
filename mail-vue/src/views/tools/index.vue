@@ -48,7 +48,7 @@
       <div style="display:flex;flex-direction:column;gap:10px">
         <el-input v-model="tplForm.name" :placeholder="$t('templateName')"/>
         <el-input v-model="tplForm.subject" :placeholder="$t('templateSubject')"/>
-        <div style="height:200px;border:1px solid var(--light-border-color);border-radius:2px;overflow:hidden">
+        <div style="height:200px;border:1px solid var(--light-border-color);border-radius:0;overflow:hidden">
           <tinyEditor ref="tplEditorRef" :def-value="tplForm.content" editor-id="tools-tpl-editor"
             toolbar="bold italic underline | forecolor | link | code" height="200px"
             @change="(html) => tplForm.content = html"/>
@@ -182,7 +182,7 @@ async function deleteGroup(groupId) {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--regular-text-color);
-  border-bottom: 2px solid #CC0000;
+  border-bottom: 2px solid #bc0000;
   padding-bottom: 6px;
 }
 
@@ -194,7 +194,7 @@ async function deleteGroup(groupId) {
 
 .item-list {
   border: 1px solid var(--light-border-color);
-  border-radius: 3px;
+  border-radius: 0;
   overflow: hidden;
 }
 
@@ -246,6 +246,6 @@ async function deleteGroup(groupId) {
   cursor: pointer;
   color: var(--regular-text-color);
   &:hover { color: var(--el-text-color-primary); }
-  &.remove:hover { color: #CC0000; }
+  &.remove:hover { color: #bc0000; }
 }
 </style>

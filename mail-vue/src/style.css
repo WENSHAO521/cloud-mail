@@ -145,35 +145,35 @@ button, input, select, textarea {
 
 /* Compact buttons */
 .tox .tox-tbtn {
-    border-radius: 3px !important;
+    border-radius: 0 !important;
     margin: 1px !important;
 }
 
 /* Active/enabled state — red */
 .tox .tox-tbtn--enabled,
 .tox .tox-tbtn--enabled:hover {
-    background: rgba(176, 0, 0, 0.12) !important;
+    background: rgba(188, 0, 0, 0.12) !important;
 }
 .tox .tox-tbtn--enabled svg,
 .tox .tox-tbtn--enabled:hover svg {
-    fill: #b00000 !important;
+    fill: #bc0000 !important;
 }
 
 /* Focus ring — red instead of blue */
 .tox .tox-tbtn:focus,
 .tox .tox-tbtn--select:focus,
 .tox .tox-split-button:focus {
-    box-shadow: 0 0 0 2px rgba(176, 0, 0, 0.30) !important;
+    box-shadow: 0 0 0 2px rgba(188, 0, 0, 0.30) !important;
     outline: none !important;
 }
 
 /* Font/size select — consistent sizing */
 .tox .tox-tbtn--bespoke {
-    border-radius: 3px !important;
+    border-radius: 0 !important;
     min-width: 80px !important;
 }
 .tox .tox-tbtn--bespoke:focus {
-    box-shadow: 0 0 0 2px rgba(176, 0, 0, 0.30) !important;
+    box-shadow: 0 0 0 2px rgba(188, 0, 0, 0.30) !important;
     outline: none !important;
 }
 .tox .tox-tbtn--bespoke .tox-tbtn__select-label {
@@ -266,9 +266,9 @@ button, input, select, textarea {
     --separator: #333333;
     --muted: #6b7280;
 
-    --red-accent: #b00000;
+    --red-accent: #bc0000;
     --red-accent-dark: #8f0000;
-    --red-accent-subtle: rgba(176, 0, 0, 0.10);
+    --red-accent-subtle: rgba(188, 0, 0, 0.10);
 
     --extra-light-fill: #181818;
     --light-ill: #222222;
@@ -304,38 +304,40 @@ button, input, select, textarea {
    Global vfasky-compatible utility classes
    ══════════════════════════════════════════════════════════════ */
 
-/* Pill tab list — matches vfasky .settings-tab-list */
+/* Flat tab list — matches vfasky .settings-tab-list */
 .settings-tab-list {
     display: inline-flex;
     max-width: 100%;
-    gap: 4px;
+    gap: 0;
     overflow-x: auto;
-    padding: 4px;
-    border-radius: 999px;
-    background: var(--surface-secondary, #f3f3f3);
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    border-bottom: 2px solid var(--light-border, #000000);
     margin-bottom: 20px;
 }
 
 .settings-tab-button {
     min-width: 108px;
     border: none;
-    border-radius: 999px;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    border-radius: 0;
     background: transparent;
     cursor: pointer;
     font-size: 14px;
     font-weight: 700;
     line-height: 1;
     padding: 11px 22px;
-    transition: background 140ms ease, box-shadow 140ms ease, color 140ms ease;
+    transition: color 140ms ease, border-color 140ms ease;
     white-space: nowrap;
     color: rgba(0, 0, 0, 0.55);
     font-family: inherit;
 
     &[data-active="true"] {
-        background: var(--surface, #ffffff);
+        background: transparent;
         color: var(--el-text-color-primary);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.08);
+        border-bottom-color: #bc0000;
     }
 }
 
@@ -604,13 +606,13 @@ button, input, select, textarea {
 
 /* Select */
 .el-select .el-input__wrapper.is-focus {
-    box-shadow: 0 0 0 2px rgba(176, 0, 0, 0.15), 0 0 0 1px #b00000 !important;
+    box-shadow: 0 0 0 2px rgba(188, 0, 0, 0.15), 0 0 0 1px #bc0000 !important;
 }
 
 /* Dropdown */
 .el-dropdown__popper,
 .el-dropdown-menu {
-    border-radius: 3px !important;
+    border-radius: 0 !important;
     background: #ffffff !important;
     box-shadow: 0 4px 16px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.06) !important;
     border: 1px solid #e5e7eb !important;
@@ -640,7 +642,7 @@ button, input, select, textarea {
     background: #ffffff !important;
     border: 1px solid #e5e7eb !important;
     box-shadow: 0 4px 16px rgba(0,0,0,0.10) !important;
-    border-radius: 3px !important;
+    border-radius: 0 !important;
 }
 .dark .el-select__popper,
 .dark .el-select-dropdown {
@@ -648,7 +650,7 @@ button, input, select, textarea {
     border-color: #2a2a2a !important;
 }
 .el-select-dropdown__item.is-selected {
-    color: #b00000 !important;
+    color: #bc0000 !important;
     font-weight: 700 !important;
 }
 .el-select-dropdown__item.is-hovering {

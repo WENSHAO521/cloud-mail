@@ -435,9 +435,9 @@ window.onresize = () => {
   width: 100%;
   overflow: hidden;
   background: var(--surface, #fff);
-  border-radius: 4px;
-  border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 80%, transparent);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+  border-radius: 0;
+  border: 1px solid var(--light-border, #000000);
+  box-shadow: none;
 }
 
 .send-num {
@@ -460,9 +460,9 @@ window.onresize = () => {
   align-items: center;
   gap: 8px;
   background: var(--surface, #fff);
-  border-radius: 4px;
-  border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 80%, transparent);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+  border-radius: 0;
+  border: 1px solid var(--light-border, #000000);
+  box-shadow: none;
   flex-shrink: 0;
 
   .icon {
@@ -473,7 +473,7 @@ window.onresize = () => {
     justify-content: center;
     width: 32px;
     height: 32px;
-    border-radius: 50%;
+    border-radius: 0;
     transition: background 0.12s, color 0.12s;
 
     @media (hover: hover) {
@@ -537,7 +537,7 @@ window.onresize = () => {
 
 
 :deep(.el-segmented--small .el-segmented__item) {
-  border-radius: 8px !important;
+  border-radius: 0 !important;
   overflow: hidden;
 }
 
@@ -549,7 +549,7 @@ window.onresize = () => {
 
 .perm-expand {
   margin-bottom: 5px;
-  --el-border-radius-base: 4px;
+  --el-border-radius-base: 0px;
   position: relative;
   bottom: 5px;
 }

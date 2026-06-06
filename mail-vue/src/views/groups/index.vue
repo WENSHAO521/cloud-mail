@@ -216,16 +216,16 @@ async function deleteGroup(groupId) {
   align-items: center;
   padding: 12px 16px;
   background: var(--surface, #fff);
-  border-radius: 4px;
-  border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 80%, transparent);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+  border-radius: 0;
+  border: 1px solid var(--light-border, #000000);
+  box-shadow: none;
 }
 
 .add-btn {
   display: flex; align-items: center; gap: 6px;
   font-size: 13px; font-weight: 600;
   height: 36px; padding: 0 16px;
-  border-radius: 8px !important;
+  border-radius: 0 !important;
 }
 
 .empty-state {
@@ -239,9 +239,9 @@ async function deleteGroup(groupId) {
 /* Group list */
 .group-list {
   background: var(--surface, #fff);
-  border-radius: 4px;
-  border: 1px solid color-mix(in srgb, var(--separator, #e5e5e5) 80%, transparent);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+  border-radius: 0;
+  border: 1px solid var(--light-border, #000000);
+  box-shadow: none;
   overflow: hidden;
 }
 
@@ -271,10 +271,10 @@ async function deleteGroup(groupId) {
 }
 
 .group-avatar {
-  width: 32px; height: 32px; border-radius: 3px;
-  background: rgba(204,0,0,0.08);
-  border: 1px solid rgba(204,0,0,0.15);
-  color: #CC0000; font-size: 13px; font-weight: 800;
+  width: 32px; height: 32px; border-radius: 0;
+  background: rgba(188,0,0,0.08);
+  border: 1px solid rgba(188,0,0,0.15);
+  color: #bc0000; font-size: 13px; font-weight: 800;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
@@ -303,12 +303,12 @@ async function deleteGroup(groupId) {
   display: flex; align-items: center; justify-content: center;
   width: 28px; height: 28px;
   border: none; background: transparent;
-  border-radius: 3px; cursor: pointer;
+  border-radius: 0; cursor: pointer;
   color: var(--secondary-text-color);
   transition: background 0.10s, color 0.10s;
 
   &:hover { background: var(--base-fill); color: var(--el-text-color-primary); }
-  &.danger:hover { background: rgba(204,0,0,0.08); color: #CC0000; }
+  &.danger:hover { background: rgba(188,0,0,0.08); color: #bc0000; }
 }
 
 .chevron {
@@ -332,7 +332,7 @@ async function deleteGroup(groupId) {
 .member-row { display: flex; align-items: center; gap: 10px; padding: 4px 0; }
 
 .member-dot {
-  width: 24px; height: 24px; border-radius: 50%;
+  width: 24px; height: 24px; border-radius: 0;
   background: var(--base-fill);
   border: 1px solid var(--light-border-color);
   color: var(--regular-text-color); font-size: 9.5px; font-weight: 800;
@@ -399,7 +399,7 @@ async function deleteGroup(groupId) {
 
     &::before {
       content: '—'; position: absolute; left: 0;
-      color: #CC0000; font-weight: 700;
+      color: #bc0000; font-weight: 700;
     }
   }
 }
@@ -438,7 +438,7 @@ async function deleteGroup(groupId) {
   display: flex; align-items: center; gap: 4px;
   background: transparent;
   border: 1px solid var(--light-border-color);
-  border-radius: 2px; cursor: pointer;
+  border-radius: 0; cursor: pointer;
   font-size: 12px; font-weight: 700;
   color: var(--regular-text-color); padding: 4px 10px;
   transition: border-color 0.12s, color 0.12s; font-family: inherit;
@@ -456,17 +456,17 @@ async function deleteGroup(groupId) {
   display: flex; align-items: center; gap: 8px;
   padding: 8px 10px;
   border: 1px solid var(--light-border-color);
-  border-radius: 2px;
+  border-radius: 0;
   background: var(--extra-light-fill);
   transition: border-color 0.12s;
   &:focus-within { border-color: var(--el-border-color-hover); }
 }
 
 .row-avatar {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: rgba(204,0,0,0.07);
-  border: 1px solid rgba(204,0,0,0.15);
-  color: #CC0000; font-size: 11px; font-weight: 800;
+  width: 28px; height: 28px; border-radius: 0;
+  background: rgba(188,0,0,0.07);
+  border: 1px solid rgba(188,0,0,0.15);
+  color: #bc0000; font-size: 11px; font-weight: 800;
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
 
@@ -492,10 +492,10 @@ async function deleteGroup(groupId) {
   display: flex; align-items: center; justify-content: center;
   width: 24px; height: 24px;
   border: none; background: transparent;
-  border-radius: 3px; cursor: pointer;
+  border-radius: 0; cursor: pointer;
   color: var(--secondary-text-color); flex-shrink: 0;
   transition: background 0.10s, color 0.10s;
-  &:hover { background: rgba(204,0,0,0.08); color: #CC0000; }
+  &:hover { background: rgba(188,0,0,0.08); color: #bc0000; }
 }
 
 .drawer-footer {

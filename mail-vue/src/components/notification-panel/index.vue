@@ -62,7 +62,7 @@ const notifStore = useNotificationStore()
 <style>
 .notif-popper {
   padding: 0 !important;
-  border-radius: 4px !important;
+  border-radius: 0 !important;
   overflow: hidden;
 }
 </style>
@@ -78,7 +78,7 @@ const notifStore = useNotificationStore()
   justify-content: center;
 
   :deep(.el-badge__content) {
-    background: #CC0000;
+    background: #bc0000;
     border-color: transparent;
     font-size: 10px;
     height: 16px;
@@ -117,7 +117,7 @@ const notifStore = useNotificationStore()
     font-size: 11.5px;
     color: var(--regular-text-color);
     padding: 0;
-    &:hover { color: #CC0000; }
+    &:hover { color: #bc0000; }
   }
 }
 
