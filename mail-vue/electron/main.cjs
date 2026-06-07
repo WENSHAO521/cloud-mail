@@ -1,3 +1,15 @@
+// If ELECTRON_RUN_AS_NODE=1 is present in the environment, Electron runs as
+// plain Node.js and require('electron') never returns the real API.
+// Detect it early and re-spawn ourselves without that variable.
+if (process.env.ELECTRON_RUN_AS_NODE) {
+  const { spawn } = require('child_process')
+  const env = Object.assign({}, process.env)
+  delete env.ELECTRON_RUN_AS_NODE
+  spawn(process.execPath, process.argv.slice(1), { stdio: 'inherit', env, windowsHide: false })
+    .on('close', (code) => process.exit(code || 0))
+  return
+}
+
 const { app, BrowserWindow, ipcMain, Notification, nativeImage, shell } = require('electron')
 const path = require('path')
 
