@@ -198,7 +198,15 @@
     <!-- Language switcher — fixed top-right -->
     <el-dropdown class="lang-switcher" placement="bottom-end" trigger="click">
       <button class="lang-btn" :title="settingStore.lang === 'zh' ? '切换语言' : 'Switch Language'">
-        <span class="lang-current">{{ settingStore.lang === 'zh' ? '中' : 'EN' }}</span>
+        <!-- Hand-drawn globe: outer circle + equatorial ellipse + meridian ellipse -->
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+             stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true">
+          <circle cx="9" cy="9" r="7"/>
+          <ellipse cx="9" cy="9" rx="7" ry="2.6"/>
+          <ellipse cx="9" cy="9" rx="2.6" ry="7"/>
+          <line x1="9" y1="2" x2="9" y2="16"/>
+          <line x1="2" y1="9" x2="16" y2="9"/>
+        </svg>
       </button>
       <template #dropdown>
         <el-dropdown-menu>
@@ -1154,15 +1162,15 @@ function submitRegister() {
 }
 
 .lang-btn {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 1px solid #cccccc;
   background: #ffffff;
   cursor: pointer;
-  color: #333333;
+  color: #555555;
   transition: border-color 0.1s, color 0.1s;
 
   @media (hover: hover) {
@@ -1171,15 +1179,6 @@ function submitRegister() {
       color: #000000;
     }
   }
-}
-
-.lang-current {
-  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  line-height: 1;
-  pointer-events: none;
 }
 
 .lang-option {
