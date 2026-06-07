@@ -27,7 +27,7 @@ html, body {
 }
 
 body {
-    font-family: 'Inter', 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    font-family: 'IBM Plex Sans', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
     line-height: 1.5;
     color: var(--el-text-color-primary);
     font-size: 14px;
