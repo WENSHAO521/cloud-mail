@@ -12,51 +12,50 @@
                  :show-account-icon="false"
                  :time-sort="params.timeSort"
                  :item-height="65"
+                 :hide-inline-search="true"
                  @jump="jumpContent"
                  @refresh-before="refreshBefore"
                  @right-search="rightSearch"
                  :type="'all-email'"
-
     >
       <template #first>
-        <el-input
+        <!-- Search type pill -->
+        <div class="type-pill" @click.stop="openSelect">
+          <el-select
+              ref="mySelect"
+              v-model="params.searchType"
+              class="select"
+          >
+            <el-option key="3" :label="$t('sender')" :value="'name'"/>
+            <el-option key="4" :label="$t('subject')" :value="'subject'"/>
+            <el-option key="1" :label="$t('user')" :value="'user'"/>
+            <el-option key="2" :label="$t('selectEmail')" :value="'account'"/>
+          </el-select>
+          <span class="type-label">{{ selectTitle }}</span>
+          <Icon icon="mingcute:down-small-fill" width="14" height="14" class="type-arrow"/>
+        </div>
+        <!-- Content search input -->
+        <input
             v-model="searchValue"
+            class="content-input"
             :placeholder="$t('searchByContent')"
-            class="search-input"
-        >
-          <template #prefix>
-            <div @click.stop="openSelect">
-              <el-select
-                  ref="mySelect"
-                  v-model="params.searchType"
-                  :placeholder="$t('select')"
-                  class="select"
-              >
-                <el-option key="3" :label="$t('sender')" :value="'name'"/>
-                <el-option key="4" :label="$t('subject')" :value="'subject'"/>
-                <el-option key="1" :label="$t('user')" :value="'user'"/>
-                <el-option key="2" :label="$t('selectEmail')" :value="'account'"/>
-              </el-select>
-              <div class="search-type">
-                <span>{{ selectTitle }}</span>
-                <Icon class="setting-icon" icon="mingcute:down-small-fill" width="20" height="20"/>
-              </div>
-            </div>
-          </template>
-        </el-input>
-        <el-select v-model="params.type" placeholder="Select" class="status-select" @change="typeSelectChange">
+            @keydown.enter="search"
+        />
+        <!-- Status filter -->
+        <el-select v-model="params.type" class="status-select" @change="typeSelectChange">
           <el-option key="1" :label="$t('all')" value="all"/>
           <el-option key="3" :label="$t('received')" value="receive"/>
           <el-option key="2" :label="$t('sent')" value="send"/>
           <el-option key="4" :label="$t('selectDeleted')" value="delete"/>
           <el-option key="4" :label="$t('noRecipientTitle')" value="noone"/>
         </el-select>
-        <Icon class="icon" icon="iconoir:search" @click="search" width="18" height="18"/>
+        <!-- Action icons -->
+        <Icon class="icon" icon="iconoir:search" @click="search" width="16" height="16"/>
         <Icon class="icon" @click="changeTimeSort" icon="material-symbols-light:timer-arrow-down-outline"
-              v-if="params.timeSort === 0" width="20" height="20"/>
+              v-if="params.timeSort === 0" width="18" height="18"/>
         <Icon class="icon" @click="changeTimeSort" icon="material-symbols-light:timer-arrow-up-outline" v-else
-              width="20" height="20"/>
-        <Icon class="icon clear" icon="fluent:broom-sparkle-16-regular" width="18" height="18" @click="openBathDelete"/>
+              width="18" height="18"/>
+        <Icon class="icon clear" icon="fluent:broom-sparkle-16-regular" width="16" height="16" @click="openBathDelete"/>
       </template>
     </emailScroll>
     <el-dialog v-model="showBathDelete" :title="$t('clearEmail')" width="335"
@@ -400,11 +399,7 @@ async function latest() {
 }
 
 
-.search {
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
+/* ── Hidden real select (triggered by type-pill click) ─── */
 .select {
   position: absolute;
   width: 40px;
@@ -412,41 +407,68 @@ async function latest() {
   pointer-events: none;
 }
 
-.search-type {
-  display: flex;
+/* ── Search type pill ─────────────────────────────────── */
+.type-pill {
+  position: relative;
+  display: inline-flex;
   align-items: center;
-  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--el-text-color-regular);
-}
-
-/* ── Unify all interactive control heights ─────── */
-:deep(.el-input__wrapper) {
+  gap: 3px;
   height: 28px;
   padding: 0 8px;
-  box-sizing: border-box;
+  border: 1px solid var(--light-border, #d0d0d0);
+  background: var(--surface, #fff);
+  cursor: pointer;
+  flex-shrink: 0;
+  user-select: none;
+
+  .type-label {
+    font-size: 12px;
+    color: var(--el-text-color-regular);
+    white-space: nowrap;
+  }
+
+  .type-arrow {
+    color: var(--el-text-color-placeholder);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      border-color: var(--el-border-color-hover);
+    }
+  }
 }
 
+/* ── Content search plain input ───────────────────────── */
+.content-input {
+  height: 28px;
+  min-width: 80px;
+  max-width: 180px;
+  flex: 1;
+  border: 1px solid var(--light-border, #d0d0d0);
+  border-left: none;
+  background: var(--surface, #fff);
+  padding: 0 8px;
+  font-size: 13px;
+  color: var(--el-text-color-primary);
+  outline: none;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: var(--el-text-color-placeholder);
+  }
+
+  &:focus {
+    border-color: var(--el-color-primary);
+    z-index: 1;
+  }
+}
+
+/* ── Status select ────────────────────────────────────── */
 :deep(.el-select__wrapper) {
   height: 28px;
   min-height: 28px;
   padding: 0 8px;
   box-sizing: border-box;
-}
-
-.search-input {
-  width: 100%;
-  max-width: 260px;
-  flex-shrink: 1;
-  flex-grow: 0;
-
-  .setting-icon {
-    display: flex;
-    align-items: center;
-  }
 }
 
 .clear-email {
@@ -466,7 +488,7 @@ async function latest() {
 }
 
 .status-select {
-  width: 100px;
+  width: 88px;
   flex-shrink: 0;
 }
 
@@ -478,8 +500,8 @@ async function latest() {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border: 1px solid transparent;
   background: transparent;
   cursor: pointer;
@@ -507,6 +529,19 @@ async function latest() {
 .dark .icon.clear:hover {
   border-color: #bc0000 !important;
   color: #bc0000 !important;
+}
+
+.dark .type-pill {
+  background: var(--surface);
+  border-color: var(--light-border);
+  .type-label { color: var(--el-text-color-regular); }
+}
+
+.dark .content-input {
+  background: var(--surface);
+  border-color: var(--light-border);
+  color: var(--el-text-color-primary);
+  &::placeholder { color: var(--el-text-color-placeholder); }
 }
 
 .clear {

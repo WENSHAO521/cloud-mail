@@ -10,7 +10,7 @@
           :disabled="!emailList.length || loading"
           @change="handleCheckAllChange"
         />
-        <div class="toolbar-search" :class="{ 'has-value': searchQuery }">
+        <div v-if="!props.hideInlineSearch" class="toolbar-search" :class="{ 'has-value': searchQuery }">
           <Icon icon="iconoir:search" width="15" height="15" class="search-icon-inline"/>
           <input
             ref="searchInputRef"
@@ -249,6 +249,7 @@ const props = defineProps({
   unspamEmail: { type: Function, default: null },
   archiveEmail: { type: Function, default: null },
   unarchiveEmail: { type: Function, default: null },
+  hideInlineSearch: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['jump', 'refresh-before', 'delete-draft', 'right-search'])
