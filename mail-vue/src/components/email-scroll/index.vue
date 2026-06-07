@@ -344,7 +344,6 @@ watch(noLoading, (v) => {
 watch(() => arrivedState.bottom, (isBottom) => { if (isBottom && !loading.value) loadData(); });
 
 watch(() => emailList.map(item => item.checked), () => {
-  checkedEmailCount.value = emailList.length
   if (emailList.length > 0) updateCheckStatus();
 }, { deep: true });
 
