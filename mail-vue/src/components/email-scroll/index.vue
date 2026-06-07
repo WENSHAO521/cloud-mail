@@ -37,6 +37,12 @@
         <button class="icon-btn" v-if="getSelectedMailsIds().length > 0 && showUnread" @click="handleRead">
           <Icon icon="fluent:mail-read-20-regular" width="19" height="19" />
         </button>
+        <el-tooltip v-if="getSelectedMailsIds().length === 0 && unreadCount > 0 && showUnread"
+                    :content="$t('markAllRead')" placement="bottom">
+          <button class="icon-btn" @click="handleMarkAllRead">
+            <Icon icon="fluent:mail-read-24-regular" width="19" height="19" />
+          </button>
+        </el-tooltip>
       </div>
       <div class="toolbar-right">
         <span class="mail-count" v-if="total && !searchQuery.trim()">{{ $t('emailCount', { total }) }}</span>
@@ -283,7 +289,11 @@ const position = ref(DOMRect.fromRect({ x: 0, y: 0 }))
 const triggerRef = ref({ getBoundingClientRect() { return position.value; } })
 const queryParam = reactive({ size: 50 });
 
-defineExpose({ refreshList, deleteEmail, addItem, handleList, emailList, firstLoad, latestEmail, noLoading, total })
+const unreadCount = computed(() =>
+  props.showUnread ? emailList.filter(e => e.unread === EmailUnreadEnum.UNREAD).length : 0
+)
+
+defineExpose({ refreshList, deleteEmail, addItem, handleList, emailList, firstLoad, latestEmail, noLoading, total, unreadCount })
 
 onActivated(() => {
   requestAnimationFrame(() => {
@@ -430,6 +440,13 @@ function starChange(email) {
 function changeAccountShow() { uiStore.accountShow = !uiStore.accountShow; }
 
 const handleRead = () => { const ids = getSelectedMailsIds(); props.emailRead(ids); localRead(ids); }
+
+function handleMarkAllRead() {
+  const ids = emailList.filter(e => e.unread === EmailUnreadEnum.UNREAD).map(e => e.emailId)
+  if (!ids.length) return
+  props.emailRead(ids)
+  localRead(ids)
+}
 
 function emailRead(emailId) { props.emailRead([emailId]); localRead([emailId]); }
 

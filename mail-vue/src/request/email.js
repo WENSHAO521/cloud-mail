@@ -40,6 +40,10 @@ export function emailArchiveList(accountId, allReceive, emailId, size) {
     return http.get('/email/archive/list', {params: {accountId, allReceive, emailId, size}})
 }
 
+export function emailUnread(emailIds) {
+    return http.put('/email/unread', {emailIds})
+}
+
 export function emailSend(form,progress) {
     return http.post('/email/send', form,{
         onUploadProgress: (e) => {

@@ -1,6 +1,16 @@
 <template>
   <CommandPalette ref="cmdPaletteRef"/>
 
+  <!-- Keyboard shortcuts dialog -->
+  <el-dialog v-model="showShortcuts" :title="$t('shortcutsTitle')" width="420" align-center>
+    <div class="shortcuts-grid">
+      <div class="sc-row" v-for="sc in shortcutsList" :key="sc.key">
+        <kbd class="sc-key">{{ sc.key }}</kbd>
+        <span class="sc-desc">{{ $t(sc.label) }}</span>
+      </div>
+    </div>
+  </el-dialog>
+
   <div class="app-shell"
        :data-mode="isMailRoute ? 'mail' : 'workspace'"
        :data-collapsed="String(sidebarCollapsed)"
@@ -76,8 +86,20 @@ const emailStore = useEmailStore()
 const settingStore = useSettingStore()
 const writerRef = ref({})
 const cmdPaletteRef = ref(null)
+const showShortcuts = ref(false)
 let elNotification = null
 let noticeStyle = null
+
+const shortcutsList = [
+  { key: 'C',       label: 'shortcutCompose'  },
+  { key: 'R',       label: 'shortcutReply'    },
+  { key: 'A',       label: 'shortcutReplyAll' },
+  { key: 'F',       label: 'shortcutForward'  },
+  { key: 'E',       label: 'shortcutArchive'  },
+  { key: '?',       label: 'shortcutHelp'     },
+  { key: 'Ctrl K',  label: 'shortcutSearch'   },
+  { key: 'Esc',     label: 'close'            },
+]
 
 // ── Website announcement ────────────────────────────────────
 watch(() => uiStore.changeNotice, () => {
@@ -107,7 +129,7 @@ const isMailRoute = computed(() => MAIL_ROUTES.has(route.meta?.name))
 const sidebarCollapsed = computed(() => uiStore.asideCollapsed && window.innerWidth >= 1025)
 
 const keepAliveList = ['email', 'all-email', 'send', 'star', 'draft', 'archive', 'spam']
-const keepAliveWorkspace = ['sys-setting', 'analysis', 'user', 'role', 'reg-key', 'setting', 'templates', 'groups']
+const keepAliveWorkspace = ['sys-setting', 'analysis', 'user', 'role', 'reg-key', 'setting', 'templates', 'groups', 'rules']
 
 // Clear selected email when switching mail folders
 watch(isMailRoute, (is) => { if (!is) emailStore.contentData.email = null })
@@ -134,6 +156,7 @@ function handleKeydown(e) {
     case 'r': if (email) uiStore.writerRef?.openReply?.(email); break
     case 'a': if (email) uiStore.writerRef?.openReplyAll?.(email); break
     case 'f': if (email) uiStore.writerRef?.openForward?.(email); break
+    case '?': showShortcuts.value = true; break
     case 'e':
       if (email?.emailId) {
         emailArchive([email.emailId]).then(() => {
@@ -163,6 +186,37 @@ onBeforeUnmount(() => {
   window.removeEventListener('keydown', handleKeydown)
 })
 </script>
+
+<style lang="scss">
+.shortcuts-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sc-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.sc-key {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--base-fill, #f5f5f5);
+  border: 1px solid var(--light-border-color, #ccc);
+  padding: 3px 10px;
+  border-radius: 0;
+  min-width: 72px;
+  text-align: center;
+  color: var(--el-text-color-primary);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.sc-desc {
+  font-size: 13px;
+  color: var(--regular-text-color, #555);
+}
+</style>
 
 <style lang="scss" scoped>
 /* ── Shell: CSS grid, replaces el-container/el-aside ───────── */

@@ -34,9 +34,27 @@
           </button>
         </template>
       </div>
-      <span class="page-counter" v-if="emailStore.contentData.emailTotal > 0">
-        {{ emailStore.contentData.emailIndex }}&thinsp;/&thinsp;{{ emailStore.contentData.emailTotal }}
-      </span>
+      <div class="header-right">
+        <el-tooltip :content="$t('markAsUnread')" placement="bottom"
+                    v-if="emailStore.contentData.showUnread">
+          <button class="icon-btn" @click="handleMarkAsUnread">
+            <Icon icon="fluent:mail-unread-20-regular" width="19" height="19" />
+          </button>
+        </el-tooltip>
+        <el-tooltip :content="$t('printEmail')" placement="bottom">
+          <button class="icon-btn" @click="handlePrint">
+            <Icon icon="material-symbols:print-outline-rounded" width="19" height="19" />
+          </button>
+        </el-tooltip>
+        <el-tooltip :content="$t('downloadEml')" placement="bottom">
+          <button class="icon-btn" @click="handleDownloadEml">
+            <Icon icon="material-symbols:download-rounded" width="19" height="19" />
+          </button>
+        </el-tooltip>
+        <span class="page-counter" v-if="emailStore.contentData.emailTotal > 0">
+          {{ emailStore.contentData.emailIndex }}&thinsp;/&thinsp;{{ emailStore.contentData.emailTotal }}
+        </span>
+      </div>
     </header>
 
     <!-- Scrollable content -->
@@ -121,7 +139,7 @@
 import ShadowHtml from '@/components/shadow-html/index.vue'
 import { reactive, ref, watch, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { emailDelete, emailRead } from '@/request/email.js'
+import { emailDelete, emailRead, emailUnread } from '@/request/email.js'
 import { Icon } from '@iconify/vue'
 import { useEmailStore } from '@/store/email.js'
 import { useAccountStore } from '@/store/account.js'
@@ -242,6 +260,61 @@ function changeStar() {
   }
 }
 
+function handleMarkAsUnread() {
+  const e = email.value
+  if (!e) return
+  e.unread = EmailUnreadEnum.UNREAD
+  emailStore.contentData.showUnread = false
+  emailUnread([e.emailId]).catch(() => { e.unread = EmailUnreadEnum.READ })
+}
+
+function handlePrint() {
+  const e = email.value
+  if (!e) return
+  const win = window.open('', '_blank', 'width=800,height=600')
+  const body = e.content
+    ? `<div style="font-family:Arial,sans-serif;max-width:760px;margin:0 auto;padding:24px">${e.content}</div>`
+    : `<pre style="font-family:Arial,sans-serif;max-width:760px;margin:0 auto;padding:24px;white-space:pre-wrap">${e.text || ''}</pre>`
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8">
+    <title>${e.subject || ''}</title>
+    <style>@media print{body{margin:0}}</style></head><body>
+    <h2 style="font-size:18px;margin-bottom:8px">${e.subject || '(No subject)'}</h2>
+    <p style="color:#666;font-size:13px;margin-bottom:16px">From: ${e.name || ''} &lt;${e.sendEmail || ''}&gt; — ${e.createTime || ''}</p>
+    <hr style="border:none;border-top:1px solid #ddd;margin-bottom:16px">
+    ${body}
+    </body></html>`)
+  win.document.close()
+  win.focus()
+  setTimeout(() => { win.print(); win.close() }, 300)
+}
+
+function handleDownloadEml() {
+  const e = email.value
+  if (!e) return
+  const date = new Date(e.createTime || Date.now()).toUTCString()
+  const recipientList = (() => {
+    try { return JSON.parse(e.recipient || '[]').map(r => r.address || r).join(', ') }
+    catch { return e.recipient || '' }
+  })()
+  const lines = [
+    `From: ${e.name ? `"${e.name}" <${e.sendEmail}>` : e.sendEmail || ''}`,
+    `To: ${recipientList}`,
+    `Subject: ${e.subject || ''}`,
+    `Date: ${date}`,
+    `MIME-Version: 1.0`,
+    `Content-Type: text/html; charset=utf-8`,
+    ``,
+    e.content || e.text || '',
+  ]
+  const blob = new Blob([lines.join('\r\n')], { type: 'message/rfc822' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `${(e.subject || 'email').replace(/[/\\?%*:|"<>]/g, '_')}.eml`
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
 function handleDelete() {
   const e = email.value
   if (!e) return
@@ -317,7 +390,8 @@ function handleDelete() {
   flex-shrink: 0;
 }
 
-.header-left { display: flex; align-items: center; gap: 2px; }
+.header-left  { display: flex; align-items: center; gap: 2px; }
+.header-right { display: flex; align-items: center; gap: 2px; }
 
 /* Back button: hidden on desktop, visible on mobile/tablet */
 .detail-back-btn {

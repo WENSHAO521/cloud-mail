@@ -52,6 +52,10 @@
             <span class="sidebar-nav-content">
               <Icon :icon="item.icon" width="20" height="20" class="nav-icon" />
               <span class="sidebar-label">{{ $t(item.labelKey) }}</span>
+              <el-badge v-if="item.name === 'email' && emailStore.inboxUnreadCount > 0"
+                        :value="emailStore.inboxUnreadCount"
+                        :max="99"
+                        class="inbox-unread-badge" />
             </span>
           </div>
         </el-tooltip>
@@ -131,6 +135,7 @@ import { useRoute } from "vue-router";
 import { Icon } from "@iconify/vue";
 import { useUiStore } from "@/store/ui.js";
 import { useUserStore } from "@/store/user.js";
+import { useEmailStore } from "@/store/email.js";
 import { hasPerm } from "@/perm/perm.js";
 import { logout } from "@/request/login.js";
 import { computed, ref, onUnmounted } from "vue";
@@ -139,6 +144,7 @@ import { avatarBg, avatarLetter } from "@/utils/avatar.js";
 const route  = useRoute();
 const uiStore = useUiStore();
 const userStore = useUserStore();
+const emailStore = useEmailStore();
 
 /* ── Collapse ── */
 const isMobile = ref(window.innerWidth < 1025);
@@ -164,6 +170,7 @@ const navItems = [
   { name: 'spam',      labelKey: 'spam',          icon: 'psg:spam' },
   { name: 'templates', labelKey: 'templates',     icon: 'psg:template' },
   { name: 'groups',    labelKey: 'contactGroups', icon: 'psg:group' },
+  { name: 'rules',     labelKey: 'emailRules',    icon: 'material-symbols:rule-rounded' },
   { name: 'setting',   labelKey: 'settings',      icon: 'psg:settings' },
 ];
 
@@ -441,6 +448,23 @@ function clickLogout() {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex: 1;
+}
+
+.inbox-unread-badge {
+  flex-shrink: 0;
+  :deep(.el-badge__content) {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    background: #bc0000;
+    border: none;
+    border-radius: 0;
+    padding: 0 4px;
+    min-width: 18px;
+    height: 16px;
+    line-height: 16px;
+  }
 }
 
 /* ── Admin separator + title ─────────────────────────────── */

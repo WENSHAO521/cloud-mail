@@ -141,12 +141,39 @@
             </div>
           </div>
           <div class="toolbar-right">
-            <el-button class="send-btn" type="primary" @click="sendEmail">
-              <Icon icon="mingcute:send-fill" width="15" height="15" style="margin-right:6px"/>
-              <span v-if="form.sendType === 'reply'">{{ $t('reply') }}</span>
-              <span v-else-if="form.sendType === 'forward'">{{ $t('forward') }}</span>
-              <span v-else>{{ $t('send') }}</span>
-            </el-button>
+            <!-- Send Later inline picker -->
+            <template v-if="showSchedulePicker">
+              <el-date-picker
+                v-model="scheduledAt"
+                type="datetime"
+                :placeholder="$t('scheduleFor')"
+                format="YYYY-MM-DD HH:mm"
+                value-format="YYYY-MM-DD HH:mm:ss"
+                :disabled-date="d => d < new Date(Date.now() - 86400000)"
+                size="small"
+                class="schedule-picker"
+              />
+              <el-button size="small" class="schedule-confirm-btn" type="primary"
+                         @click="sendScheduled" :disabled="!scheduledAt">
+                {{ $t('scheduleConfirmBtn') }}
+              </el-button>
+              <el-button size="small" class="schedule-cancel-btn" @click="showSchedulePicker = false; scheduledAt = ''">
+                {{ $t('cancel') }}
+              </el-button>
+            </template>
+            <template v-else>
+              <el-tooltip :content="$t('sendLater')" placement="top">
+                <el-button class="send-later-btn" @click="showSchedulePicker = true">
+                  <Icon icon="material-symbols:schedule-outline-rounded" width="16" height="16"/>
+                </el-button>
+              </el-tooltip>
+              <el-button class="send-btn" type="primary" @click="sendEmail">
+                <Icon icon="mingcute:send-fill" width="15" height="15" style="margin-right:6px"/>
+                <span v-if="form.sendType === 'reply'">{{ $t('reply') }}</span>
+                <span v-else-if="form.sendType === 'forward'">{{ $t('forward') }}</span>
+                <span v-else>{{ $t('send') }}</span>
+              </el-button>
+            </template>
           </div>
         </div>
 
@@ -293,6 +320,8 @@ const directoryLoading = ref(false)
 const directoryLoaded = ref(false)
 const senderAccounts = ref([])
 const senderLoaded = ref(false)
+const showSchedulePicker = ref(false)
+const scheduledAt = ref('')
 
 const filteredDirectory = computed(() => {
   const q = directorySearch.value.trim().toLowerCase()
@@ -520,6 +549,15 @@ function chooseFile() {
   }
 }
 
+async function sendScheduled() {
+  if (!scheduledAt.value) return
+  form.scheduledAt = scheduledAt.value
+  showSchedulePicker.value = false
+  await sendEmail()
+  form.scheduledAt = undefined
+  scheduledAt.value = ''
+}
+
 async function sendEmail() {
 
   // Commit any text typed but not yet confirmed as a tag (user skipped pressing Enter)
@@ -662,6 +700,8 @@ function resetForm() {
   backReply.subject = ''
   backReply.receiveEmail = []
   backReply.sendType = ''
+  showSchedulePicker.value = false
+  scheduledAt.value = ''
   editor.value.clearEditor()
 }
 
@@ -902,12 +942,39 @@ const handleKeyDown = (event) => {
   }
 };
 
+let autoSaveTimer = null
+
+async function autoSaveDraft() {
+  if (!show.value) return
+  const content = editor.value?.getContent?.() ?? form.content
+  if (!content && !form.subject && form.receiveEmail.length === 0) return
+
+  form.content = content
+
+  if (form.draftId) {
+    draftStore.setDraft = { ...toRaw(form) }
+  } else {
+    const formData = { ...toRaw(form) }
+    delete formData.draftId
+    delete formData.attachments
+    formData.createTime = dayjs().utc().format('YYYY-MM-DD HH:mm:ss')
+    const draftId = await db.value.draft.add({ ...formData })
+    db.value.att.add({ draftId, attachments: toRaw(form.attachments) })
+    form.draftId = draftId
+    draftStore.refreshList++
+  }
+
+  ElMessage({ message: t('autoSavedDraft'), type: 'success', plain: true, duration: 1500 })
+}
+
 onMounted(() => {
   window.addEventListener('keydown', handleKeyDown);
+  autoSaveTimer = setInterval(autoSaveDraft, 30000)
 });
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyDown);
+  clearInterval(autoSaveTimer)
 });
 
 function close() {
@@ -1399,6 +1466,30 @@ function close() {
   border-radius: 0 !important;
   display: inline-flex !important;
   align-items: center !important;
+}
+
+.send-later-btn {
+  height: 34px !important;
+  width: 34px !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0;
+}
+
+.schedule-picker {
+  width: 200px !important;
+  :deep(.el-input__wrapper) { border-radius: 0 !important; }
+}
+
+.schedule-confirm-btn,
+.schedule-cancel-btn {
+  height: 28px !important;
+  border-radius: 0 !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
 }
 
 /* El overrides — flat field inputs */

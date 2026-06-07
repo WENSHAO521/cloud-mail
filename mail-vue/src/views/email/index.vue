@@ -32,9 +32,10 @@ import {useSettingStore} from "@/store/setting.js";
 import emailScroll from "@/components/email-scroll/index.vue"
 import {emailList, emailDelete, emailLatest, emailRead, emailMarkSpam, emailArchive} from "@/request/email.js";
 import {starAdd, starCancel} from "@/request/star.js";
-import {defineOptions, h, onMounted, reactive, ref, watch} from "vue";
+import {defineOptions, h, onMounted, reactive, ref, watch, computed} from "vue";
 import {useI18n} from "vue-i18n";
 import {useNotificationStore} from "@/store/notification.js";
+import {useRulesStore} from "@/store/rules.js";
 import {sleep} from "@/utils/time-utils.js";
 import router from "@/router/index.js";
 import {Icon} from "@iconify/vue";
@@ -55,11 +56,15 @@ const params = reactive({
   timeSort: 0,
 })
 const notificationStore = useNotificationStore()
+const rulesStore = useRulesStore()
 
 onMounted(() => {
   emailStore.emailScroll = scroll;
   latest()
 })
+
+const inboxUnread = computed(() => scroll.value?.unreadCount ?? 0)
+watch(inboxUnread, v => { emailStore.inboxUnreadCount = v })
 
 
 watch(() => accountStore.currentAccountId, () => {
@@ -119,6 +124,13 @@ async function latest() {
 
                 existIds.add(email.emailId)
                 scroll.value.addItem(email)
+
+                // apply client-side rules
+                rulesStore.applyRules(email, {
+                  starAdd,
+                  archiveEmail: archiveEmailAction,
+                  emailRead,
+                })
 
                 // push to notification store
                 notificationStore.push(email)
