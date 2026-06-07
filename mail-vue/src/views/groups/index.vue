@@ -169,11 +169,13 @@ async function saveGroup() {
 }
 
 async function deleteGroup(groupId) {
-  await contactGroupDelete(groupId)
-  groupList.value = groupList.value.filter(g => g.groupId !== groupId)
-  expandedIds.value.delete(groupId)
-  expandedIds.value = new Set(expandedIds.value)
-  ElMessage({ message: t('groupDeleted'), type: 'success', plain: true })
+  try {
+    await contactGroupDelete(groupId)
+    groupList.value = groupList.value.filter(g => g.groupId !== groupId)
+    expandedIds.value.delete(groupId)
+    expandedIds.value = new Set(expandedIds.value)
+    ElMessage({ message: t('groupDeleted'), type: 'success', plain: true })
+  } catch {}
 }
 </script>
 

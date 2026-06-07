@@ -364,7 +364,7 @@ function remove(account) {
         type: 'success',
         plain: true,
       })
-    })
+    }).catch(() => {})
   });
 }
 
@@ -428,7 +428,7 @@ function setAsTop(account, index) {
     const [item] = accounts.splice(index, 1);
     accounts.splice(1, 0, item);
 
-  });
+  }).catch(() => {});
 }
 
 function emailInitial(email, name) {

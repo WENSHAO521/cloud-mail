@@ -133,9 +133,11 @@ async function saveTpl() {
 }
 
 async function deleteTpl(templateId) {
-  await templateDelete(templateId)
-  tplList.value = tplList.value.filter(t => t.templateId !== templateId)
-  ElMessage({ message: t('templateDeleted'), type: 'success', plain: true })
+  try {
+    await templateDelete(templateId)
+    tplList.value = tplList.value.filter(t => t.templateId !== templateId)
+    ElMessage({ message: t('templateDeleted'), type: 'success', plain: true })
+  } catch {}
 }
 </script>
 

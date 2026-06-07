@@ -893,7 +893,7 @@ function openDraft(draft) {
   defValue.value = ''
   setTimeout(() => defValue.value = form.content)
   show.value = true;
-  editor.value.focus()
+  try { editor.value.focus() } catch {}
 }
 
 const handleKeyDown = (event) => {

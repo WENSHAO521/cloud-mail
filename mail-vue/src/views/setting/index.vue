@@ -322,7 +322,7 @@ const deleteConfirm = () => {
       localStorage.removeItem('token')
       router.replace('/login')
       ElMessage({ message: t('delSuccessMsg'), type: 'success', plain: true })
-    })
+    }).catch(() => {})
   })
 }
 
@@ -345,7 +345,7 @@ function submitPwd() {
     pwdShow.value = false
     form.password = ''
     form.newPwd = ''
-  }).finally(() => { setPwdLoading.value = false })
+  }).catch(() => {}).finally(() => { setPwdLoading.value = false })
 }
 </script>
 
