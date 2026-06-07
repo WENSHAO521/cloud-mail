@@ -19,43 +19,37 @@
                  :type="'all-email'"
     >
       <template #first>
-        <!-- Search type pill -->
-        <div class="type-pill" @click.stop="openSelect">
-          <el-select
-              ref="mySelect"
-              v-model="params.searchType"
-              class="select"
-          >
-            <el-option key="3" :label="$t('sender')" :value="'name'"/>
-            <el-option key="4" :label="$t('subject')" :value="'subject'"/>
-            <el-option key="1" :label="$t('user')" :value="'user'"/>
-            <el-option key="2" :label="$t('selectEmail')" :value="'account'"/>
+        <!-- ── Unified search group ── -->
+        <div class="search-group">
+          <!-- Type selector -->
+          <div class="type-pill" @click.stop="openSelect">
+            <el-select ref="mySelect" v-model="params.searchType" class="select">
+              <el-option key="3" :label="$t('sender')" :value="'name'"/>
+              <el-option key="4" :label="$t('subject')" :value="'subject'"/>
+              <el-option key="1" :label="$t('user')" :value="'user'"/>
+              <el-option key="2" :label="$t('selectEmail')" :value="'account'"/>
+            </el-select>
+            <span class="type-label">{{ selectTitle }}</span>
+            <Icon icon="mingcute:down-small-fill" width="13" height="13" class="type-arrow"/>
+          </div>
+          <!-- Content input -->
+          <input v-model="searchValue" class="content-input"
+                 :placeholder="$t('searchByContent')" @keydown.enter="search"/>
+          <!-- Status filter -->
+          <el-select v-model="params.type" class="status-select" @change="typeSelectChange">
+            <el-option key="1" :label="$t('all')" value="all"/>
+            <el-option key="3" :label="$t('received')" value="receive"/>
+            <el-option key="2" :label="$t('sent')" value="send"/>
+            <el-option key="4" :label="$t('selectDeleted')" value="delete"/>
+            <el-option key="4" :label="$t('noRecipientTitle')" value="noone"/>
           </el-select>
-          <span class="type-label">{{ selectTitle }}</span>
-          <Icon icon="mingcute:down-small-fill" width="14" height="14" class="type-arrow"/>
         </div>
-        <!-- Content search input -->
-        <input
-            v-model="searchValue"
-            class="content-input"
-            :placeholder="$t('searchByContent')"
-            @keydown.enter="search"
-        />
-        <!-- Status filter -->
-        <el-select v-model="params.type" class="status-select" @change="typeSelectChange">
-          <el-option key="1" :label="$t('all')" value="all"/>
-          <el-option key="3" :label="$t('received')" value="receive"/>
-          <el-option key="2" :label="$t('sent')" value="send"/>
-          <el-option key="4" :label="$t('selectDeleted')" value="delete"/>
-          <el-option key="4" :label="$t('noRecipientTitle')" value="noone"/>
-        </el-select>
-        <!-- Action icons -->
+        <!-- ── Action icons ── -->
         <Icon class="icon" icon="iconoir:search" @click="search" width="16" height="16"/>
-        <Icon class="icon" @click="changeTimeSort" icon="material-symbols-light:timer-arrow-down-outline"
-              v-if="params.timeSort === 0" width="18" height="18"/>
-        <Icon class="icon" @click="changeTimeSort" icon="material-symbols-light:timer-arrow-up-outline" v-else
-              width="18" height="18"/>
-        <Icon class="icon clear" icon="fluent:broom-sparkle-16-regular" width="16" height="16" @click="openBathDelete"/>
+        <Icon class="icon" @click="changeTimeSort"
+              :icon="params.timeSort === 0 ? 'material-symbols-light:timer-arrow-down-outline' : 'material-symbols-light:timer-arrow-up-outline'"
+              width="17" height="17"/>
+        <Icon class="icon icon-danger" icon="fluent:broom-sparkle-16-regular" width="16" height="16" @click="openBathDelete"/>
       </template>
     </emailScroll>
     <el-dialog v-model="showBathDelete" :title="$t('clearEmail')" width="335"
@@ -399,7 +393,7 @@ async function latest() {
 }
 
 
-/* ── Hidden real select (triggered by type-pill click) ─── */
+/* ── Hidden real select (triggered by type-pill) ─────── */
 .select {
   position: absolute;
   width: 40px;
@@ -407,25 +401,38 @@ async function latest() {
   pointer-events: none;
 }
 
-/* ── Search type pill ─────────────────────────────────── */
+/* ── Unified search group: type | input | status ──────── */
+.search-group {
+  display: flex;
+  align-items: stretch;
+  height: 30px;
+  border: 1px solid var(--light-border, #d0d0d0);
+  flex: 1 1 100px;
+  min-width: 100px;
+  max-width: 380px;
+  overflow: hidden;
+
+  &:focus-within {
+    border-color: var(--el-color-primary);
+  }
+}
+
 .type-pill {
   position: relative;
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  height: 28px;
   padding: 0 8px;
-  border: 1px solid var(--light-border, #d0d0d0);
-  border-right: none;
-  background: var(--surface, #fff);
+  border-right: 1px solid var(--light-border, #d0d0d0);
+  background: var(--base-fill, #f5f5f5);
   cursor: pointer;
   flex-shrink: 0;
   user-select: none;
+  white-space: nowrap;
 
   .type-label {
     font-size: 12px;
     color: var(--el-text-color-regular);
-    white-space: nowrap;
   }
 
   .type-arrow {
@@ -433,80 +440,47 @@ async function latest() {
   }
 
   @media (hover: hover) {
-    &:hover .type-label {
-      color: var(--el-text-color-primary);
-    }
+    &:hover { background: var(--email-hover-background, #f0f0f0); }
   }
 }
 
-/* ── Content search plain input ───────────────────────── */
 .content-input {
-  height: 28px;
-  min-width: 60px;
-  max-width: 160px;
   flex: 1;
-  border: 1px solid var(--light-border, #d0d0d0);
-  background: var(--surface, #fff);
+  min-width: 0;
+  border: none;
+  background: transparent;
   padding: 0 8px;
   font-size: 13px;
   color: var(--el-text-color-primary);
   outline: none;
-  box-sizing: border-box;
 
-  &::placeholder {
-    color: var(--el-text-color-placeholder);
-  }
-
-  &:focus {
-    border-color: var(--el-color-primary);
-    z-index: 1;
-  }
+  &::placeholder { color: var(--el-text-color-placeholder); }
 }
 
-/* ── Status select — match type-pill + content-input height ─ */
-.status-select :deep(.el-select__wrapper) {
-  height: 28px;
-  min-height: 28px;
-  padding: 0 8px;
-  box-sizing: border-box;
-  border-radius: 0;
-  box-shadow: none !important;
-  border: 1px solid var(--light-border, #d0d0d0);
-
-  &:hover {
-    border-color: var(--el-border-color-hover);
-  }
-
-  &.is-focused {
-    border-color: var(--el-color-primary);
-  }
-}
-
-.clear-email {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.clear-button {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-
-  .el-button {
-    width: 100%;
-  }
-}
-
+/* status-select: borderless inside the group, left separator only */
 .status-select {
-  width: 88px;
+  width: 76px;
   flex-shrink: 0;
 }
 
-:deep(.el-date-editor.el-input__wrapper) {
-  width: 303px;
+.status-select :deep(.el-select__wrapper) {
+  height: 100%;
+  min-height: unset;
+  padding: 0 6px;
+  box-shadow: none !important;
+  border: none;
+  border-left: 1px solid var(--light-border, #d0d0d0);
+  border-radius: 0;
+  background: var(--base-fill, #f5f5f5);
 }
 
+.status-select :deep(.el-select__wrapper:hover),
+.status-select :deep(.el-select__wrapper.is-focused) {
+  box-shadow: none !important;
+  background: var(--email-hover-background, #f0f0f0);
+}
+
+/* ── Action icon buttons ──────────────────────────────── */
 .icon {
   display: inline-flex;
   align-items: center;
@@ -521,43 +495,54 @@ async function latest() {
   transition: border-color 0.10s, color 0.10s;
 
   @media (hover: hover) {
-    &:hover {
-      border-color: #000000;
-      color: #000000;
-    }
-
-    &.clear:hover {
-      border-color: #bc0000;
-      color: #bc0000;
-    }
+    &:hover { border-color: #000000; color: #000000; }
+    &.icon-danger:hover { border-color: #bc0000; color: #bc0000; }
   }
 }
 
-.dark .icon:hover {
-  border-color: #ffffff !important;
-  color: #ffffff !important;
-}
-.dark .icon.clear:hover {
-  border-color: #bc0000 !important;
-  color: #bc0000 !important;
+:deep(.el-date-editor.el-input__wrapper) {
+  width: 303px;
 }
 
+/* ── Dark mode ────────────────────────────────────────── */
+.dark .search-group {
+  border-color: var(--light-border);
+}
 .dark .type-pill {
-  background: var(--surface);
-  border-color: var(--light-border);
-  .type-label { color: var(--el-text-color-regular); }
+  background: var(--surface-secondary);
+  border-right-color: var(--light-border);
 }
-
 .dark .content-input {
-  background: var(--surface);
-  border-color: var(--light-border);
   color: var(--el-text-color-primary);
   &::placeholder { color: var(--el-text-color-placeholder); }
 }
-
 .dark .status-select :deep(.el-select__wrapper) {
-  border-color: var(--light-border) !important;
-  background: var(--surface) !important;
+  border-left-color: var(--light-border) !important;
+  background: var(--surface-secondary) !important;
+}
+.dark .icon {
+  @media (hover: hover) {
+    &:hover { border-color: #ffffff; color: #ffffff; }
+    &.icon-danger:hover { border-color: #bc0000; color: #bc0000; }
+  }
+}
+
+/* ── Batch clear dialog ───────────────────────────────── */
+.clear-email {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.clear-button {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  .el-button { width: 100%; }
+}
+
+:deep(.el-date-editor.el-input__wrapper_PLACEHOLDER) {
 }
 
 .clear {
@@ -565,14 +550,6 @@ async function latest() {
     position: absolute;
     top: 41px;
     left: 242px;
-  }
-}
-
-:deep(.reload) {
-  @media (max-width: 419px) {
-    position: absolute;
-    top: 42px;
-    left: 208px;
   }
 }
 
