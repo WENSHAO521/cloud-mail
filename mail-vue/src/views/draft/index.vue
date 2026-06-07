@@ -84,8 +84,8 @@ async function deleteDraft(draftIds) {
 
 async function jumpContent(email) {
   const att = await db.value.att.get(email.draftId)
-  email.attachments = att.attachments
-  uiStore.writerRef.openDraft(email);
+  email.attachments = att?.attachments ?? []
+  uiStore.writerRef?.openDraft(email);
 }
 
 </script>

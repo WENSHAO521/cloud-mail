@@ -19,6 +19,7 @@ import { emailDelete, emailSpamList, emailUnmarkSpam } from "@/request/email.js"
 import { starAdd, starCancel } from "@/request/star.js"
 import { useEmailStore } from "@/store/email.js"
 import { useAccountStore } from "@/store/account.js"
+import { useUiStore } from "@/store/ui.js"
 import { defineOptions, ref, watch } from "vue"
 import router from "@/router/index.js"
 
@@ -27,6 +28,7 @@ defineOptions({ name: 'spam' })
 const scroll = ref({})
 const emailStore = useEmailStore()
 const accountStore = useAccountStore()
+const uiStore = useUiStore()
 
 watch(() => accountStore.currentAccountId, () => {
   scroll.value.refreshList()

@@ -5,5 +5,11 @@ export const useAccountStore = defineStore('account', {
         currentAccountId: 0,
         currentAccount: {},
         changeUserAccountName: ''
-    })
+    }),
+    actions: {
+        setCurrentAccount(account) {
+            this.currentAccountId = account.accountId
+            this.currentAccount = account
+        }
+    }
 })

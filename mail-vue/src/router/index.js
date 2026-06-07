@@ -141,20 +141,12 @@ function loadBackground(next) {
 
         const img = new Image();
         img.src = src;
+        let done = false;
+        const proceed = () => { if (!done) { done = true; next(); } };
 
-        img.onload = () => {
-            next()
-        };
-
-        img.onerror = () => {
-            console.warn("背景图片加载失败:", img.src);
-            next()
-        };
-
-        setTimeout(() => {
-            console.warn("背景加载超时，已放行");
-            next()
-        }, 3000)
+        img.onload = proceed;
+        img.onerror = () => { console.warn("背景图片加载失败:", img.src); proceed(); };
+        setTimeout(() => { console.warn("背景加载超时，已放行"); proceed(); }, 3000);
 
     } else {
         next()
