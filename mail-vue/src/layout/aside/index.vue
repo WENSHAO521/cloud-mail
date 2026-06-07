@@ -5,10 +5,9 @@
 
     <!-- ── Brand ────────────────────────────────────────── -->
     <div class="sidebar-brand">
-      <div class="brand-mark">PSG</div>
-      <div class="brand-meta">
-        <div class="brand-name">Panorama Scholarly Group</div>
-        <div class="brand-sub">Institutional Mail</div>
+      <div class="brand-text-block">
+        <div class="brand-name">PANORAMA SCHOLARLY GROUP</div>
+        <div class="brand-sub">INSTITUTIONAL MAIL</div>
       </div>
     </div>
 
@@ -229,53 +228,42 @@ function clickLogout() {
 /* ── Brand ───────────────────────────────────────────────── */
 .sidebar-brand {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 20px 20px 16px;
+  align-items: flex-start;
+  padding: 18px 20px 14px;
   flex-shrink: 0;
   border-bottom: 1px solid var(--light-border, #000000);
+  border-left: 3px solid #bc0000;
 }
 
-.brand-mark {
-  flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #bc0000;
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  font-family: 'JetBrains Mono', monospace;
-}
-
-.brand-meta {
+.brand-text-block {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 
 .brand-name {
-  font-size: 13px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.01em;
-  color: var(--el-text-color-primary);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #111111;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  :global(.dark) & { color: #f0f0f0; }
 }
 
 .brand-sub {
-  font-size: 9.5px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--muted, #7e7576);
-  white-space: nowrap;
   font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #bc0000;
+  white-space: nowrap;
 }
 
 /* ── Header ──────────────────────────────────────────────── */

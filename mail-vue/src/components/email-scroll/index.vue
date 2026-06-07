@@ -439,14 +439,19 @@ function localRead(emailIds) {
 }
 
 function rightDelete(emailId) {
+  const doDelete = () => {
+    props.emailDelete([emailId]).then(() => {
+      ElMessage({ message: t('delSuccessMsg'), type: 'success', plain: true })
+      deleteEmail([emailId])
+      emailStore.deleteIds = [emailId]
+    })
+  }
   if (props.type === 'all-email') {
     ElMessageBox.confirm(t('delOneEmailConfirm'), { confirmButtonText: t('confirm'), cancelButtonText: t('cancel'), type: 'warning' })
-      .then(() => {
-        props.emailDelete([emailId]).then(() => { ElMessage({ message: t('delSuccessMsg'), type: 'success', plain: true }); emailStore.deleteIds = [emailId]; })
-      })
-    return;
+      .then(doDelete)
+    return
   }
-  props.emailDelete([emailId]).then(() => { ElMessage({ message: t('delSuccessMsg'), type: 'success', plain: true }); emailStore.deleteIds = [emailId]; })
+  doDelete()
 }
 
 function archiveAction(emailId) { if (props.archiveEmail) props.archiveEmail(emailId) }
@@ -468,15 +473,20 @@ function handleDelete() {
   ElMessageBox.confirm(t('delEmailsConfirm'), { confirmButtonText: t('confirm'), cancelButtonText: t('cancel'), type: 'warning' })
     .then(() => {
       if (props.type === 'draft') { emit('delete-draft', getSelectedDraftsIds()); return; }
-      const emailIds = getSelectedMailsIds();
-      props.emailDelete(emailIds).then(() => { ElMessage({ message: t('delSuccessMsg'), type: 'success', plain: true }); emailStore.deleteIds = emailIds; })
+      const emailIds = getSelectedMailsIds()
+      props.emailDelete(emailIds).then(() => {
+        ElMessage({ message: t('delSuccessMsg'), type: 'success', plain: true })
+        deleteEmail(emailIds)
+        emailStore.deleteIds = emailIds
+      })
     })
 }
 
 function deleteEmail(emailIds) {
-  emailIds.forEach(emailId => {
-    emailList.forEach((item, index) => { if (emailId === item.emailId) emailList.splice(index, 1); })
-  })
+  const idSet = new Set(emailIds)
+  for (let i = emailList.length - 1; i >= 0; i--) {
+    if (idSet.has(emailList[i].emailId)) emailList.splice(i, 1)
+  }
   if (emailList.length < queryParam.size && !noLoading.value) getEmailList()
 }
 

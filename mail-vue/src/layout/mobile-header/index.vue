@@ -6,7 +6,7 @@
         <Icon icon="material-symbols:menu-rounded" width="24" height="24"/>
       </button>
       <div class="m-brand">
-        <span class="m-brand-mark">PSG</span>
+        <span class="m-brand-name">PSG</span>
         <span class="m-title">{{ title }}</span>
       </div>
     </div>
@@ -90,19 +90,14 @@ function openSearch() {
   min-width: 0;
 }
 
-.m-brand-mark {
+.m-brand-name {
   flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 24px;
-  padding: 0 7px;
-  background: #bc0000;
-  color: #ffffff;
-  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.08em;
-  font-family: 'JetBrains Mono', monospace;
+  text-transform: uppercase;
+  color: #bc0000;
 }
 
 .m-title {

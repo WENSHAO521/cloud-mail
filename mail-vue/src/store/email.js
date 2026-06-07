@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 export const useEmailStore = defineStore('email', {
     state: () => ({
-        deleteIds: 0,
+        deleteIds: null,
         starScroll: null,
         emailScroll: null,
         cancelStarEmailId: 0,

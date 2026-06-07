@@ -25,11 +25,8 @@
       </svg>
 
       <div class="brand-editorial">
-        <div class="brand-lockup">
-          <img src="/favicon.svg" class="brand-logo" alt="PSG"/>
-          <div class="brand-eyebrow">{{ $t('institutionalMail') }}</div>
-        </div>
-        <h1 class="brand-wordmark">Panorama<br/>Scholarly Group</h1>
+        <div class="brand-eyebrow">{{ $t('institutionalMail') }}</div>
+        <h1 class="brand-wordmark">PANORAMA<br/>SCHOLARLY GROUP</h1>
         <div class="brand-divider"></div>
         <p class="brand-caption">{{ $t('brandPanelLine') }}</p>
       </div>
@@ -43,9 +40,8 @@
 
         <!-- Compact brand header (shown when brand panel is hidden) -->
         <div class="card-brand">
-          <img src="/favicon.svg" class="card-brand-logo" alt="PSG"/>
           <div class="card-brand-meta">
-            <span class="card-brand-name">Panorama Scholarly Group</span>
+            <span class="card-brand-name">PANORAMA SCHOLARLY GROUP</span>
             <span class="card-brand-sub">{{ $t('institutionalMail') }}</span>
           </div>
         </div>
@@ -200,7 +196,7 @@
       </div>
     </el-dialog>
     <a v-show="settingStore.settings.projectLink" class="psg-link" href="https://panorama-sg.com" target="_blank">
-      <img src="/favicon.svg" class="psg-link-logo" alt="PSG"/>
+      <span class="psg-link-text">PSG</span>
     </a>
   </div>
 </template>
@@ -751,21 +747,6 @@ function submitRegister() {
   max-width: 480px;
 }
 
-.brand-lockup {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 30px;
-}
-
-.brand-logo {
-  width: 44px;
-  height: 44px;
-  flex-shrink: 0;
-  display: block;
-  border-radius: 0;
-}
-
 .brand-eyebrow {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
@@ -775,11 +756,13 @@ function submitRegister() {
 }
 
 .brand-wordmark {
-  margin: 0;
-  font-size: clamp(34px, 3.6vw, 50px);
+  margin: 14px 0 0;
+  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+  font-size: clamp(28px, 3.0vw, 42px);
   font-weight: 700;
-  line-height: 1.08;
-  letter-spacing: -0.02em;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
   color: #111111;
 }
 
@@ -849,16 +832,15 @@ function submitRegister() {
   @media (max-width: 980px) { display: flex; }
 }
 
-.card-brand-logo {
-  width: 38px;
-  height: 38px;
-  flex-shrink: 0;
-  display: block;
-  border-radius: 0;
-}
-
 .card-brand-meta { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.card-brand-name { font-size: 14px; font-weight: 700; color: #111111; }
+.card-brand-name {
+  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #111111;
+}
 .card-brand-sub {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
@@ -1122,11 +1104,14 @@ function submitRegister() {
     &:hover { opacity: 1; }
   }
 
-  .psg-link-logo {
-    height: 28px;
-    width: 28px;
-    display: block;
-    border-radius: 0;
+  .psg-link-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #bc0000;
+    text-decoration: none;
   }
 }
 </style>
