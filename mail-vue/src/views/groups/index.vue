@@ -263,6 +263,10 @@ async function deleteGroup(groupId) {
       .card-actions { opacity: 1; }
     }
   }
+
+  @media (max-width: 480px) {
+    padding: 10px 12px;
+  }
 }
 
 .card-left {
@@ -301,7 +305,7 @@ async function deleteGroup(groupId) {
 
 .act-btn {
   display: flex; align-items: center; justify-content: center;
-  width: 28px; height: 28px;
+  min-width: 32px; height: 32px;
   border: none; background: transparent;
   border-radius: 0; cursor: pointer;
   color: var(--secondary-text-color);

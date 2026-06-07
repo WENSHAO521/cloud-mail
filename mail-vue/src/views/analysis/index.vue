@@ -747,7 +747,8 @@ function createSendGauge() {
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
   @media (max-width: 1200px) { grid-template-columns: repeat(2, 1fr); }
-  @media (max-width: 600px)  { grid-template-columns: 1fr; }
+  @media (max-width: 768px)  { grid-template-columns: 1fr 1fr; }
+  @media (max-width: 480px)  { grid-template-columns: 1fr; }
 }
 
 .stat-card {
@@ -833,6 +834,7 @@ function createSendGauge() {
   .chart-area {
     height: 280px;
     @media (max-width: 640px) { height: 220px; }
+    @media (max-width: 420px) { height: 180px; }
   }
 }
 </style>
