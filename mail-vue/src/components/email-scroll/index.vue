@@ -652,7 +652,7 @@ function loadData() { getEmailList() }
     color: var(--secondary-text-color, #7e7576);
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
-    padding: 0 10px;
+    padding: 0 16px;
   }
 }
 
