@@ -451,11 +451,11 @@ onUnmounted(() => { window.removeEventListener('resize', adjustWidth) })
 }
 
 .header-actions {
-  padding: 0 16px;
-  height: 52px;
+  padding: 0 12px;
+  height: 44px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   background: var(--surface, #fff);
   border-radius: 0;
   border: 1px solid var(--light-border, #000000);
@@ -468,17 +468,25 @@ onUnmounted(() => { window.removeEventListener('resize', adjustWidth) })
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
+    border: 1px solid transparent;
     border-radius: 0;
-    transition: background 0.12s, color 0.12s;
+    flex-shrink: 0;
+    transition: border-color 0.10s, color 0.10s;
 
     @media (hover: hover) {
       &:hover {
-        background: rgba(0,0,0,0.07);
-        color: var(--el-text-color-primary);
+        border-color: #000000;
+        color: #000000;
       }
     }
+  }
+}
+
+.dark .header-actions .icon {
+  @media (hover: hover) {
+    &:hover { border-color: #ffffff; color: #ffffff; }
   }
 }
 

@@ -13,7 +13,7 @@
       </div>
       <Icon class="icon" icon="iconoir:search" @click="search" width="18" height="18"/>
       <Icon class="icon" icon="ion:reload" width="18" height="18" @click="refresh"/>
-      <Icon class="icon" icon="fluent:broom-sparkle-16-regular" width="18" height="18" @click="clearNotUse"/>
+      <Icon class="icon icon-danger" icon="fluent:broom-sparkle-16-regular" width="18" height="18" @click="clearNotUse"/>
     </div>
 
     <div class="keys-body">
@@ -405,19 +405,31 @@ function openAdd() {
 }
 
 .header-actions {
-  padding: 0 16px;
-  height: 52px;
+  padding: 0 12px;
+  height: 44px;
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+  gap: 4px;
+  flex-wrap: nowrap;
   align-items: center;
   background: var(--surface, #fff);
   border-radius: 0;
   border: 1px solid var(--light-border, #000000);
   box-shadow: none;
 
+  :deep(.el-input__wrapper) {
+    height: 30px;
+    box-shadow: none !important;
+    border: 1px solid var(--light-border, #d0d0d0);
+    border-radius: 0;
+    transition: border-color 0.12s;
+    &:hover { border-color: var(--el-border-color-hover); }
+  }
+  :deep(.el-input__wrapper.is-focus) {
+    border-color: var(--el-color-primary) !important;
+  }
+
   .search-input {
-    width: min(200px, calc(100vw - 160px));
+    width: min(200px, calc(100vw - 200px));
   }
 
   .icon {
@@ -426,17 +438,36 @@ function openAdd() {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
+    border: 1px solid transparent;
     border-radius: 0;
-    transition: background 0.12s, color 0.12s;
+    flex-shrink: 0;
+    transition: border-color 0.10s, color 0.10s;
 
     @media (hover: hover) {
       &:hover {
-        background: rgba(0,0,0,0.07);
-        color: var(--el-text-color-primary);
+        border-color: #000000;
+        color: #000000;
+      }
+      &.icon-danger:hover {
+        border-color: #bc0000;
+        color: #bc0000;
       }
     }
+  }
+}
+
+.dark .header-actions {
+  .icon {
+    @media (hover: hover) {
+      &:hover { border-color: #ffffff; color: #ffffff; }
+      &.icon-danger:hover { border-color: #bc0000; color: #bc0000; }
+    }
+  }
+  :deep(.el-input__wrapper) {
+    border-color: var(--light-border) !important;
+    background: var(--surface) !important;
   }
 }
 

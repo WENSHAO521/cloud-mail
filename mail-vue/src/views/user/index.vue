@@ -24,7 +24,7 @@
       <Icon class="icon" @click="changeTimeSort" icon="material-symbols-light:timer-arrow-up-outline" v-else width="20"
             height="20"/>
       <Icon class="icon" icon="ion:reload" width="18" height="18" @click="refresh"/>
-      <Icon class="icon" icon="uiw:delete" width="18" height="18" @click="delUser"/>
+      <Icon class="icon icon-danger" icon="uiw:delete" width="18" height="18" @click="delUser"/>
     </div>
     <div class="table-card">
       <div>
@@ -1095,11 +1095,11 @@ function adjustWidth() {
 }
 
 .header-actions {
-  padding: 0 16px;
-  height: 52px;
+  padding: 0 12px;
+  height: 44px;
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+  gap: 4px;
+  flex-wrap: nowrap;
   align-items: center;
   background: var(--surface, #fff);
   border-radius: 0;
@@ -1107,8 +1107,20 @@ function adjustWidth() {
   box-shadow: none;
   flex-shrink: 0;
 
+  :deep(.el-input__wrapper) {
+    height: 30px;
+    box-shadow: none !important;
+    border: 1px solid var(--light-border, #d0d0d0);
+    border-radius: 0;
+    transition: border-color 0.12s;
+    &:hover { border-color: var(--el-border-color-hover); }
+  }
+  :deep(.el-input__wrapper.is-focus) {
+    border-color: var(--el-color-primary) !important;
+  }
+
   .search-input {
-    width: min(160px, calc(100vw - 200px));
+    width: min(160px, calc(100vw - 260px));
   }
 
   .icon {
@@ -1117,17 +1129,36 @@ function adjustWidth() {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
+    border: 1px solid transparent;
     border-radius: 0;
-    transition: background 0.12s, color 0.12s;
+    flex-shrink: 0;
+    transition: border-color 0.10s, color 0.10s;
 
     @media (hover: hover) {
       &:hover {
-        background: rgba(0,0,0,0.07);
-        color: var(--el-text-color-primary);
+        border-color: #000000;
+        color: #000000;
+      }
+      &.icon-danger:hover {
+        border-color: #bc0000;
+        color: #bc0000;
       }
     }
+  }
+}
+
+.dark .header-actions {
+  .icon {
+    @media (hover: hover) {
+      &:hover { border-color: #ffffff; color: #ffffff; }
+      &.icon-danger:hover { border-color: #bc0000; color: #bc0000; }
+    }
+  }
+  :deep(.el-input__wrapper) {
+    border-color: var(--light-border) !important;
+    background: var(--surface) !important;
   }
 }
 
@@ -1213,10 +1244,20 @@ function adjustWidth() {
   white-space: nowrap;
 }
 
-.status-select {
-  :deep(.el-select__wrapper) {
-    min-height: 28px;
-  }
+.status-select :deep(.el-select__wrapper) {
+  height: 30px;
+  min-height: 30px;
+  box-shadow: none !important;
+  border: 1px solid var(--light-border, #d0d0d0);
+  border-radius: 0;
+  transition: border-color 0.12s;
+  &:hover { border-color: var(--el-border-color-hover); }
+  &.is-focused { border-color: var(--el-color-primary); }
+}
+
+.dark .status-select :deep(.el-select__wrapper) {
+  border-color: var(--light-border) !important;
+  background: var(--surface) !important;
 }
 
 .dialog {
