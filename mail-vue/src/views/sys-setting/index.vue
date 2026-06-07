@@ -1850,7 +1850,7 @@ function editSetting(settingForm, refreshStatus = true) {
   padding: 14px 20px;
   align-items: center;
   border-bottom: 1px solid var(--separator, #e5e5e5);
-  font-weight: 650;
+  font-weight: 600;
 
   > div:first-child {
     display: flex;
@@ -1861,7 +1861,7 @@ function editSetting(settingForm, refreshStatus = true) {
 
     span {
       color: var(--el-text-color-primary);
-      font-size: 16px;
+      font-size: 14px;
       line-height: 1.35;
     }
 
@@ -1881,7 +1881,7 @@ function editSetting(settingForm, refreshStatus = true) {
     justify-content: flex-end;
     align-items: center;
     color: var(--el-text-color-primary);
-    font-weight: 650;
+    font-weight: 600;
     text-align: right;
   }
 
@@ -1922,8 +1922,8 @@ function editSetting(settingForm, refreshStatus = true) {
 
     span {
       color: var(--el-text-color-primary);
-      font-size: 16px;
-      font-weight: 650;
+      font-size: 14px;
+      font-weight: 600;
       line-height: 1.35;
     }
   }

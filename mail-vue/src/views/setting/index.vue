@@ -1,168 +1,172 @@
 <template>
   <div class="settings-container">
-    <div class="settings-shell">
+    <el-scrollbar class="scroll">
+      <div class="scroll-body">
+        <div class="settings-shell">
 
-      <!-- ── Left sidebar nav ── -->
-      <nav class="settings-sidebar" aria-label="Personal settings sections">
-        <button
-          v-for="item in navItems"
-          :key="item.key"
-          class="settings-nav-item"
-          :class="{ active: activeSection === item.key }"
-          type="button"
-          @click="activeSection = item.key"
-        >
-          <Icon class="settings-nav-icon" :icon="item.icon" width="20" height="20"/>
-          <span>{{ item.label }}</span>
-        </button>
-      </nav>
+          <!-- ── Left sidebar nav ── -->
+          <nav class="settings-sidebar" aria-label="Personal settings sections">
+            <button
+              v-for="item in navItems"
+              :key="item.key"
+              class="settings-nav-item"
+              :class="{ active: activeSection === item.key }"
+              type="button"
+              @click="activeSection = item.key"
+            >
+              <Icon class="settings-nav-icon" :icon="item.icon" width="20" height="20"/>
+              <span>{{ item.label }}</span>
+            </button>
+          </nav>
 
-      <!-- ── Right panel ── -->
-      <main class="settings-panel">
+          <!-- ── Right panel ── -->
+          <main class="settings-panel">
 
-        <!-- Panel header -->
-        <div class="settings-panel-header">
-          <div>
-            <h1>{{ activeMeta.label }}</h1>
-            <p>{{ activeMeta.desc }}</p>
-          </div>
-          <!-- Section-specific save button -->
-          <el-button
-            v-if="activeSection === 'signature'"
-            class="settings-save-button" type="primary"
-            :loading="signatureLoading" @click="saveSignature"
-          >{{ $t('save') }}</el-button>
-          <el-button
-            v-else-if="activeSection === 'autoreply' && autoReplyEnabled"
-            class="settings-save-button" type="primary"
-            :loading="autoReplySaving" @click="saveAutoReply"
-          >{{ $t('save') }}</el-button>
-        </div>
-
-        <!-- ── Profile section ── -->
-        <div v-show="activeSection === 'profile'" class="settings-card">
-          <div class="avatar-strip">
-            <div class="avatar-wrap" @click="triggerUpload">
-              <img v-if="userStore.avatar" :src="userStore.avatar" class="avatar-img"/>
-              <div v-else class="avatar-init">{{ userInitial }}</div>
-              <div class="avatar-lens">
-                <Icon icon="solar:camera-add-bold" width="18" height="18"/>
-              </div>
-              <input ref="fileInputRef" type="file" accept="image/*"
-                     style="display:none" @change="handleFileChange"/>
-            </div>
-            <div class="avatar-meta">
-              <div class="meta-name">{{ userStore.user.name || userStore.user.email }}</div>
-              <div class="meta-email">{{ userStore.user.email }}</div>
-              <div class="meta-role" v-if="userStore.user.role?.name">{{ userStore.user.role.name }}</div>
-              <div class="avatar-links">
-                <button class="link-btn" @click="triggerUpload">{{ $t('uploadAvatar') }}</button>
-                <button class="link-btn dim" v-if="userStore.avatar" @click="removeAvatar">{{ $t('removeAvatar') }}</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="data-table">
-            <div class="data-row">
-              <span class="data-key">{{ $t('username') }}</span>
-              <div class="data-val">
-                <template v-if="setNameShow">
-                  <el-input v-model="accountName" size="small" style="width:160px"/>
-                  <button class="link-btn" @click="setName">{{ $t('save') }}</button>
-                  <button class="link-btn dim" @click="setNameShow = false">{{ $t('cancel') }}</button>
-                </template>
-                <template v-else>
-                  <span class="val-str">{{ userStore.user.name || '—' }}</span>
-                  <button class="link-btn" @click="showSetName">{{ $t('change') }}</button>
-                </template>
-              </div>
-            </div>
-            <div class="data-row">
-              <span class="data-key">{{ $t('emailAccount') }}</span>
-              <span class="val-str mono">{{ userStore.user.email }}</span>
-            </div>
-            <div class="data-row last">
-              <span class="data-key">{{ $t('password') }}</span>
-              <div class="data-val">
-                <span class="val-str">••••••••</span>
-                <button class="link-btn" @click="pwdShow = true">{{ $t('changePwdBtn') }}</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── Language section ── -->
-        <div v-show="activeSection === 'language'" class="settings-card">
-          <div class="card-body">
-            <el-select :model-value="langSelect" style="width:220px" @change="changeLang">
-              <el-option label="中文" value="zh" @pointerdown.prevent.stop="changeLang('zh')"/>
-              <el-option label="English" value="en" @pointerdown.prevent.stop="changeLang('en')"/>
-            </el-select>
-          </div>
-        </div>
-
-        <!-- ── Signature section ── -->
-        <div v-show="activeSection === 'signature'" class="settings-card">
-          <div class="card-body">
-            <div class="card-desc">{{ $t('signatureDesc') }}</div>
-            <div class="editor-shell">
-              <tinyEditor
-                ref="signatureEditorRef"
-                :def-value="signatureText"
-                editor-id="signature-editor"
-                toolbar="bold italic underline | forecolor | link | code"
-                height="200px"
-                @change="onSignatureChange"
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- ── Auto-reply section ── -->
-        <div v-show="activeSection === 'autoreply'" class="settings-card">
-          <div class="card-body">
-            <div class="autoreply-toggle">
+            <!-- Panel header -->
+            <div class="settings-panel-header">
               <div>
-                <div class="toggle-label">{{ $t('autoReply') }}</div>
-                <div class="card-desc" style="margin:0">{{ $t('autoReplyDesc') }}</div>
+                <h1>{{ activeMeta.label }}</h1>
+                <p>{{ activeMeta.desc }}</p>
               </div>
-              <el-switch v-model="autoReplyEnabled" @change="saveAutoReply"/>
+              <!-- Section-specific save button -->
+              <el-button
+                v-if="activeSection === 'signature'"
+                class="settings-save-button" type="primary"
+                :loading="signatureLoading" @click="saveSignature"
+              >{{ $t('save') }}</el-button>
+              <el-button
+                v-else-if="activeSection === 'autoreply' && autoReplyEnabled"
+                class="settings-save-button" type="primary"
+                :loading="autoReplySaving" @click="saveAutoReply"
+              >{{ $t('save') }}</el-button>
             </div>
-            <transition name="expand">
-              <div class="autoreply-body" v-if="autoReplyEnabled">
-                <el-input
-                  v-model="autoReplyMessage"
-                  type="textarea" :rows="5"
-                  :placeholder="$t('autoReplyMessage')"
-                  resize="none"
-                />
+
+            <!-- ── Profile section ── -->
+            <div v-show="activeSection === 'profile'" class="settings-card">
+              <div class="avatar-strip">
+                <div class="avatar-wrap" @click="triggerUpload">
+                  <img v-if="userStore.avatar" :src="userStore.avatar" class="avatar-img"/>
+                  <div v-else class="avatar-init">{{ userInitial }}</div>
+                  <div class="avatar-lens">
+                    <Icon icon="solar:camera-add-bold" width="18" height="18"/>
+                  </div>
+                  <input ref="fileInputRef" type="file" accept="image/*"
+                         style="display:none" @change="handleFileChange"/>
+                </div>
+                <div class="avatar-meta">
+                  <div class="meta-name">{{ userStore.user.name || userStore.user.email }}</div>
+                  <div class="meta-email">{{ userStore.user.email }}</div>
+                  <div class="meta-role" v-if="userStore.user.role?.name">{{ userStore.user.role.name }}</div>
+                  <div class="avatar-links">
+                    <button class="link-btn" @click="triggerUpload">{{ $t('uploadAvatar') }}</button>
+                    <button class="link-btn dim" v-if="userStore.avatar" @click="removeAvatar">{{ $t('removeAvatar') }}</button>
+                  </div>
+                </div>
               </div>
-            </transition>
-          </div>
-        </div>
 
-        <!-- ── Mail management section ── -->
-        <div v-show="activeSection === 'mail'" class="settings-card">
-          <div class="card-body mail-body">
-            <Account />
-          </div>
-        </div>
-
-        <!-- ── Danger zone section ── -->
-        <div v-show="activeSection === 'danger'" class="settings-card">
-          <div class="danger-inner">
-            <div class="danger-text">
-              <div class="danger-heading">{{ $t('deleteUserBtn') }}</div>
-              <div class="danger-desc-text">{{ $t('delAccountMsg') }}</div>
+              <div class="data-table">
+                <div class="data-row">
+                  <span class="data-key">{{ $t('username') }}</span>
+                  <div class="data-val">
+                    <template v-if="setNameShow">
+                      <el-input v-model="accountName" size="small" style="width:160px"/>
+                      <button class="link-btn" @click="setName">{{ $t('save') }}</button>
+                      <button class="link-btn dim" @click="setNameShow = false">{{ $t('cancel') }}</button>
+                    </template>
+                    <template v-else>
+                      <span class="val-str">{{ userStore.user.name || '—' }}</span>
+                      <button class="link-btn" @click="showSetName">{{ $t('change') }}</button>
+                    </template>
+                  </div>
+                </div>
+                <div class="data-row">
+                  <span class="data-key">{{ $t('emailAccount') }}</span>
+                  <span class="val-str mono">{{ userStore.user.email }}</span>
+                </div>
+                <div class="data-row last">
+                  <span class="data-key">{{ $t('password') }}</span>
+                  <div class="data-val">
+                    <span class="val-str">••••••••</span>
+                    <button class="link-btn" @click="pwdShow = true">{{ $t('changePwdBtn') }}</button>
+                  </div>
+                </div>
+              </div>
             </div>
-            <el-button type="danger" size="small" @click="deleteConfirm">
-              {{ $t('deleteUserBtn') }}
-            </el-button>
-          </div>
-        </div>
 
-      </main>
-    </div>
+            <!-- ── Language section ── -->
+            <div v-show="activeSection === 'language'" class="settings-card">
+              <div class="card-body">
+                <el-select :model-value="langSelect" style="width:220px" @change="changeLang">
+                  <el-option label="中文" value="zh" @pointerdown.prevent.stop="changeLang('zh')"/>
+                  <el-option label="English" value="en" @pointerdown.prevent.stop="changeLang('en')"/>
+                </el-select>
+              </div>
+            </div>
+
+            <!-- ── Signature section ── -->
+            <div v-show="activeSection === 'signature'" class="settings-card">
+              <div class="card-body">
+                <div class="card-desc">{{ $t('signatureDesc') }}</div>
+                <div class="editor-shell">
+                  <tinyEditor
+                    ref="signatureEditorRef"
+                    :def-value="signatureText"
+                    editor-id="signature-editor"
+                    toolbar="bold italic underline | forecolor | link | code"
+                    height="200px"
+                    @change="onSignatureChange"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- ── Auto-reply section ── -->
+            <div v-show="activeSection === 'autoreply'" class="settings-card">
+              <div class="card-body">
+                <div class="autoreply-toggle">
+                  <div>
+                    <div class="toggle-label">{{ $t('autoReply') }}</div>
+                    <div class="card-desc" style="margin:0">{{ $t('autoReplyDesc') }}</div>
+                  </div>
+                  <el-switch v-model="autoReplyEnabled" @change="saveAutoReply"/>
+                </div>
+                <transition name="expand">
+                  <div class="autoreply-body" v-if="autoReplyEnabled">
+                    <el-input
+                      v-model="autoReplyMessage"
+                      type="textarea" :rows="5"
+                      :placeholder="$t('autoReplyMessage')"
+                      resize="none"
+                    />
+                  </div>
+                </transition>
+              </div>
+            </div>
+
+            <!-- ── Mail management section ── -->
+            <div v-show="activeSection === 'mail'" class="settings-card">
+              <div class="card-body mail-body">
+                <Account />
+              </div>
+            </div>
+
+            <!-- ── Danger zone section ── -->
+            <div v-show="activeSection === 'danger'" class="settings-card">
+              <div class="danger-inner">
+                <div class="danger-text">
+                  <div class="danger-heading">{{ $t('deleteUserBtn') }}</div>
+                  <div class="danger-desc-text">{{ $t('delAccountMsg') }}</div>
+                </div>
+                <el-button type="danger" size="small" @click="deleteConfirm">
+                  {{ $t('deleteUserBtn') }}
+                </el-button>
+              </div>
+            </div>
+
+          </main>
+        </div>
+      </div>
+    </el-scrollbar>
 
     <!-- Password dialog -->
     <el-dialog v-model="pwdShow" :title="$t('changePassword')" width="380">
@@ -376,16 +380,31 @@ function submitPwd() {
 
 <style scoped lang="scss">
 .settings-container {
-  padding: 20px 24px 56px;
+  height: 100%;
+}
 
-  @media (max-width: 960px) { padding: 16px 16px 40px; }
-  @media (max-width: 640px) { padding: 12px 12px 28px; }
+.scroll {
+  width: 100%;
+  height: 100%;
+
+  :deep(.el-scrollbar__view) {
+    min-height: 100%;
+  }
+
+  .scroll-body {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 16px 20px 36px;
+
+    @media (max-width: 960px) { padding: 14px 16px 32px; }
+    @media (max-width: 640px) { padding: 12px 12px 28px; }
+  }
 }
 
 /* ── Shell: sidebar + panel ── */
 .settings-shell {
   display: grid;
-  grid-template-columns: 230px minmax(0, 1fr);
+  grid-template-columns: 270px minmax(0, 1fr);
   gap: 18px;
   align-items: start;
 
