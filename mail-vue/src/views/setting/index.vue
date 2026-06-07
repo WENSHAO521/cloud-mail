@@ -721,10 +721,10 @@ function submitPwd() {
 
   &:hover {
     color: var(--el-text-color-primary);
-    border-left-color: #CC0000;
+    border-left-color: #bc0000;
   }
 
-  &.danger-link:hover { color: #CC0000; }
+  &.danger-link:hover { color: #bc0000; }
 }
 
 /* Account meta-list */

@@ -397,7 +397,7 @@ async function deleteTpl(templateId) {
     font-size: 10px; font-weight: 700;
     background: var(--base-fill);
     border: 1px solid var(--light-border-color);
-    border-radius: 3px;
+    border-radius: 0;
     padding: 2px 6px;
     color: var(--el-text-color-primary);
   }
