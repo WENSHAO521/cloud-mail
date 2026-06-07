@@ -114,6 +114,7 @@
                     editor-id="signature-editor"
                     toolbar="bold italic underline | forecolor | link | code"
                     height="200px"
+                    :light-content="true"
                     @change="onSignatureChange"
                   />
                 </div>

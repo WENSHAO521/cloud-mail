@@ -34,6 +34,10 @@ const props = defineProps({
   height: {
     type: String,
     default: '100%'
+  },
+  lightContent: {
+    type: Boolean,
+    default: false
   }
 });
 
@@ -110,14 +114,15 @@ function initEditor() {
     //relative_urls: false,  //阻止 img标签域名和网站域名相同 自动把链接转换相对路径
     //remove_script_host: false, // 阻止删除 URL 中的域名
     forced_root_block: 'div',
-    skin: `${uiStore.dark ? 'oxide-dark' : 'oxide'}`,
-    content_css: `${tinyBase}/css/index.css,${uiStore.dark ? 'dark' : 'default'}`,
+    skin: `${uiStore.dark && !props.lightContent ? 'oxide-dark' : 'oxide'}`,
+    content_css: `${tinyBase}/css/index.css,${uiStore.dark && !props.lightContent ? 'dark' : 'default'}`,
     content_style: `
       @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto:wght@400;700&family=Open+Sans:wght@400;600&family=Lato:wght@400;700&family=Poppins:wght@400;600&family=Nunito:wght@400;600&family=Montserrat:wght@400;600&family=Source+Sans+3:wght@400;600&family=Raleway:wght@400;600&family=Ubuntu:wght@400;500&family=Merriweather:wght@400;700&family=Playfair+Display:wght@400;600&family=Lora:wght@400;600&family=EB+Garamond:wght@400;500&family=Noto+Serif:wght@400;700&family=Oswald:wght@400;600&family=Roboto+Mono:wght@400;500&family=Source+Code+Pro:wght@400;600&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700&family=Noto+Serif+SC:wght@400;700&family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&display=swap');
       :root {
-        --scrollbar-track-color: ${uiStore.dark ? '#141414' : '#FFFFFF'};
-        --scrollbar-thumb-color: ${uiStore.dark ? '#8D9095' : '#A8ABB2'};
+        --scrollbar-track-color: ${uiStore.dark && !props.lightContent ? '#141414' : '#FFFFFF'};
+        --scrollbar-thumb-color: ${uiStore.dark && !props.lightContent ? '#8D9095' : '#A8ABB2'};
       }
+      ${props.lightContent ? 'body { background: #ffffff !important; color: #1a1a1a !important; }' : ''}
     `,
     font_family_formats: [
       'Default=-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif',
