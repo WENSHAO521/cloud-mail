@@ -416,6 +416,7 @@ async function latest() {
   height: 28px;
   padding: 0 8px;
   border: 1px solid var(--light-border, #d0d0d0);
+  border-right: none;
   background: var(--surface, #fff);
   cursor: pointer;
   flex-shrink: 0;
@@ -432,8 +433,8 @@ async function latest() {
   }
 
   @media (hover: hover) {
-    &:hover {
-      border-color: var(--el-border-color-hover);
+    &:hover .type-label {
+      color: var(--el-text-color-primary);
     }
   }
 }
@@ -441,11 +442,10 @@ async function latest() {
 /* ── Content search plain input ───────────────────────── */
 .content-input {
   height: 28px;
-  min-width: 80px;
-  max-width: 180px;
+  min-width: 60px;
+  max-width: 160px;
   flex: 1;
   border: 1px solid var(--light-border, #d0d0d0);
-  border-left: none;
   background: var(--surface, #fff);
   padding: 0 8px;
   font-size: 13px;
@@ -463,12 +463,23 @@ async function latest() {
   }
 }
 
-/* ── Status select ────────────────────────────────────── */
-:deep(.el-select__wrapper) {
+/* ── Status select — match type-pill + content-input height ─ */
+.status-select :deep(.el-select__wrapper) {
   height: 28px;
   min-height: 28px;
   padding: 0 8px;
   box-sizing: border-box;
+  border-radius: 0;
+  box-shadow: none !important;
+  border: 1px solid var(--light-border, #d0d0d0);
+
+  &:hover {
+    border-color: var(--el-border-color-hover);
+  }
+
+  &.is-focused {
+    border-color: var(--el-color-primary);
+  }
 }
 
 .clear-email {
@@ -542,6 +553,11 @@ async function latest() {
   border-color: var(--light-border);
   color: var(--el-text-color-primary);
   &::placeholder { color: var(--el-text-color-placeholder); }
+}
+
+.dark .status-select :deep(.el-select__wrapper) {
+  border-color: var(--light-border) !important;
+  background: var(--surface) !important;
 }
 
 .clear {
