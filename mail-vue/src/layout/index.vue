@@ -231,10 +231,10 @@ onBeforeUnmount(() => {
 
   /* Mail mode: sidebar | list | detail */
   &[data-mode="mail"] {
-    grid-template-columns: 260px minmax(360px, 520px) minmax(420px, 1fr);
+    grid-template-columns: 260px minmax(380px, 600px) minmax(380px, 1fr);
 
     &[data-collapsed="true"] {
-      grid-template-columns: 72px minmax(360px, 520px) minmax(420px, 1fr);
+      grid-template-columns: 72px minmax(380px, 600px) minmax(380px, 1fr);
     }
   }
 
@@ -250,9 +250,9 @@ onBeforeUnmount(() => {
   /* Tablet: reduce list width */
   @media (max-width: 1280px) {
     &[data-mode="mail"] {
-      grid-template-columns: 260px minmax(320px, 400px) minmax(0, 1fr);
+      grid-template-columns: 260px minmax(340px, 480px) minmax(0, 1fr);
       &[data-collapsed="true"] {
-        grid-template-columns: 72px minmax(320px, 400px) minmax(0, 1fr);
+        grid-template-columns: 72px minmax(340px, 480px) minmax(0, 1fr);
       }
     }
   }
