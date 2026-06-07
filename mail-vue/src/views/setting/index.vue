@@ -1,29 +1,46 @@
 <template>
-  <div class="settings-outer">
+  <div class="settings-container">
+    <div class="settings-shell">
 
-    <!-- Pill tabs — matches vfasky settings-tab-list -->
-    <div class="settings-tab-list">
-      <button class="settings-tab-button" :data-active="String(activeTab === 'details')" @click="activeTab = 'details'">
-        {{ $t('details') }}
-      </button>
-      <button class="settings-tab-button" :data-active="String(activeTab === 'mail')" @click="activeTab = 'mail'">
-        {{ $t('mailManagement') }}
-      </button>
-    </div>
+      <!-- ── Left sidebar nav ── -->
+      <nav class="settings-sidebar" aria-label="Personal settings sections">
+        <button
+          v-for="item in navItems"
+          :key="item.key"
+          class="settings-nav-item"
+          :class="{ active: activeSection === item.key }"
+          type="button"
+          @click="activeSection = item.key"
+        >
+          <Icon class="settings-nav-icon" :icon="item.icon" width="20" height="20"/>
+          <span>{{ item.label }}</span>
+        </button>
+      </nav>
 
-    <!-- ── Details tab ─────────────────────────────────── -->
-    <template v-if="activeTab === 'details'">
-    <div class="settings-detail-grid">
+      <!-- ── Right panel ── -->
+      <main class="settings-panel">
 
-      <!-- LEFT — main settings -->
-      <div class="settings-main">
-
-        <!-- ── PROFILE ── -->
-        <section class="section" id="s-profile">
-          <div class="section-head">
-            <span class="section-label">{{ $t('profile') }}</span>
+        <!-- Panel header -->
+        <div class="settings-panel-header">
+          <div>
+            <h1>{{ activeMeta.label }}</h1>
+            <p>{{ activeMeta.desc }}</p>
           </div>
+          <!-- Section-specific save button -->
+          <el-button
+            v-if="activeSection === 'signature'"
+            class="settings-save-button" type="primary"
+            :loading="signatureLoading" @click="saveSignature"
+          >{{ $t('save') }}</el-button>
+          <el-button
+            v-else-if="activeSection === 'autoreply' && autoReplyEnabled"
+            class="settings-save-button" type="primary"
+            :loading="autoReplySaving" @click="saveAutoReply"
+          >{{ $t('save') }}</el-button>
+        </div>
 
+        <!-- ── Profile section ── -->
+        <div v-show="activeSection === 'profile'" class="settings-card">
           <div class="avatar-strip">
             <div class="avatar-wrap" @click="triggerUpload">
               <img v-if="userStore.avatar" :src="userStore.avatar" class="avatar-img"/>
@@ -72,97 +89,80 @@
               </div>
             </div>
           </div>
-        </section>
+        </div>
 
-        <!-- ── LANGUAGE ── -->
-        <section class="section" id="s-language">
-          <div class="section-head">
-            <span class="section-label">{{ $t('language') }}</span>
+        <!-- ── Language section ── -->
+        <div v-show="activeSection === 'language'" class="settings-card">
+          <div class="card-body">
+            <el-select :model-value="langSelect" style="width:220px" @change="changeLang">
+              <el-option label="中文" value="zh" @pointerdown.prevent.stop="changeLang('zh')"/>
+              <el-option label="English" value="en" @pointerdown.prevent.stop="changeLang('en')"/>
+            </el-select>
           </div>
-          <div class="section-body">
-          <el-select :model-value="langSelect" style="width:200px" @change="changeLang">
-            <el-option label="中文" value="zh" @pointerdown.prevent.stop="changeLang('zh')"/>
-            <el-option label="English" value="en" @pointerdown.prevent.stop="changeLang('en')"/>
-          </el-select>
-          </div>
-        </section>
+        </div>
 
-        <!-- ── SIGNATURE ── -->
-        <section class="section" id="s-signature">
-          <div class="section-head">
-            <span class="section-label">{{ $t('signature') }}</span>
-            <el-button type="primary" size="small" :loading="signatureLoading" @click="saveSignature" class="head-action">
-              {{ $t('save') }}
+        <!-- ── Signature section ── -->
+        <div v-show="activeSection === 'signature'" class="settings-card">
+          <div class="card-body">
+            <div class="card-desc">{{ $t('signatureDesc') }}</div>
+            <div class="editor-shell">
+              <tinyEditor
+                ref="signatureEditorRef"
+                :def-value="signatureText"
+                editor-id="signature-editor"
+                toolbar="bold italic underline | forecolor | link | code"
+                height="200px"
+                @change="onSignatureChange"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Auto-reply section ── -->
+        <div v-show="activeSection === 'autoreply'" class="settings-card">
+          <div class="card-body">
+            <div class="autoreply-toggle">
+              <div>
+                <div class="toggle-label">{{ $t('autoReply') }}</div>
+                <div class="card-desc" style="margin:0">{{ $t('autoReplyDesc') }}</div>
+              </div>
+              <el-switch v-model="autoReplyEnabled" @change="saveAutoReply"/>
+            </div>
+            <transition name="expand">
+              <div class="autoreply-body" v-if="autoReplyEnabled">
+                <el-input
+                  v-model="autoReplyMessage"
+                  type="textarea" :rows="5"
+                  :placeholder="$t('autoReplyMessage')"
+                  resize="none"
+                />
+              </div>
+            </transition>
+          </div>
+        </div>
+
+        <!-- ── Mail management section ── -->
+        <div v-show="activeSection === 'mail'" class="settings-card">
+          <div class="card-body mail-body">
+            <Account />
+          </div>
+        </div>
+
+        <!-- ── Danger zone section ── -->
+        <div v-show="activeSection === 'danger'" class="settings-card">
+          <div class="danger-inner">
+            <div class="danger-text">
+              <div class="danger-heading">{{ $t('deleteUserBtn') }}</div>
+              <div class="danger-desc-text">{{ $t('delAccountMsg') }}</div>
+            </div>
+            <el-button type="danger" size="small" @click="deleteConfirm">
+              {{ $t('deleteUserBtn') }}
             </el-button>
           </div>
-          <div class="section-body">
-          <div class="section-desc">{{ $t('signatureDesc') }}</div>
-          <div class="editor-shell">
-            <tinyEditor
-              ref="signatureEditorRef"
-              :def-value="signatureText"
-              editor-id="signature-editor"
-              toolbar="bold italic underline | forecolor | link | code"
-              height="160px"
-              @change="onSignatureChange"
-            />
-          </div>
-          </div>
-        </section>
-
-        <!-- ── AUTO-REPLY ── -->
-        <section class="section" id="s-autoreply">
-          <div class="section-head">
-            <span class="section-label">{{ $t('autoReply') }}</span>
-            <el-switch v-model="autoReplyEnabled" @change="saveAutoReply"/>
-          </div>
-          <div class="section-body">
-          <div class="section-desc">{{ $t('autoReplyDesc') }}</div>
-          <transition name="expand">
-            <div class="autoreply-body" v-if="autoReplyEnabled">
-              <el-input
-                v-model="autoReplyMessage"
-                type="textarea" :rows="4"
-                :placeholder="$t('autoReplyMessage')"
-                resize="none"
-              />
-              <div class="section-action-bar">
-                <el-button type="primary" size="small" :loading="autoReplySaving" @click="saveAutoReply">
-                  {{ $t('save') }}
-                </el-button>
-              </div>
-            </div>
-          </transition>
-          </div>
-        </section>
-
-      </div>
-
-      <!-- RIGHT — danger card (sticky, matches vfasky settings-danger-card) -->
-      <section class="section danger-section settings-danger-sticky" v-perm="'my:delete'">
-        <div class="section-head">
-          <span class="section-label danger-label">{{ $t('dangerZone') }}</span>
         </div>
-        <div class="danger-inner" style="padding: 0 24px 20px">
-          <div class="danger-text">
-            <div class="danger-heading">{{ $t('deleteUserBtn') }}</div>
-            <div class="danger-desc-text">{{ $t('delAccountMsg') }}</div>
-          </div>
-          <el-button type="danger" size="small" @click="deleteConfirm">
-            {{ $t('deleteUserBtn') }}
-          </el-button>
-        </div>
-      </section>
 
-    </div><!-- /settings-detail-grid -->
-    </template>
-
-    <!-- ── Mail management tab ────────────────────────── -->
-    <template v-else-if="activeTab === 'mail'">
-      <section class="section mail-panel">
-        <Account />
-      </section>
-    </template>
+      </main>
+    </div>
 
     <!-- Password dialog -->
     <el-dialog v-model="pwdShow" :title="$t('changePassword')" width="380">
@@ -180,7 +180,6 @@
         </el-button>
       </div>
     </el-dialog>
-
   </div>
 </template>
 
@@ -197,6 +196,7 @@ import { useSettingStore } from "@/store/setting.js"
 import { Icon } from "@iconify/vue"
 import tinyEditor from "@/components/tiny-editor/index.vue"
 import http from "@/axios/index.js"
+import { hasPerm } from "@/perm/perm.js"
 
 const { t } = useI18n()
 const accountStore = useAccountStore()
@@ -218,7 +218,32 @@ const autoReplySaving = ref(false)
 
 defineOptions({ name: 'setting' })
 
-const activeTab = ref('details')
+const activeSection = ref('profile')
+
+const navItems = computed(() => {
+  const items = [
+    { key: 'profile',   icon: 'solar:user-bold-duotone',            label: t('profile') },
+    { key: 'language',  icon: 'solar:global-bold-duotone',          label: t('language') },
+    { key: 'signature', icon: 'solar:pen-bold-duotone',             label: t('signature') },
+    { key: 'autoreply', icon: 'solar:chat-round-dots-bold-duotone', label: t('autoReply') },
+    { key: 'mail',      icon: 'solar:mailbox-bold-duotone',         label: t('mailManagement') },
+  ]
+  if (hasPerm('my:delete')) {
+    items.push({ key: 'danger', icon: 'solar:danger-triangle-bold-duotone', label: t('dangerZone') })
+  }
+  return items
+})
+
+const sectionMeta = computed(() => ({
+  profile:   { label: t('profile'),        desc: t('profileDesc') },
+  language:  { label: t('language'),       desc: t('languageDesc') },
+  signature: { label: t('signature'),      desc: t('signatureDesc') },
+  autoreply: { label: t('autoReply'),      desc: t('autoReplyDesc') },
+  mail:      { label: t('mailManagement'), desc: t('mailManagementDesc') },
+  danger:    { label: t('dangerZone'),     desc: t('dangerZoneDesc') },
+}))
+
+const activeMeta = computed(() => sectionMeta.value[activeSection.value] || { label: '', desc: '' })
 
 onMounted(() => {
   userStore.loadAvatar()
@@ -350,129 +375,167 @@ function submitPwd() {
 </script>
 
 <style scoped lang="scss">
-/* ─── Outer shell ──────────────────────────────────── */
-.settings-outer {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 24px 32px 56px;
+.settings-container {
+  padding: 20px 24px 56px;
 
-  @media (max-width: 960px)  { padding: 20px 20px 40px; }
-  @media (max-width: 640px)  { padding: 16px 16px 32px; }
+  @media (max-width: 960px) { padding: 16px 16px 40px; }
+  @media (max-width: 640px) { padding: 12px 12px 28px; }
 }
 
-/* ─── Left settings column ─────────────────────────── */
-.settings-main {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-/* ── Settings grid ── */
-.settings-detail-grid {
+/* ── Shell: sidebar + panel ── */
+.settings-shell {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
-  gap: 20px;
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: 18px;
   align-items: start;
 
-  @media (max-width: 1100px) {
-    grid-template-columns: minmax(0, 1fr);
+  @media (max-width: 820px) {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 }
 
-.settings-danger-sticky {
-  position: sticky;
-  top: 24px;
-
-  @media (max-width: 1100px) {
-    position: static;
-  }
-}
-
-/* ── Tab list ── */
-.settings-tab-list {
-  display: flex;
-  gap: 0;
-  border-bottom: 2px solid var(--light-border, #000000);
-  margin-bottom: 20px;
-}
-
-.settings-tab-button {
-  min-width: 108px;
-  border: none;
-  border-bottom: 3px solid transparent;
-  margin-bottom: -2px;
-  border-radius: 0;
-  background: transparent;
-  color: var(--psg-text-secondary, #666666);
-  cursor: pointer;
-  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 12px 20px;
-  transition: color 0.12s, border-color 0.12s;
-  white-space: nowrap;
-
-  &:hover { color: var(--el-text-color-primary); }
-
-  &[data-active="true"] {
-    color: var(--el-text-color-primary);
-    border-bottom-color: #bc0000;
-  }
-}
-
-/* ── Section — surface-card ── */
-.section {
-  background: var(--surface, #fff);
-  border-radius: 0;
+/* ── Sidebar ── */
+.settings-sidebar,
+.settings-panel {
+  background: var(--surface, #ffffff);
   border: 1px solid var(--light-border, #000000);
+  border-radius: 0;
   box-shadow: none;
   overflow: hidden;
-  margin-bottom: 20px;
-
-  &:last-child { margin-bottom: 0; }
-  &.danger-section { border-color: #bc0000; }
 }
 
-.section-head {
+.settings-sidebar {
+  position: sticky;
+  top: 16px;
+  min-height: min(500px, calc(100vh - 32px));
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  @media (max-width: 820px) {
+    position: static;
+    min-height: 0;
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 0;
+  }
+}
+
+.settings-nav-item {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 14px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 12px;
-  padding: 16px 24px;
-  border-bottom: 1px solid var(--separator, #e5e5e5);
-}
-
-.section-label {
+  border: none;
+  border-left: 3px solid transparent;
+  background: transparent;
+  color: var(--psg-text-secondary, #666666);
   font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--el-text-color-primary);
-  line-height: 1.4;
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.04);
+    color: var(--el-text-color-primary);
+  }
+
+  &.active {
+    border-left-color: #bc0000;
+    background: rgba(188, 0, 0, 0.06);
+    color: var(--el-text-color-primary);
+  }
+
+  @media (max-width: 820px) {
+    width: auto;
+    white-space: nowrap;
+    flex: 0 0 auto;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+    padding: 0 12px;
+
+    &.active {
+      border-bottom-color: #bc0000;
+      background: rgba(188, 0, 0, 0.06);
+    }
+  }
 }
 
-.danger-label {
-  color: #bc0000;
+.settings-nav-icon {
+  flex: 0 0 auto;
+  color: currentColor;
 }
 
-.head-action {
+/* ── Panel ── */
+.settings-panel-header {
+  min-height: 84px;
+  padding: 18px 20px 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--separator, #e5e5e5);
+
+  h1 {
+    margin: 0 0 4px;
+    color: var(--el-text-color-primary);
+    font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+    font-size: 20px;
+    font-weight: 750;
+    line-height: 1.2;
+    @media (max-width: 640px) { font-size: 16px; }
+  }
+
+  p {
+    margin: 0;
+    max-width: 38rem;
+    color: var(--psg-text-secondary, #666666);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  @media (max-width: 520px) {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+.settings-save-button {
+  flex: 0 0 auto;
+  min-width: 68px;
+  height: 42px !important;
   border-radius: 0 !important;
-  font-size: 12px !important;
-  flex-shrink: 0;
+  margin: 0 !important;
 }
 
-.section-body {
-  padding: 16px 24px 20px;
+.settings-card {
+  background: transparent;
+  border: 0;
 }
 
-.section-desc {
-  font-size: 12.5px;
-  color: var(--secondary-text-color);
-  margin-bottom: 14px;
-  line-height: 1.55;
+/* ── Card body padding ── */
+.card-body {
+  padding: 20px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mail-body { padding: 0; }
+
+.card-desc {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--psg-text-secondary, #666666);
+  margin-bottom: 4px;
 }
 
 /* ── Avatar strip ── */
@@ -480,20 +543,15 @@ function submitPwd() {
   display: flex;
   align-items: flex-start;
   gap: 20px;
-  margin-bottom: 16px;
-  padding: 16px 24px 0;
+  padding: 20px 24px 0;
 }
 
 .avatar-wrap {
   position: relative;
-  width: 76px;
-  height: 76px;
-  border-radius: 0;
-  overflow: hidden;
-  cursor: pointer;
-  flex-shrink: 0;
+  width: 76px; height: 76px;
+  border-radius: 0; overflow: hidden;
+  cursor: pointer; flex-shrink: 0;
   background: #111;
-
   &:hover .avatar-lens { opacity: 1; }
 }
 
@@ -510,9 +568,7 @@ function submitPwd() {
   position: absolute; inset: 0;
   background: rgba(0,0,0,0.54);
   display: flex; align-items: center; justify-content: center;
-  opacity: 0;
-  transition: opacity 0.14s ease;
-  color: #fff;
+  opacity: 0; transition: opacity 0.14s ease; color: #fff;
 }
 
 .avatar-meta {
@@ -539,8 +595,7 @@ function submitPwd() {
   display: inline-flex; align-items: center;
   font-size: 9px; font-weight: 900;
   letter-spacing: 0.14em; text-transform: uppercase;
-  color: #bc0000;
-  background: rgba(188,0,0,0.07);
+  color: #bc0000; background: rgba(188,0,0,0.07);
   border: 1px solid rgba(188,0,0,0.18);
   padding: 2px 6px; border-radius: 0;
   width: fit-content; margin-top: 4px;
@@ -551,11 +606,10 @@ function submitPwd() {
   margin-top: 8px;
 }
 
-/* ── Data table — vfasky divide-y style ── */
+/* ── Data table ── */
 .data-table {
-  display: flex;
-  flex-direction: column;
-  padding: 0 24px;
+  display: flex; flex-direction: column;
+  padding: 0 24px 4px;
 }
 
 .data-row {
@@ -569,24 +623,15 @@ function submitPwd() {
 
   &.last, &:last-child { border-bottom: none; }
 
-  @media (max-width: 640px) {
-    grid-template-columns: 1fr;
-    min-height: auto;
-    padding: 10px 0;
-  }
-
   @media (max-width: 480px) {
     grid-template-columns: 1fr;
-    min-height: auto;
-    padding: 10px 0;
+    min-height: auto; padding: 10px 0;
   }
 }
 
 .data-key {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--muted, #666666);
-  flex-shrink: 0;
+  font-size: 13px; font-weight: 500;
+  color: var(--muted, #666666); flex-shrink: 0;
 }
 
 .data-val {
@@ -609,28 +654,33 @@ function submitPwd() {
   background: transparent; border: none; cursor: pointer;
   font-size: 12px; font-weight: 700;
   color: #bc0000; padding: 0;
-  transition: opacity 0.12s; user-select: none;
-  font-family: inherit;
-
+  transition: opacity 0.12s; user-select: none; font-family: inherit;
   &:hover { opacity: 0.65; }
   &.dim { color: var(--secondary-text-color); font-weight: 600; }
 }
 
-/* ── Editor ── */
+/* ── Editor shell ── */
 .editor-shell {
   border: 1px solid var(--light-border-color);
   border-radius: 0; overflow: hidden;
-  height: 160px;
+  height: 200px;
 }
 
 /* ── Auto-reply ── */
+.autoreply-toggle {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+
+.toggle-label {
+  font-size: 14px; font-weight: 700;
+  color: var(--el-text-color-primary);
+  margin-bottom: 4px;
+}
+
 .autoreply-body {
   display: flex; flex-direction: column; gap: 12px;
   overflow: hidden; margin-top: 4px;
-}
-
-.section-action-bar {
-  display: flex; justify-content: flex-end;
 }
 
 .expand-enter-active {
@@ -643,165 +693,25 @@ function submitPwd() {
   opacity: 0; transform: translateY(-6px); max-height: 0;
 }
 .expand-enter-to, .expand-leave-from {
-  opacity: 1; transform: translateY(0); max-height: 300px;
+  opacity: 1; transform: translateY(0); max-height: 400px;
 }
 
 /* ── Danger zone ── */
-.danger-section {
-  padding-top: 20px;
-}
-
-.mail-panel {
-  padding: 20px;
-}
-
 .danger-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  padding: 0 24px 20px;
+  padding: 20px 24px 24px;
 
   @media (max-width: 520px) {
     flex-direction: column; align-items: flex-start;
-  }
-
-  @media (max-width: 480px) {
-    padding: 0 16px 16px;
-    .el-button { width: 100%; }
   }
 }
 
 .danger-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .danger-heading { font-size: 13.5px; font-weight: 700; color: var(--el-text-color-primary); }
 .danger-desc-text { font-size: 12.5px; line-height: 1.5; color: var(--regular-text-color); }
-
-/* ═══════════════════════════════════════════════
-   RIGHT — info sidebar
-═══════════════════════════════════════════════ */
-.settings-sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  position: sticky;
-  top: 24px;
-
-  @media (max-width: 1160px) {
-    display: none; /* hidden on single-col layout */
-  }
-}
-
-.sidebar-block {
-  padding: 18px 0 18px;
-  border-bottom: 1px solid var(--light-border-color);
-
-  &:first-child { padding-top: 0; }
-  &:last-of-type { border-bottom: none; }
-}
-
-.sidebar-block-label {
-  font-size: 9.5px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: var(--secondary-text-color);
-  margin-bottom: 10px;
-}
-
-.sidebar-block-text {
-  font-size: 12.5px;
-  line-height: 1.7;
-  color: var(--regular-text-color);
-  margin: 0;
-}
-
-/* Page index navigation */
-.page-index {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-
-.index-item {
-  display: block;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--regular-text-color);
-  text-decoration: none;
-  padding: 5px 0 5px 10px;
-  border-left: 2px solid transparent;
-  transition: border-color 0.12s, color 0.12s;
-
-  &:hover {
-    color: var(--el-text-color-primary);
-    border-left-color: #bc0000;
-  }
-
-  &.danger-link:hover { color: #bc0000; }
-}
-
-/* Account meta-list */
-.meta-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin: 0;
-}
-
-.meta-pair {
-  display: grid;
-  grid-template-columns: 60px 1fr;
-  gap: 8px;
-  align-items: baseline;
-
-  dt {
-    font-size: 9.5px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--secondary-text-color);
-  }
-
-  dd {
-    font-size: 12.5px;
-    color: var(--el-text-color-primary);
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    &.mono {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 11.5px;
-      color: var(--regular-text-color);
-    }
-  }
-}
-
-/* Help note */
-.sidebar-note {
-  display: flex;
-  align-items: flex-start;
-  gap: 7px;
-  padding: 14px 12px;
-  border: 1px solid var(--light-border-color);
-  border-left: 3px solid var(--light-border-color);
-  border-radius: 0;
-  margin-top: 20px;
-  background: var(--extra-light-fill);
-
-  .note-icon {
-    color: var(--secondary-text-color);
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-
-  span {
-    font-size: 12px;
-    line-height: 1.6;
-    color: var(--secondary-text-color);
-  }
-}
 
 /* ── Password dialog ── */
 .pwd-form {

@@ -31,13 +31,7 @@ const routes = [
                     menu: true
                 }
             },
-            {
-                path: '/rules',
-                name: 'rules',
-                component: () => import('@/views/rules/index.vue'),
-                meta: { title: 'emailRules', name: 'rules', menu: true }
-            },
-            {
+{
                 path: '/archive',
                 name: 'archive',
                 component: () => import('@/views/archive/index.vue'),

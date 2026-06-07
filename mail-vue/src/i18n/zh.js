@@ -135,6 +135,8 @@ const zh = {
     removeAvatar: '移除头像',
     avatarTip: '支持 JPG、PNG，建议正方形图片',
     dangerZone: '危险区域',
+    mailManagement: '邮箱管理',
+    mailManagementDesc: '管理你绑定的邮箱账号',
     change: '修改',
     changePwdBtn: '修改密码',
     username: '用户名',

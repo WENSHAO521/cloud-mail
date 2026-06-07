@@ -170,8 +170,7 @@ const navItems = [
   { name: 'spam',      labelKey: 'spam',          icon: 'psg:spam' },
   { name: 'templates', labelKey: 'templates',     icon: 'psg:template' },
   { name: 'groups',    labelKey: 'contactGroups', icon: 'psg:group' },
-  { name: 'rules',     labelKey: 'emailRules',    icon: 'material-symbols:rule-rounded' },
-  { name: 'setting',   labelKey: 'settings',      icon: 'psg:settings' },
+{ name: 'setting',   labelKey: 'settings',      icon: 'psg:settings' },
 ];
 
 const adminItems = [

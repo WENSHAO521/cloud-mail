@@ -135,6 +135,8 @@ const en = {
     removeAvatar: 'Remove',
     avatarTip: 'JPG or PNG, square image recommended',
     dangerZone: 'Danger Zone',
+    mailManagement: 'Mail Management',
+    mailManagementDesc: 'Manage your linked email accounts',
     change: 'Change',
     changePwdBtn: 'Change',
     username: 'Username',
