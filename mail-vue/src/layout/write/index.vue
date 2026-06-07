@@ -544,7 +544,7 @@ async function sendEmail() {
   }
 
   if (!form.content) {
-    form.content = editor.value.getContent();
+    try { form.content = editor.value.getContent() } catch {}
   }
 
   if (!form.content) {
@@ -690,6 +690,11 @@ function focusChange() {
   if (selectStatus) openSelect()
 }
 
+function sigBlock() {
+  const sig = userStore.user.signature
+  return sig ? `<p><br></p><p style="color:#999;margin-top:0">-- </p>${sig}` : ''
+}
+
 function openForward(email) {
   resetForm();
 
@@ -702,9 +707,11 @@ function openForward(email) {
 
   setTimeout(() => {
     defValue.value = `
+      ${sigBlock()}
+      <p><br></p>
       ${formatImage(email.content) || `<pre style="font-family: inherit;word-break: break-word;white-space: pre-wrap;margin: 0">${email.text}</pre>`}
     `
-    open()
+    _showWindow()
 
     nextTick(() => {
       backReply.content = editor.value.getContent()
@@ -756,6 +763,7 @@ function openReplyAll(email) {
   defValue.value = ''
   setTimeout(() => {
     defValue.value = `
+    ${sigBlock()}
     <div></div>
     <div><br>
         ${formatDetailDate(email.createTime)} ${email.name} &lt${email.sendEmail}&gt ${t('wrote')}:
@@ -763,7 +771,7 @@ function openReplyAll(email) {
     <blockquote class="mceNonEditable" style="margin:0 0 0 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex;">
       <article>${formatImage(email.content) || `<pre style="font-family:inherit;word-break:break-word;white-space:pre-wrap;margin:0">${email.text}</pre>`}</article>
     </blockquote>`
-    open()
+    _showWindow()
     nextTick(() => {
       backReply.content = editor.value.getContent()
       backReply.subject = form.subject
@@ -792,6 +800,7 @@ function openReply(email) {
 
   setTimeout(() => {
     defValue.value = `
+    ${sigBlock()}
     <div></div>
     <div>
     <br>
@@ -802,7 +811,7 @@ function openReply(email) {
           ${formatImage(email.content) || `<pre style="font-family: inherit;word-break: break-word;white-space: pre-wrap;margin: 0">${email.text}</pre>`}
       </article>
     </blockquote>`
-    open()
+    _showWindow()
 
     nextTick(() => {
       backReply.content = editor.value.getContent()
@@ -850,7 +859,9 @@ function selectSender(acc) {
   form.name = acc.name || ''
 }
 
-function open() {
+// Shared setup called by open(), openReply(), openReplyAll(), openForward()
+// Does NOT touch defValue — callers set their own editor content.
+function _showWindow() {
   if (!accountStore.currentAccount.email) {
     form.sendEmail = userStore.user.email;
     form.accountId = userStore.user.account.accountId;
@@ -860,6 +871,14 @@ function open() {
     form.accountId = accountStore.currentAccount.accountId;
     form.name = accountStore.currentAccount.name;
   }
+  show.value = true;
+  try { editor.value.focus() } catch {}
+  loadTemplates()
+  loadSenderAccounts()
+}
+
+function open() {
+  _showWindow()
   const sig = userStore.user.signature
   const sigHtml = sig
     ? `<p><br></p><p><br></p><p style="color:#999;margin-top:0">-- </p>${sig}`
@@ -867,10 +886,6 @@ function open() {
   // Reset to '' first so watcher fires even when sigHtml hasn't changed since last open
   defValue.value = ''
   nextTick(() => { defValue.value = sigHtml })
-  show.value = true;
-  editor.value.focus()
-  loadTemplates()
-  loadSenderAccounts()
 }
 
 function openDraft(draft) {

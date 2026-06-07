@@ -80,22 +80,26 @@ function clearEditor() {
   }
 }
 
+const tinyBase = import.meta.env.BASE_URL + 'tinymce'
+
 function initTinyMCE() {
   if (window.tinymce) {
     initEditor();
   } else {
     showLoading.value = true;
     const script = document.createElement('script');
-    script.src = '/tinymce/tinymce.min.js';
-    script.onload = () => initEditor();
+    script.src = tinyBase + '/tinymce.min.js';
+    script.onload = () => { showLoading.value = false; initEditor(); };
+    script.onerror = () => { showLoading.value = false; };
     document.head.appendChild(script);
-    showLoading.value = false;
   }
 }
 
 function initEditor() {
   window.tinymce.init({
     selector: `#${props.editorId}`,
+    base_url: tinyBase,
+    suffix: '.min',
     statusbar: false,
     height: props.height,
     auto_focus: true,
@@ -103,7 +107,7 @@ function initEditor() {
     //remove_script_host: false, // 阻止删除 URL 中的域名
     forced_root_block: 'div',
     skin: `${uiStore.dark ? 'oxide-dark' : 'oxide'}`,
-    content_css: `/tinymce/css/index.css,${uiStore.dark ? 'dark' : 'default'}`,
+    content_css: `${tinyBase}/css/index.css,${uiStore.dark ? 'dark' : 'default'}`,
     content_style: `
       @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto:wght@400;700&family=Open+Sans:wght@400;600&family=Lato:wght@400;700&family=Poppins:wght@400;600&family=Nunito:wght@400;600&family=Montserrat:wght@400;600&family=Source+Sans+3:wght@400;600&family=Raleway:wght@400;600&family=Ubuntu:wght@400;500&family=Merriweather:wght@400;700&family=Playfair+Display:wght@400;600&family=Lora:wght@400;600&family=EB+Garamond:wght@400;500&family=Noto+Serif:wght@400;700&family=Oswald:wght@400;600&family=Roboto+Mono:wght@400;500&family=Source+Code+Pro:wght@400;600&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700&family=Noto+Serif+SC:wght@400;700&family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&display=swap');
       :root {
