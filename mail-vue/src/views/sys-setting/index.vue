@@ -120,6 +120,9 @@
                 <div>
                   <span>{{ $t('autoDeleteDays') }}</span>
                   <p>{{ $t('autoDeleteDaysDesc') }}</p>
+                  <p v-if="setting.autoDeleteDays > 0" class="danger-warn">
+                    {{ $t('autoDeleteDaysWarn', { n: setting.autoDeleteDays }) }}
+                  </p>
                 </div>
                 <div>
                   <el-input-number class="setting-number" @change="change" v-model="setting.autoDeleteDays" :min="0" :max="365" :step="1"/>
@@ -1872,6 +1875,12 @@ function editSetting(settingForm, refreshStatus = true) {
       font-size: 13px;
       font-weight: 550;
       line-height: 1.35;
+
+      &.danger-warn {
+        color: #bc0000;
+        font-weight: 600;
+        margin-top: 6px;
+      }
     }
   }
 

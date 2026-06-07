@@ -458,6 +458,7 @@ const en = {
     mustNotContainDesc: 'Separate with commas',
     autoDeleteDays: 'Auto-Delete After (Days)',
     autoDeleteDaysDesc: 'Automatically delete emails older than N days. Set to 0 to disable. (Runs daily via cron)',
+    autoDeleteDaysWarn: '⚠ Active: emails older than {n} day(s) will be permanently deleted and cannot be recovered.',
     blackSubjectDesc: 'Subject',
     blackContentDesc: 'Content',
     blackFromDesc: 'Sender or domain',
