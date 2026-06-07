@@ -292,17 +292,24 @@ onActivated(() => {
   })
 })
 
+const onResize = () => { isMobile.value = innerWidth < 1367 }
+const onWheel = () => { if (dropdownShow.value) dropdownRef.value.handleClose() }
+
 onMounted(() => {
   timer = setInterval(() => {
     emailList.forEach(email => { email.formatCreateTime = fromNow(email.createTime); })
   }, 1000 * 60);
+  window.addEventListener('resize', onResize)
+  window.addEventListener('wheel', onWheel)
 })
 
-onUnmounted(() => { clearInterval(timer) })
+onUnmounted(() => {
+  clearInterval(timer)
+  window.removeEventListener('resize', onResize)
+  window.removeEventListener('wheel', onWheel)
+})
 
 getEmailList()
-
-window.onresize = () => { isMobile.value = innerWidth < 1367 }
 
 function onScroll(e) { scrollTop = e.target.scrollTop; }
 
@@ -327,8 +334,6 @@ const itemHeight = computed(() => {
   return isMobile.value ? 52 : 44;
 })
 
-watch(emailList, () => { nextTick(() => {}) })
-watch(scrollbarRef, () => { nextTick(() => {}) })
 watch(itemHeight, () => { keyCount.value++ })
 
 watch(followLoading, (v) => {
@@ -354,8 +359,6 @@ watch(() => emailStore.cancelStarEmailId, () => {
 watch(() => emailStore.addStarEmailId, () => {
   emailList.forEach(email => { if (email.emailId === emailStore.addStarEmailId) email.isStar = 1 })
 })
-
-window.addEventListener('wheel', () => { if (dropdownShow.value) dropdownRef.value.handleClose(); })
 
 function openReply(email) { uiStore.writerRef.openReply(email) }
 function openReplyAll(email) { uiStore.writerRef.openReplyAll(email) }
@@ -493,7 +496,7 @@ function addItem(email) {
   const existIndex = emailList.findIndex(item => item.emailId === email.emailId)
   if (existIndex > -1) return false;
   email.formatText = htmlToText(email);
-  email.formatCreateTime = fromNow(email.formatCreateTime);
+  email.formatCreateTime = fromNow(email.createTime);
   if (props.timeSort) {
     if (noLoading.value) { handleList([email]); emailList.push(email); }
     if (email.emailId > latestEmail.value?.emailId) latestEmail.value = email
