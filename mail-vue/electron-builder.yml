@@ -2,9 +2,6 @@ appId: com.psg.mail
 productName: PSG Mail
 copyright: Copyright © 2025 Panorama Scholarly Group
 
-# Entry point
-main: electron/main.cjs
-
 directories:
   output: dist-electron
 

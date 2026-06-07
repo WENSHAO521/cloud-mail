@@ -1,7 +1,9 @@
 {
-  "name": "mail-vue",
+  "name": "psg-mail",
+  "description": "PSG Mail — Panorama Scholarly Group institutional email client",
+  "author": "Panorama Scholarly Group",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "main": "electron/main.cjs",
   "scripts": {
