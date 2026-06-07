@@ -11,7 +11,7 @@
       </div>
     </div>
 
-    <!-- Right: search + compose + notifications -->
+    <!-- Right: search + compose -->
     <div class="m-right">
       <button class="m-icon-btn" :aria-label="$t('search')" @click="openSearch">
         <Icon icon="iconoir:search" width="22" height="22"/>
@@ -19,7 +19,6 @@
       <button v-if="canSend" class="m-icon-btn m-compose" :aria-label="$t('compose')" @click="openCompose">
         <Icon icon="psg:compose" width="21" height="21"/>
       </button>
-      <NotificationPanel/>
     </div>
   </header>
 </template>
@@ -31,7 +30,6 @@ import { Icon } from '@iconify/vue'
 import { useI18n } from 'vue-i18n'
 import { useUiStore } from '@/store/ui.js'
 import { hasPerm } from '@/perm/perm.js'
-import NotificationPanel from '@/components/notification-panel/index.vue'
 
 const route = useRoute()
 const uiStore = useUiStore()
@@ -138,10 +136,4 @@ function openSearch() {
 }
 
 .m-compose { color: #bc0000; }
-
-/* NotificationPanel trigger sizing to match */
-:deep(.notif-trigger) {
-  width: 44px;
-  height: 44px;
-}
 </style>
