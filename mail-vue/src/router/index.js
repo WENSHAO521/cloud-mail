@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from 'vue-router'
+import {createRouter, createWebHistory, createWebHashHistory} from 'vue-router'
 import NProgress from 'nprogress';
 import {useUiStore} from "@/store/ui.js";
 import {useSettingStore} from "@/store/setting.js";
@@ -86,8 +86,11 @@ const routes = [
 ]
 
 
+// Electron production loads from file:// — use hash history to avoid 404s
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    history: window.location.protocol === 'file:'
+        ? createWebHashHistory()
+        : createWebHistory(import.meta.env.BASE_URL),
     routes
 })
 

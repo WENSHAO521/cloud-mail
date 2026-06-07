@@ -1,0 +1,45 @@
+appId: com.psg.mail
+productName: PSG Mail
+copyright: Copyright © 2025 Panorama Scholarly Group
+
+# Entry point
+main: electron/main.cjs
+
+directories:
+  output: dist-electron
+
+# What to bundle
+files:
+  - dist/**
+  - electron/**
+  - package.json
+
+# Windows
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  icon: public/pwa-512.png
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: PSG Mail
+
+# macOS
+mac:
+  target:
+    - target: dmg
+      arch: [x64, arm64]
+  icon: public/pwa-512.png
+  category: public.app-category.productivity
+
+# Linux
+linux:
+  target:
+    - target: AppImage
+      arch: [x64]
+  icon: public/pwa-512.png
+  category: Network

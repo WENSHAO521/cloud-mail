@@ -121,8 +121,13 @@ async function latest() {
                 // push to notification store
                 notificationStore.push(email)
 
-                // browser notification when tab is not visible
-                if (
+                // native notification: Electron always fires; browser only when hidden
+                if (window.electronAPI) {
+                  window.electronAPI.sendNotification(
+                    email.name || email.sendEmail || 'PSG Mail',
+                    email.subject || ''
+                  )
+                } else if (
                   document.visibilityState === 'hidden' &&
                   typeof Notification !== 'undefined' &&
                   Notification.permission === 'granted'
