@@ -609,7 +609,7 @@ function loadData() { getEmailList() }
 /* ── Container ────────────────────────────────────────────── */
 .email-container {
   display: grid;
-  grid-template-rows: auto auto 1fr;
+  grid-template-rows: auto 1fr;
   height: 100%;
   overflow: hidden;
   background: #f9f9f9;
