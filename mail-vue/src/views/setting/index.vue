@@ -559,7 +559,7 @@ function submitPwd() {
 
 .data-row {
   display: grid;
-  grid-template-columns: 160px 1fr;
+  grid-template-columns: 130px 1fr;
   align-items: center;
   min-height: 52px;
   padding: 12px 0;
@@ -569,6 +569,12 @@ function submitPwd() {
   &.last, &:last-child { border-bottom: none; }
 
   @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding: 10px 0;
+  }
+
+  @media (max-width: 480px) {
     grid-template-columns: 1fr;
     min-height: auto;
     padding: 10px 0;
@@ -653,9 +659,15 @@ function submitPwd() {
   align-items: center;
   justify-content: space-between;
   gap: 20px;
+  padding: 0 24px 20px;
 
   @media (max-width: 520px) {
     flex-direction: column; align-items: flex-start;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 16px 16px;
+    .el-button { width: 100%; }
   }
 }
 

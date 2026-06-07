@@ -376,6 +376,7 @@ function handleDelete() {
   @media (max-width: 1280px) { padding: 24px 24px 40px; }
   @media (max-width: 1024px) { padding: 20px 20px 36px; }
   @media (max-width: 767px)  { padding: 16px 16px 32px; }
+  @media (max-width: 420px)  { padding: 16px 14px; }
 }
 
 /* ── Subject ─────────────────────────────────────────────── */
@@ -502,7 +503,7 @@ function handleDelete() {
   text-transform: uppercase;
   color: var(--muted, #7e7576);
   flex-shrink: 0;
-  width: 28px;
+  min-width: 28px;
 }
 
 .meta-field-value {
@@ -547,7 +548,7 @@ function handleDelete() {
 
 /* ── Attachments ─────────────────────────────────────────── */
 .att-container {
-  margin-top: 40px; max-width: 560px;
+  margin-top: 40px; max-width: min(100%, 560px);
   border: 1px solid var(--light-border, #000000); padding: 16px;
 }
 .att-header {

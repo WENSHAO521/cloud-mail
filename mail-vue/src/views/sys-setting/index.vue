@@ -1773,6 +1773,8 @@ function editSetting(settingForm, refreshStatus = true) {
     font-size: 20px;
     font-weight: 750;
     line-height: 1.2;
+
+    @media (max-width: 640px) { font-size: 16px; }
   }
 
   p {
@@ -1895,6 +1897,11 @@ function editSetting(settingForm, refreshStatus = true) {
       justify-content: flex-start;
       text-align: left;
     }
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    .setting-item-value { margin-top: 6px; }
   }
 }
 

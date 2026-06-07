@@ -142,7 +142,7 @@
     </div><!-- /space-y -->
   </div><!-- /page-outer -->
   <!-- dialogs -->
-  <el-dialog class="dialog" v-model="setPwdShow" :title="$t('changePassword')" @closed="resetUserForm">
+  <el-dialog class="dialog" v-model="setPwdShow" :title="$t('changePassword')" width="min(400px, calc(100vw - 32px))" @closed="resetUserForm">
       <div class="dialog-box">
         <el-input v-model="userForm.password" type="password" :placeholder="$t('newPassword')" autocomplete="off">
         </el-input>
@@ -151,7 +151,7 @@
         </el-button>
       </div>
     </el-dialog>
-    <el-dialog class="dialog" v-model="setTypeShow" :title="$t('changePerm')" @closed="resetUserForm">
+    <el-dialog class="dialog" v-model="setTypeShow" :title="$t('changePerm')" width="min(400px, calc(100vw - 32px))" @closed="resetUserForm">
       <div class="dialog-box">
         <el-input disabled :model-value="$t('admin')" v-if="userForm.type === 0"/>
         <el-select v-else v-model="userForm.type" placeholder="Select">
@@ -162,7 +162,7 @@
         </el-button>
       </div>
     </el-dialog>
-    <el-dialog v-model="showAdd" :title="$t('addUser')">
+    <el-dialog v-model="showAdd" :title="$t('addUser')" width="min(400px, calc(100vw - 32px))">
       <div class="container">
         <el-input v-model="addForm.email" type="text" :placeholder="$t('emailAccount')" autocomplete="off">
           <template #append>
@@ -1038,7 +1038,7 @@ function adjustWidth() {
   accountNumShow.value = width > 650
   sendNumShow.value = width > 685
   typeShow.value = width > 767
-  emailWidth.value = width > 480 ? 230 : null
+  emailWidth.value = width > 480 ? 160 : null
   settingWidth.value = width < 480 ? (locale.value === 'en' ? 85 : 75) : null
   expandWidth.value = width < 480 ? 30 : 35
   pagerCount.value = width < 768 ? 7 : 11
@@ -1115,7 +1115,7 @@ function adjustWidth() {
   flex-shrink: 0;
 
   .search-input {
-    width: min(220px, calc(100vw - 160px));
+    width: min(160px, calc(100vw - 200px));
   }
 
   .icon {

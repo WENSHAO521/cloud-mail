@@ -217,7 +217,7 @@ function clickLogout() {
     position: fixed;
     inset: 0 auto 0 0;
     z-index: 50;
-    width: min(86vw, 310px);
+    width: min(88vw, 310px);
     transform: translateX(-105%);
     transition: transform 160ms ease;
 
@@ -355,8 +355,8 @@ function clickLogout() {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   border: none;
   background: transparent;
   cursor: pointer;
@@ -398,7 +398,7 @@ function clickLogout() {
 .sidebar-nav-link {
   display: flex;
   align-items: center;
-  height: 40px;
+  height: 44px;
   margin: 0 10px;
   padding: 0 10px 0 14px;
   font-size: 11px;

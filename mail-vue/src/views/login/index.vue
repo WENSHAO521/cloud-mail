@@ -841,6 +841,9 @@ function submitRegister() {
 
   @media (max-width: 980px) { flex: 1 1 auto; }
   @media (max-width: 767px) { padding: 20px; }
+  @media (max-width: 420px) {
+    padding: 12px;
+  }
 }
 
 .container {
@@ -856,6 +859,10 @@ function submitRegister() {
   flex-direction: column;
 
   @media (max-width: 767px) { padding: 32px 22px 22px; }
+  @media (max-width: 420px) {
+    padding: 28px 18px 20px;
+    max-width: 100%;
+  }
 }
 
 /* Compact in-card brand (shown when side panel is hidden) */
@@ -878,6 +885,11 @@ function submitRegister() {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: #111111;
+
+  @media (max-width: 420px) {
+    font-size: 11px;
+    letter-spacing: 0.02em;
+  }
 }
 .card-brand-sub {
   font-family: 'IBM Plex Mono', monospace;
@@ -1162,8 +1174,8 @@ function submitRegister() {
 }
 
 .lang-btn {
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;

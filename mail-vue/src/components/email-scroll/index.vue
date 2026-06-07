@@ -710,8 +710,9 @@ function loadData() { getEmailList() }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  /* min 32px for touch targets */
+  width: 32px;
+  height: 32px;
   border: 1px solid transparent;
   background: transparent;
   border-radius: 0;
@@ -805,7 +806,7 @@ function loadData() { getEmailList() }
 
   /* ── Mobile: stacked 2-row card layout ── */
   @media (max-width: 768px) {
-    grid-template-columns: 40px 1fr auto;
+    grid-template-columns: 36px 1fr auto;
     grid-template-rows: auto auto;
     gap: 0 8px;
     min-height: 56px;
@@ -852,6 +853,13 @@ function loadData() { getEmailList() }
     /* Hide long preview on mobile to reduce clutter */
     .mail-preview-inline { display: none; }
   }
+}
+
+/* 480px: hide preview text, boost sender/subject readability */
+@media (max-width: 480px) {
+  :deep(.mail-preview-inline) { display: none !important; }
+  :deep(.row-sender .mail-name) { font-size: 15px; }
+  :deep(.row-subject-cell .subject-text) { font-size: 15px; }
 }
 
 .dark :deep(.mail-row) {
