@@ -240,6 +240,12 @@ function clickLogout() {
   flex-shrink: 0;
   border-bottom: 1px solid var(--light-border, #000000);
   border-left: 3px solid #bc0000;
+  /* macOS hiddenInset: reserve space for traffic-light buttons (≈52px wide, 28px tall) */
+  -webkit-app-region: drag;
+}
+
+.sidebar-brand * {
+  -webkit-app-region: no-drag;
 }
 
 .brand-text-block {

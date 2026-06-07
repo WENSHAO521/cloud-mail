@@ -14,7 +14,8 @@
   <div class="app-shell"
        :data-mode="isMailRoute ? 'mail' : 'workspace'"
        :data-collapsed="String(sidebarCollapsed)"
-       :data-mobile-detail="String(uiStore.mobileDetailOpen)">
+       :data-mobile-detail="String(uiStore.mobileDetailOpen)"
+       :data-platform="platform">
 
     <!-- Mobile sidebar backdrop -->
     <div class="sidebar-backdrop"
@@ -87,6 +88,7 @@ const settingStore = useSettingStore()
 const writerRef = ref({})
 const cmdPaletteRef = ref(null)
 const showShortcuts = ref(false)
+const platform = window.electronAPI?.platform ?? 'web'
 let elNotification = null
 let noticeStyle = null
 
@@ -260,6 +262,15 @@ onBeforeUnmount(() => {
     display: block !important;
     height: 100dvh;
   }
+}
+
+/* ── macOS: traffic-light safe area ────────────────────────── */
+/* hiddenInset puts traffic lights in top-left of the window (inside the sidebar).
+   The sidebar-brand block already has -webkit-app-region:drag which acts as the
+   drag handle. No extra padding needed — traffic lights sit at y=18 which aligns
+   naturally with the brand block padding. */
+.app-shell[data-platform="darwin"] {
+  /* nothing extra needed for now — handled per-pane below if required */
 }
 
 /* ── Sidebar backdrop (mobile) ─────────────────────────────── */

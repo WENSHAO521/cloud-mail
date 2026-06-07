@@ -4,6 +4,7 @@ copyright: Copyright © 2025 Panorama Scholarly Group
 
 directories:
   output: dist-electron
+  buildResources: build
 
 # What to bundle
 files:
@@ -11,12 +12,12 @@ files:
   - electron/**
   - package.json
 
-# Windows
+# ── Windows ──────────────────────────────────────────────────
 win:
   target:
     - target: nsis
       arch: [x64]
-  icon: public/pwa-512.png
+  icon: build/icon.ico
 
 nsis:
   oneClick: false
@@ -24,19 +25,43 @@ nsis:
   createDesktopShortcut: true
   createStartMenuShortcut: true
   shortcutName: PSG Mail
+  installerIcon: build/icon.ico
+  uninstallerIcon: build/icon.ico
 
-# macOS
+# ── macOS ─────────────────────────────────────────────────────
 mac:
   target:
     - target: dmg
       arch: [x64, arm64]
-  icon: public/pwa-512.png
+    - target: zip
+      arch: [x64, arm64]
+  icon: build/icon.icns
   category: public.app-category.productivity
+  # For unsigned local builds — remove these for App Store / notarized distribution
+  identity: null
+  hardenedRuntime: false
+  gatekeeperAssess: false
 
-# Linux
+dmg:
+  title: PSG Mail ${version}
+  icon: build/icon.icns
+  iconSize: 80
+  contents:
+    - x: 180
+      y: 170
+      type: file
+    - x: 480
+      y: 170
+      type: link
+      path: /Applications
+  window:
+    width: 660
+    height: 400
+
+# ── Linux ─────────────────────────────────────────────────────
 linux:
   target:
     - target: AppImage
       arch: [x64]
-  icon: public/pwa-512.png
+  icon: build/icon.png
   category: Network

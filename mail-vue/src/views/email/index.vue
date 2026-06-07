@@ -64,7 +64,10 @@ onMounted(() => {
 })
 
 const inboxUnread = computed(() => scroll.value?.unreadCount ?? 0)
-watch(inboxUnread, v => { emailStore.inboxUnreadCount = v })
+watch(inboxUnread, v => {
+  emailStore.inboxUnreadCount = v
+  window.electronAPI?.setBadgeCount?.(v)
+})
 
 
 watch(() => accountStore.currentAccountId, () => {
