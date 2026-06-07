@@ -198,7 +198,7 @@
     <!-- Language switcher — fixed top-right -->
     <el-dropdown class="lang-switcher" placement="bottom-end" trigger="click">
       <button class="lang-btn" :title="settingStore.lang === 'zh' ? '切换语言' : 'Switch Language'">
-        <Icon icon="material-symbols:language-rounded" width="18" height="18"/>
+        <span class="lang-current">{{ settingStore.lang === 'zh' ? '中' : 'EN' }}</span>
       </button>
       <template #dropdown>
         <el-dropdown-menu>
@@ -1154,15 +1154,15 @@ function submitRegister() {
 }
 
 .lang-btn {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid transparent;
-  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid #cccccc;
+  background: #ffffff;
   cursor: pointer;
-  color: #7e7576;
+  color: #333333;
   transition: border-color 0.1s, color 0.1s;
 
   @media (hover: hover) {
@@ -1171,6 +1171,15 @@ function submitRegister() {
       color: #000000;
     }
   }
+}
+
+.lang-current {
+  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  pointer-events: none;
 }
 
 .lang-option {
