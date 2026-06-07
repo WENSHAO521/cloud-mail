@@ -48,16 +48,18 @@ function getIcon() {
     return img.isEmpty() ? nativeImage.createFromPath(pngPath) : img
   }
   if (isWin) {
-    const icoPath = isDev
-      ? path.join(__dirname, '..', 'build', 'icon.ico')
-      : path.join(__dirname, '..', 'dist', 'icon.ico')
-    const img = nativeImage.createFromPath(icoPath)
-    if (!img.isEmpty()) return img
+    // build/icon.ico is bundled in both dev and packaged app (see files in electron-builder.yml)
+    const icoPath = path.join(__dirname, '..', 'build', 'icon.ico')
+    const ico = nativeImage.createFromPath(icoPath)
+    if (!ico.isEmpty()) return ico
+    // fallback: original PNG (dev only, before first build)
+    const pngPath = path.join(__dirname, '..', 'public', 'image', 'psg-logo.png')
+    return nativeImage.createFromPath(pngPath)
   }
-  const iconFile = 'pwa-192.png'
+  // Linux
   const p = isDev
-    ? path.join(__dirname, '..', 'public', iconFile)
-    : path.join(__dirname, '..', 'dist', iconFile)
+    ? path.join(__dirname, '..', 'public', 'pwa-192.png')
+    : path.join(__dirname, '..', 'dist', 'pwa-192.png')
   return nativeImage.createFromPath(p)
 }
 

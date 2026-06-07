@@ -10,6 +10,9 @@ directories:
 files:
   - dist/**
   - electron/**
+  - build/icon.ico
+  - build/icon.icns
+  - build/icon.png
   - package.json
 
 # ── Windows ──────────────────────────────────────────────────
