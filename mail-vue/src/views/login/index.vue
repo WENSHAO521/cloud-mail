@@ -195,6 +195,29 @@
         </el-button>
       </div>
     </el-dialog>
+    <!-- Language switcher — fixed top-right -->
+    <el-dropdown class="lang-switcher" placement="bottom-end" trigger="click">
+      <button class="lang-btn" :title="settingStore.lang === 'zh' ? '切换语言' : 'Switch Language'">
+        <Icon icon="material-symbols:language-rounded" width="18" height="18"/>
+      </button>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item @click="changeLang('zh')">
+            <span class="lang-option">
+              <span class="lang-mark" :class="{ active: settingStore.lang === 'zh' }">ZH</span>
+              中文
+            </span>
+          </el-dropdown-item>
+          <el-dropdown-item @click="changeLang('en')">
+            <span class="lang-option">
+              <span class="lang-mark" :class="{ active: settingStore.lang === 'en' }">EN</span>
+              English
+            </span>
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
+
     <a v-show="settingStore.settings.projectLink" class="psg-link" href="https://panorama-sg.com" target="_blank">
       <span class="psg-link-text">PSG</span>
     </a>
@@ -237,6 +260,13 @@ function persistRemember() {
   } else {
     localStorage.removeItem('rememberLogin')
   }
+}
+
+function changeLang(lang) {
+  let setting = {}
+  try { setting = JSON.parse(localStorage.getItem('setting') || '{}') } catch {}
+  localStorage.setItem('setting', JSON.stringify({ ...setting, lang }))
+  window.location.reload()
 }
 
 function forgotPassword() {
@@ -1112,6 +1142,57 @@ function submitRegister() {
     text-transform: uppercase;
     color: #bc0000;
     text-decoration: none;
+  }
+}
+
+/* ── Language switcher ──────────────────────────────────────── */
+.lang-switcher {
+  position: fixed;
+  top: 14px;
+  right: 16px;
+  z-index: 1001;
+}
+
+.lang-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  color: #7e7576;
+  transition: border-color 0.1s, color 0.1s;
+
+  @media (hover: hover) {
+    &:hover {
+      border-color: #000000;
+      color: #000000;
+    }
+  }
+}
+
+.lang-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13px;
+}
+
+.lang-mark {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 1px 4px;
+  border: 1px solid #dddddd;
+  color: #999999;
+
+  &.active {
+    border-color: #bc0000;
+    color: #bc0000;
   }
 }
 </style>
