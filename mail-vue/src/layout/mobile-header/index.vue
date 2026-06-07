@@ -11,15 +11,6 @@
       </div>
     </div>
 
-    <!-- Right: search + compose -->
-    <div class="m-right">
-      <button class="m-icon-btn" :aria-label="$t('search')" @click="openSearch">
-        <Icon icon="iconoir:search" width="22" height="22"/>
-      </button>
-      <button v-if="canSend" class="m-icon-btn m-compose" :aria-label="$t('compose')" @click="openCompose">
-        <Icon icon="psg:compose" width="21" height="21"/>
-      </button>
-    </div>
   </header>
 </template>
 
@@ -29,13 +20,10 @@ import { useRoute } from 'vue-router'
 import { Icon } from '@iconify/vue'
 import { useI18n } from 'vue-i18n'
 import { useUiStore } from '@/store/ui.js'
-import { hasPerm } from '@/perm/perm.js'
 
 const route = useRoute()
 const uiStore = useUiStore()
 const { t } = useI18n()
-
-const canSend = computed(() => hasPerm('email:send'))
 
 const title = computed(() => {
   const key = route.meta?.title
@@ -44,14 +32,6 @@ const title = computed(() => {
 
 function openDrawer() {
   uiStore.asideShow = true
-}
-
-function openCompose() {
-  uiStore.writerRef?.open?.()
-}
-
-function openSearch() {
-  uiStore.commandPaletteShow = true
 }
 </script>
 
@@ -111,13 +91,6 @@ function openSearch() {
   min-width: 0;
 }
 
-.m-right {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  flex-shrink: 0;
-}
-
 /* 44px touch targets */
 .m-icon-btn {
   width: 44px;
@@ -134,6 +107,4 @@ function openSearch() {
 
   &:active { background: rgba(0, 0, 0, 0.08); }
 }
-
-.m-compose { color: #bc0000; }
 </style>

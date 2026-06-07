@@ -861,9 +861,12 @@ function open() {
     form.name = accountStore.currentAccount.name;
   }
   const sig = userStore.user.signature
-  defValue.value = sig
+  const sigHtml = sig
     ? `<p><br></p><p><br></p><p style="color:#999;margin-top:0">-- </p>${sig}`
     : ''
+  // Reset to '' first so watcher fires even when sigHtml hasn't changed since last open
+  defValue.value = ''
+  nextTick(() => { defValue.value = sigHtml })
   show.value = true;
   editor.value.focus()
   loadTemplates()
