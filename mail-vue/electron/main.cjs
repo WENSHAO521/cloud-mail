@@ -10,7 +10,7 @@ if (process.env.ELECTRON_RUN_AS_NODE) {
   return
 }
 
-const { app, BrowserWindow, ipcMain, Notification, nativeImage, shell, Menu } = require('electron')
+const { app, BrowserWindow, ipcMain, Notification, nativeImage, shell, Menu, Tray } = require('electron')
 const path = require('path')
 
 const isDev  = process.env.NODE_ENV === 'development'
@@ -18,12 +18,26 @@ const isMac  = process.platform === 'darwin'
 const isWin  = process.platform === 'win32'
 
 let win
+let tray
 let appIcon
+
+// ── Single instance lock ──────────────────────────────────────
+const gotLock = app.requestSingleInstanceLock()
+if (!gotLock) {
+  app.quit()
+  process.exit(0)
+}
+app.on('second-instance', () => {
+  if (win) {
+    if (win.isMinimized()) win.restore()
+    if (!win.isVisible()) win.show()
+    win.focus()
+  }
+})
 
 // ── Icon ─────────────────────────────────────────────────────
 function getIcon() {
   if (isMac) {
-    // macOS: prefer .icns; fall back to PNG (electron-builder handles ICNS at build time)
     const icnsPath = isDev
       ? path.join(__dirname, '..', 'build', 'icon.icns')
       : path.join(process.resourcesPath, 'build', 'icon.icns')
@@ -32,6 +46,13 @@ function getIcon() {
       : path.join(__dirname, '..', 'dist', 'pwa-512.png')
     const img = nativeImage.createFromPath(icnsPath)
     return img.isEmpty() ? nativeImage.createFromPath(pngPath) : img
+  }
+  if (isWin) {
+    const icoPath = isDev
+      ? path.join(__dirname, '..', 'build', 'icon.ico')
+      : path.join(__dirname, '..', 'dist', 'icon.ico')
+    const img = nativeImage.createFromPath(icoPath)
+    if (!img.isEmpty()) return img
   }
   const iconFile = 'pwa-192.png'
   const p = isDev
@@ -44,7 +65,7 @@ function getIcon() {
 function buildMacMenu() {
   const template = [
     {
-      label: app.name,           // "PSG Mail" (first menu = app name on macOS)
+      label: app.name,
       submenu: [
         { role: 'about' },
         { type: 'separator' },
@@ -128,14 +149,84 @@ function buildMacMenu() {
   return Menu.buildFromTemplate(template)
 }
 
+// ── Windows system tray ───────────────────────────────────────
+function createTray() {
+  if (!isWin) return
+  tray = new Tray(appIcon)
+  tray.setToolTip('PSG Mail')
+
+  const menu = Menu.buildFromTemplate([
+    {
+      label: 'Open PSG Mail',
+      click: () => { win?.show(); win?.focus() },
+    },
+    {
+      label: 'New Message',
+      click: () => {
+        win?.show()
+        win?.focus()
+        win?.webContents.executeJavaScript(
+          "document.dispatchEvent(new KeyboardEvent('keydown',{key:'c',bubbles:true}))"
+        ).catch(() => {})
+      },
+    },
+    { type: 'separator' },
+    {
+      label: 'Quit PSG Mail',
+      click: () => {
+        app.isQuitting = true
+        app.quit()
+      },
+    },
+  ])
+  tray.setContextMenu(menu)
+
+  tray.on('click', () => {
+    if (win?.isVisible()) {
+      win.focus()
+    } else {
+      win?.show()
+      win?.focus()
+    }
+  })
+
+  tray.on('double-click', () => {
+    win?.show()
+    win?.focus()
+  })
+}
+
+// ── Windows taskbar jump list ─────────────────────────────────
+function setWindowsJumpList() {
+  if (!isWin) return
+  app.setUserTasks([
+    {
+      program: process.execPath,
+      arguments: '',
+      iconPath: process.execPath,
+      iconIndex: 0,
+      title: 'Open PSG Mail',
+      description: 'Open PSG Mail',
+    },
+    {
+      program: process.execPath,
+      arguments: '--compose',
+      iconPath: process.execPath,
+      iconIndex: 0,
+      title: 'New Message',
+      description: 'Compose a new email',
+    },
+  ])
+}
+
 // ── Window ────────────────────────────────────────────────────
 function createWindow() {
   appIcon = getIcon()
 
   const macWindowOptions = isMac ? {
-    titleBarStyle: 'hiddenInset',        // keeps native traffic-light buttons
+    titleBarStyle: 'hiddenInset',
     trafficLightPosition: { x: 14, y: 18 },
-    vibrancy: 'under-window',            // frosted-glass effect (macOS 10.10+)
+    vibrancy: 'under-window',
     visualEffectState: 'active',
   } : {}
 
@@ -157,7 +248,6 @@ function createWindow() {
     },
   })
 
-  // Windows: hide default menu bar; macOS: use native app menu
   if (!isMac) {
     win.setMenuBarVisibility(false)
   } else {
@@ -172,11 +262,29 @@ function createWindow() {
 
   win.once('ready-to-show', () => {
     win.show()
-    // macOS: set initial dock icon (no badge at start)
     if (isMac && app.dock) app.dock.setIcon(appIcon)
+    if (isWin) {
+      createTray()
+      setWindowsJumpList()
+    }
   })
 
-  // Open external links in system browser
+  // Windows: hide to system tray instead of closing
+  win.on('close', (event) => {
+    if (isWin && !app.isQuitting) {
+      event.preventDefault()
+      win.hide()
+      if (tray && !tray._trayHintShown) {
+        tray._trayHintShown = true
+        tray.displayBalloon({
+          iconType: 'info',
+          title: 'PSG Mail',
+          content: 'PSG Mail is still running in the system tray.',
+        })
+      }
+    }
+  })
+
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith('http')) shell.openExternal(url)
     return { action: 'deny' }
@@ -188,13 +296,13 @@ function createWindow() {
 // ── App lifecycle ─────────────────────────────────────────────
 app.whenReady().then(createWindow)
 
+app.on('before-quit', () => { app.isQuitting = true })
+
 app.on('window-all-closed', () => {
-  // macOS convention: keep app running after last window closes
   if (!isMac) app.quit()
 })
 
 app.on('activate', () => {
-  // macOS: re-create window when dock icon is clicked with no windows open
   if (BrowserWindow.getAllWindows().length === 0) createWindow()
 })
 
@@ -210,6 +318,7 @@ ipcMain.on('notify', (_event, { title, body }) => {
   n.on('click', () => {
     if (win) {
       if (win.isMinimized()) win.restore()
+      if (!win.isVisible()) win.show()
       if (isMac) app.focus()
       win.focus()
     }
@@ -217,25 +326,58 @@ ipcMain.on('notify', (_event, { title, body }) => {
   n.show()
 })
 
-// ── IPC: Dock badge (macOS only) ──────────────────────────────
+// ── IPC: Badge / taskbar overlay ─────────────────────────────
 ipcMain.on('set-badge', (_event, count) => {
+  // macOS dock badge
   if (isMac && app.dock) {
     app.dock.setBadge(count > 0 ? String(count) : '')
   }
-  // Windows taskbar overlay badge
-  if (isWin && win) {
-    if (count > 0) {
-      const badge = nativeImage.createEmpty()
-      // Create a simple red circle badge programmatically
-      win.setOverlayIcon(null, '')
-      // Use a canvas-drawn badge via renderer, or skip for simplicity
-    } else {
-      win.setOverlayIcon(null, '')
+
+  // Windows: tray tooltip + taskbar overlay badge drawn via renderer canvas
+  if (isWin) {
+    if (tray) {
+      tray.setToolTip(count > 0 ? `PSG Mail — ${count} unread` : 'PSG Mail')
+    }
+    if (win) {
+      if (count > 0) {
+        const label = count > 99 ? '99+' : String(count)
+        const fontSize = label.length > 2 ? 7 : 11
+        win.webContents.executeJavaScript(`
+          (function() {
+            const c = document.createElement('canvas')
+            c.width = 20; c.height = 20
+            const ctx = c.getContext('2d')
+            ctx.beginPath()
+            ctx.arc(10, 10, 10, 0, Math.PI * 2)
+            ctx.fillStyle = '#bc0000'
+            ctx.fill()
+            ctx.fillStyle = 'white'
+            ctx.font = 'bold ${fontSize}px Arial'
+            ctx.textAlign = 'center'
+            ctx.textBaseline = 'middle'
+            ctx.fillText('${label}', 10, 10)
+            return c.toDataURL('image/png')
+          })()
+        `).then(dataUrl => {
+          if (win) {
+            const img = nativeImage.createFromDataURL(dataUrl)
+            win.setOverlayIcon(img, `${count} unread messages`)
+          }
+        }).catch(() => {})
+      } else {
+        win.setOverlayIcon(null, '')
+      }
     }
   }
 })
 
-// ── IPC: Window controls (for custom titlebar if needed) ──────
+// ── IPC: Window controls ──────────────────────────────────────
 ipcMain.on('window-minimize', () => win?.minimize())
 ipcMain.on('window-maximize', () => win?.isMaximized() ? win.unmaximize() : win.maximize())
-ipcMain.on('window-close',    () => win?.close())
+ipcMain.on('window-close',    () => {
+  if (isWin) {
+    win?.hide()
+  } else {
+    win?.close()
+  }
+})

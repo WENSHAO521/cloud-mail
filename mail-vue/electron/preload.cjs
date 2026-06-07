@@ -6,10 +6,15 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.send('notify', { title, body })
   },
 
-  // Dock badge (macOS) / taskbar badge (Windows)
+  // Dock badge (macOS) / taskbar overlay badge (Windows)
   setBadgeCount: (count) => {
     ipcRenderer.send('set-badge', count)
   },
+
+  // Window controls
+  minimize: () => ipcRenderer.send('window-minimize'),
+  maximize: () => ipcRenderer.send('window-maximize'),
+  close:    () => ipcRenderer.send('window-close'),
 
   // Platform info
   platform: process.platform,
