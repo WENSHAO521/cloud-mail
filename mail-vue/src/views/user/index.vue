@@ -521,11 +521,7 @@ const filterItem = reactive({
   receive: ['normal', 'del']
 })
 
-window.addEventListener('wheel', (event) => {
-  if (dropdownShow.value) {
-    dropdownRef.value.handleClose();
-  }
-})
+const onWheel = () => { if (dropdownShow.value) dropdownRef.value.handleClose() }
 
 function visibleChange(e) {
   dropdownShow.value = e;
@@ -1025,8 +1021,8 @@ function getUserList(loading = true) {
   })
 }
 
-onMounted(() => { adjustWidth(); window.addEventListener('resize', adjustWidth) })
-onUnmounted(() => { window.removeEventListener('resize', adjustWidth) })
+onMounted(() => { adjustWidth(); window.addEventListener('resize', adjustWidth); window.addEventListener('wheel', onWheel) })
+onUnmounted(() => { window.removeEventListener('resize', adjustWidth); window.removeEventListener('wheel', onWheel) })
 
 function adjustWidth() {
   const width = window.innerWidth
