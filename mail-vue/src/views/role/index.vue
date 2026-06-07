@@ -2,7 +2,7 @@
   <div class="page-outer">
     <div class="space-y">
     <div class="header-actions">
-      <Icon class="icon" icon="ion:add-outline" width="23" height="23" @click="openAddRole"/>
+      <Icon class="icon" icon="ion:add-outline" width="20" height="20" @click="openAddRole"/>
       <Icon class="icon" icon="ion:reload" width="18" height="18" @click="refresh"/>
     </div>
     <div class="table-card">

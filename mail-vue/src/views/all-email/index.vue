@@ -51,12 +51,12 @@
           <el-option key="4" :label="$t('selectDeleted')" value="delete"/>
           <el-option key="4" :label="$t('noRecipientTitle')" value="noone"/>
         </el-select>
-        <Icon class="icon" icon="iconoir:search" @click="search" width="20" height="20"/>
+        <Icon class="icon" icon="iconoir:search" @click="search" width="18" height="18"/>
         <Icon class="icon" @click="changeTimeSort" icon="material-symbols-light:timer-arrow-down-outline"
-              v-if="params.timeSort === 0" width="28" height="28"/>
+              v-if="params.timeSort === 0" width="20" height="20"/>
         <Icon class="icon" @click="changeTimeSort" icon="material-symbols-light:timer-arrow-up-outline" v-else
-              width="28" height="28"/>
-        <Icon class="icon clear" icon="fluent:broom-sparkle-16-regular" width="22" height="22" @click="openBathDelete"/>
+              width="20" height="20"/>
+        <Icon class="icon clear" icon="fluent:broom-sparkle-16-regular" width="18" height="18" @click="openBathDelete"/>
       </template>
     </emailScroll>
     <el-dialog v-model="showBathDelete" :title="$t('clearEmail')" width="335"
@@ -478,13 +478,13 @@ async function latest() {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border: 1px solid transparent;
   background: transparent;
   cursor: pointer;
   flex-shrink: 0;
-  color: #7e7576;
+  color: var(--muted, #7e7576);
   transition: border-color 0.10s, color 0.10s;
 
   @media (hover: hover) {
@@ -498,6 +498,15 @@ async function latest() {
       color: #bc0000;
     }
   }
+}
+
+.dark .icon:hover {
+  border-color: #ffffff !important;
+  color: #ffffff !important;
+}
+.dark .icon.clear:hover {
+  border-color: #bc0000 !important;
+  color: #bc0000 !important;
 }
 
 .clear {

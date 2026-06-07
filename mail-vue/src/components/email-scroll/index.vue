@@ -637,7 +637,7 @@ function loadData() { getEmailList() }
     min-width: 0;
     display: flex;
     align-items: center;
-    gap: 0;
+    gap: 2px;
     height: 100%;
   }
 
@@ -672,25 +672,17 @@ function loadData() { getEmailList() }
 .toolbar-search {
   flex: 1;
   min-width: 60px;
-  max-width: 240px;
+  max-width: 220px;
   height: 100%;
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 0 10px;
-  border-left: 1px solid var(--light-border, #000000);
-  border-right: 1px solid var(--light-border, #000000);
-  margin-left: 8px;
-  transition: border-color 0.12s;
-
-  &:focus-within,
-  &.has-value {
-    border-color: #bc0000;
-  }
+  gap: 5px;
+  padding: 0 8px;
 
   .search-icon-inline {
     color: var(--secondary-text-color, #7e7576);
     flex-shrink: 0;
+    opacity: 0.6;
   }
 
   .search-input-inline {
@@ -699,14 +691,12 @@ function loadData() { getEmailList() }
     border: none;
     outline: none;
     background: transparent;
-    font-size: 12px;
-    font-family: 'JetBrains Mono', monospace;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    font-size: 13px;
     color: var(--el-text-color-primary);
 
     &::placeholder {
       color: var(--secondary-text-color, #7e7576);
+      opacity: 0.6;
     }
   }
 
@@ -714,7 +704,8 @@ function loadData() { getEmailList() }
     color: var(--secondary-text-color, #7e7576);
     cursor: pointer;
     flex-shrink: 0;
-    &:hover { color: var(--el-text-color-primary); }
+    opacity: 0.6;
+    &:hover { opacity: 1; color: var(--el-text-color-primary); }
   }
 }
 

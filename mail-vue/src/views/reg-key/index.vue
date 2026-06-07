@@ -2,7 +2,7 @@
   <div class="page-outer">
     <div class="space-y">
     <div class="header-actions">
-      <Icon class="icon" icon="ion:add-outline" width="23" height="23" @click="openAdd"/>
+      <Icon class="icon" icon="ion:add-outline" width="20" height="20" @click="openAdd"/>
       <div class="search">
         <el-input
             v-model="params.code"
@@ -11,9 +11,9 @@
         >
         </el-input>
       </div>
-      <Icon class="icon" icon="iconoir:search" @click="search" width="20" height="20"/>
+      <Icon class="icon" icon="iconoir:search" @click="search" width="18" height="18"/>
       <Icon class="icon" icon="ion:reload" width="18" height="18" @click="refresh"/>
-      <Icon class="icon" icon="fluent:broom-sparkle-16-regular" width="22" height="22" @click="clearNotUse"/>
+      <Icon class="icon" icon="fluent:broom-sparkle-16-regular" width="18" height="18" @click="clearNotUse"/>
     </div>
 
     <div class="keys-body">
