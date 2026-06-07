@@ -39,8 +39,7 @@
             <Icon icon="fluent:mail-read-24-regular" width="19" height="19" />
           </button>
         </el-tooltip>
-      </div>
-      <div class="toolbar-right">
+        <!-- Count pushed to right edge via margin-left:auto -->
         <span class="mail-count" v-if="total && !searchQuery.trim()">{{ $t('emailCount', { total }) }}</span>
         <span class="mail-count" v-if="searchQuery.trim()">{{ $t('searchResultCount', { count: searchResultCount }) }}</span>
       </div>
@@ -626,12 +625,10 @@ function loadData() { getEmailList() }
   height: 44px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 0 0 0 10px;
   border-bottom: 1px solid var(--light-border, #000000);
   background: var(--surface, #ffffff);
   flex-shrink: 0;
-  gap: 0;
 
   .toolbar-left {
     flex: 1;
@@ -640,18 +637,13 @@ function loadData() { getEmailList() }
     align-items: center;
     gap: 2px;
     height: 100%;
+    overflow: hidden;
   }
 
-  .toolbar-right {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    flex-shrink: 0;
-    height: 100%;
-    padding-right: 4px;
-  }
-
+  /* count lives inside toolbar-left, pushed right with margin-left:auto */
   .mail-count {
+    margin-left: auto;
+    flex-shrink: 0;
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
     font-weight: 500;
