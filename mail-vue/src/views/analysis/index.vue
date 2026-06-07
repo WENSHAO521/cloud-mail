@@ -106,7 +106,7 @@
 <script setup>
 import {Icon} from "@iconify/vue";
 import {useTransition} from "@vueuse/core";
-import {defineOptions, onActivated, onDeactivated, onMounted, reactive, ref, watch, computed} from "vue";
+import {defineOptions, onActivated, onDeactivated, onMounted, onUnmounted, reactive, ref, watch, computed} from "vue";
 import echarts from "@/echarts/index.js";
 import dayjs from "dayjs";
 import {analysisEcharts} from "@/request/analysis.js";
@@ -258,10 +258,9 @@ onDeactivated(() => {
   leaveWidth = window.innerWidth
 })
 
-window.onresize = () => {
-  setStyle()
-  widthChange()
-}
+const onResize = () => { setStyle(); widthChange() }
+onMounted(() => window.addEventListener('resize', onResize))
+onUnmounted(() => window.removeEventListener('resize', onResize))
 
 watch(() => uiStore.dark, () => {
   if (route.name !== 'analysis') return
