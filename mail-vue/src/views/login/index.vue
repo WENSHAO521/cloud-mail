@@ -1,5 +1,5 @@
 <template>
-  <div id="login-box" :class="{ 'has-bg': !!background }" v-loading="oauthLoading" element-loading-text="登录中...">
+  <div id="login-box" :class="{ 'has-bg': !!background }" v-loading="oauthLoading" :element-loading-text="$t('loggingIn')">
     <!-- Optional admin-configured background image -->
     <div v-if="background" class="custom-bg" :style="background"></div>
 
@@ -161,7 +161,7 @@
         <div class="authorized-note">{{ $t('authorizedNote') }}</div>
       </div>
     </div>
-    <el-dialog class="bind-dialog" v-model="showBindForm"  title="注册邮箱" >
+    <el-dialog class="bind-dialog" v-model="showBindForm" :title="$t('bindEmailTitle')">
       <div class="bind-container">
         <el-input :class="!hideLoginDomain ? 'email-input' : ''" v-model="bindForm.email" type="text" :placeholder="$t('emailAccount')" autocomplete="off">
           <template #append v-if="!hideLoginDomain">
@@ -190,9 +190,7 @@
                   type="text" autocomplete="off"/>
         <el-input v-if="settingStore.settings.regKey === 2" v-model="bindForm.code"
                   :placeholder="$t('regKeyOptional')" type="text" autocomplete="off"/>
-        <el-button class="btn" type="primary" @click="bind" :loading="bindLoading"
-        >绑定
-        </el-button>
+        <el-button class="btn" type="primary" @click="bind" :loading="bindLoading">{{ $t('bind') }}</el-button>
       </div>
     </el-dialog>
     <!-- Language switcher — fixed top-right -->
@@ -419,7 +417,7 @@ async function linuxDoGetUser() {
         showBindForm.value = true
         oauthLoading.value = false
         ElMessage({
-          message: '请注册绑定一个邮箱',
+          message: t('bindEmailRequired'),
           type: 'warning',
           duration: 4000,
           plain: true,

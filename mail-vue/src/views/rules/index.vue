@@ -1,6 +1,8 @@
 <template>
-  <div class="page-outer" v-if="!editorMode">
-    <div class="page-main-only">
+  <div class="page-outer" :class="{ 'editor-mode': editorMode }">
+
+    <!-- ── LIST MODE ── -->
+    <div class="page-main-only" v-if="!editorMode">
       <div class="list-toolbar">
         <el-button class="add-btn" @click="openAdd">
           <Icon icon="ep:plus" width="13" height="13"/>
@@ -40,52 +42,53 @@
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Editor mode -->
-  <div class="page-outer editor-mode" v-else>
-    <div class="editor-nav">
-      <button class="back-btn" @click="cancelEdit">
-        <Icon icon="ep:arrow-left" width="14" height="14"/>
-        {{ $t('emailRules') }}
-      </button>
-      <div class="editor-crumb">
-        {{ ruleForm.id ? $t('editRule') : $t('addRule') }}
+    <!-- ── EDITOR MODE ── -->
+    <template v-else>
+      <div class="editor-nav">
+        <button class="back-btn" @click="cancelEdit">
+          <Icon icon="ep:arrow-left" width="14" height="14"/>
+          {{ $t('emailRules') }}
+        </button>
+        <div class="editor-crumb">
+          {{ ruleForm.id ? $t('editRule') : $t('addRule') }}
+        </div>
+        <el-button type="primary" class="save-btn" @click="saveRule">
+          {{ $t('save') }}
+        </el-button>
       </div>
-      <el-button type="primary" class="save-btn" @click="saveRule">
-        {{ $t('save') }}
-      </el-button>
-    </div>
 
-    <div class="editor-fields">
-      <div class="field-block">
-        <label class="field-label">{{ $t('ruleName') }}</label>
-        <el-input v-model="ruleForm.name" :placeholder="$t('ruleName')" size="large"/>
+      <div class="editor-fields">
+        <div class="field-block">
+          <label class="field-label">{{ $t('ruleName') }}</label>
+          <el-input v-model="ruleForm.name" :placeholder="$t('ruleName')" size="large"/>
+        </div>
+        <div class="field-block">
+          <label class="field-label">{{ $t('ruleConditionType') }}</label>
+          <el-select v-model="ruleForm.conditionType" size="large" style="width:100%">
+            <el-option value="sender"  :label="$t('conditionSender')" />
+            <el-option value="subject" :label="$t('conditionSubject')" />
+            <el-option value="all"     :label="$t('ruleMatchAll')" />
+          </el-select>
+        </div>
+        <div class="field-block" v-if="ruleForm.conditionType !== 'all'">
+          <label class="field-label">{{ $t('ruleConditionValue') }}</label>
+          <el-input v-model="ruleForm.conditionValue" :placeholder="$t('ruleConditionPlaceholder')" size="large"/>
+        </div>
+        <div class="field-block">
+          <label class="field-label">{{ $t('ruleActionType') }}</label>
+          <el-select v-model="ruleForm.action" size="large" style="width:100%">
+            <el-option value="star"     :label="$t('actionStar')" />
+            <el-option value="archive"  :label="$t('actionArchive')" />
+            <el-option value="markRead" :label="$t('actionMarkRead')" />
+          </el-select>
+        </div>
+        <div class="field-block">
+          <el-checkbox v-model="ruleForm.enabled">{{ $t('ruleEnabledLabel') }}</el-checkbox>
+        </div>
       </div>
-      <div class="field-block">
-        <label class="field-label">{{ $t('ruleConditionType') }}</label>
-        <el-select v-model="ruleForm.conditionType" size="large" style="width:100%">
-          <el-option value="sender"  :label="$t('conditionSender')" />
-          <el-option value="subject" :label="$t('conditionSubject')" />
-          <el-option value="all"     :label="$t('ruleMatchAll')" />
-        </el-select>
-      </div>
-      <div class="field-block" v-if="ruleForm.conditionType !== 'all'">
-        <label class="field-label">{{ $t('ruleConditionValue') }}</label>
-        <el-input v-model="ruleForm.conditionValue" :placeholder="$t('ruleConditionPlaceholder')" size="large"/>
-      </div>
-      <div class="field-block">
-        <label class="field-label">{{ $t('ruleActionType') }}</label>
-        <el-select v-model="ruleForm.action" size="large" style="width:100%">
-          <el-option value="star"     :label="$t('actionStar')" />
-          <el-option value="archive"  :label="$t('actionArchive')" />
-          <el-option value="markRead" :label="$t('actionMarkRead')" />
-        </el-select>
-      </div>
-      <div class="field-block">
-        <el-checkbox v-model="ruleForm.enabled">{{ $t('ruleEnabledLabel') }}</el-checkbox>
-      </div>
-    </div>
+    </template>
+
   </div>
 </template>
 
@@ -117,7 +120,7 @@ function cancelEdit() { editorMode.value = false }
 
 function saveRule() {
   if (!ruleForm.name.trim()) {
-    ElMessage({ message: t('emptyUserNameMsg'), type: 'error', plain: true })
+    ElMessage({ message: t('ruleName') + ' ' + t('emptyContentMsg'), type: 'error', plain: true })
     return
   }
   if (ruleForm.conditionType !== 'all' && !ruleForm.conditionValue.trim()) {
