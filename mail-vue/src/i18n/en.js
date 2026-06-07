@@ -330,6 +330,7 @@ const en = {
     cancel: 'Cancel',
     delEmailConfirm: 'Confirm deleting this email?',
     delSuccessMsg: 'Deleted successfully',
+    delFailMsg: 'Delete failed, please try again',
     emptyEmailMsg: 'Email cannot be empty',
     notEmailMsg: 'Invalid email',
     minEmailPrefix: 'Email must be at least {msg} characters',

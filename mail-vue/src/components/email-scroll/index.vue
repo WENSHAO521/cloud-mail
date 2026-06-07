@@ -446,6 +446,8 @@ function rightDelete(emailId) {
       ElMessage({ message: t('delSuccessMsg'), type: 'success', plain: true })
       deleteEmail([emailId])
       emailStore.deleteIds = [emailId]
+    }).catch(() => {
+      ElMessage({ message: t('delFailMsg') || 'Delete failed', type: 'error', plain: true })
     })
   }
   if (props.type === 'all-email') {
@@ -480,6 +482,8 @@ function handleDelete() {
         ElMessage({ message: t('delSuccessMsg'), type: 'success', plain: true })
         deleteEmail(emailIds)
         emailStore.deleteIds = emailIds
+      }).catch(() => {
+        ElMessage({ message: t('delFailMsg') || 'Delete failed', type: 'error', plain: true })
       })
     })
 }

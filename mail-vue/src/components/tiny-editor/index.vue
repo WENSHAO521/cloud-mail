@@ -85,14 +85,18 @@ const tinyBase = import.meta.env.BASE_URL + 'tinymce'
 function initTinyMCE() {
   if (window.tinymce) {
     initEditor();
-  } else {
-    showLoading.value = true;
-    const script = document.createElement('script');
-    script.src = tinyBase + '/tinymce.min.js';
-    script.onload = () => { showLoading.value = false; initEditor(); };
-    script.onerror = () => { showLoading.value = false; };
-    document.head.appendChild(script);
+    return;
   }
+  showLoading.value = true;
+  const script = document.createElement('script');
+  script.src = tinyBase + '/tinymce.min.js';
+  script.onload = () => {
+    showLoading.value = false;
+    // Wait for Vue to render the textarea before TinyMCE tries to mount on it
+    nextTick(() => initEditor());
+  };
+  script.onerror = () => { showLoading.value = false; };
+  document.head.appendChild(script);
 }
 
 function initEditor() {
