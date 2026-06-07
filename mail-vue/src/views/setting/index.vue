@@ -146,6 +146,10 @@
 
             <!-- ── Mail management section ── -->
             <div v-show="activeSection === 'mail'" class="settings-card">
+              <div v-if="settingStore.settings.autoDeleteDays > 0" class="auto-delete-notice">
+                <Icon icon="solar:danger-triangle-bold" width="15" height="15" style="flex-shrink:0"/>
+                {{ $t('autoDeleteDaysUserWarn', { n: settingStore.settings.autoDeleteDays }) }}
+              </div>
               <div class="card-body mail-body">
                 <Account />
               </div>
@@ -539,6 +543,20 @@ function submitPwd() {
 .settings-card {
   background: transparent;
   border: 0;
+}
+
+.auto-delete-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 20px 0;
+  padding: 10px 14px;
+  background: rgba(188, 0, 0, 0.06);
+  border-left: 3px solid #bc0000;
+  color: #bc0000;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
 }
 
 /* ── Card body padding ── */

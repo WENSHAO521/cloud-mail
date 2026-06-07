@@ -459,6 +459,7 @@ const zh = {
     autoDeleteDays: '自动删除天数',
     autoDeleteDaysDesc: '超过N天的邮件将自动删除，设置为0则关闭此功能（每日定时执行）',
     autoDeleteDaysWarn: '⚠ 已启用：超过 {n} 天的邮件将被永久删除，不可恢复。',
+    autoDeleteDaysUserWarn: '系统已启用自动删除：超过 {n} 天的邮件将被永久清除，请及时备份重要邮件。',
     blackSubjectDesc: '邮件标题',
     blackContentDesc: '邮件内容',
     blackFromDesc: '发件人邮箱或域名',
