@@ -1,23 +1,7 @@
 <template>
   <div class="email-container">
 
-    <!-- ── Search area (always visible, vfasky p-4 pill style) ── -->
-    <div class="search-area">
-      <div class="search-pill">
-        <Icon icon="iconoir:search" width="20" height="20" class="search-icon-pill" />
-        <input
-          ref="searchInputRef"
-          v-model="searchQuery"
-          class="search-input"
-          :placeholder="$t('searchPlaceholder')"
-          @keydown.esc="searchQuery = ''"
-        />
-        <Icon v-if="searchQuery" icon="material-symbols:close-rounded" width="18" height="18"
-              class="search-clear-icon" @click="searchQuery = ''" />
-      </div>
-    </div>
-
-    <!-- ── Toolbar (h-12 border-y, vfasky style) ── -->
+    <!-- ── Toolbar ── -->
     <div class="mail-toolbar">
       <div class="toolbar-left">
         <el-checkbox
@@ -26,6 +10,18 @@
           :disabled="!emailList.length || loading"
           @change="handleCheckAllChange"
         />
+        <div class="toolbar-search" :class="{ 'has-value': searchQuery }">
+          <Icon icon="iconoir:search" width="15" height="15" class="search-icon-inline"/>
+          <input
+            ref="searchInputRef"
+            v-model="searchQuery"
+            class="search-input-inline"
+            :placeholder="$t('searchPlaceholder')"
+            @keydown.esc="searchQuery = ''"
+          />
+          <Icon v-if="searchQuery" icon="material-symbols:close-rounded" width="15" height="15"
+                class="search-clear-inline" @click="searchQuery = ''" />
+        </div>
         <slot name="first"></slot>
         <button class="icon-btn" @click="refresh">
           <Icon icon="ion:reload" width="17" height="17" />
@@ -624,87 +620,34 @@ function loadData() { getEmailList() }
   background: #0a0a0a;
 }
 
-/* ── Search area ──────────────────────────────────────────── */
-.search-area {
-  padding: 10px 16px;
-  background: var(--surface-secondary, #f3f3f3);
-  border-bottom: 1px solid var(--light-border, #000000);
-}
-
-.dark .search-area {
-  background: var(--surface-secondary);
-  border-bottom-color: var(--light-border);
-}
-
-.search-pill {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 36px;
-  background: var(--surface, #ffffff);
-  border-radius: 0;
-  padding: 0 12px;
-  border: 1px solid var(--light-border, #000000);
-  transition: border-color 0.12s ease;
-
-  &:focus-within {
-    border-color: #bc0000;
-  }
-
-  .search-icon-pill { color: var(--secondary-text-color, #7e7576); flex-shrink: 0; }
-
-  .search-input {
-    flex: 1;
-    border: none;
-    outline: none;
-    background: transparent;
-    font-size: 13px;
-    font-family: 'JetBrains Mono', monospace;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--el-text-color-primary);
-    min-width: 0;
-    &::placeholder {
-      color: var(--secondary-text-color, #7e7576);
-      text-transform: uppercase;
-    }
-  }
-
-  .search-clear-icon {
-    color: var(--secondary-text-color, #7e7576);
-    cursor: pointer;
-    flex-shrink: 0;
-    &:hover { color: var(--el-text-color-primary); }
-  }
-}
-
-.dark .search-pill {
-  background: var(--surface);
-  border-color: var(--dark-border);
-  &:focus-within { border-color: #bc0000; }
-}
-
 /* ── Toolbar ──────────────────────────────────────────────── */
 .mail-toolbar {
   height: 44px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 12px;
+  padding: 0 0 0 10px;
   border-bottom: 1px solid var(--light-border, #000000);
   background: var(--surface, #ffffff);
   flex-shrink: 0;
+  gap: 0;
 
   .toolbar-left {
+    flex: 1;
+    min-width: 0;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 0;
+    height: 100%;
   }
 
   .toolbar-right {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 0;
+    flex-shrink: 0;
+    height: 100%;
+    padding-right: 4px;
   }
 
   .mail-count {
@@ -713,18 +656,66 @@ function loadData() { getEmailList() }
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: #7e7576;
+    color: var(--secondary-text-color, #7e7576);
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
-    border: 1px solid #cfc4c5;
-    padding: 2px 6px;
+    padding: 0 10px;
   }
 }
 
 .dark .mail-toolbar {
   background: var(--surface);
   border-bottom-color: var(--light-border);
-  .mail-count { border-color: var(--dark-border); }
+}
+
+/* ── Integrated search in toolbar ────────────────────────── */
+.toolbar-search {
+  flex: 1;
+  min-width: 60px;
+  max-width: 240px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  border-left: 1px solid var(--light-border, #000000);
+  border-right: 1px solid var(--light-border, #000000);
+  margin-left: 8px;
+  transition: border-color 0.12s;
+
+  &:focus-within,
+  &.has-value {
+    border-color: #bc0000;
+  }
+
+  .search-icon-inline {
+    color: var(--secondary-text-color, #7e7576);
+    flex-shrink: 0;
+  }
+
+  .search-input-inline {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--el-text-color-primary);
+
+    &::placeholder {
+      color: var(--secondary-text-color, #7e7576);
+    }
+  }
+
+  .search-clear-inline {
+    color: var(--secondary-text-color, #7e7576);
+    cursor: pointer;
+    flex-shrink: 0;
+    &:hover { color: var(--el-text-color-primary); }
+  }
 }
 
 /* ── Icon button (brutalist square) ──────────────────────── */
