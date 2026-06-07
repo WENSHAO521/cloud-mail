@@ -1769,7 +1769,7 @@ function editSetting(settingForm, refreshStatus = true) {
   h1 {
     margin: 0 0 4px;
     color: var(--el-text-color-primary);
-    font-family: 'Hanken Grotesk', 'Inter', sans-serif;
+    font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
     font-size: 20px;
     font-weight: 750;
     line-height: 1.2;

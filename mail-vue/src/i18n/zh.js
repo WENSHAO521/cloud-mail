@@ -331,6 +331,7 @@ const zh = {
     delEmailConfirm: '确认删除该邮件吗？',
     delSuccessMsg: '删除成功',
     delFailMsg: '删除失败，请重试',
+    operationFailMsg: '操作失败，请重试',
     emptyEmailMsg: '邮箱不能为空',
     notEmailMsg: '输入的邮箱不合法',
     emptyPwdMsg: '密码不能为空',

@@ -21,10 +21,12 @@ import { useEmailStore } from "@/store/email.js"
 import { useAccountStore } from "@/store/account.js"
 import { useUiStore } from "@/store/ui.js"
 import { defineOptions, ref, watch } from "vue"
+import { useI18n } from "vue-i18n"
 import router from "@/router/index.js"
 
 defineOptions({ name: 'archive' })
 
+const { t } = useI18n()
 const scroll = ref({})
 const emailStore = useEmailStore()
 const accountStore = useAccountStore()
@@ -48,5 +50,6 @@ function getArchiveList(emailId, size) {
 
 function unarchiveAction(emailId) {
   emailUnarchive([emailId]).then(() => scroll.value.deleteEmail([emailId]))
+    .catch(() => ElMessage({ message: t('operationFailMsg'), type: 'error', plain: true }))
 }
 </script>

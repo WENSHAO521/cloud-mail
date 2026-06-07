@@ -33,6 +33,7 @@ import emailScroll from "@/components/email-scroll/index.vue"
 import {emailList, emailDelete, emailLatest, emailRead, emailMarkSpam, emailArchive} from "@/request/email.js";
 import {starAdd, starCancel} from "@/request/star.js";
 import {defineOptions, h, onMounted, reactive, ref, watch} from "vue";
+import {useI18n} from "vue-i18n";
 import {useNotificationStore} from "@/store/notification.js";
 import {sleep} from "@/utils/time-utils.js";
 import router from "@/router/index.js";
@@ -43,6 +44,7 @@ defineOptions({
   name: 'email'
 })
 
+const { t } = useI18n()
 const route = useRoute();
 const emailStore = useEmailStore();
 const uiStore = useUiStore();
@@ -160,12 +162,13 @@ async function latest() {
 
 function archiveEmailAction(emailId) {
   emailArchive([emailId]).then(() => scroll.value.deleteEmail([emailId]))
+    .catch(() => ElMessage({ message: t('operationFailMsg'), type: 'error', plain: true }))
 }
 
 function spamEmailAction(emailId) {
   emailMarkSpam([emailId]).then(() => {
     scroll.value.deleteEmail([emailId])
-  })
+  }).catch(() => ElMessage({ message: t('operationFailMsg'), type: 'error', plain: true }))
 }
 
 function addStar(email) {

@@ -257,6 +257,8 @@ function handleDelete() {
       ElMessage({ message: t('delSuccessMsg'), type: 'success', plain: true })
       emailStore.deleteIds = [e.emailId]
       emailStore.contentData.email = null
+    }).catch(() => {
+      ElMessage({ message: t('delFailMsg'), type: 'error', plain: true })
     })
   })
 }
@@ -387,7 +389,7 @@ function handleDelete() {
   color: var(--el-text-color-primary);
   margin: 0 0 20px;
   word-break: break-word;
-  font-family: 'Hanken Grotesk', 'Inter', sans-serif;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
   letter-spacing: -0.01em;
 
   @media (max-width: 768px) {
