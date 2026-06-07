@@ -278,11 +278,12 @@ function setName() {
   setNameShow.value = false
   const name = accountName.value
   if (name === userStore.user.name) return
+  const prevName = userStore.user.name
   userStore.user.name = name
   accountSetName(userStore.user.account.accountId, name).then(() => {
     ElMessage({ message: t('saveSuccessMsg'), type: 'success', plain: true })
     accountStore.changeUserAccountName = name
-  }).catch(() => { userStore.user.name = name })
+  }).catch(() => { userStore.user.name = prevName })
 }
 
 function onSignatureChange(html) { signatureText.value = html }

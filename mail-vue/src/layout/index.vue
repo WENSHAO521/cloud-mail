@@ -77,6 +77,7 @@ const settingStore = useSettingStore()
 const writerRef = ref({})
 const cmdPaletteRef = ref(null)
 let elNotification = null
+let noticeStyle = null
 
 // ── Website announcement ────────────────────────────────────
 watch(() => uiStore.changeNotice, () => {
@@ -90,9 +91,8 @@ watch(() => uiStore.changePreview, () => { showNotice(uiStore.previewData) })
 function showNotice(data) {
   if (data.notice === 1) return
   if (elNotification) elNotification.close()
-  const style = document.createElement('style')
-  style.innerHTML = `.custom-notice.el-notification{--el-notification-width:min(${data.noticeWidth}px,calc(100% - 30px))!important}`
-  document.head.appendChild(style)
+  if (!noticeStyle) { noticeStyle = document.createElement('style'); document.head.appendChild(noticeStyle) }
+  noticeStyle.innerHTML = `.custom-notice.el-notification{--el-notification-width:min(${data.noticeWidth}px,calc(100% - 30px))!important}`
   elNotification = ElNotification({
     title: data.noticeTitle,
     message: `<div style="width:100%;height:100%">${data.noticeContent}</div>`,
