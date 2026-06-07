@@ -627,13 +627,13 @@ function loadData() { getEmailList() }
 /* ── Search area ──────────────────────────────────────────── */
 .search-area {
   padding: 10px 16px;
-  background: #f9f9f9;
-  border-bottom: 1px solid #000000;
+  background: var(--surface-secondary, #f3f3f3);
+  border-bottom: 1px solid var(--light-border, #000000);
 }
 
 .dark .search-area {
-  background: #0a0a0a;
-  border-bottom-color: #333333;
+  background: var(--surface-secondary);
+  border-bottom-color: var(--light-border);
 }
 
 .search-pill {
@@ -641,17 +641,17 @@ function loadData() { getEmailList() }
   align-items: center;
   gap: 8px;
   height: 36px;
-  background: #ffffff;
+  background: var(--surface, #ffffff);
   border-radius: 0;
   padding: 0 12px;
-  border: 1px solid #000000;
+  border: 1px solid var(--light-border, #000000);
   transition: border-color 0.12s ease;
 
   &:focus-within {
     border-color: #bc0000;
   }
 
-  .search-icon-pill { color: #7e7576; flex-shrink: 0; }
+  .search-icon-pill { color: var(--secondary-text-color, #7e7576); flex-shrink: 0; }
 
   .search-input {
     flex: 1;
@@ -662,27 +662,26 @@ function loadData() { getEmailList() }
     font-family: 'JetBrains Mono', monospace;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: #000000;
+    color: var(--el-text-color-primary);
     min-width: 0;
     &::placeholder {
-      color: #7e7576;
+      color: var(--secondary-text-color, #7e7576);
       text-transform: uppercase;
     }
   }
 
   .search-clear-icon {
-    color: #7e7576;
+    color: var(--secondary-text-color, #7e7576);
     cursor: pointer;
     flex-shrink: 0;
-    &:hover { color: #000000; }
+    &:hover { color: var(--el-text-color-primary); }
   }
 }
 
 .dark .search-pill {
-  background: #111111;
-  border-color: #555555;
+  background: var(--surface);
+  border-color: var(--dark-border);
   &:focus-within { border-color: #bc0000; }
-  .search-input { color: #ffffff; }
 }
 
 /* ── Toolbar ──────────────────────────────────────────────── */
@@ -692,8 +691,8 @@ function loadData() { getEmailList() }
   align-items: center;
   justify-content: space-between;
   padding: 0 12px;
-  border-bottom: 1px solid #000000;
-  background: #f3f3f3;
+  border-bottom: 1px solid var(--light-border, #000000);
+  background: var(--surface, #ffffff);
   flex-shrink: 0;
 
   .toolbar-left {
@@ -723,9 +722,9 @@ function loadData() { getEmailList() }
 }
 
 .dark .mail-toolbar {
-  background: #111111;
-  border-bottom-color: #333333;
-  .mail-count { border-color: #444444; }
+  background: var(--surface);
+  border-bottom-color: var(--light-border);
+  .mail-count { border-color: var(--dark-border); }
 }
 
 /* ── Icon button (brutalist square) ──────────────────────── */
@@ -775,7 +774,7 @@ function loadData() { getEmailList() }
 .scroll {
   height: 100%;
   overflow: hidden;
-  background: var(--psg-bg, #f9f9f9);
+  background: var(--extra-light-fill, #f9f9f9);
 
   .virtual { will-change: scroll-position; }
 
@@ -813,7 +812,7 @@ function loadData() { getEmailList() }
   padding: 8px 16px 8px 8px;
   border-radius: 0;
   border-bottom: 1px solid var(--light-border-color, #cfc4c5);
-  background: #ffffff;
+  background: var(--surface, #ffffff);
   cursor: pointer;
   align-items: center;
   transition: background 100ms ease;
@@ -841,12 +840,12 @@ function loadData() { getEmailList() }
 
   @media (hover: hover) {
     &:hover {
-      background: #f3f3f3;
+      background: var(--email-hover-background, #eeeeee);
     }
   }
 
   &[data-active] {
-    background: #eeeeee;
+    background: var(--email-hover-background, #eeeeee);
   }
 }
 
@@ -886,11 +885,11 @@ function loadData() { getEmailList() }
 }
 
 .dark :deep(.mail-row) {
-  background: #111111;
-  border-bottom-color: #202020;
+  background: var(--surface);
+  border-bottom-color: var(--light-border-color);
 
-  &:hover { background: #1a1a1a; }
-  &[data-active] { background: #1e1e1e; }
+  &:hover { background: var(--email-hover-background); }
+  &[data-active] { background: var(--base-fill); }
 }
 
 /* ── Col 1: Checkbox + unread indicator ───────────────────── */

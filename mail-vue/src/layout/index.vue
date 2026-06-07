@@ -299,8 +299,8 @@ onBeforeUnmount(() => {
 .mail-list-pane {
   min-height: 0;
   overflow: hidden;
-  border-right: 1px solid #000000;
-  background: #f9f9f9;
+  border-right: 1px solid var(--light-border, #000000);
+  background: var(--extra-light-fill, #f9f9f9);
 
   /* Mobile: sit between the fixed header and the bottom tab bar */
   @media (max-width: 1024px) {
@@ -319,7 +319,7 @@ onBeforeUnmount(() => {
   min-height: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  background: #f9f9f9;
+  background: var(--extra-light-fill, #f9f9f9);
   padding: 0;
 
   /* Mobile: a full-screen reading page (its own back button + actions) */
@@ -342,7 +342,7 @@ onBeforeUnmount(() => {
 .workspace-pane {
   min-height: 0;
   overflow: hidden;
-  background: #f9f9f9;
+  background: var(--extra-light-fill, #f9f9f9);
   display: flex;
   flex-direction: column;
 

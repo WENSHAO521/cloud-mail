@@ -261,43 +261,47 @@ button, input, select, textarea {
 }
 
 .dark {
-    --surface: #1e1e1e;
-    --surface-secondary: #282828;
-    --separator: #333333;
+    --surface: #080808;
+    --surface-secondary: #0f0f0f;
+    --separator: #1a1a1a;
     --muted: #6b7280;
 
     --red-accent: #bc0000;
     --red-accent-dark: #8f0000;
-    --red-accent-subtle: rgba(188, 0, 0, 0.10);
+    --red-accent-subtle: rgba(188, 0, 0, 0.12);
 
-    --extra-light-fill: #181818;
-    --light-ill: #222222;
-    --light-border: #2E2E2E;
-    --aside-backgound: #0a0a0a;
-    --header-actions-border: inset 0 -1px 0 0 #2E2E2E;
-    --loadding-background: rgba(0, 0, 0, 0.3);
-    --dark-border: #555555;
-    --base-fill: #1E1E1E;
-    --regular-text-color: #999999;
-    /* Dark mode: near-invisible row separators */
-    --light-border-color: #202020;
-    --aside-right-border: 1px 0 0 rgba(0, 0, 0, 0.4);
-    --choose-account-background: #2a1414;
-    /* Dark mode email: read = dim, unread = full white via CSS rules below */
-    --email-scroll-content-color: rgba(255, 255, 255, 0.25);
-    --email-hover-background: #1A1A1A;
-    --login-border: 1px solid #2E2E2E;
-    --form-desc-color: #999999;
+    --extra-light-fill: #050505;
+    --light-ill: #0d0d0d;
+    --light-border: #1c1c1c;
+    --aside-backgound: #000000;
+    --header-actions-border: inset 0 -1px 0 0 #1c1c1c;
+    --loadding-background: rgba(0, 0, 0, 0.55);
+    --dark-border: #2e2e2e;
+    --base-fill: #0a0a0a;
+    --regular-text-color: #909090;
+    --light-border-color: #141414;
+    --aside-right-border: 1px 0 0 rgba(0, 0, 0, 0.6);
+    --choose-account-background: #1a0808;
+    --email-scroll-content-color: rgba(255, 255, 255, 0.22);
+    --email-hover-background: #0d0d0d;
+    --login-border: 1px solid #1c1c1c;
+    --form-desc-color: #909090;
     --login-switch-color: #D93333;
-    --scrollbar-track-color: #444444;
-    --base-border-color: #2E2E2E;
-    --secondary-text-color: #5A5A5A;
-    --message-block-color: rgba(28, 28, 28, 0.2);
-    --el-border-color: #2A2A2A !important;
+    --scrollbar-track-color: #2e2e2e;
+    --base-border-color: #1c1c1c;
+    --secondary-text-color: #505050;
+    --message-block-color: rgba(8, 8, 8, 0.4);
+    --el-border-color: #1c1c1c !important;
+    --el-bg-color: #000000 !important;
+    --el-bg-color-overlay: #080808 !important;
+    --el-bg-color-page: #000000 !important;
+    --el-fill-color-blank: #080808 !important;
+    --el-fill-color: #0d0d0d !important;
+    --el-fill-color-light: #0a0a0a !important;
 
-    --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.25);
-    --card-shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.55), 0 1px 4px rgba(0, 0, 0, 0.3);
-    --compose-shadow: 0 8px 40px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.35);
+    --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.6), 0 4px 16px rgba(0, 0, 0, 0.4);
+    --card-shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.7), 0 1px 4px rgba(0, 0, 0, 0.5);
+    --compose-shadow: 0 8px 40px rgba(0, 0, 0, 0.7), 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -534,8 +538,8 @@ button, input, select, textarea {
     background: #f3f3f3 !important;
 }
 .dark .el-dialog__header {
-    border-bottom-color: #555555 !important;
-    background: #1a1a1a !important;
+    border-bottom-color: #1c1c1c !important;
+    background: #080808 !important;
 }
 .el-dialog__title {
     font-weight: 700 !important;
@@ -620,8 +624,8 @@ button, input, select, textarea {
 }
 .dark .el-dropdown__popper,
 .dark .el-dropdown-menu {
-    background: #1a1a1a !important;
-    border-color: #2a2a2a !important;
+    background: #080808 !important;
+    border-color: #1c1c1c !important;
 }
 .el-dropdown-menu__item {
     border-radius: 0 !important;
@@ -646,8 +650,8 @@ button, input, select, textarea {
 }
 .dark .el-select__popper,
 .dark .el-select-dropdown {
-    background: #1a1a1a !important;
-    border-color: #2a2a2a !important;
+    background: #080808 !important;
+    border-color: #1c1c1c !important;
 }
 .el-select-dropdown__item.is-selected {
     color: #bc0000 !important;
@@ -687,7 +691,8 @@ button, input, select, textarea {
 }
 .dark .el-notification,
 .dark .el-message {
-    border-color: #555555 !important;
+    border-color: #1c1c1c !important;
+    background: #080808 !important;
 }
 
 /* Switch */
