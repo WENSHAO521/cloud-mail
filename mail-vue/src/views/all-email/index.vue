@@ -84,7 +84,7 @@
 <script setup>
 import {starAdd, starCancel} from "@/request/star.js";
 import emailScroll from "@/components/email-scroll/index.vue"
-import {computed, defineOptions, reactive, ref, watch, onMounted} from "vue";
+import {computed, defineOptions, reactive, ref, watch, onMounted, onUnmounted} from "vue";
 import {useEmailStore} from "@/store/email.js";
 import {useUiStore} from "@/store/ui.js";
 import {
@@ -117,9 +117,12 @@ const mySelect = ref()
 const showBathDelete = ref(false)
 const clearLoading = ref(false)
 
+let latestRunning = false
 onMounted(() => {
+  latestRunning = true
   latest();
 })
+onUnmounted(() => { latestRunning = false })
 
 const openSelect = () => {
   mySelect.value.toggleMenu()
@@ -290,7 +293,7 @@ function getEmailList(emailId, size) {
 
 async function latest() {
 
-  while (true) {
+  while (latestRunning) {
 
     let autoRefresh = settingStore.settings.autoRefresh;
 

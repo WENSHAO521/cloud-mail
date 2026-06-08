@@ -32,7 +32,7 @@ import {useSettingStore} from "@/store/setting.js";
 import emailScroll from "@/components/email-scroll/index.vue"
 import {emailList, emailDelete, emailLatest, emailRead, emailMarkSpam, emailArchive} from "@/request/email.js";
 import {starAdd, starCancel} from "@/request/star.js";
-import {defineOptions, h, onMounted, reactive, ref, watch, computed} from "vue";
+import {defineOptions, h, onMounted, onUnmounted, reactive, ref, watch, computed} from "vue";
 import {useI18n} from "vue-i18n";
 import {useNotificationStore} from "@/store/notification.js";
 import {useRulesStore} from "@/store/rules.js";
@@ -58,10 +58,13 @@ const params = reactive({
 const notificationStore = useNotificationStore()
 const rulesStore = useRulesStore()
 
+let latestRunning = false
 onMounted(() => {
   emailStore.emailScroll = scroll;
+  latestRunning = true
   latest()
 })
+onUnmounted(() => { latestRunning = false })
 
 const inboxUnread = computed(() => scroll.value?.unreadCount ?? 0)
 watch(inboxUnread, v => {
@@ -91,7 +94,7 @@ function jumpContent(email) {
 const existIds = new Set();
 
 async function latest() {
-  while (true) {
+  while (latestRunning) {
 
     let autoRefresh = settingStore.settings.autoRefresh;
     await sleep(autoRefresh > 1 ? autoRefresh * 1000 : 3000);
