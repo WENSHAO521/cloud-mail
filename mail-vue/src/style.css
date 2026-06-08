@@ -26,7 +26,7 @@ html, body {
 }
 
 body {
-    font-family: 'IBM Plex Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei UI', 'Microsoft YaHei', sans-serif;
+    font-family: 'IBM Plex Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei UI', 'Microsoft YaHei', sans-serif !important;
     line-height: 1.5;
     color: var(--el-text-color-primary);
     font-size: 14px;
@@ -182,7 +182,7 @@ button, input, select, textarea {
 
 :root {
     /* Override Element Plus default font so all el-* components use our bundled fonts */
-    --el-font-family: 'IBM Plex Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei UI', 'Microsoft YaHei', sans-serif;
+    --el-font-family: 'IBM Plex Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei UI', 'Microsoft YaHei', sans-serif !important;
 
     /* PSG — Black / White / Deep Red — German scholarly publisher */
     --el-color-primary: #bc0000;
