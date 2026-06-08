@@ -36,6 +36,7 @@ nsis:
   shortcutName: PSG Mail
   installerIcon: build/icon.ico
   uninstallerIcon: build/icon.ico
+  include: build/installer.nsh
 
 # ── macOS ─────────────────────────────────────────────────────
 mac:
