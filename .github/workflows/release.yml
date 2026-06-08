@@ -12,9 +12,6 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  # ── Build each platform and upload artifacts to a draft release.
-  # electron-builder creates the draft automatically; all three jobs
-  # safely upload to the same draft without race conditions.
   build:
     strategy:
       fail-fast: false
@@ -24,7 +21,7 @@ jobs:
             platform: win
           - os: macos-13
             platform: mac
-          - os: ubuntu-latest
+          - os: ubuntu-22.04
             platform: linux
 
     runs-on: ${{ matrix.os }}
@@ -37,6 +34,12 @@ jobs:
           node-version: '22'
           cache: 'npm'
           cache-dependency-path: mail-vue/package-lock.json
+
+      - name: Install Linux build dependencies
+        if: matrix.platform == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libarchive-tools libopenjp2-tools rpm
 
       - name: Install dependencies
         working-directory: mail-vue
@@ -67,10 +70,12 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CSC_IDENTITY_AUTO_DISCOVERY: false
 
-  # ── After all three platform builds succeed, publish the draft release.
+  # Publish the draft once all builds are done.
+  # Runs even if Linux fails so Windows + macOS packages are still released.
   publish-release:
     needs: build
     runs-on: ubuntu-latest
+    if: always() && needs.build.result != 'cancelled'
     steps:
       - name: Publish GitHub Release
         env:
