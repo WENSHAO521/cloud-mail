@@ -64,7 +64,7 @@ dmg:
 # ── Linux ─────────────────────────────────────────────────────
 linux:
   target:
-    - target: AppImage
+    - target: deb
       arch: [x64]
   icon: build/icon.png
   category: Network
