@@ -370,7 +370,7 @@ async function deleteTpl(templateId) {
   border-radius: 0 !important;
   flex-shrink: 0;
 
-  :deep(span) { display: inline-flex; align-items: center; gap: 7px; }
+  :deep(svg) { margin-right: 6px; }
 }
 
 /* Empty state */

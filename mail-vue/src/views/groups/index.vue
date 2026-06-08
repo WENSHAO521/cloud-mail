@@ -263,7 +263,7 @@ async function deleteGroup(groupId) {
   border-radius: 0 !important;
   flex-shrink: 0;
 
-  :deep(span) { display: inline-flex; align-items: center; gap: 7px; }
+  :deep(svg) { margin-right: 6px; }
 }
 
 .empty-state {
