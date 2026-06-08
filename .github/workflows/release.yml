@@ -19,7 +19,7 @@ jobs:
         include:
           - os: windows-latest
             platform: win
-          - os: macos-13
+          - os: macos-latest
             platform: mac
           - os: ubuntu-22.04
             platform: linux
