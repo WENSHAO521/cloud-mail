@@ -68,3 +68,9 @@ linux:
       arch: [x64]
   icon: build/icon.png
   category: Network
+
+# ── Auto-update publish target ─────────────────────────────────
+publish:
+  provider: github
+  owner: WENSHAO521
+  repo: cloud-mail

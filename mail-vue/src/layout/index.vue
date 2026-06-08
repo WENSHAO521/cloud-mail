@@ -63,16 +63,37 @@
   </div>
 
   <writer ref="writerRef"/>
+
+  <!-- ── Auto-update banner (Electron only) ── -->
+  <Transition name="update-bar">
+    <div v-if="updateState.show" class="update-bar">
+      <Icon icon="solar:download-minimalistic-linear" width="16" height="16" class="update-icon"/>
+      <span v-if="updateState.stage === 'downloading'" class="update-text">
+        {{ $t('updateDownloading', { version: updateState.version, pct: updateState.progress }) }}
+      </span>
+      <span v-else class="update-text update-ready">
+        {{ $t('updateReady', { version: updateState.version }) }}
+      </span>
+      <el-progress v-if="updateState.stage === 'downloading'"
+                   :percentage="updateState.progress" :show-text="false"
+                   class="update-progress" />
+      <el-button v-else size="small" type="primary" class="update-btn" @click="installUpdate">
+        {{ $t('updateInstall') }}
+      </el-button>
+      <button class="update-close" @click="updateState.show = false">×</button>
+    </div>
+  </Transition>
 </template>
 
 <script setup>
+import { Icon } from '@iconify/vue'
 import Aside from '@/layout/aside/index.vue'
 import ContentPane from '@/views/content/index.vue'
 import CommandPalette from '@/components/command-palette/index.vue'
 import MobileHeader from '@/layout/mobile-header/index.vue'
 import MobileTabbar from '@/layout/mobile-tabbar/index.vue'
 import writer from '@/layout/write/index.vue'
-import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
+import { ref, computed, reactive, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUiStore } from '@/store/ui.js'
 import { useNotificationStore } from '@/store/notification.js'
@@ -175,6 +196,28 @@ function handleResize() {
   else uiStore.asideShow = true
 }
 
+// ── Auto-update (Electron only) ──────────────────────────────
+const updateState = reactive({ show: false, stage: '', version: '', progress: 0 })
+
+if (window.electronAPI?.onUpdateAvailable) {
+  window.electronAPI.onUpdateAvailable((info) => {
+    updateState.version = info.version
+    updateState.stage = 'downloading'
+    updateState.show = true
+  })
+  window.electronAPI.onUpdateProgress((pct) => {
+    updateState.progress = pct
+  })
+  window.electronAPI.onUpdateDownloaded(() => {
+    updateState.stage = 'ready'
+    updateState.progress = 100
+  })
+}
+
+function installUpdate() {
+  window.electronAPI?.installUpdate()
+}
+
 onMounted(() => {
   uiStore.writerRef = writerRef
   window.addEventListener('resize', handleResize)
@@ -190,6 +233,40 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss">
+/* ── Auto-update banner ─────────────────────────────────────── */
+.update-bar {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #111;
+  color: #fff;
+  border-radius: 8px;
+  padding: 10px 14px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.35);
+  font-size: 13px;
+  white-space: nowrap;
+  max-width: calc(100vw - 40px);
+
+  .update-icon { opacity: .75; flex-shrink: 0; }
+  .update-text { opacity: .9; }
+  .update-ready { color: #7ee2a8; font-weight: 600; }
+  .update-progress { width: 100px; flex-shrink: 0; }
+  .update-btn { flex-shrink: 0; border-radius: 5px; }
+  .update-close {
+    background: none; border: none; color: rgba(255,255,255,.5);
+    cursor: pointer; font-size: 16px; line-height: 1; padding: 0 2px;
+    &:hover { color: #fff; }
+  }
+}
+
+.update-bar-enter-active, .update-bar-leave-active { transition: all .25s ease; }
+.update-bar-enter-from, .update-bar-leave-to { opacity: 0; transform: translateX(-50%) translateY(12px); }
+
 .shortcuts-grid {
   display: flex;
   flex-direction: column;

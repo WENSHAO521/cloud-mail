@@ -539,5 +539,8 @@ const zh = {
     ruleConditionPlaceholder: '例如：newsletter@example.com',
     ruleEnabledLabel: '已启用',
     ruleMatchAll: '应用于所有邮件',
+    updateDownloading: '正在下载更新 v{version}... {pct}%',
+    updateReady: '更新 v{version} 已就绪',
+    updateInstall: '重启并安装',
 }
 export default zh

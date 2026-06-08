@@ -20,4 +20,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
   platform: process.platform,
   isMac: process.platform === 'darwin',
   isWin: process.platform === 'win32',
+
+  // Auto-update
+  onUpdateAvailable:  (cb) => ipcRenderer.on('update-available',  (_, info) => cb(info)),
+  onUpdateProgress:   (cb) => ipcRenderer.on('update-progress',   (_, pct)  => cb(pct)),
+  onUpdateDownloaded: (cb) => ipcRenderer.on('update-downloaded', ()        => cb()),
+  checkForUpdates: () => ipcRenderer.send('check-for-updates'),
+  installUpdate:   () => ipcRenderer.send('install-update'),
 })

@@ -539,6 +539,9 @@ const en = {
     ruleConditionPlaceholder: 'e.g. newsletter@example.com',
     ruleEnabledLabel: 'Enabled',
     ruleMatchAll: 'Apply to all',
+    updateDownloading: 'Downloading update v{version}... {pct}%',
+    updateReady: 'Update v{version} ready to install',
+    updateInstall: 'Restart & Install',
 }
 
 export default en

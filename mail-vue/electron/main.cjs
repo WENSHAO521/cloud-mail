@@ -12,6 +12,7 @@ if (process.env.ELECTRON_RUN_AS_NODE) {
 
 const { app, BrowserWindow, ipcMain, Notification, nativeImage, shell, Menu, Tray } = require('electron')
 const path = require('path')
+const { autoUpdater } = require('electron-updater')
 
 const isDev  = process.env.NODE_ENV === 'development'
 const isMac  = process.platform === 'darwin'
@@ -295,8 +296,41 @@ function createWindow() {
   win.on('closed', () => { win = null })
 }
 
+// ── Auto-updater ──────────────────────────────────────────────
+autoUpdater.autoDownload = true
+autoUpdater.autoInstallOnAppQuit = true
+
+autoUpdater.on('update-available', (info) => {
+  win?.webContents.send('update-available', { version: info.version })
+})
+
+autoUpdater.on('download-progress', (progress) => {
+  win?.webContents.send('update-progress', Math.round(progress.percent))
+})
+
+autoUpdater.on('update-downloaded', () => {
+  win?.webContents.send('update-downloaded')
+})
+
+autoUpdater.on('error', (err) => {
+  console.error('[updater]', err.message)
+})
+
+ipcMain.on('install-update', () => {
+  app.isQuitting = true
+  autoUpdater.quitAndInstall()
+})
+
+ipcMain.on('check-for-updates', () => {
+  if (!isDev) autoUpdater.checkForUpdates()
+})
+
 // ── App lifecycle ─────────────────────────────────────────────
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  createWindow()
+  // Check after 8 s so the window is fully loaded before any dialog appears
+  if (!isDev) setTimeout(() => autoUpdater.checkForUpdates(), 8000)
+})
 
 app.on('before-quit', () => { app.isQuitting = true })
 
