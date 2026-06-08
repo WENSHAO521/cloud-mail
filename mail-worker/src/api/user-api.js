@@ -54,4 +54,9 @@ app.delete('/user/deleteAccount', async (c) => {
 	return c.json(result.ok());
 });
 
+app.put('/user/setName', async (c) => {
+	await accountService.setNameByAdmin(c, await c.req.json());
+	return c.json(result.ok());
+});
+
 

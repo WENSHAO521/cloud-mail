@@ -282,6 +282,15 @@ const accountService = {
 		await orm(c).update(account).set({name}).where(and(eq(account.userId, userId),eq(account.accountId, accountId))).run();
 	},
 
+	async setNameByAdmin(c, params) {
+		const { userId, name } = params
+		if (!name || name.trim().length === 0) throw new BizError(t('emptyUserNameMsg'));
+		if (name.length > 30) throw new BizError(t('usernameLengthLimit'));
+		await orm(c).update(account).set({ name: name.trim() })
+			.where(eq(account.userId, Number(userId)))
+			.run();
+	},
+
 	async allAccount(c, params) {
 
 		let { userId, num, size } = params

@@ -95,6 +95,7 @@
                 <template #dropdown>
                   <el-dropdown-menu>
                     <el-dropdown-item @click="openSetPwd(props.row)" >{{ $t('chgPwd') }}</el-dropdown-item>
+                    <el-dropdown-item @click="openSetName(props.row)" >{{ $t('setUsername') }}</el-dropdown-item>
                     <el-dropdown-item @click="openSetType(props.row)" >{{ $t('perm') }}</el-dropdown-item>
                     <template v-if="props.row.type !== 0">
                       <el-dropdown-item v-if="props.row.isDel !== 1" @click="setStatus(props.row)">
@@ -149,6 +150,12 @@
         <el-button class="btn" type="primary" :loading="settingLoading" @click="updatePwd"
         >{{ $t('save') }}
         </el-button>
+      </div>
+    </el-dialog>
+    <el-dialog class="dialog" v-model="setNameShow" :title="$t('setUsername')" width="min(400px, calc(100vw - 32px))">
+      <div class="dialog-box">
+        <el-input v-model="setNameValue" :placeholder="$t('username')" autocomplete="off" maxlength="30" show-word-limit @keydown.enter="submitSetName"/>
+        <el-button class="btn" type="primary" :loading="setNameLoading" @click="submitSetName">{{ $t('save') }}</el-button>
       </div>
     </el-dialog>
     <el-dialog class="dialog" v-model="setTypeShow" :title="$t('changePerm')" width="min(400px, calc(100vw - 32px))" @closed="resetUserForm">
@@ -322,6 +329,14 @@
               </div>
             </template>
           </el-dropdown-item>
+          <el-dropdown-item @click="openSetName(rightClickUser)">
+            <template #default>
+              <div class="right-dropdown-item">
+                <icon icon="solar:user-id-bold-duotone" width="21" height="21" />
+                <span>{{ t('setUsername') }}</span>
+              </div>
+            </template>
+          </el-dropdown-item>
           <el-dropdown-item @click="openSetType(rightClickUser)">
             <template #default>
               <div class="right-dropdown-item">
@@ -384,7 +399,8 @@ import {
   userRestSendCount,
   userRestore,
   userDeleteAccount,
-  userAllAccount
+  userAllAccount,
+  userSetName
 } from '@/request/user.js'
 import {roleSelectUse} from "@/request/role.js";
 import {Icon} from "@iconify/vue";
@@ -469,6 +485,10 @@ const accountShow = ref(false)
 const addLoading = ref(false);
 const setTypeShow = ref(false)
 const setPwdShow = ref(false)
+const setNameShow = ref(false)
+const setNameValue = ref('')
+const setNameUserId = ref(0)
+const setNameLoading = ref(false)
 const pagerCount = ref(10)
 const settingLoading = ref(false)
 const tableLoading = ref(true)
@@ -971,6 +991,26 @@ function openSetType(user) {
 function openSetPwd(user) {
   userForm.userId = user.userId
   setPwdShow.value = true
+}
+
+function openSetName(user) {
+  setNameUserId.value = user.userId
+  setNameValue.value = user.accountName || user.oauthName || ''
+  setNameShow.value = true
+}
+
+function submitSetName() {
+  if (!setNameValue.value.trim()) {
+    ElMessage({ message: t('emptyUserNameMsg'), type: 'error', plain: true })
+    return
+  }
+  setNameLoading.value = true
+  userSetName(setNameUserId.value, setNameValue.value.trim()).then(() => {
+    ElMessage({ message: t('saveSuccessMsg'), type: 'success', plain: true })
+    setNameShow.value = false
+    const row = users.value?.find(u => u.userId === setNameUserId.value)
+    if (row) row.accountName = setNameValue.value.trim()
+  }).catch(() => {}).finally(() => { setNameLoading.value = false })
 }
 
 function refresh() {

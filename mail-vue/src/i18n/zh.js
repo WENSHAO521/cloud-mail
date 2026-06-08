@@ -488,6 +488,7 @@ const zh = {
     markAsRead: '标为已读',
     star: '星标',
     setRole: '设置权限',
+    setUsername: '修改用户名',
     adminDeleteUser: '删除用户',
     banUser: '封禁用户',
     enableUser: '启动用户',
