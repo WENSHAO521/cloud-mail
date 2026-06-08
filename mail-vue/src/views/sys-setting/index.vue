@@ -89,7 +89,7 @@
                 <div>
                   <span>{{ $t('multipleEmail') }}</span>
                   <el-tooltip effect="dark" :content="$t('multipleEmailDesc')">
-                    <Icon class="warning" icon="fe:warning" width="18" height="18"/>
+                    <Icon class="warning" icon="solar:danger-triangle-linear" width="18" height="18"/>
                   </el-tooltip>
                   <p>{{ $t('multipleEmailDesc') }}</p>
                 </div>
@@ -140,7 +140,7 @@
                 <div class="email-title">
                   <span>{{ setting.title }}</span>
                   <el-button class="opt-button" size="small" type="primary" @click="editTitleShow = true">
-                    <Icon icon="lsicon:edit-outline" width="16" height="16"/>
+                    <Icon icon="solar:pen-linear" width="16" height="16"/>
                   </el-button>
                 </div>
               </div>
@@ -170,16 +170,16 @@
                   >
                     <template #error>
                       <div class="error-image">
-                        <Icon icon="ph:image" width="24" height="24"/>
+                        <Icon icon="solar:gallery-linear" width="24" height="24"/>
                       </div>
                     </template>
                   </el-image>
                   <div class="background-btn">
                     <el-button class="opt-button" size="small" type="primary" @click="openSetBackground">
-                      <Icon icon="lsicon:edit-outline" width="16" height="16"/>
+                      <Icon icon="solar:pen-linear" width="16" height="16"/>
                     </el-button>
                     <el-button class="opt-button" size="small" type="primary" @click="delBackground">
-                      <Icon icon="material-symbols:delete-outline-rounded" width="16" height="16"/>
+                      <Icon icon="solar:trash-bin-trash-linear" width="16" height="16"/>
                     </el-button>
                   </div>
                 </div>
@@ -202,7 +202,7 @@
                 <div>
                   <span>{{ $t('autoRefresh') }}</span>
                   <el-tooltip effect="dark" :content="$t('autoRefreshDesc')">
-                    <Icon class="warning" icon="fe:warning" width="18" height="18"/>
+                    <Icon class="warning" icon="solar:danger-triangle-linear" width="18" height="18"/>
                   </el-tooltip>
                 </div>
                 <div>
@@ -232,7 +232,7 @@
                 <div>
                   <span>{{ $t('noRecipientTitle') }}</span>
                   <el-tooltip effect="dark" :content="$t('noRecipientDesc')">
-                    <Icon class="warning" icon="fe:warning" width="18" height="18"/>
+                    <Icon class="warning" icon="solar:danger-triangle-linear" width="18" height="18"/>
                   </el-tooltip>
                 </div>
                 <div>
@@ -248,11 +248,11 @@
                 <div v-else>
                   <el-button class="opt-button" style="margin-top: 0" @click="openResendList" size="small"
                              type="primary">
-                    <Icon icon="ic:round-list" width="18" height="18"/>
+                    <Icon icon="solar:list-linear" width="18" height="18"/>
                   </el-button>
                   <el-button class="opt-button" style="margin-top: 0" @click="openResendForm" size="small"
                              type="primary">
-                    <Icon icon="material-symbols:add-rounded" width="16" height="16"/>
+                    <Icon icon="solar:add-circle-linear" width="16" height="16"/>
                   </el-button>
                 </div>
               </div>
@@ -261,7 +261,7 @@
                 <div>
                   <el-button class="opt-button" style="margin-top: 0" @click="openBlackListForm" size="small"
                              type="primary">
-                    <Icon icon="fluent:settings-48-regular" width="16" height="16"/>
+                    <Icon icon="solar:settings-linear" width="16" height="16"/>
                   </el-button>
                 </div>
               </div>
@@ -276,13 +276,13 @@
                 <div>
                   <span>{{ $t('osDomain') }}</span>
                   <el-tooltip effect="dark" :content="$t('ossDomainDesc')">
-                    <Icon class="warning" icon="fe:warning" width="18" height="18"/>
+                    <Icon class="warning" icon="solar:danger-triangle-linear" width="18" height="18"/>
                   </el-tooltip>
                 </div>
                 <div class="r2domain">
                   <span>{{ setting.r2Domain || '' }}</span>
                   <el-button class="opt-button" size="small" type="primary" @click="r2DomainShow = true">
-                    <Icon icon="lsicon:edit-outline" width="16" height="16"/>
+                    <Icon icon="solar:pen-linear" width="16" height="16"/>
                   </el-button>
                 </div>
               </div>
@@ -292,7 +292,7 @@
                 </div>
                 <div class="r2domain">
                   <el-button class="opt-button" size="small" type="primary" @click="addS3Show = true">
-                    <Icon icon="fluent:settings-48-regular" width="16" height="16"/>
+                    <Icon icon="solar:settings-linear" width="16" height="16"/>
                   </el-button>
                 </div>
               </div>
@@ -317,7 +317,7 @@
                 <div class="forward">
                   <span>{{ setting.tgBotStatus === 0 ? $t('enabled') : $t('disabled') }}</span>
                   <el-button class="opt-button" size="small" type="primary" @click="openTgSetting">
-                    <Icon icon="fluent:settings-48-regular" width="18" height="18"/>
+                    <Icon icon="solar:settings-linear" width="18" height="18"/>
                   </el-button>
                 </div>
               </div>
@@ -326,7 +326,7 @@
                 <div class="forward">
                   <span>{{ setting.forwardStatus === 0 ? $t('enabled') : $t('disabled') }}</span>
                   <el-button class="opt-button" size="small" type="primary" @click="openThirdEmailSetting">
-                    <Icon icon="fluent:settings-48-regular" width="18" height="18"/>
+                    <Icon icon="solar:settings-linear" width="18" height="18"/>
                   </el-button>
                 </div>
               </div>
@@ -335,7 +335,7 @@
                 <div class="forward">
                   <span>{{ setting.ruleType === 0 ? $t('forwardAll') : $t('rules') }}</span>
                   <el-button class="opt-button" size="small" type="primary" @click="openForwardRules">
-                    <Icon icon="fluent:settings-48-regular" width="18" height="18"/>
+                    <Icon icon="solar:settings-linear" width="18" height="18"/>
                   </el-button>
                 </div>
               </div>
@@ -350,7 +350,7 @@
                 <div><span>{{ $t('signUpVerification') }}</span></div>
                 <div>
                   <el-button class="opt-button" size="small" type="primary" @click="openRegVerifyCount">
-                    <Icon icon="fluent:settings-48-regular" width="18" height="18"/>
+                    <Icon icon="solar:settings-linear" width="18" height="18"/>
                   </el-button>
                   <el-select
                       @change="change"
@@ -369,7 +369,7 @@
                 <div><span>{{ $t('addEmailVerification') }}</span></div>
                 <div>
                   <el-button class="opt-button" size="small" type="primary" @click="openAddVerifyCount">
-                    <Icon icon="fluent:settings-48-regular" width="18" height="18"/>
+                    <Icon icon="solar:settings-linear" width="18" height="18"/>
                   </el-button>
                   <el-select
                       @change="change"
@@ -389,7 +389,7 @@
                 <div class="bot-verify">
                   <span>{{ setting.siteKey }}</span>
                   <el-button class="opt-button" size="small" type="primary" @click="turnstileShow = true">
-                    <Icon icon="lsicon:edit-outline" width="16" height="16"/>
+                    <Icon icon="solar:pen-linear" width="16" height="16"/>
                   </el-button>
                 </div>
               </div>
@@ -398,7 +398,7 @@
                 <div class="bot-verify">
                   <span> {{ setting.secretKey }} </span>
                   <el-button class="opt-button" size="small" type="primary" @click="turnstileShow = true">
-                    <Icon icon="lsicon:edit-outline" width="16" height="16"/>
+                    <Icon icon="solar:pen-linear" width="16" height="16"/>
                   </el-button>
                 </div>
               </div>
@@ -413,7 +413,7 @@
                 <div class="forward">
                   <span>{{ setting.notice === 0 ? $t('enabled') : $t('disabled') }}</span>
                   <el-button class="opt-button" size="small" type="primary" @click="openNoticePopupSetting">
-                    <Icon icon="fluent:settings-48-regular" width="18" height="18"/>
+                    <Icon icon="solar:settings-linear" width="18" height="18"/>
                   </el-button>
                 </div>
               </div>
@@ -421,7 +421,7 @@
                 <div><span>{{ $t('popUp') }}</span></div>
                 <div class="forward">
                   <el-button class="opt-button" size="small" type="primary" @click="openNoticePopup">
-                    <Icon icon="mynaui:click-solid" width="18" height="18"/>
+                    <Icon icon="solar:cursor-bold" width="18" height="18"/>
                   </el-button>
                 </div>
               </div>
@@ -442,7 +442,7 @@
                 <div><span>{{ $t('codeRecognitionRules') }}</span></div>
                 <div class="forward">
                   <el-button class="opt-button" size="small" type="primary" @click="openAiCodeFilter">
-                    <Icon icon="fluent:settings-48-regular" width="18" height="18"/>
+                    <Icon icon="solar:settings-linear" width="18" height="18"/>
                   </el-button>
                 </div>
               </div>
@@ -456,7 +456,7 @@
                 <div class="about-actions">
                   <el-badge is-dot :hidden="!hasUpdate">
                     <el-button class="about-btn" @click="jump('https://github.com/maillab/cloud-mail/releases')">
-                      <template #icon><Icon icon="qlementine-icons:version-control-16" width="16" height="16" color="#1890FF"/></template>
+                      <template #icon><Icon icon="solar:code-branch-linear" width="16" height="16" color="#1890FF"/></template>
                       {{ currentVersion }}
                     </el-button>
                   </el-badge>
@@ -548,7 +548,7 @@
               <template #content>
                 <span>{{ $t('backgroundWarning') }}</span>
               </template>
-              <Icon class="title-icon  warning" icon="fe:warning" width="18" height="18"/>
+              <Icon class="title-icon  warning" icon="solar:danger-triangle-linear" width="18" height="18"/>
             </el-tooltip>
           </span>
         </template>
@@ -580,7 +580,7 @@
           <div class="forward-head">
             <span class="forward-set-title">{{ $t('tgBot') }}</span>
             <el-tooltip effect="dark" :content="$t('tgBotDesc')">
-              <Icon class="warning" icon="fe:warning" width="18" height="18"/>
+              <Icon class="warning" icon="solar:danger-triangle-linear" width="18" height="18"/>
             </el-tooltip>
           </div>
         </template>
@@ -641,7 +641,7 @@
           <div class="forward-head">
             <span class="forward-set-title">{{ $t('otherEmail') }}</span>
             <el-tooltip effect="dark" :content="$t('otherEmailDesc')">
-              <Icon class="warning" icon="fe:warning" width="18" height="18"/>
+              <Icon class="warning" icon="solar:danger-triangle-linear" width="18" height="18"/>
             </el-tooltip>
           </div>
         </template>
@@ -667,7 +667,7 @@
           <div class="forward-head">
             <span class="forward-set-title">{{ $t('forwardingRules') }}</span>
             <el-tooltip effect="dark" :content="$t('forwardingRulesDesc')">
-              <Icon class="warning" icon="fe:warning" width="18" height="18"/>
+              <Icon class="warning" icon="solar:danger-triangle-linear" width="18" height="18"/>
             </el-tooltip>
           </div>
         </template>
@@ -795,7 +795,7 @@
             <div class="force-path-style-left">
               <span>ForcePathStyle</span>
               <el-tooltip effect="dark" :content="$t('forcePathStyleDesc')">
-                <Icon class="warning" icon="fe:warning" width="18" height="18"/>
+                <Icon class="warning" icon="solar:danger-triangle-linear" width="18" height="18"/>
               </el-tooltip>
             </div>
             <el-switch :before-change="beforeChange" :active-value="0" :inactive-value="1"
@@ -827,7 +827,7 @@
           <div class="forward-head">
             <span class="forward-set-title">{{ $t('blackList') }}</span>
             <el-tooltip effect="dark" :content="$t('blackListDesc')">
-              <Icon class="warning" icon="fe:warning" width="18" height="18"/>
+              <Icon class="warning" icon="solar:danger-triangle-linear" width="18" height="18"/>
             </el-tooltip>
           </div>
         </template>
@@ -849,7 +849,7 @@
           <div class="forward-head">
             <span class="forward-set-title">{{ $t('codeRecognitionRules') }}</span>
             <el-tooltip effect="dark" :content="$t('codeRecognitionRulesDesc')">
-              <Icon class="warning" icon="fe:warning" width="18" height="18"/>
+              <Icon class="warning" icon="solar:danger-triangle-linear" width="18" height="18"/>
             </el-tooltip>
           </div>
         </template>

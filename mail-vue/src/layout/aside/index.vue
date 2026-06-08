@@ -28,12 +28,12 @@
         <button class="icon-button sidebar-collapse-button"
                 :title="collapsed ? $t('expand') : $t('collapse')"
                 @click="uiStore.asideCollapsed = !uiStore.asideCollapsed">
-          <Icon icon="material-symbols:menu-rounded" width="20" height="20" />
+          <Icon icon="solar:hamburger-menu-linear" width="20" height="20" />
         </button>
         <button class="icon-button sidebar-close-button"
                 :title="$t('close')"
                 @click="uiStore.asideShow = false">
-          <Icon icon="material-symbols:close-rounded" width="20" height="20" />
+          <Icon icon="solar:close-circle-linear" width="20" height="20" />
         </button>
       </div>
     </div>
@@ -107,15 +107,14 @@
             <el-dropdown-menu>
               <el-dropdown-item @click="toggleDark">
                 <div class="drop-item">
-                  <Icon :icon="uiStore.dark ? 'material-symbols:light-mode-outline-rounded'
-                                            : 'material-symbols:dark-mode-outline-rounded'"
+                  <Icon :icon="uiStore.dark ? 'solar:sun-linear' : 'solar:moon-linear'"
                         width="17" height="17" />
                   <span>{{ uiStore.dark ? $t('lightMode') : $t('darkMode') }}</span>
                 </div>
               </el-dropdown-item>
               <el-dropdown-item @click="clickLogout" class="logout-item">
                 <div class="drop-item">
-                  <Icon icon="material-symbols:logout-rounded" width="17" height="17" />
+                  <Icon icon="solar:logout-linear" width="17" height="17" />
                   <span>{{ $t('logOut') }}</span>
                 </div>
               </el-dropdown-item>

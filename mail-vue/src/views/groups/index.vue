@@ -4,13 +4,13 @@
     <div class="page-main-only">
         <div class="list-toolbar">
           <el-button class="add-btn" @click="openAdd">
-            <Icon icon="ep:plus" width="13" height="13"/>
+            <Icon icon="solar:add-circle-linear" width="13" height="13"/>
             {{ $t('addGroup') }}
           </el-button>
         </div>
 
         <div v-if="!groupList.length" class="empty-state">
-          <Icon icon="material-symbols:group-outline" width="32" height="32" class="empty-icon"/>
+          <Icon icon="solar:users-group-rounded-linear" width="32" height="32" class="empty-icon"/>
           <div class="empty-title">{{ $t('noGroups') }}</div>
           <div class="empty-desc">{{ $t('noGroupsDesc') }}</div>
         </div>
@@ -31,14 +31,14 @@
               <div class="card-right" @click.stop>
                 <div class="card-actions">
                   <button class="act-btn" :title="$t('change')" @click="openEdit(g)">
-                    <Icon icon="material-symbols:edit-outline-rounded" width="14" height="14"/>
+                    <Icon icon="solar:pen-linear" width="14" height="14"/>
                   </button>
                   <button class="act-btn danger" :title="$t('delete')" @click="deleteGroup(g.groupId)">
-                    <Icon icon="material-symbols:delete-outline-rounded" width="14" height="14"/>
+                    <Icon icon="solar:trash-bin-trash-linear" width="14" height="14"/>
                   </button>
                 </div>
                 <span class="chevron" :class="{ open: expandedIds.has(g.groupId) }">
-                  <Icon icon="ep:arrow-down" width="13" height="13"/>
+                  <Icon icon="solar:alt-arrow-down-linear" width="13" height="13"/>
                 </span>
               </div>
             </div>
@@ -77,7 +77,7 @@
           <div class="members-head">
             <label class="drawer-label">{{ $t('contactMembers') }}</label>
             <button class="add-member-btn" @click="addContact">
-              <Icon icon="ep:plus" width="12" height="12"/>
+              <Icon icon="solar:add-circle-linear" width="12" height="12"/>
               {{ $t('addContact') }}
             </button>
           </div>
@@ -90,7 +90,7 @@
                 <el-input v-model="c.email" :placeholder="$t('emailAccount')" size="small" class="no-border-input mono-input"/>
               </div>
               <button class="remove-btn" @click="removeContact(i)">
-                <Icon icon="ep:close" width="13" height="13"/>
+                <Icon icon="solar:close-circle-linear" width="13" height="13"/>
               </button>
             </div>
           </div>

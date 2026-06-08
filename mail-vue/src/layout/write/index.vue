@@ -21,7 +21,7 @@
                 <span class="wh-email">{{ form.sendEmail }}</span>
               </div>
               <Icon v-if="senderAccounts.length > 1"
-                    icon="ep:arrow-down" width="12" height="12" class="sender-chevron"/>
+                    icon="solar:alt-arrow-down-linear" width="12" height="12" class="sender-chevron"/>
             </div>
             <template #dropdown>
               <el-dropdown-menu>
@@ -43,7 +43,7 @@
                       <span class="sender-opt-email">{{ acc.email }}</span>
                     </div>
                     <Icon v-if="acc.accountId === form.accountId"
-                          icon="ep:check" width="14" height="14" class="sender-opt-check"/>
+                          icon="solar:check-circle-linear" width="14" height="14" class="sender-opt-check"/>
                   </div>
                 </el-dropdown-item>
               </el-dropdown-menu>
@@ -51,7 +51,7 @@
           </el-dropdown>
         </div>
         <div class="wh-close" @click="close">
-          <Icon icon="material-symbols-light:close-rounded" width="22" height="22"/>
+          <Icon icon="solar:close-circle-linear" width="22" height="22"/>
         </div>
       </div>
 
@@ -76,7 +76,7 @@
             <span v-if="!showCc"  class="field-toggle" @click.stop="showCc = true">{{ $t('cc') }}</span>
             <span v-if="!showBcc" class="field-toggle" @click.stop="showBcc = true">{{ $t('bcc') }}</span>
             <div class="icon-btn-sm" @click.stop="openContacts">
-              <Icon icon="fa7-solid:user-plus" width="14" height="14"/>
+              <Icon icon="solar:user-plus-linear" width="14" height="14"/>
             </div>
           </div>
         </div>
@@ -110,15 +110,15 @@
         <div class="toolbar-bar">
           <div class="toolbar-left">
             <div class="tb-btn tb-btn--label" @click="chooseFile">
-              <Icon icon="iconamoon:attachment-fill" width="16" height="16"/>
+              <Icon icon="solar:paperclip-linear" width="16" height="16"/>
               <span>{{ $t('attachments') }}</span>
             </div>
             <div class="tb-btn" @click="clearContent" :title="$t('clear')">
-              <Icon icon="icon-park-outline:clear-format" width="17" height="17"/>
+              <Icon icon="solar:eraser-linear" width="17" height="17"/>
             </div>
             <el-dropdown trigger="click" @command="insertTemplate" :hide-on-click="true">
               <div class="tb-btn tb-btn--label">
-                <Icon icon="material-symbols:description-outline-rounded" width="16" height="16"/>
+                <Icon icon="solar:document-text-linear" width="16" height="16"/>
                 <span>{{ $t('insertTemplate') }}</span>
               </div>
               <template #dropdown>
@@ -135,7 +135,7 @@
                 <Icon v-bind="getIconByName(item.filename)" width="14" height="14"/>
                 <span class="att-filename">{{ item.filename }}</span>
                 <span class="att-size">{{ formatBytes(item.size) }}</span>
-                <Icon icon="material-symbols-light:close-rounded" width="16" height="16"
+                <Icon icon="solar:close-circle-linear" width="16" height="16"
                       style="cursor:pointer;flex-shrink:0" @click="delAtt(index)"/>
               </div>
             </div>
@@ -164,11 +164,11 @@
             <template v-else>
               <el-tooltip :content="$t('sendLater')" placement="top">
                 <el-button class="send-later-btn" @click="showSchedulePicker = true">
-                  <Icon icon="material-symbols:schedule-outline-rounded" width="16" height="16"/>
+                  <Icon icon="solar:clock-circle-linear" width="16" height="16"/>
                 </el-button>
               </el-tooltip>
               <el-button class="send-btn" type="primary" @click="sendEmail">
-                <Icon icon="mingcute:send-fill" width="15" height="15" style="margin-right:6px"/>
+                <Icon icon="solar:plain-3-bold" width="15" height="15" style="margin-right:6px"/>
                 <span v-if="form.sendType === 'reply'">{{ $t('reply') }}</span>
                 <span v-else-if="form.sendType === 'forward'">{{ $t('forward') }}</span>
                 <span v-else>{{ $t('send') }}</span>
@@ -193,7 +193,7 @@
             </el-table-column>
             <el-table-column width="44">
               <template #default>
-                <Icon icon="mage:user" width="20" height="20" style="color:var(--secondary-text-color)"/>
+                <Icon icon="solar:user-linear" width="20" height="20" style="color:var(--secondary-text-color)"/>
               </template>
             </el-table-column>
           </el-table>
@@ -207,7 +207,7 @@
             clearable
             style="margin-bottom:8px"
           >
-            <template #prefix><Icon icon="iconoir:search" width="15" height="15"/></template>
+            <template #prefix><Icon icon="solar:magnifer-linear" width="15" height="15"/></template>
           </el-input>
           <el-table
             ref="directoryTabRef"

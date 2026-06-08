@@ -30,7 +30,7 @@
               <el-option key="2" :label="$t('selectEmail')" :value="'account'"/>
             </el-select>
             <span class="type-label">{{ selectTitle }}</span>
-            <Icon icon="mingcute:down-small-fill" width="13" height="13" class="type-arrow"/>
+            <Icon icon="solar:alt-arrow-down-linear" width="13" height="13" class="type-arrow"/>
           </div>
           <!-- Content input -->
           <input v-model="searchValue" class="content-input"
@@ -45,11 +45,12 @@
           </el-select>
         </div>
         <!-- ── Action icons ── -->
-        <Icon class="icon" icon="iconoir:search" @click="search" width="16" height="16"/>
+        <Icon class="icon" icon="solar:magnifer-linear" @click="search" width="16" height="16"/>
         <Icon class="icon" @click="changeTimeSort"
-              :icon="params.timeSort === 0 ? 'material-symbols-light:timer-arrow-down-outline' : 'material-symbols-light:timer-arrow-up-outline'"
+              icon="solar:sort-by-time-linear"
+              :style="params.timeSort !== 0 ? 'transform:scaleY(-1)' : ''"
               width="17" height="17"/>
-        <Icon class="icon icon-danger" icon="fluent:broom-sparkle-16-regular" width="16" height="16" @click="openBathDelete"/>
+        <Icon class="icon icon-danger" icon="solar:broom-linear" width="16" height="16" @click="openBathDelete"/>
       </template>
     </emailScroll>
     <el-dialog v-model="showBathDelete" :title="$t('clearEmail')" width="335"

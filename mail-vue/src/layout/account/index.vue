@@ -2,10 +2,10 @@
   <div class="account-box">
     <div class="head-opt">
       <div v-perm="'account:add'" class="icon" @click="add">
-        <Icon icon="ion:add-outline" width="20" height="20"/>
+        <Icon icon="solar:add-circle-linear" width="20" height="20"/>
       </div>
       <div class="icon" @click="refresh">
-        <Icon icon="ion:reload" width="16" height="16"/>
+        <Icon icon="solar:refresh-linear" width="16" height="16"/>
       </div>
     </div>
     <el-scrollbar class="scrollbar" ref="scrollbarRef">

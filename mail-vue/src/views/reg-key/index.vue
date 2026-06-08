@@ -2,7 +2,7 @@
   <div class="page-outer">
     <div class="space-y">
     <div class="header-actions">
-      <Icon class="icon" icon="ion:add-outline" width="20" height="20" @click="openAdd"/>
+      <Icon class="icon" icon="solar:add-circle-linear" width="20" height="20" @click="openAdd"/>
       <div class="search">
         <el-input
             v-model="params.code"
@@ -11,9 +11,9 @@
         >
         </el-input>
       </div>
-      <Icon class="icon" icon="iconoir:search" @click="search" width="18" height="18"/>
-      <Icon class="icon" icon="ion:reload" width="18" height="18" @click="refresh"/>
-      <Icon class="icon icon-danger" icon="fluent:broom-sparkle-16-regular" width="18" height="18" @click="clearNotUse"/>
+      <Icon class="icon" icon="solar:magnifer-linear" @click="search" width="18" height="18"/>
+      <Icon class="icon" icon="solar:refresh-linear" width="18" height="18" @click="refresh"/>
+      <Icon class="icon icon-danger" icon="solar:broom-linear" width="18" height="18" @click="clearNotUse"/>
     </div>
 
     <div class="keys-body">
@@ -44,7 +44,7 @@
             </div>
             <div class="info-right">
               <el-dropdown class="setting">
-                <Icon icon="fluent:settings-24-filled" width="21" height="21" color="#909399"/>
+                <Icon icon="solar:settings-bold" width="21" height="21" color="#909399"/>
                 <template #dropdown>
                   <el-dropdown-menu>
                     <el-dropdown-item @click="copyCode(item.code)">{{ $t('copy') }}</el-dropdown-item>
@@ -67,7 +67,7 @@
       <div class="container">
         <el-input v-model="addForm.code" :placeholder="$t('regKey')">
           <template #suffix>
-            <Icon @click.stop="genCode" class="gen-code" icon="bitcoin-icons:refresh-filled" width="24" height="24"/>
+            <Icon @click.stop="genCode" class="gen-code" icon="solar:refresh-bold" width="24" height="24"/>
           </template>
         </el-input>
         <el-select v-model="addForm.roleId" :placeholder="$t('roleDesc')">

@@ -3,7 +3,7 @@
     <!-- Left: menu + brand / section title -->
     <div class="m-left">
       <button class="m-icon-btn" :aria-label="$t('menu')" @click="openDrawer">
-        <Icon icon="material-symbols:menu-rounded" width="24" height="24"/>
+        <Icon icon="solar:hamburger-menu-linear" width="24" height="24"/>
       </button>
       <div class="m-brand">
         <span class="m-brand-name">PSG</span>

@@ -6,13 +6,13 @@
     <div class="page-main-only">
         <div class="list-toolbar">
           <el-button class="add-btn" @click="openAdd">
-            <Icon icon="ep:plus" width="13" height="13"/>
+            <Icon icon="solar:add-circle-linear" width="13" height="13"/>
             {{ $t('addTemplate') }}
           </el-button>
         </div>
 
         <div v-if="!tplList.length" class="empty-state">
-          <Icon icon="material-symbols:description-outline-rounded" width="32" height="32" class="empty-icon"/>
+          <Icon icon="solar:document-text-linear" width="32" height="32" class="empty-icon"/>
           <div class="empty-title">{{ $t('noTemplates') }}</div>
           <div class="empty-desc">{{ $t('noTemplatesDesc') }}</div>
         </div>
@@ -20,7 +20,7 @@
         <div v-else class="item-list">
           <div class="item-row" v-for="tpl in tplList" :key="tpl.templateId">
             <div class="item-icon">
-              <Icon icon="material-symbols:description-outline-rounded" width="16" height="16"/>
+              <Icon icon="solar:document-text-linear" width="16" height="16"/>
             </div>
             <div class="item-body">
               <div class="item-name">{{ tpl.name }}</div>
@@ -29,10 +29,10 @@
             </div>
             <div class="item-actions">
               <button class="act-btn" :title="$t('change')" @click="openEdit(tpl)">
-                <Icon icon="material-symbols:edit-outline-rounded" width="14" height="14"/>
+                <Icon icon="solar:pen-linear" width="14" height="14"/>
               </button>
               <button class="act-btn danger" :title="$t('delete')" @click="deleteTpl(tpl.templateId)">
-                <Icon icon="material-symbols:delete-outline-rounded" width="14" height="14"/>
+                <Icon icon="solar:trash-bin-trash-linear" width="14" height="14"/>
               </button>
             </div>
           </div>
@@ -45,7 +45,7 @@
   <div class="page-outer editor-mode" v-else>
     <div class="editor-nav">
       <button class="back-btn" @click="cancelEdit">
-        <Icon icon="ep:arrow-left" width="14" height="14"/>
+        <Icon icon="solar:alt-arrow-left-linear" width="14" height="14"/>
         {{ $t('templates') }}
       </button>
       <div class="editor-crumb">

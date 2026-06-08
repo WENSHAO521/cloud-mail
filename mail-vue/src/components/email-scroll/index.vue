@@ -109,7 +109,7 @@
                 <div class="mail-actions">
                   <button v-if="archiveEmail" class="icon-btn" :title="$t('archive')"
                           @click.stop="archiveEmail(item.emailId)">
-                    <Icon icon="material-symbols:archive-outline-rounded" width="14" height="14" />
+                    <Icon icon="solar:archive-linear" width="14" height="14" />
                   </button>
                   <button v-if="showStar" class="icon-btn" :title="$t('star')"
                           @click.stop="starChange(item)">
@@ -118,7 +118,7 @@
                   </button>
                   <button v-perm="'email:delete'" class="icon-btn icon-danger" :title="$t('delete')"
                           @click.stop="rightDelete(item.emailId)">
-                    <Icon icon="material-symbols:delete-outline-rounded" width="14" height="14" />
+                    <Icon icon="solar:trash-bin-trash-linear" width="14" height="14" />
                   </button>
                 </div>
               </div>
@@ -165,43 +165,43 @@
             <div class="ctx-item"><Icon icon="fluent-color:clipboard-24" width="18" height="18" /><span>{{ t('copyCode') }}</span></div>
           </el-dropdown-item>
           <el-dropdown-item v-if="['email'].includes(props.type)" @click="emailRead(rightClickEmail.emailId)">
-            <div class="ctx-item"><Icon icon="fluent:mail-read-20-regular" width="18" height="18" /><span>{{ t('markAsRead') }}</span></div>
+            <div class="ctx-item"><Icon icon="solar:letter-opened-linear" width="18" height="18" /><span>{{ t('markAsRead') }}</span></div>
           </el-dropdown-item>
           <el-dropdown-item v-if="['email','star'].includes(props.type)" @click="openReply(rightClickEmail)">
-            <div class="ctx-item"><Icon icon="la:reply" width="18" height="18" /><span>{{ t('reply') }}</span></div>
+            <div class="ctx-item"><Icon icon="solar:reply-linear" width="18" height="18" /><span>{{ t('reply') }}</span></div>
           </el-dropdown-item>
           <el-dropdown-item v-if="['email','star'].includes(props.type)" @click="openReplyAll(rightClickEmail)">
-            <div class="ctx-item"><Icon icon="la:reply-all" width="18" height="18" /><span>{{ t('replyAll') }}</span></div>
+            <div class="ctx-item"><Icon icon="solar:reply-all-linear" width="18" height="18" /><span>{{ t('replyAll') }}</span></div>
           </el-dropdown-item>
           <el-dropdown-item v-if="['email','send','star'].includes(props.type)" @click="openForward(rightClickEmail)">
-            <div class="ctx-item"><Icon icon="iconoir:arrow-up-right" width="17" height="17" /><span>{{ t('forward') }}</span></div>
+            <div class="ctx-item"><Icon icon="solar:arrow-right-up-linear" width="17" height="17" /><span>{{ t('forward') }}</span></div>
           </el-dropdown-item>
           <el-dropdown-item v-if="['email','send','star'].includes(props.type)" @click="starChange(rightClickEmail)">
             <div class="ctx-item"><Icon icon="solar:star-line-duotone" width="17" height="17" /><span>{{ t('star') }}</span></div>
           </el-dropdown-item>
           <el-dropdown-item v-if="props.type === 'all-email'" @click="handleSearch('user', rightClickEmail.userEmail)">
-            <div class="ctx-item"><Icon icon="iconoir:search" width="18" height="18" /><span>{{ t('searchUser') }}</span></div>
+            <div class="ctx-item"><Icon icon="solar:magnifer-linear" width="18" height="18" /><span>{{ t('searchUser') }}</span></div>
           </el-dropdown-item>
           <el-dropdown-item v-if="props.type === 'all-email'" @click="handleSearch('account', rightClickEmail.toEmail)">
-            <div class="ctx-item"><Icon icon="iconoir:search" width="18" height="18" /><span>{{ t('searchEmail') }}</span></div>
+            <div class="ctx-item"><Icon icon="solar:magnifer-linear" width="18" height="18" /><span>{{ t('searchEmail') }}</span></div>
           </el-dropdown-item>
           <el-dropdown-item v-if="props.type === 'all-email'" @click="handleSearch('name', rightClickEmail.name)">
-            <div class="ctx-item"><Icon icon="iconoir:search" width="18" height="18" /><span>{{ t('searchSender') }}</span></div>
+            <div class="ctx-item"><Icon icon="solar:magnifer-linear" width="18" height="18" /><span>{{ t('searchSender') }}</span></div>
           </el-dropdown-item>
           <el-dropdown-item v-if="props.type === 'email'" @click="archiveAction(rightClickEmail.emailId)">
-            <div class="ctx-item"><Icon icon="material-symbols:archive-outline-rounded" width="18" height="18" /><span>{{ t('archive') }}</span></div>
+            <div class="ctx-item"><Icon icon="solar:archive-linear" width="18" height="18" /><span>{{ t('archive') }}</span></div>
           </el-dropdown-item>
           <el-dropdown-item v-if="props.type === 'archive'" @click="unarchiveAction(rightClickEmail.emailId)">
-            <div class="ctx-item"><Icon icon="material-symbols:unarchive-outline-rounded" width="18" height="18" /><span>{{ t('unarchive') }}</span></div>
+            <div class="ctx-item"><Icon icon="solar:inbox-out-linear" width="18" height="18" /><span>{{ t('unarchive') }}</span></div>
           </el-dropdown-item>
           <el-dropdown-item v-if="props.type === 'email'" @click="markSpamAction(rightClickEmail.emailId)">
-            <div class="ctx-item"><Icon icon="material-symbols:report-outline-rounded" width="18" height="18" /><span>{{ t('markAsSpam') }}</span></div>
+            <div class="ctx-item"><Icon icon="solar:danger-triangle-linear" width="18" height="18" /><span>{{ t('markAsSpam') }}</span></div>
           </el-dropdown-item>
           <el-dropdown-item v-if="props.type === 'spam'" @click="unmarkSpamAction(rightClickEmail.emailId)">
-            <div class="ctx-item"><Icon icon="material-symbols:check-circle-outline-rounded" width="18" height="18" /><span>{{ t('notSpam') }}</span></div>
+            <div class="ctx-item"><Icon icon="solar:check-circle-linear" width="18" height="18" /><span>{{ t('notSpam') }}</span></div>
           </el-dropdown-item>
           <el-dropdown-item @click="rightDelete(rightClickEmail.emailId)">
-            <div class="ctx-item danger"><Icon icon="material-symbols:delete-outline-rounded" width="18" height="18" /><span>{{ t('delete') }}</span></div>
+            <div class="ctx-item danger"><Icon icon="solar:trash-bin-trash-linear" width="18" height="18" /><span>{{ t('delete') }}</span></div>
           </el-dropdown-item>
         </el-dropdown-menu>
       </template>

@@ -72,7 +72,7 @@
                 </el-select>
                 <div style="color: var(--el-text-color-primary)">
                   <span>{{ suffix }}</span>
-                  <Icon class="setting-icon" icon="mingcute:down-small-fill" width="20" height="20"/>
+                  <Icon class="setting-icon" icon="solar:alt-arrow-down-linear" width="20" height="20"/>
                 </div>
               </div>
             </template>
@@ -92,7 +92,7 @@
           </el-button>
 
           <button class="twofactor-entry" @click="twoFactor">
-            <Icon icon="fluent:fingerprint-20-filled" width="17" height="17"/>
+            <Icon icon="solar:fingerprint-bold-duotone" width="17" height="17"/>
             <span>{{ $t('twoFactorEntry') }}</span>
           </button>
 
@@ -121,7 +121,7 @@
                 </el-select>
                 <div>
                   <span>{{ suffix }}</span>
-                  <Icon class="setting-icon" icon="mingcute:down-small-fill" width="20" height="20"/>
+                  <Icon class="setting-icon" icon="solar:alt-arrow-down-linear" width="20" height="20"/>
                 </div>
               </div>
             </template>
@@ -181,7 +181,7 @@
               </el-select>
               <div>
                 <span>{{ suffix }}</span>
-                <Icon class="setting-icon" icon="mingcute:down-small-fill" width="20" height="20"/>
+                <Icon class="setting-icon" icon="solar:alt-arrow-down-linear" width="20" height="20"/>
               </div>
             </div>
           </template>

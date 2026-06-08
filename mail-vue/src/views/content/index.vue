@@ -1,7 +1,7 @@
 <template>
   <!-- Empty state: no email selected — matches vfasky's empty detail panel -->
   <div v-if="!email" class="detail-empty surface-card">
-    <Icon icon="material-symbols:mark-email-unread-outline-rounded" width="40" height="40" class="empty-icon"/>
+    <Icon icon="solar:letter-unread-linear" width="40" height="40" class="empty-icon"/>
     <span class="empty-text">{{ $t('selectEmailHint') }}</span>
   </div>
 
@@ -13,10 +13,10 @@
       <div class="header-left">
         <!-- Back button: always visible; clears selection on desktop, triggers mobile nav -->
         <button class="icon-btn detail-back-btn" @click="handleBack">
-          <Icon icon="material-symbols-light:arrow-back-ios-new" width="20" height="20" />
+          <Icon icon="solar:alt-arrow-left-linear" width="20" height="20" />
         </button>
         <button v-perm="'email:delete'" class="icon-btn icon-danger" @click="handleDelete">
-          <Icon icon="material-symbols:delete-outline-rounded" width="19" height="19" />
+          <Icon icon="solar:trash-bin-trash-linear" width="19" height="19" />
         </button>
         <button class="icon-btn" @click="changeStar" v-if="emailStore.contentData.showStar">
           <Icon :icon="email.isStar ? 'fluent-color:star-16' : 'solar:star-line-duotone'"
@@ -24,13 +24,13 @@
         </button>
         <template v-if="emailStore.contentData.showReply">
           <button class="icon-btn" v-perm="'email:send'" @click="openReply">
-            <Icon icon="la:reply" width="21" height="21" />
+            <Icon icon="solar:reply-linear" width="21" height="21" />
           </button>
           <button class="icon-btn" v-perm="'email:send'" @click="openReplyAll">
-            <Icon icon="la:reply-all" width="22" height="22" />
+            <Icon icon="solar:reply-all-linear" width="22" height="22" />
           </button>
           <button class="icon-btn" v-perm="'email:send'" @click="openForward">
-            <Icon icon="iconoir:arrow-up-right" width="20" height="20" />
+            <Icon icon="solar:arrow-right-up-linear" width="20" height="20" />
           </button>
         </template>
       </div>
@@ -38,17 +38,17 @@
         <el-tooltip :content="$t('markAsUnread')" placement="bottom"
                     v-if="emailStore.contentData.showUnread">
           <button class="icon-btn" @click="handleMarkAsUnread">
-            <Icon icon="fluent:mail-unread-20-regular" width="19" height="19" />
+            <Icon icon="solar:letter-linear" width="19" height="19" />
           </button>
         </el-tooltip>
         <el-tooltip :content="$t('printEmail')" placement="bottom">
           <button class="icon-btn" @click="handlePrint">
-            <Icon icon="material-symbols:print-outline-rounded" width="19" height="19" />
+            <Icon icon="solar:printer-linear" width="19" height="19" />
           </button>
         </el-tooltip>
         <el-tooltip :content="$t('downloadEml')" placement="bottom">
           <button class="icon-btn" @click="handleDownloadEml">
-            <Icon icon="material-symbols:download-rounded" width="19" height="19" />
+            <Icon icon="solar:download-linear" width="19" height="19" />
           </button>
         </el-tooltip>
         <span class="page-counter" v-if="emailStore.contentData.emailTotal > 0">
@@ -118,10 +118,10 @@
               <span class="att-size">{{ formatBytes(att.size) }}</span>
               <div class="att-actions">
                 <button v-if="isImage(att.filename)" class="icon-btn-sm" @click.stop="showImage(att.key)">
-                  <Icon icon="hugeicons:view" width="18" height="18" />
+                  <Icon icon="solar:eye-linear" width="18" height="18" />
                 </button>
                 <a class="icon-btn-sm" :href="cvtR2Url(att.key)" download @click.stop>
-                  <Icon icon="material-symbols:download-rounded" width="18" height="18" />
+                  <Icon icon="solar:download-linear" width="18" height="18" />
                 </a>
               </div>
             </div>

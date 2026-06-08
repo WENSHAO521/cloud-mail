@@ -9,14 +9,14 @@
     <!-- Right: toolbar -->
     <div class="toolbar">
       <div v-if="uiStore.dark" class="icon-btn" @click="openDark($event)">
-        <Icon icon="mingcute:sun-fill" width="20" height="20"/>
+        <Icon icon="solar:sun-bold" width="20" height="20"/>
       </div>
       <div v-else class="icon-btn" @click="openDark($event)">
         <Icon icon="solar:moon-linear" width="20" height="20"/>
       </div>
       <NotificationPanel />
       <div class="icon-btn" @click="openNotice">
-        <Icon icon="streamline-plump:announcement-megaphone" width="20" height="20"/>
+        <Icon icon="solar:megaphone-linear" width="20" height="20"/>
       </div>
 
       <!-- Avatar dropdown -->
@@ -26,7 +26,7 @@
             <img v-if="userStore.avatar" :src="userStore.avatar" class="avatar-photo"/>
             <span v-else>{{ formatName(userStore.user.email) }}</span>
           </div>
-          <Icon class="chevron" icon="mingcute:down-small-fill" width="22" height="22"/>
+          <Icon class="chevron" icon="solar:alt-arrow-down-linear" width="22" height="22"/>
         </div>
         <template #dropdown>
           <div class="user-details">

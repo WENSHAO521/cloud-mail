@@ -15,10 +15,10 @@
                @jump="jumpContent"
   >
     <template #first>
-      <Icon class="icon" @click="changeTimeSort" icon="material-symbols-light:timer-arrow-down-outline"
+      <Icon class="icon" @click="changeTimeSort" icon="solar:sort-by-time-linear"
             v-if="params.timeSort === 0" width="28" height="28"/>
-      <Icon class="icon" @click="changeTimeSort" icon="material-symbols-light:timer-arrow-up-outline" v-else
-            width="28" height="28"/>
+      <Icon class="icon" @click="changeTimeSort" icon="solar:sort-by-time-linear" v-else
+            width="28" height="28" style="transform:scaleY(-1)"/>
     </template>
 
   </emailScroll>
