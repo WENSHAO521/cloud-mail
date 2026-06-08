@@ -11,9 +11,9 @@ import '@fontsource/ibm-plex-sans/700.css'
 import '@fontsource/ibm-plex-mono/400.css'
 import '@fontsource/ibm-plex-mono/500.css'
 import '@fontsource/jetbrains-mono/500.css'
-import '@fontsource/noto-sans-sc/400.css'
-import '@fontsource/noto-sans-sc/500.css'
-import '@fontsource/noto-sans-sc/700.css'
+import '@fontsource/noto-sans-sc/chinese-simplified-400.css'
+import '@fontsource/noto-sans-sc/chinese-simplified-500.css'
+import '@fontsource/noto-sans-sc/chinese-simplified-700.css'
 import { init } from '@/init/init.js';
 import { createPinia } from 'pinia';
 import piniaPersistedState from 'pinia-plugin-persistedstate';
