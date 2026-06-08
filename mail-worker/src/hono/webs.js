@@ -23,4 +23,5 @@ import '../api/oauth-api'
 import '../api/template-api'
 import '../api/contact-group-api'
 import '../api/auto-reply-api'
+import '../api/backup-api'
 export default app;

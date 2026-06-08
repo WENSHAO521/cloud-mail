@@ -39,8 +39,28 @@ const dbInit = {
 		await this.v3_8DB(c);
 		await this.v3_9DB(c);
 		await this.v4_0DB(c);
+		await this.v4_1DB(c);
 		await settingService.refresh(c);
 		return c.text('success');
+	},
+
+	async v4_1DB(c) {
+		try {
+			await c.env.db.prepare(`
+				CREATE TABLE IF NOT EXISTS cloud_backup (
+					id INTEGER PRIMARY KEY AUTOINCREMENT,
+					user_id INTEGER NOT NULL,
+					provider TEXT NOT NULL,
+					access_token TEXT NOT NULL DEFAULT '',
+					refresh_token TEXT NOT NULL DEFAULT '',
+					expires_at INTEGER NOT NULL DEFAULT 0,
+					folder_id TEXT NOT NULL DEFAULT '',
+					last_backup_at INTEGER NOT NULL DEFAULT 0,
+					backup_count INTEGER NOT NULL DEFAULT 0,
+					UNIQUE(user_id, provider)
+				)
+			`).run();
+		} catch (e) { console.warn(`跳过：${e.message}`); }
 	},
 
 	async v4_0DB(c) {

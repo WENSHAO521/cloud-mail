@@ -155,6 +155,61 @@
               </div>
             </div>
 
+            <!-- ── Cloud backup section ── -->
+            <div v-show="activeSection === 'backup'" class="settings-card">
+              <div class="card-body backup-body">
+                <div
+                  v-for="p in PROVIDERS"
+                  :key="p.key"
+                  class="backup-provider-row"
+                >
+                  <div class="backup-provider-info">
+                    <Icon :icon="p.icon" width="28" height="28" class="backup-provider-logo"/>
+                    <div class="backup-provider-meta">
+                      <div class="backup-provider-name">{{ p.label }}</div>
+                      <div class="backup-provider-status">
+                        <template v-if="backupStatusData[p.key]">
+                          <span class="backup-connected-dot"/>
+                          {{ $t('backupConnected') }}
+                          <span class="backup-stat">
+                            · {{ $t('backupLastTime') }}: {{ formatBackupTime(backupStatusData[p.key].lastBackupAt) }}
+                          </span>
+                          <span v-if="backupStatusData[p.key].backupCount" class="backup-stat">
+                            · {{ $t('backupCount', { n: backupStatusData[p.key].backupCount }) }}
+                          </span>
+                        </template>
+                        <template v-else>
+                          <span class="backup-disconnected-dot"/>
+                          {{ $t('backupDisconnect') }}
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="backup-provider-actions">
+                    <template v-if="backupStatusData[p.key]">
+                      <el-button
+                        size="small"
+                        :loading="backupLoading[p.key]"
+                        @click="triggerBackup(p.key)"
+                      >{{ $t('backupNow') }}</el-button>
+                      <el-button
+                        size="small"
+                        type="danger"
+                        plain
+                        @click="disconnectProvider(p.key)"
+                      >{{ $t('backupDisconnect') }}</el-button>
+                    </template>
+                    <el-button
+                      v-else
+                      size="small"
+                      type="primary"
+                      @click="connectProvider(p.key)"
+                    >{{ p.key === 'google' ? $t('backupConnectGoogle') : $t('backupConnectMicrosoft') }}</el-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- ── Danger zone section ── -->
             <div v-show="activeSection === 'danger'" class="settings-card">
               <div class="danger-inner">
@@ -193,7 +248,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, computed, defineOptions, onMounted } from 'vue'
+import { reactive, ref, computed, defineOptions, onMounted, watch } from 'vue'
 import Account from '@/layout/account/index.vue'
 import { resetPassword, userDelete } from "@/request/my.js"
 import { useUserStore } from "@/store/user.js"
@@ -206,6 +261,8 @@ import { Icon } from "@iconify/vue"
 import tinyEditor from "@/components/tiny-editor/index.vue"
 import http from "@/axios/index.js"
 import { hasPerm } from "@/perm/perm.js"
+import { backupConnectUrl, backupStatus, backupDisconnect, backupStart } from "@/request/backup.js"
+import dayjs from "dayjs"
 
 const { t } = useI18n()
 const accountStore = useAccountStore()
@@ -225,6 +282,64 @@ const autoReplyEnabled = ref(false)
 const autoReplyMessage = ref('')
 const autoReplySaving = ref(false)
 
+// ── Cloud backup ──
+const backupStatusData = ref({})
+const backupLoading = ref({ google: false, microsoft: false })
+
+const PROVIDERS = [
+  { key: 'google',    label: 'Google Drive',  icon: 'logos:google-drive' },
+  { key: 'microsoft', label: 'OneDrive',       icon: 'logos:microsoft-onedrive' },
+]
+
+function loadBackupStatus() {
+  backupStatus().then(d => { backupStatusData.value = d }).catch(() => {})
+}
+
+async function connectProvider(provider) {
+  try {
+    const { url } = await backupConnectUrl(provider)
+    const popup = window.open(url, 'backup_oauth', 'width=600,height=700,scrollbars=yes')
+    const timer = setInterval(() => {
+      if (popup?.closed) {
+        clearInterval(timer)
+        loadBackupStatus()
+      }
+    }, 800)
+  } catch {
+    ElMessage({ message: t('backupConnectFailed'), type: 'error', plain: true })
+  }
+}
+
+function disconnectProvider(provider) {
+  const label = PROVIDERS.find(p => p.key === provider)?.label || provider
+  ElMessageBox.confirm(t('backupDisconnectConfirm', { provider: label }), {
+    confirmButtonText: t('confirm'), cancelButtonText: t('cancel'), type: 'warning',
+  }).then(() => {
+    backupDisconnect(provider).then(() => {
+      delete backupStatusData.value[provider]
+      backupStatusData.value = { ...backupStatusData.value }
+    })
+  }).catch(() => {})
+}
+
+async function triggerBackup(provider) {
+  backupLoading.value[provider] = true
+  try {
+    const { count } = await backupStart(provider)
+    ElMessage({ message: t('backupDone', { count }), type: 'success', plain: true })
+    loadBackupStatus()
+  } catch {
+    ElMessage({ message: t('backupFailed'), type: 'error', plain: true })
+  } finally {
+    backupLoading.value[provider] = false
+  }
+}
+
+function formatBackupTime(ts) {
+  if (!ts) return t('backupNever')
+  return dayjs(ts).format('YYYY-MM-DD HH:mm')
+}
+
 defineOptions({ name: 'setting' })
 
 const activeSection = ref('profile')
@@ -236,6 +351,7 @@ const navItems = computed(() => {
     { key: 'signature', icon: 'solar:pen-bold-duotone',             label: t('signature') },
     { key: 'autoreply', icon: 'solar:chat-round-dots-bold-duotone', label: t('autoReply') },
     { key: 'mail',      icon: 'solar:mailbox-bold-duotone',         label: t('mailManagement') },
+    { key: 'backup',    icon: 'solar:cloud-upload-bold-duotone',    label: t('cloudBackup') },
   ]
   if (hasPerm('my:delete')) {
     items.push({ key: 'danger', icon: 'solar:danger-triangle-bold-duotone', label: t('dangerZone') })
@@ -249,6 +365,7 @@ const sectionMeta = computed(() => ({
   signature: { label: t('signature'),      desc: t('signatureDesc') },
   autoreply: { label: t('autoReply'),      desc: t('autoReplyDesc') },
   mail:      { label: t('mailManagement'), desc: t('mailManagementDesc') },
+  backup:    { label: t('cloudBackup'),    desc: t('cloudBackupDesc') },
   danger:    { label: t('dangerZone'),     desc: t('dangerZoneDesc') },
 }))
 
@@ -261,6 +378,18 @@ onMounted(() => {
     autoReplyEnabled.value = !!data.enabled
     autoReplyMessage.value = data.message || ''
   }).catch(() => {})
+  loadBackupStatus()
+
+  // Handle OAuth popup redirect back with ?backup_connected=provider
+  const hash = window.location.hash
+  if (hash.includes('backup_connected=')) {
+    const provider = hash.split('backup_connected=')[1]?.split('&')[0]
+    if (provider) {
+      activeSection.value = 'backup'
+      ElMessage({ message: t('backupConnected'), type: 'success', plain: true })
+      history.replaceState(null, '', window.location.pathname)
+    }
+  }
 })
 
 const userInitial = computed(() => {
@@ -557,6 +686,85 @@ function submitPwd() {
   font-size: 13px;
   font-weight: 600;
   line-height: 1.4;
+}
+
+/* ── Cloud backup ── */
+.backup-body {
+  gap: 0;
+  padding: 0;
+}
+
+.backup-provider-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--separator, #e5e5e5);
+
+  &:last-child { border-bottom: 0; }
+
+  @media (max-width: 560px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.backup-provider-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.backup-provider-logo {
+  flex-shrink: 0;
+}
+
+.backup-provider-meta {
+  min-width: 0;
+}
+
+.backup-provider-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--el-text-color-primary);
+  margin-bottom: 3px;
+}
+
+.backup-provider-status {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--psg-text-secondary, #666);
+}
+
+.backup-connected-dot {
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #22a06b;
+  flex-shrink: 0;
+}
+
+.backup-disconnected-dot {
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--el-border-color, #ccc);
+  flex-shrink: 0;
+}
+
+.backup-stat {
+  color: var(--psg-text-secondary, #888);
+}
+
+.backup-provider-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 /* ── Card body padding ── */
