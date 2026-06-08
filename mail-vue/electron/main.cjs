@@ -315,8 +315,13 @@ autoUpdater.on('update-downloaded', () => {
   win?.webContents.send('update-downloaded')
 })
 
+autoUpdater.on('update-not-available', () => {
+  win?.webContents.send('update-not-available')
+})
+
 autoUpdater.on('error', (err) => {
   console.error('[updater]', err.message)
+  win?.webContents.send('update-error', err.message)
 })
 
 ipcMain.on('install-update', () => {

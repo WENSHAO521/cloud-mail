@@ -22,9 +22,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
   isWin: process.platform === 'win32',
 
   // Auto-update
-  onUpdateAvailable:  (cb) => ipcRenderer.on('update-available',  (_, info) => cb(info)),
-  onUpdateProgress:   (cb) => ipcRenderer.on('update-progress',   (_, pct)  => cb(pct)),
-  onUpdateDownloaded: (cb) => ipcRenderer.on('update-downloaded', ()        => cb()),
+  onUpdateAvailable:    (cb) => ipcRenderer.on('update-available',    (_, info) => cb(info)),
+  onUpdateProgress:     (cb) => ipcRenderer.on('update-progress',     (_, pct)  => cb(pct)),
+  onUpdateDownloaded:   (cb) => ipcRenderer.on('update-downloaded',   ()        => cb()),
+  onUpdateNotAvailable: (cb) => ipcRenderer.on('update-not-available',()        => cb()),
+  onUpdateError:        (cb) => ipcRenderer.on('update-error',        (_, msg)  => cb(msg)),
   checkForUpdates: () => ipcRenderer.send('check-for-updates'),
   installUpdate:   () => ipcRenderer.send('install-update'),
 })

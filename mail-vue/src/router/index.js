@@ -41,6 +41,16 @@ const routes = [
                     menu: true
                 }
             },
+            {
+                path: '/about',
+                name: 'about',
+                component: () => import('@/views/about/index.vue'),
+                meta: {
+                    title: 'about',
+                    name: 'about',
+                    menu: true
+                }
+            },
 {
                 path: '/archive',
                 name: 'archive',

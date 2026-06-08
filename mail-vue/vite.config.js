@@ -1,10 +1,14 @@
 import {defineConfig, loadEnv} from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
+import { createRequire } from 'module'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import {ElementPlusResolver} from 'unplugin-vue-components/resolvers'
 import {VitePWA} from 'vite-plugin-pwa';
+
+const _require = createRequire(import.meta.url)
+const pkg = _require('./package.json')
 
 export default defineConfig(({mode}) => {
     const env = loadEnv(mode, process.cwd(), 'VITE')
@@ -44,6 +48,9 @@ export default defineConfig(({mode}) => {
             AutoImport({ resolvers: [ElementPlusResolver()] }),
             Components({ resolvers: [ElementPlusResolver()] }),
         ],
+        define: {
+            __APP_VERSION__: JSON.stringify(pkg.version),
+        },
         resolve: {
             alias: { '@': path.resolve(__dirname, 'src') }
         },
