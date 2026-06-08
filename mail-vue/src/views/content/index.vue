@@ -51,6 +51,13 @@
             <Icon icon="solar:download-linear" width="19" height="19" />
           </button>
         </el-tooltip>
+        <el-tooltip :content="translateBtnLabel" placement="bottom">
+          <button class="icon-btn" :class="{ 'icon-btn--active': showTranslation }"
+                  @click="handleTranslate" :disabled="translating">
+            <Icon v-if="translating" icon="svg-spinners:3-dots-fade" width="20" height="20" />
+            <Icon v-else icon="solar:global-linear" width="19" height="19" />
+          </button>
+        </el-tooltip>
         <span class="page-counter" v-if="emailStore.contentData.emailTotal > 0">
           {{ emailStore.contentData.emailIndex }}&thinsp;/&thinsp;{{ emailStore.contentData.emailTotal }}
         </span>
@@ -106,6 +113,28 @@
           <pre v-else class="email-text">{{ email.text }}</pre>
         </div>
 
+        <div v-if="showTranslation" class="translate-panel">
+          <div class="translate-panel-header">
+            <span class="translate-panel-title">
+              <Icon icon="solar:global-linear" width="15" height="15" />
+              {{ $t('translatedResult') }}
+              <span class="translate-lang-tag">{{ translateTargetLang === 'zh' ? $t('translateToZh') : $t('translateToEn') }}</span>
+            </span>
+            <div class="translate-panel-actions">
+              <button class="translate-switch-btn" @click="switchTranslateLang">
+                {{ translateTargetLang === 'zh' ? $t('translateToEn') : $t('translateToZh') }}
+              </button>
+              <button class="icon-btn-sm" @click="showTranslation = false">
+                <Icon icon="solar:close-linear" width="15" height="15" />
+              </button>
+            </div>
+          </div>
+          <div v-if="translating" class="translate-loading">
+            <Icon icon="svg-spinners:3-dots-fade" width="24" height="24" />
+          </div>
+          <pre v-else class="translate-body">{{ translatedText }}</pre>
+        </div>
+
         <div class="att-container" v-if="email.attList && email.attList.length > 0">
           <div class="att-header">
             <span class="att-title-text">{{ $t('attachments') }}</span>
@@ -140,6 +169,7 @@ import ShadowHtml from '@/components/shadow-html/index.vue'
 import { reactive, ref, watch, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { emailDelete, emailRead, emailUnread } from '@/request/email.js'
+import { translateEmail } from '@/request/translate.js'
 import { Icon } from '@iconify/vue'
 import { useEmailStore } from '@/store/email.js'
 import { useAccountStore } from '@/store/account.js'
@@ -178,16 +208,72 @@ const metaAvatarBg = computed(() => avatarBg(email.value?.sendEmail || email.val
 const showPreview = ref(false)
 const srcList = reactive([])
 
+const translating = ref(false)
+const showTranslation = ref(false)
+const translatedText = ref('')
+const translateTargetLang = ref('zh')
+
+const translateBtnLabel = computed(() =>
+  showTranslation.value ? t('showOriginal') : t('translateEmail')
+)
+
+function detectLang(text) {
+  const cjk = (text.match(/[一-鿿぀-ゟ゠-ヿ]/g) || []).length
+  return cjk / Math.max(text.length, 1) > 0.1 ? 'zh' : 'en'
+}
+
+async function runTranslate(targetLang) {
+  const e = email.value
+  if (!e) return
+  translating.value = true
+  showTranslation.value = true
+  translatedText.value = ''
+  const sourceLang = detectLang(e.text || e.content || '')
+  try {
+    const res = await translateEmail({
+      html: e.content || undefined,
+      text: e.content ? undefined : (e.text || ''),
+      source_lang: sourceLang,
+      target_lang: targetLang,
+    })
+    translatedText.value = res.data?.translated_text || ''
+  } catch {
+    ElMessage({ message: t('translateFailed'), type: 'error', plain: true })
+    showTranslation.value = false
+  } finally {
+    translating.value = false
+  }
+}
+
+function handleTranslate() {
+  if (showTranslation.value) {
+    showTranslation.value = false
+    return
+  }
+  const e = email.value
+  if (!e) return
+  const sourceLang = detectLang(e.text || e.content || '')
+  translateTargetLang.value = sourceLang === 'zh' ? 'en' : 'zh'
+  runTranslate(translateTargetLang.value)
+}
+
+function switchTranslateLang() {
+  translateTargetLang.value = translateTargetLang.value === 'zh' ? 'en' : 'zh'
+  runTranslate(translateTargetLang.value)
+}
+
 const parsedCc  = computed(() => parseAddressList(email.value?.cc))
 const parsedBcc = computed(() => parseAddressList(email.value?.bcc))
 
-// Mark as read when email opens
+// Mark as read when email opens; reset translation state on switch
 watch(email, (newEmail) => {
   if (newEmail && emailStore.contentData.showUnread && newEmail.unread === EmailUnreadEnum.UNREAD) {
     newEmail.unread = EmailUnreadEnum.READ
     emailRead([newEmail.emailId])
   }
   if (!newEmail) emailStore.contentData.showUnread = false
+  showTranslation.value = false
+  translatedText.value = ''
 }, { immediate: true })
 
 // Clear on account switch
@@ -654,6 +740,86 @@ function handleDelete() {
   .att-name { flex: 1; min-width: 0; font-size: 13px; font-weight: 500; color: var(--el-text-color-primary); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
   .att-size { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted, #666666); flex-shrink: 0; white-space: nowrap; }
   .att-actions { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+}
+
+/* ── Translation panel ─────────────────────────────── */
+.translate-panel {
+  margin: 16px 0 8px;
+  border: 1px solid var(--light-border-color, #cfc4c5);
+  border-left: 3px solid #bc0000;
+  background: var(--surface-secondary, #f3f3f3);
+}
+
+.translate-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--light-border-color, #e0e0e0);
+}
+
+.translate-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted, #666666);
+}
+
+.translate-lang-tag {
+  background: #bc0000;
+  color: #fff;
+  font-size: 9px;
+  padding: 1px 5px;
+  letter-spacing: 0.05em;
+}
+
+.translate-panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.translate-switch-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #bc0000;
+  border: 1px solid #bc0000;
+  background: transparent;
+  padding: 2px 8px;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+  &:hover { background: #bc0000; color: #fff; }
+}
+
+.translate-loading {
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+  color: var(--muted, #999);
+}
+
+.translate-body {
+  padding: 12px 16px;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  font-size: 14px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--el-text-color-primary);
+  background: transparent;
+  margin: 0;
+}
+
+.icon-btn--active {
+  color: #bc0000 !important;
 }
 </style>
 
