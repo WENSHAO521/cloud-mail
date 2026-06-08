@@ -104,7 +104,7 @@
             </div>
 
             <!-- ── Signature section ── -->
-            <div v-show="activeSection === 'signature'" class="settings-card">
+            <div v-if="activeSection === 'signature'" class="settings-card">
               <div class="card-body">
                 <div class="card-desc">{{ $t('signatureDesc') }}</div>
                 <div class="editor-shell">
@@ -248,7 +248,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, computed, defineOptions, onMounted, watch } from 'vue'
+import { reactive, ref, computed, defineOptions, onMounted, onActivated, watch } from 'vue'
 import Account from '@/layout/account/index.vue'
 import { resetPassword, userDelete } from "@/request/my.js"
 import { useUserStore } from "@/store/user.js"
@@ -370,6 +370,10 @@ const sectionMeta = computed(() => ({
 }))
 
 const activeMeta = computed(() => sectionMeta.value[activeSection.value] || { label: '', desc: '' })
+
+onActivated(() => {
+  signatureText.value = userStore.user.signature || ''
+})
 
 onMounted(() => {
   userStore.loadAvatar()
