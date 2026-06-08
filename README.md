@@ -4,7 +4,7 @@
 
 A self-hosted, Cloudflare-native email platform built for institutional deployment. Runs entirely on the Cloudflare edge (Workers · D1 · KV · R2) with a Vue 3 web client and a cross-platform Electron desktop application.
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![License: Proprietary](https://img.shields.io/badge/license-Proprietary-red)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/WENSHAO521/cloud-mail)](https://github.com/WENSHAO521/cloud-mail/releases)
 
 ---
@@ -103,4 +103,8 @@ Key modifications made in this fork:
 
 ## License
 
-[MIT](LICENSE) — © 2025 Panorama Scholarly Group
+© 2025 Panorama Scholarly Group. All Rights Reserved.
+
+This software is proprietary. Copying, redistribution, and private or commercial use by any party outside of Panorama Scholarly Group is strictly prohibited. See [LICENSE](LICENSE) for full terms.
+
+Original open-source components from [Cloud Mail](https://github.com/maillab/cloud-mail) (MIT License) are attributed in the license file.

@@ -1,20 +1,61 @@
+PANORAMA SCHOLARLY GROUP PROPRIETARY LICENSE
+Version 1.0, 2025
+
+Copyright (c) 2025 Panorama Scholarly Group. All Rights Reserved.
+
+This software, PSG Mail, is the exclusive intellectual property of
+Panorama Scholarly Group. This includes all source code, configuration,
+design, branding, and documentation authored or modified by
+Panorama Scholarly Group.
+
+RESTRICTIONS
+
+1. No Copying — You may not reproduce, duplicate, or copy this software
+   or any substantial portion of it.
+
+2. No Redistribution — You may not distribute, publish, sublicense, sell,
+   or otherwise transfer this software or any derivative works to any
+   third party.
+
+3. No Private or Commercial Use — You may not use this software, in whole
+   or in part, for any private, commercial, or non-commercial purpose
+   outside of Panorama Scholarly Group without prior written permission.
+
+4. No Modification for External Deployment — You may not modify and deploy
+   this software for any organisation or individual outside of
+   Panorama Scholarly Group.
+
+Violations of these terms may result in legal action under applicable
+copyright law.
+
+For licensing inquiries, contact: Panorama Scholarly Group.
+
+-------------------------------------------------------------------------------
+
+OPEN SOURCE COMPONENTS — ORIGINAL MIT LICENSE NOTICE
+
+Portions of this software are derived from Cloud Mail
+(https://github.com/maillab/cloud-mail), which is made available under the
+MIT License. The original MIT License notice is reproduced below as required:
+
 The MIT License (MIT)
 
 Copyright (c) 2025 eoao
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
