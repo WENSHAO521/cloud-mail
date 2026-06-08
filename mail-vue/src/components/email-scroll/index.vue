@@ -117,7 +117,7 @@
                           :width="14" :height="14" />
                   </button>
                   <button v-perm="'email:delete'" class="icon-btn icon-danger" :title="$t('delete')"
-                          @click.stop="rightDelete(item.emailId)">
+                          @click.stop="rightDeleteItem(item)">
                     <Icon icon="solar:trash-bin-trash-linear" width="14" height="14" />
                   </button>
                 </div>
@@ -451,6 +451,14 @@ function localRead(emailIds) {
     const index = emailList.findIndex(email => email.emailId === emailId);
     if (index > -1) { emailList[index].unread = EmailUnreadEnum.READ; emailList[index].checked = false; }
   })
+}
+
+function rightDeleteItem(item) {
+  if (props.type === 'draft') {
+    emit('delete-draft', [item.draftId])
+    return
+  }
+  rightDelete(item.emailId)
 }
 
 function rightDelete(emailId) {
