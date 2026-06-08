@@ -923,9 +923,8 @@ function open() {
   const sigHtml = sig
     ? `<p><br></p><p><br></p><p style="color:#999;margin-top:0">-- </p>${sig}`
     : ''
-  // Reset to '' first so watcher fires even when sigHtml hasn't changed since last open
   defValue.value = ''
-  nextTick(() => { defValue.value = sigHtml })
+  setTimeout(() => { defValue.value = sigHtml })
 }
 
 function openDraft(draft) {
@@ -948,6 +947,13 @@ async function autoSaveDraft() {
   if (!show.value) return
   const content = editor.value?.getContent?.() ?? form.content
   if (!content && !form.subject && form.receiveEmail.length === 0) return
+  // Don't autosave a draft that only contains the signature with no user input
+  if (!form.subject && form.receiveEmail.length === 0 && !form.draftId) {
+    const sigOnly = userStore.user.signature
+      ? content.includes(userStore.user.signature) && form.receiveEmail.length === 0
+      : false
+    if (sigOnly) return
+  }
 
   form.content = content
 
