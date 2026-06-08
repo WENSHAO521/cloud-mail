@@ -68,6 +68,7 @@ linux:
       arch: [x64]
   icon: build/icon.png
   category: Network
+  maintainer: Panorama Scholarly Group <admin@panorama-sg.com>
 
 # ── Auto-update publish target ─────────────────────────────────
 publish:

@@ -1,9 +1,10 @@
 {
   "name": "psg-mail",
   "description": "PSG Mail — Panorama Scholarly Group institutional email client",
-  "author": "Panorama Scholarly Group",
+  "author": "Panorama Scholarly Group <admin@panorama-sg.com>",
+  "homepage": "https://panorama-sg.com",
   "private": true,
-  "version": "2.2.7",
+  "version": "2.2.8",
   "type": "module",
   "main": "electron/main.cjs",
   "scripts": {
