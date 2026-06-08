@@ -91,7 +91,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, defineOptions } from 'vue'
+import { ref, computed, onMounted, onUnmounted, defineOptions } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Icon } from '@iconify/vue'
 
@@ -106,6 +106,7 @@ const isElectron = !!window.electronAPI
 const stage    = ref('idle')
 const progress = ref(0)
 const newVersion = ref('')
+let autoCheckTimer = null
 
 const stageCls = computed(() => ({
   'status--idle':       stage.value === 'idle',
@@ -163,6 +164,14 @@ onMounted(() => {
   window.electronAPI.onUpdateError?.(() => {
     stage.value = 'error'
   })
+
+  autoCheckTimer = setTimeout(() => {
+    if (stage.value === 'idle') checkUpdate()
+  }, 6000)
+})
+
+onUnmounted(() => {
+  clearTimeout(autoCheckTimer)
 })
 </script>
 
