@@ -161,8 +161,8 @@ const canSend = computed(() => hasPerm('email:send'));
 
 /* ── Nav items ── */
 const navItems = [
-  { name: 'email',     labelKey: 'inbox',         icon: 'psg:inbox' },
   { name: 'all-inbox', labelKey: 'allInbox',      icon: 'solar:layers-linear' },
+  { name: 'email',     labelKey: 'inbox',         icon: 'psg:inbox' },
   { name: 'send',      labelKey: 'sent',          icon: 'psg:send',     perm: 'email:send' },
   { name: 'draft',     labelKey: 'drafts',        icon: 'psg:draft',    perm: 'email:send' },
   { name: 'star',      labelKey: 'starred',       icon: 'psg:bookmark' },
