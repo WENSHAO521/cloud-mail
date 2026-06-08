@@ -11,7 +11,7 @@
           @change="handleCheckAllChange"
         />
         <div v-if="!props.hideInlineSearch" class="toolbar-search" :class="{ 'has-value': searchQuery }">
-          <Icon icon="iconoir:search" width="15" height="15" class="search-icon-inline"/>
+          <Icon icon="solar:magnifer-linear" width="15" height="15" class="search-icon-inline"/>
           <input
             ref="searchInputRef"
             v-model="searchQuery"
@@ -19,24 +19,24 @@
             :placeholder="$t('searchPlaceholder')"
             @keydown.esc="searchQuery = ''"
           />
-          <Icon v-if="searchQuery" icon="material-symbols:close-rounded" width="15" height="15"
+          <Icon v-if="searchQuery" icon="solar:close-circle-linear" width="15" height="15"
                 class="search-clear-inline" @click="searchQuery = ''" />
         </div>
         <slot name="first"></slot>
         <button class="icon-btn" @click="refresh">
-          <Icon icon="ion:reload" width="17" height="17" />
+          <Icon icon="solar:refresh-linear" width="17" height="17" />
         </button>
         <button v-perm="'email:delete'" class="icon-btn icon-danger"
                 v-if="getSelectedMailsIds().length > 0" @click="handleDelete">
-          <Icon icon="material-symbols:delete-outline-rounded" width="17" height="17" />
+          <Icon icon="solar:trash-bin-trash-linear" width="17" height="17" />
         </button>
         <button class="icon-btn" v-if="getSelectedMailsIds().length > 0 && showUnread" @click="handleRead">
-          <Icon icon="fluent:mail-read-20-regular" width="19" height="19" />
+          <Icon icon="solar:letter-opened-linear" width="19" height="19" />
         </button>
         <el-tooltip v-if="getSelectedMailsIds().length === 0 && unreadCount > 0 && showUnread"
                     :content="$t('markAllRead')" placement="bottom">
           <button class="icon-btn" @click="handleMarkAllRead">
-            <Icon icon="fluent:mail-read-24-regular" width="19" height="19" />
+            <Icon icon="solar:letter-opened-linear" width="19" height="19" />
           </button>
         </el-tooltip>
         <!-- Count pushed to right edge via margin-left:auto -->
