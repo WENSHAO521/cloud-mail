@@ -3,8 +3,7 @@
     padding: 0;
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
-    scrollbar-width: thin;
-    scrollbar-color: var(--dark-border) transparent;
+    scrollbar-width: none;
 }
 
 html, body {
@@ -701,13 +700,8 @@ button, input, select, textarea {
     border-color: #bc0000 !important;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #CCCCCC; border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: #999999; }
-.dark ::-webkit-scrollbar-thumb { background: #444444; }
-.dark ::-webkit-scrollbar-thumb:hover { background: #666666; }
+/* Scrollbar — hidden but functional */
+::-webkit-scrollbar { width: 0; height: 0; }
 
 /* ── View Transition ────────────────────────────── */
 html.dark,
