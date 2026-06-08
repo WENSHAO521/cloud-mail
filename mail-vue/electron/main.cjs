@@ -10,7 +10,7 @@ if (process.env.ELECTRON_RUN_AS_NODE) {
   return
 }
 
-const { app, BrowserWindow, ipcMain, Notification, nativeImage, shell, Menu, Tray } = require('electron')
+const { app, BrowserWindow, ipcMain, Notification, nativeImage, shell, Menu, Tray, nativeTheme } = require('electron')
 const path = require('path')
 const { autoUpdater } = require('electron-updater')
 
@@ -243,7 +243,7 @@ function createWindow() {
     minHeight: 600,
     title: 'PSG Mail',
     icon: appIcon,
-    backgroundColor: '#ffffff',
+    backgroundColor: nativeTheme.shouldUseDarkColors ? '#141418' : '#ffffff',
     show: false,
     ...macWindowOptions,
     webPreferences: {
@@ -320,7 +320,6 @@ autoUpdater.on('update-not-available', () => {
 })
 
 autoUpdater.on('error', (err) => {
-  console.error('[updater]', err.message)
   win?.webContents.send('update-error', err.message)
 })
 

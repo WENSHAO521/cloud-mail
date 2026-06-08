@@ -310,6 +310,8 @@ button, input, select, textarea {
     /* ── Misc ────────────────────────────────────────────── */
     --aside-backgound: #141418;
     --login-switch-color: #d93333;
+    --brand-grid-line: #2a2a32;
+    --brand-grid-mark: #9898aa;
 
     /* ── Element Plus overrides ──────────────────────────── */
     --el-border-color: #30303a !important;       /* was #1c1c1c */

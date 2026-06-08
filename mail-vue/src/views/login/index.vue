@@ -7,7 +7,7 @@
     <div class="brand-panel">
       <!-- Precise structural grid / registration marks (Bauhaus restraint) -->
       <svg class="brand-grid" viewBox="0 0 600 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-        <g stroke="#E5E5E5" stroke-width="1">
+        <g stroke="var(--brand-grid-line, #E5E5E5)" stroke-width="1">
           <line x1="80" y1="0" x2="80" y2="800"/>
           <line x1="220" y1="0" x2="220" y2="800"/>
           <line x1="360" y1="0" x2="360" y2="800"/>
@@ -16,12 +16,12 @@
           <line x1="0" y1="400" x2="600" y2="400"/>
           <line x1="0" y1="640" x2="600" y2="640"/>
         </g>
-        <g stroke="#111111" stroke-width="1">
+        <g stroke="var(--brand-grid-mark, #111111)" stroke-width="1">
           <path d="M40 40 H70 M40 40 V70" fill="none"/>
           <path d="M560 760 H530 M560 760 V730" fill="none"/>
         </g>
         <rect x="500" y="160" width="14" height="14" fill="#bc0000"/>
-        <circle cx="80" cy="640" r="6" fill="none" stroke="#111111" stroke-width="1"/>
+        <circle cx="80" cy="640" r="6" fill="none" stroke="var(--brand-grid-mark, #111111)" stroke-width="1"/>
       </svg>
 
       <div class="brand-editorial">
@@ -337,7 +337,6 @@ window.onTurnstileError = (e) => {
     return
   }
   verifyErrorCount++
-  console.warn('人机验加载失败', e)
   setTimeout(() => {
     nextTick(() => {
       if (!turnstileId) {
@@ -557,9 +556,7 @@ function refreshWebsiteConfig() {
       suffix.value = setting.domainList[0]
     }
     document.title = setting.title
-  }).catch(e => {
-    console.error(e)
-  })
+  }).catch(() => {})
 }
 
 
@@ -645,7 +642,6 @@ function submitRegister() {
             turnstileId = window.turnstile.render('.register-turnstile')
           } catch (e) {
             botJsError.value = true
-            console.log('人机验证js加载失败')
           }
         } else {
           window.turnstile.reset('.register-turnstile')

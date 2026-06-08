@@ -2,11 +2,21 @@
   <CommandPalette ref="cmdPaletteRef"/>
 
   <!-- Keyboard shortcuts dialog -->
-  <el-dialog v-model="showShortcuts" :title="$t('shortcutsTitle')" width="420" align-center>
-    <div class="shortcuts-grid">
-      <div class="sc-row" v-for="sc in shortcutsList" :key="sc.key">
-        <kbd class="sc-key">{{ sc.key }}</kbd>
-        <span class="sc-desc">{{ $t(sc.label) }}</span>
+  <el-dialog v-model="showShortcuts" :title="$t('shortcutsTitle')" width="460" align-center>
+    <div class="shortcuts-body">
+      <div class="sc-section-title">{{ $t('shortcutActions') }}</div>
+      <div class="shortcuts-grid">
+        <div class="sc-row" v-for="sc in actionsShortcuts" :key="sc.key">
+          <kbd class="sc-key">{{ sc.key }}</kbd>
+          <span class="sc-desc">{{ $t(sc.label) }}</span>
+        </div>
+      </div>
+      <div class="sc-section-title sc-section-title--mt">{{ $t('shortcutNavigation') }}</div>
+      <div class="shortcuts-grid">
+        <div class="sc-row" v-for="sc in navShortcuts" :key="sc.key">
+          <kbd class="sc-key">{{ sc.key }}</kbd>
+          <span class="sc-desc">{{ $t(sc.label) }}</span>
+        </div>
       </div>
     </div>
   </el-dialog>
@@ -94,7 +104,7 @@ import MobileHeader from '@/layout/mobile-header/index.vue'
 import MobileTabbar from '@/layout/mobile-tabbar/index.vue'
 import writer from '@/layout/write/index.vue'
 import { ref, computed, reactive, onMounted, onBeforeUnmount, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useUiStore } from '@/store/ui.js'
 import { useNotificationStore } from '@/store/notification.js'
 import { useEmailStore } from '@/store/email.js'
@@ -102,6 +112,7 @@ import { useSettingStore } from '@/store/setting.js'
 import { emailArchive } from '@/request/email.js'
 
 const route = useRoute()
+const router = useRouter()
 const uiStore = useUiStore()
 const notificationStore = useNotificationStore()
 const emailStore = useEmailStore()
@@ -113,16 +124,25 @@ const platform = window.electronAPI?.platform ?? 'web'
 let elNotification = null
 let noticeStyle = null
 
-const shortcutsList = [
-  { key: 'C',       label: 'shortcutCompose'  },
-  { key: 'R',       label: 'shortcutReply'    },
-  { key: 'A',       label: 'shortcutReplyAll' },
-  { key: 'F',       label: 'shortcutForward'  },
-  { key: 'E',       label: 'shortcutArchive'  },
-  { key: '?',       label: 'shortcutHelp'     },
-  { key: 'Ctrl K',  label: 'shortcutSearch'   },
-  { key: 'Esc',     label: 'close'            },
+const actionsShortcuts = [
+  { key: 'C',      label: 'shortcutCompose'  },
+  { key: 'R',      label: 'shortcutReply'    },
+  { key: 'A',      label: 'shortcutReplyAll' },
+  { key: 'F',      label: 'shortcutForward'  },
+  { key: 'E',      label: 'shortcutArchive'  },
+  { key: 'Ctrl K', label: 'shortcutSearch'   },
+  { key: '?',      label: 'shortcutHelp'     },
 ]
+const navShortcuts = [
+  { key: 'G I',    label: 'shortcutGoInbox'  },
+  { key: 'G A',    label: 'shortcutGoAll'    },
+  { key: 'G S',    label: 'shortcutGoSent'   },
+  { key: 'G D',    label: 'shortcutGoDrafts' },
+  { key: 'G T',    label: 'shortcutGoStarred'},
+]
+
+let pendingG = false
+let pendingGTimer = null
 
 // ── Website announcement ────────────────────────────────────
 watch(() => uiStore.changeNotice, () => {
@@ -173,6 +193,27 @@ function handleKeydown(e) {
   const tag = e.target.tagName
   if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable) return
   if (e.ctrlKey || e.metaKey || e.altKey) return
+
+  // g-prefix navigation (Gmail-style: g then i/a/s/d/t)
+  if (pendingG) {
+    clearTimeout(pendingGTimer)
+    pendingG = false
+    switch (e.key) {
+      case 'i': router.push({ name: 'email' }); return
+      case 'a': router.push({ name: 'all-inbox' }); return
+      case 's': router.push({ name: 'send' }); return
+      case 'd': router.push({ name: 'draft' }); return
+      case 't': router.push({ name: 'star' }); return
+    }
+    return
+  }
+
+  if (e.key === 'g') {
+    pendingG = true
+    pendingGTimer = setTimeout(() => { pendingG = false }, 1200)
+    return
+  }
+
   const email = emailStore.contentData?.email
   switch (e.key) {
     case 'c': uiStore.writerRef?.open?.(); break
@@ -229,6 +270,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('resize', handleResize)
   window.removeEventListener('keydown', handleKeydown)
+  clearTimeout(pendingGTimer)
 })
 </script>
 
@@ -267,10 +309,21 @@ onBeforeUnmount(() => {
 .update-bar-enter-active, .update-bar-leave-active { transition: all .25s ease; }
 .update-bar-enter-from, .update-bar-leave-to { opacity: 0; transform: translateX(-50%) translateY(12px); }
 
+.shortcuts-body { display: flex; flex-direction: column; gap: 0; }
+.sc-section-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--muted, #7e7576);
+  margin-bottom: 10px;
+  &--mt { margin-top: 20px; }
+}
 .shortcuts-grid {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 .sc-row {
   display: flex;

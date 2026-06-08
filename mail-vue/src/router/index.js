@@ -85,6 +85,18 @@ const routes = [
                     menu: true
                 }
             },
+            {
+                path: '/send',
+                name: 'send',
+                component: () => import('@/views/send/index.vue'),
+                meta: { title: 'sent', name: 'send', menu: true }
+            },
+            {
+                path: '/draft',
+                name: 'draft',
+                component: () => import('@/views/draft/index.vue'),
+                meta: { title: 'drafts', name: 'draft', menu: true }
+            },
         ]
 
     },
@@ -163,8 +175,8 @@ function loadBackground(next) {
         const proceed = () => { if (!done) { done = true; next(); } };
 
         img.onload = proceed;
-        img.onerror = () => { console.warn("背景图片加载失败:", img.src); proceed(); };
-        setTimeout(() => { console.warn("背景加载超时，已放行"); proceed(); }, 3000);
+        img.onerror = () => { proceed(); };
+        setTimeout(() => { proceed(); }, 3000);
 
     } else {
         next()
