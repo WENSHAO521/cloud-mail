@@ -410,8 +410,8 @@ function handleDelete() {
     type: 'warning'
   }).then(() => {
     const doDelete = emailStore.contentData.delType === 'logic'
-      ? emailDelete(e.emailId)
-      : allEmailDelete(e.emailId)
+      ? emailDelete([e.emailId])
+      : allEmailDelete([e.emailId])
     doDelete.then(() => {
       ElMessage({ message: t('delSuccessMsg'), type: 'success', plain: true })
       emailStore.deleteIds = [e.emailId]

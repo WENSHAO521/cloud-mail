@@ -31,7 +31,7 @@ import { useSettingStore } from "@/store/setting.js";
 import emailScroll from "@/components/email-scroll/index.vue";
 import { emailList, emailDelete, emailLatest, emailRead, emailMarkSpam, emailArchive } from "@/request/email.js";
 import { starAdd, starCancel } from "@/request/star.js";
-import { defineOptions, onMounted, reactive, ref, watch } from "vue";
+import { defineOptions, onMounted, onUnmounted, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { sleep } from "@/utils/time-utils.js";
@@ -50,7 +50,9 @@ const params = reactive({ timeSort: 0 });
 
 const ALL_RECEIVE = 1;
 
-onMounted(() => { latest(); });
+let latestRunning = false
+onMounted(() => { latestRunning = true; latest(); });
+onUnmounted(() => { latestRunning = false; });
 
 function changeTimeSort() {
   params.timeSort = params.timeSort ? 0 : 1;
@@ -69,7 +71,7 @@ function jumpContent(email) {
 const existIds = new Set();
 
 async function latest() {
-  while (true) {
+  while (latestRunning) {
     let autoRefresh = settingStore.settings.autoRefresh;
     await sleep(autoRefresh > 1 ? autoRefresh * 1000 : 3000);
 

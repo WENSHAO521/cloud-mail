@@ -344,12 +344,12 @@ watch(itemHeight, () => { keyCount.value++ })
 
 watch(followLoading, (v) => {
   if (v) expandList.push({ emailId: 0, expand: 'loading' })
-  else { const i = expandList.findIndex(x => x.expand === 'loading'); expandList.splice(i, 1); }
+  else { const i = expandList.findIndex(x => x.expand === 'loading'); if (i > -1) expandList.splice(i, 1); }
 })
 
 watch(noLoading, (v) => {
   if (v) expandList.push({ emailId: 0, expand: 'noMoreData' })
-  else { const i = expandList.findIndex(x => x.expand === 'noMoreData'); expandList.splice(i, 1); }
+  else { const i = expandList.findIndex(x => x.expand === 'noMoreData'); if (i > -1) expandList.splice(i, 1); }
 })
 
 watch(() => arrivedState.bottom, (isBottom) => { if (isBottom && !loading.value) loadData(); });
