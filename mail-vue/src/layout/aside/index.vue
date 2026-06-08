@@ -4,7 +4,7 @@
          :data-open="String(uiStore.asideShow)">
 
     <!-- ── Brand ────────────────────────────────────────── -->
-    <div class="sidebar-brand">
+    <div class="sidebar-brand" :class="{ 'sidebar-brand--mac': isMac }">
       <div class="brand-text-block">
         <div class="brand-name">PANORAMA SCHOLARLY GROUP</div>
         <div class="brand-sub">INSTITUTIONAL MAIL</div>
@@ -145,6 +145,9 @@ const uiStore = useUiStore();
 const userStore = useUserStore();
 const emailStore = useEmailStore();
 
+/* ── macOS traffic-light detection ── */
+const isMac = !!window.electronAPI?.isMac;
+
 /* ── Collapse ── */
 const isMobile = ref(window.innerWidth < 1025);
 const onResize = () => { isMobile.value = window.innerWidth < 1025; };
@@ -240,8 +243,11 @@ function clickLogout() {
   flex-shrink: 0;
   border-bottom: 1px solid var(--light-border, #000000);
   border-left: 3px solid #bc0000;
-  /* macOS hiddenInset: reserve space for traffic-light buttons (≈52px wide, 28px tall) */
   -webkit-app-region: drag;
+
+  /* macOS hiddenInset: trafficLightPosition y=18, button h≈14px → bottom≈32px.
+     Push brand content to y≈46 so it clears the traffic lights. */
+  &.sidebar-brand--mac { padding-top: 46px; }
 }
 
 .sidebar-brand * {
