@@ -367,10 +367,10 @@ function showNativeNotification(title, body) {
   } else if (isMac) {
     // macOS: icon from app bundle, no need to set it
   } else {
-    // Linux
+    // Linux: must be a real file path, not inside asar
     const pngPath = isDev
       ? path.join(__dirname, '..', 'public', 'pwa-192.png')
-      : path.join(__dirname, '..', 'dist', 'pwa-192.png')
+      : path.join(process.resourcesPath, 'build', 'icon.png')
     opts.icon = pngPath
   }
 
