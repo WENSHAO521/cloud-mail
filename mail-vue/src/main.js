@@ -28,3 +28,10 @@ app.use(router).use(i18n).directive('perm',perm)
 app.config.devtools = true;
 
 app.mount('#app');
+
+// Vite's CSS minifier strips !important from custom property declarations,
+// so :root { --el-font-family: ... !important } in style.css loses to the
+// vendor-element-plus chunk (same :root specificity, later in document order).
+// Setting via inline style on <html> beats all external stylesheet rules.
+const PSG_FONT = "'IBM Plex Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei UI', 'Microsoft YaHei', sans-serif"
+document.documentElement.style.setProperty('--el-font-family', PSG_FONT, 'important')

@@ -181,8 +181,9 @@ button, input, select, textarea {
 }
 
 :root {
-    /* Override Element Plus default font so all el-* components use our bundled fonts */
-    --el-font-family: 'IBM Plex Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei UI', 'Microsoft YaHei', sans-serif !important;
+    /* Override Element Plus default font — actual override happens via JS in main.js
+       because Vite strips !important from custom properties during minification */
+    --el-font-family: 'IBM Plex Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei UI', 'Microsoft YaHei', sans-serif;
 
     /* PSG — Black / White / Deep Red — German scholarly publisher */
     --el-color-primary: #bc0000;
