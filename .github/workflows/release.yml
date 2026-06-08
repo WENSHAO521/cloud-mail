@@ -87,19 +87,9 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TAG="${{ github.ref_name }}"
-          # GET /releases/tags/{tag} only returns published releases, not drafts.
-          # Use the list endpoint which includes drafts when authenticated.
           RELEASE_ID=$(curl -s -H "Authorization: token $GH_TOKEN" \
             "https://api.github.com/repos/WENSHAO521/cloud-mail/releases?per_page=50" \
-            | python3 -c "
-import sys,json,os
-releases=json.load(sys.stdin)
-tag=os.environ['TAG']
-for r in releases:
-    if r.get('tag_name') == tag:
-        print(r['id'])
-        break
-" TAG="$TAG")
+            | jq -r --arg tag "$TAG" '.[] | select(.tag_name == $tag) | .id')
           if [ -z "$RELEASE_ID" ]; then
             echo "No draft release found for $TAG — all build jobs may have failed. Skipping."
             exit 0
