@@ -8,9 +8,6 @@ on:
 permissions:
   contents: write
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
   build:
     strategy:
@@ -25,13 +22,14 @@ jobs:
             platform: linux
 
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
 
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '20'
           cache: 'npm'
           cache-dependency-path: mail-vue/package-lock.json
 
@@ -39,7 +37,7 @@ jobs:
         if: matrix.platform == 'linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libarchive-tools libopenjp2-tools rpm
+          sudo apt-get install -y libarchive-tools
 
       - name: Install dependencies
         working-directory: mail-vue
@@ -69,9 +67,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CSC_IDENTITY_AUTO_DISCOVERY: false
+          USE_HARD_LINKS: false
 
-  # Publish the draft once all builds are done.
-  # Runs even if Linux fails so Windows + macOS packages are still released.
+  # Runs even if one platform fails — publishes whatever was uploaded
   publish-release:
     needs: build
     runs-on: ubuntu-latest
