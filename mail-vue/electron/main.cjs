@@ -18,6 +18,9 @@ const isDev  = process.env.NODE_ENV === 'development'
 const isMac  = process.platform === 'darwin'
 const isWin  = process.platform === 'win32'
 
+// Windows: must be set before app.whenReady() for Toast notifications to appear
+if (isWin) app.setAppUserModelId('com.psg.mail')
+
 let win
 let tray
 let appIcon
@@ -343,23 +346,43 @@ app.on('activate', () => {
 })
 
 // ── IPC: Native notifications ─────────────────────────────────
-ipcMain.on('notify', (_event, { title, body }) => {
+function showNativeNotification(title, body) {
   if (!Notification.isSupported()) return
-  const n = new Notification({
+  const opts = {
     title: title || 'PSG Mail',
     body: body || '',
-    icon: appIcon,
     silent: false,
-  })
+  }
+  // Windows needs a proper icon path (not nativeImage) for Toast
+  if (isWin) {
+    const icoPath = isDev
+      ? path.join(__dirname, '..', 'build', 'icon.ico')
+      : path.join(process.resourcesPath, 'build', 'icon.ico')
+    opts.icon = icoPath
+  } else if (isMac) {
+    // macOS: icon from app bundle, no need to set it
+  } else {
+    // Linux
+    const pngPath = isDev
+      ? path.join(__dirname, '..', 'public', 'pwa-192.png')
+      : path.join(__dirname, '..', 'dist', 'pwa-192.png')
+    opts.icon = pngPath
+  }
+
+  const n = new Notification(opts)
   n.on('click', () => {
     if (win) {
       if (win.isMinimized()) win.restore()
       if (!win.isVisible()) win.show()
-      if (isMac) app.focus()
+      if (isMac) app.focus({ steal: true })
       win.focus()
     }
   })
   n.show()
+}
+
+ipcMain.on('notify', (_event, { title, body }) => {
+  showNativeNotification(title, body)
 })
 
 // ── IPC: Badge / taskbar overlay ─────────────────────────────
