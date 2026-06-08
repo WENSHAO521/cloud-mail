@@ -9,7 +9,7 @@
         <div class="brand-name">PANORAMA SCHOLARLY GROUP</div>
         <div class="brand-sub">INSTITUTIONAL MAIL</div>
       </div>
-      <div class="brand-abbr">PSG</div>
+      <img class="brand-abbr" src="/image/psg-logo.png" alt="PSG" />
     </div>
 
     <!-- ── Header ───────────────────────────────────────── -->
@@ -288,13 +288,9 @@ function clickLogout() {
 
 .brand-abbr {
   display: none;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
-  color: #bc0000;
-  line-height: 1;
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
 }
 
 /* ── Header ──────────────────────────────────────────────── */
