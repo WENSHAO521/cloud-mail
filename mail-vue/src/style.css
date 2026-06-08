@@ -264,47 +264,66 @@ button, input, select, textarea {
 }
 
 .dark {
-    --surface: #080808;
-    --surface-secondary: #0f0f0f;
-    --separator: #1a1a1a;
-    --muted: #6b7280;
+    /*
+     * PSG Dark — Charcoal Academic
+     * Base: cool-neutral dark (not pure black)
+     * Layers: clear 8–12 pt steps for depth
+     * Text: 3-tier legible hierarchy
+     */
 
+    /* ── Surfaces (darkest → lightest) ─────────────────── */
+    --surface: #1c1c21;              /* card / panel face          */
+    --surface-secondary: #25252b;   /* slightly elevated surface  */
+    --separator: #2a2a32;           /* section dividers           */
+    --muted: #78788a;
+
+    /* ── Red accent (unchanged) ──────────────────────────── */
     --red-accent: #bc0000;
     --red-accent-dark: #8f0000;
-    --red-accent-subtle: rgba(188, 0, 0, 0.12);
+    --red-accent-subtle: rgba(188, 0, 0, 0.14);
 
-    --extra-light-fill: #050505;
-    --light-ill: #0d0d0d;
-    --light-border: #1c1c1c;
-    --aside-backgound: #000000;
-    --header-actions-border: inset 0 -1px 0 0 #1c1c1c;
-    --loadding-background: rgba(0, 0, 0, 0.55);
-    --dark-border: #2e2e2e;
-    --base-fill: #0a0a0a;
-    --regular-text-color: #909090;
-    --light-border-color: #141414;
-    --aside-right-border: 1px 0 0 rgba(0, 0, 0, 0.6);
-    --choose-account-background: #1a0808;
-    --email-scroll-content-color: rgba(255, 255, 255, 0.22);
-    --email-hover-background: #0d0d0d;
-    --login-border: 1px solid #1c1c1c;
-    --form-desc-color: #909090;
-    --login-switch-color: #D93333;
-    --scrollbar-track-color: #2e2e2e;
-    --base-border-color: #1c1c1c;
-    --secondary-text-color: #505050;
-    --message-block-color: rgba(8, 8, 8, 0.4);
-    --el-border-color: #1c1c1c !important;
-    --el-bg-color: #000000 !important;
-    --el-bg-color-overlay: #080808 !important;
-    --el-bg-color-page: #000000 !important;
-    --el-fill-color-blank: #080808 !important;
-    --el-fill-color: #0d0d0d !important;
-    --el-fill-color-light: #0a0a0a !important;
+    /* ── Fill / hover / indent ───────────────────────────── */
+    --extra-light-fill: #18181e;    /* inset list backgrounds     */
+    --light-ill: #25252b;
+    --base-fill: #1c1c21;           /* hover backgrounds          */
+    --email-hover-background: #22222a;
+    --choose-account-background: #1e1018;
+    --message-block-color: rgba(14, 14, 20, 0.55);
+    --loadding-background: rgba(14, 14, 20, 0.90);
 
-    --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.6), 0 4px 16px rgba(0, 0, 0, 0.4);
-    --card-shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.7), 0 1px 4px rgba(0, 0, 0, 0.5);
-    --compose-shadow: 0 8px 40px rgba(0, 0, 0, 0.7), 0 2px 8px rgba(0, 0, 0, 0.5);
+    /* ── Borders ─────────────────────────────────────────── */
+    --light-border: #30303a;        /* was #1c1c1c — clearly visible */
+    --light-border-color: #2c2c36;  /* was #141414 — was near-invisible */
+    --base-border-color: #2c2c36;
+    --dark-border: #46465a;
+    --header-actions-border: inset 0 -1px 0 0 #2a2a32;
+    --aside-right-border: 1px 0 0 rgba(0, 0, 0, 0.4);
+    --login-border: 1px solid #30303a;
+    --scrollbar-track-color: #30303a;
+
+    /* ── Text ────────────────────────────────────────────── */
+    --regular-text-color: #9898aa;   /* was #909090   — slightly warmer */
+    --secondary-text-color: #70707e; /* was #505050   — much more legible */
+    --form-desc-color: #9898aa;
+    --email-scroll-content-color: rgba(220, 220, 232, 0.28);
+
+    /* ── Misc ────────────────────────────────────────────── */
+    --aside-backgound: #141418;
+    --login-switch-color: #d93333;
+
+    /* ── Element Plus overrides ──────────────────────────── */
+    --el-border-color: #30303a !important;       /* was #1c1c1c */
+    --el-bg-color: #141418 !important;           /* was #000000 */
+    --el-bg-color-overlay: #1c1c21 !important;   /* was #080808 */
+    --el-bg-color-page: #141418 !important;      /* was #000000 */
+    --el-fill-color-blank: #1c1c21 !important;   /* was #080808 */
+    --el-fill-color: #22222a !important;         /* was #0d0d0d */
+    --el-fill-color-light: #18181e !important;   /* was #0a0a0a */
+
+    /* ── Shadows ─────────────────────────────────────────── */
+    --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.45), 0 4px 16px rgba(0, 0, 0, 0.30);
+    --card-shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.55), 0 1px 4px rgba(0, 0, 0, 0.35);
+    --compose-shadow: 0 8px 40px rgba(0, 0, 0, 0.60), 0 2px 8px rgba(0, 0, 0, 0.40);
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -348,7 +367,7 @@ button, input, select, textarea {
     }
 }
 
-.dark .settings-tab-button { color: rgba(255, 255, 255, 0.50); }
+.dark .settings-tab-button { color: #9898aa; }
 .dark .settings-tab-button[data-active="true"] { color: var(--el-text-color-primary); }
 
 /* Settings detail grid — matches vfasky .settings-detail-grid */
@@ -374,14 +393,14 @@ button, input, select, textarea {
 /* ── Dark mode email: unread=white, read=dim — class-based, no :has() ── */
 .dark .email-row:not(.is-unread) .name,
 .dark .email-row:not(.is-unread) .subject-text {
-    color: rgba(255, 255, 255, 0.42) !important;
+    color: #70707e !important;
 }
 .dark .email-row.is-unread .name,
 .dark .email-row.is-unread .subject-text {
-    color: #ffffff !important;
+    color: #e8e8f4 !important;
 }
 .dark .email-row {
-    border-bottom-color: rgba(255, 255, 255, 0.035) !important;
+    border-bottom-color: #2a2a32 !important;
 }
 
 /* ── Email micro-interaction keyframes ───────────────────── */
@@ -442,8 +461,8 @@ button, input, select, textarea {
     background: transparent !important;
 }
 .dark .el-button--default {
-    border-color: #ffffff !important;
-    color: #ffffff !important;
+    border-color: #8888a0 !important;   /* was #ffffff — less harsh */
+    color: #d8d8e4 !important;          /* was #ffffff */
 }
 .dark .el-button--default:hover {
     border-color: #bc0000 !important;
@@ -470,13 +489,13 @@ button, input, select, textarea {
     box-shadow: 0 0 0 2px #bc0000 !important;
 }
 .dark .el-input__wrapper {
-    box-shadow: 0 0 0 1px #555555 !important;
+    box-shadow: 0 0 0 1px #38383e !important;  /* was #555555 — slightly darker */
 }
 .dark .el-input__wrapper:hover {
     box-shadow: 0 0 0 1px #bc0000 !important;
 }
 .dark .el-input__wrapper.is-focus {
-    box-shadow: 0 0 0 2px #bc0000 !important;
+    box-shadow: 0 0 0 2px rgba(188, 0, 0, 0.70) !important;
 }
 .el-input-group__append,
 .el-input-group__prepend {
@@ -497,21 +516,21 @@ button, input, select, textarea {
     border-bottom: 2px solid #222222 !important;
 }
 .dark .el-table th.el-table__cell {
-    background: #181818 !important;
-    color: #AAAAAA !important;
-    border-bottom: 2px solid #444444 !important;
+    background: #1c1c21 !important;
+    color: #9898aa !important;
+    border-bottom: 2px solid #30303a !important;
 }
 .el-table td.el-table__cell {
     border-bottom: 1px solid #F0F0F0 !important;
 }
 .dark .el-table td.el-table__cell {
-    border-bottom: 1px solid #222222 !important;
+    border-bottom: 1px solid #2c2c36 !important;
 }
 .el-table__row:hover td {
     background: #FAFAFA !important;
 }
 .dark .el-table__row:hover td {
-    background: #1E1E1E !important;
+    background: #22222a !important;
 }
 
 /* Cards — Brutalist Academic */
@@ -521,7 +540,7 @@ button, input, select, textarea {
     box-shadow: none !important;
 }
 .dark .el-card {
-    border-color: #555555 !important;
+    border-color: #30303a !important;
 }
 
 /* Dialogs — Brutalist Academic */
@@ -541,8 +560,8 @@ button, input, select, textarea {
     background: #f3f3f3 !important;
 }
 .dark .el-dialog__header {
-    border-bottom-color: #1c1c1c !important;
-    background: #080808 !important;
+    border-bottom-color: #2a2a32 !important;
+    background: #1c1c21 !important;
 }
 .el-dialog__title {
     font-weight: 700 !important;
@@ -553,7 +572,7 @@ button, input, select, textarea {
     color: #000000 !important;
 }
 .dark .el-dialog__title {
-    color: #EEEEEE !important;
+    color: #d8d8e8 !important;
 }
 
 /* Tags — Brutalist Academic */
@@ -627,8 +646,8 @@ button, input, select, textarea {
 }
 .dark .el-dropdown__popper,
 .dark .el-dropdown-menu {
-    background: #080808 !important;
-    border-color: #1c1c1c !important;
+    background: #1c1c21 !important;
+    border-color: #2c2c36 !important;
 }
 .el-dropdown-menu__item {
     border-radius: 0 !important;
@@ -653,8 +672,8 @@ button, input, select, textarea {
 }
 .dark .el-select__popper,
 .dark .el-select-dropdown {
-    background: #080808 !important;
-    border-color: #1c1c1c !important;
+    background: #1c1c21 !important;
+    border-color: #2c2c36 !important;
 }
 .el-select-dropdown__item.is-selected {
     color: #bc0000 !important;
@@ -694,8 +713,8 @@ button, input, select, textarea {
 }
 .dark .el-notification,
 .dark .el-message {
-    border-color: #1c1c1c !important;
-    background: #080808 !important;
+    border-color: #2c2c36 !important;
+    background: #1c1c21 !important;
 }
 
 /* Switch */
