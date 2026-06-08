@@ -27,9 +27,20 @@ function updateContent() {
   const bodyStyle = bodyStyleMatch ? bodyStyleMatch[1] : '';
 
   // 2. 移除 <body> 标签（保留内容）
-  const cleanedHtml = props.html.replace(/<\/?body[^>]*>/gi, '');
+  const rawHtml = props.html.replace(/<\/?body[^>]*>/gi, '');
 
-  // 3. 将 body 的 style 应用到 .shadow-content
+  // 3. Strip <script>/<noscript> and on* event handler attributes
+  const tmp = document.createElement('div')
+  tmp.innerHTML = rawHtml
+  tmp.querySelectorAll('script, noscript').forEach(el => el.remove())
+  tmp.querySelectorAll('*').forEach(el => {
+    Array.from(el.attributes).forEach(attr => {
+      if (/^on/i.test(attr.name)) el.removeAttribute(attr.name)
+    })
+  })
+  const cleanedHtml = tmp.innerHTML
+
+  // 4. 将 body 的 style 应用到 .shadow-content
   shadowRoot.innerHTML = `
     <style>
       :host {

@@ -1006,8 +1006,8 @@ function close() {
       receiveFlag = true;
     }
     if (subjectFlag && contentFlag && receiveFlag) {
-      resetForm();
-      close()
+      show.value = false
+      resetForm()
       return;
     }
   }
@@ -1023,7 +1023,7 @@ function close() {
     delete formData.attachments
     formData.createTime = dayjs().utc().format('YYYY-MM-DD HH:mm:ss');
     const draftId = await db.value.draft.add({...formData})
-    db.value.att.add({draftId, attachments: toRaw(form.attachments)})
+    await db.value.att.add({draftId, attachments: toRaw(form.attachments)})
     draftStore.refreshList++
     show.value = false
     await nextTick(() => {
