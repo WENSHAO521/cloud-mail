@@ -2,7 +2,19 @@
   <div class="page-outer">
 
     <div class="page-main-only">
+        <!-- Toolbar -->
         <div class="list-toolbar">
+          <div class="toolbar-stats">
+            <span class="stat-item">
+              <span class="stat-num">{{ groupList.length }}</span>
+              <span class="stat-lbl">{{ $t('groupUnit') }}</span>
+            </span>
+            <span class="stat-sep">·</span>
+            <span class="stat-item">
+              <span class="stat-num">{{ totalContacts }}</span>
+              <span class="stat-lbl">{{ $t('contactUnit') }}</span>
+            </span>
+          </div>
           <el-button class="add-btn" @click="openAdd">
             <Icon icon="solar:add-circle-linear" width="13" height="13"/>
             {{ $t('addGroup') }}
@@ -189,19 +201,6 @@ async function deleteGroup(groupId) {
   @media (max-width: 640px)  { padding: 16px 16px 32px; }
 }
 
-.page-head {
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--separator, #e5e5e5);
-  margin-bottom: 24px;
-}
-.page-h1 {
-  font-size: 24px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--el-text-color-primary);
-  line-height: 1.2;
-}
-
 /* Full-width main (no sidebar) */
 .page-main-only {
   display: flex;
@@ -214,20 +213,57 @@ async function deleteGroup(groupId) {
 
 .list-toolbar {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
+  padding: 10px 16px;
   background: var(--surface, #fff);
   border-radius: 0;
   border: 1px solid var(--light-border, #000000);
   box-shadow: none;
+  min-height: 52px;
+}
+
+.toolbar-stats {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.stat-num {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: var(--el-text-color-primary);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.stat-lbl {
+  font-size: 11px;
+  color: var(--secondary-text-color);
+  font-weight: 500;
+}
+
+.stat-sep {
+  font-size: 16px;
+  color: var(--light-border-color);
+  font-weight: 300;
+  line-height: 1;
 }
 
 .add-btn {
-  display: flex; align-items: center; gap: 6px;
   font-size: 13px; font-weight: 600;
-  height: 36px; padding: 0 16px;
+  height: 34px; padding: 0 14px;
   border-radius: 0 !important;
+  flex-shrink: 0;
+
+  :deep(span) { display: inline-flex; align-items: center; gap: 7px; }
 }
 
 .empty-state {
@@ -365,63 +401,6 @@ async function deleteGroup(groupId) {
 .slide-leave-active { transition: opacity 0.14s ease, transform 0.14s ease; }
 .slide-enter-from { opacity: 0; transform: translateY(-5px); }
 .slide-leave-to   { opacity: 0; transform: translateY(-3px); }
-
-/* ═══════════════════════════════════════
-   RIGHT SIDEBAR
-═══════════════════════════════════════ */
-.page-sidebar {
-  display: flex; flex-direction: column; gap: 0;
-  position: sticky; top: 24px;
-
-  @media (max-width: 1160px) { display: none; }
-}
-
-.sidebar-block {
-  padding: 16px 0;
-  border-bottom: 1px solid var(--light-border-color);
-  &:first-child { padding-top: 0; }
-  &.last { border-bottom: none; }
-}
-
-.sb-label {
-  font-size: 9.5px; font-weight: 900;
-  text-transform: uppercase; letter-spacing: 0.16em;
-  color: var(--secondary-text-color); margin-bottom: 10px;
-}
-
-.sb-text {
-  font-size: 12.5px; line-height: 1.7;
-  color: var(--regular-text-color); margin: 0;
-}
-
-.sb-list {
-  list-style: none; padding: 0; margin: 0;
-  display: flex; flex-direction: column; gap: 7px;
-
-  li {
-    font-size: 12.5px; line-height: 1.55;
-    color: var(--regular-text-color);
-    padding-left: 12px; position: relative;
-
-    &::before {
-      content: '—'; position: absolute; left: 0;
-      color: #bc0000; font-weight: 700;
-    }
-  }
-}
-
-.sb-stat-pair { display: flex; gap: 24px; }
-
-.sb-stat { display: flex; align-items: baseline; gap: 5px; }
-
-.sb-stat-num {
-  font-size: 32px; font-weight: 900;
-  letter-spacing: -0.04em;
-  color: var(--el-text-color-primary);
-  font-variant-numeric: tabular-nums;
-}
-
-.sb-stat-unit { font-size: 12px; color: var(--secondary-text-color); }
 
 /* ── Drawer ── */
 .drawer-body {
