@@ -10,6 +10,7 @@ const zh = {
     lightMode: '浅色模式',
     close: '关闭',
     inbox: '收件箱',
+    allInbox: '所有收件箱',
     drafts: '草稿箱',
     sent: '已发送',
     starred: '星标邮件',

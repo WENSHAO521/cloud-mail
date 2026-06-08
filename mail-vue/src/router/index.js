@@ -22,6 +22,16 @@ const routes = [
                 }
             },
             {
+                path: '/all-inbox',
+                name: 'all-inbox',
+                component: () => import('@/views/all-inbox/index.vue'),
+                meta: {
+                    title: 'allInbox',
+                    name: 'all-inbox',
+                    menu: true
+                }
+            },
+            {
                 path: '/settings',
                 name: 'setting',
                 component: () => import('@/views/setting/index.vue'),

@@ -10,6 +10,7 @@ const en = {
     lightMode: 'Light mode',
     close: 'Close',
     inbox: 'Inbox',
+    allInbox: 'All Inboxes',
     drafts: 'Drafts',
     sent: 'Sent',
     starred: 'Starred',
