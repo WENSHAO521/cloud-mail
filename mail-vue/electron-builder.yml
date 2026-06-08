@@ -74,3 +74,4 @@ publish:
   provider: github
   owner: WENSHAO521
   repo: cloud-mail
+  releaseType: draft

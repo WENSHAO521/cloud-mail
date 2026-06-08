@@ -12,21 +12,10 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  # ── Step 1: Create the GitHub Release first so all platform builds
-  # can upload to it in parallel without race-condition conflicts.
-  create-release:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          generate_release_notes: true
-          draft: false
-
-  # ── Step 2: Build each platform and publish artifacts to the release.
+  # ── Build each platform and upload artifacts to a draft release.
+  # electron-builder creates the draft automatically; all three jobs
+  # safely upload to the same draft without race conditions.
   build:
-    needs: create-release
     strategy:
       fail-fast: false
       matrix:
@@ -71,9 +60,28 @@ jobs:
           iconutil -c icns icon.iconset -o build/icon.icns
           rm -rf icon.iconset
 
-      - name: Build & publish
+      - name: Build & publish to draft release
         working-directory: mail-vue
         run: npm run electron:build -- --${{ matrix.platform }} --publish always
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CSC_IDENTITY_AUTO_DISCOVERY: false
+
+  # ── After all three platform builds succeed, publish the draft release.
+  publish-release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ github.ref_name }}"
+          RELEASE_ID=$(curl -s -H "Authorization: token $GH_TOKEN" \
+            "https://api.github.com/repos/WENSHAO521/cloud-mail/releases/tags/$TAG" \
+            | python3 -c "import sys,json; print(json.load(sys.stdin)['id'])")
+          curl -s -X PATCH -H "Authorization: token $GH_TOKEN" \
+            -H "Content-Type: application/json" \
+            "https://api.github.com/repos/WENSHAO521/cloud-mail/releases/$RELEASE_ID" \
+            -d '{"draft":false}'
+          echo "Release $TAG published."
