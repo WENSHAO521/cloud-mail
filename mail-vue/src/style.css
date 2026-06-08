@@ -181,6 +181,9 @@ button, input, select, textarea {
 }
 
 :root {
+    /* Override Element Plus default font so all el-* components use our bundled fonts */
+    --el-font-family: 'IBM Plex Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei UI', 'Microsoft YaHei', sans-serif;
+
     /* PSG — Black / White / Deep Red — German scholarly publisher */
     --el-color-primary: #bc0000;
     --el-color-primary-dark-2: #8f0000;
