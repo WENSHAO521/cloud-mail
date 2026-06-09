@@ -66,23 +66,35 @@ jobs:
           ELECTRON_MIRROR: https://npmmirror.com/mirrors/electron/
           ELECTRON_BUILDER_BINARIES_MIRROR: https://npmmirror.com/mirrors/electron-builder-binaries/
 
+      - name: Generate desktop theme icons
+        working-directory: mail-vue
+        run: node scripts/generate-desktop-icons.cjs
+
       - name: Generate icon.icns (macOS only)
         if: matrix.platform == 'mac'
         working-directory: mail-vue
         run: |
-          mkdir -p icon.iconset
-          sips -z 16   16   build/icon.png --out icon.iconset/icon_16x16.png
-          sips -z 32   32   build/icon.png --out icon.iconset/icon_16x16@2x.png
-          sips -z 32   32   build/icon.png --out icon.iconset/icon_32x32.png
-          sips -z 64   64   build/icon.png --out icon.iconset/icon_32x32@2x.png
-          sips -z 128  128  build/icon.png --out icon.iconset/icon_128x128.png
-          sips -z 256  256  build/icon.png --out icon.iconset/icon_128x128@2x.png
-          sips -z 256  256  build/icon.png --out icon.iconset/icon_256x256.png
-          sips -z 512  512  build/icon.png --out icon.iconset/icon_256x256@2x.png
-          sips -z 512  512  build/icon.png --out icon.iconset/icon_512x512.png
-          sips -z 1024 1024 build/icon.png --out icon.iconset/icon_512x512@2x.png
-          iconutil -c icns icon.iconset -o build/icon.icns
-          rm -rf icon.iconset
+          make_icns() {
+            src="$1"
+            dest="$2"
+            iconset="$(mktemp -d)/icon.iconset"
+            mkdir -p "$iconset"
+            sips -z 16   16   "$src" --out "$iconset/icon_16x16.png"
+            sips -z 32   32   "$src" --out "$iconset/icon_16x16@2x.png"
+            sips -z 32   32   "$src" --out "$iconset/icon_32x32.png"
+            sips -z 64   64   "$src" --out "$iconset/icon_32x32@2x.png"
+            sips -z 128  128  "$src" --out "$iconset/icon_128x128.png"
+            sips -z 256  256  "$src" --out "$iconset/icon_128x128@2x.png"
+            sips -z 256  256  "$src" --out "$iconset/icon_256x256.png"
+            sips -z 512  512  "$src" --out "$iconset/icon_256x256@2x.png"
+            sips -z 512  512  "$src" --out "$iconset/icon_512x512.png"
+            sips -z 1024 1024 "$src" --out "$iconset/icon_512x512@2x.png"
+            iconutil -c icns "$iconset" -o "$dest"
+            rm -rf "$(dirname "$iconset")"
+          }
+
+          make_icns build/icon.png build/icon.icns
+          make_icns build/desktop-icon.png build/desktop-icon.icns
 
       - name: Build installer
         working-directory: mail-vue
