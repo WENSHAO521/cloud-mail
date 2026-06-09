@@ -41,7 +41,7 @@
               </div>
             </div>
             <div class="detail-role">
-              <el-tag>{{ userStore.user.role.name }}</el-tag>
+              <el-tag v-if="role.name">{{ role.name }}</el-tag>
             </div>
             <div class="detail-divider"></div>
             <div class="action-info">
@@ -96,25 +96,26 @@ const logoutLoading = ref(false)
 const userInfoShow = ref(false)
 const userinfoRef = ref({})
 
-const accountCount = computed(() => userStore.user.role.accountCount)
+const role = computed(() => userStore.user?.role || {})
+const accountCount = computed(() => role.value.accountCount)
 
 const sendType = computed(() => {
   if (settingStore.settings.send === 1) return t('disabled')
   if (!hasPerm('email:send')) return t('unauthorized')
-  if (userStore.user.role.sendType === 'ban') return t('sendBanned')
-  if (userStore.user.role.sendType === 'internal') return t('sendInternal')
-  if (!userStore.user.role.sendCount) return t('unlimited')
-  if (userStore.user.role.sendType === 'day') return t('daily')
-  if (userStore.user.role.sendType === 'count') return t('total')
+  if (role.value.sendType === 'ban') return t('sendBanned')
+  if (role.value.sendType === 'internal') return t('sendInternal')
+  if (!role.value.sendCount) return t('unlimited')
+  if (role.value.sendType === 'day') return t('daily')
+  if (role.value.sendType === 'count') return t('total')
 })
 
 const sendCount = computed(() => {
   if (!hasPerm('email:send')) return null
-  if (userStore.user.role.sendType === 'ban') return null
-  if (userStore.user.role.sendType === 'internal') return null
-  if (!userStore.user.role.sendCount) return null
+  if (role.value.sendType === 'ban') return null
+  if (role.value.sendType === 'internal') return null
+  if (!role.value.sendCount) return null
   if (settingStore.settings.send === 1) return null
-  return userStore.user.sendCount + '/' + userStore.user.role.sendCount
+  return (userStore.user?.sendCount || 0) + '/' + role.value.sendCount
 })
 
 function userInfoHide() {
