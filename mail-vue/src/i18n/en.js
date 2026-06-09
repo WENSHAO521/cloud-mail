@@ -19,6 +19,7 @@ const en = {
     downloading: 'Downloading',
     readyToInstall: 'Ready to install',
     updateError: 'Check failed',
+    updateErrorDetailFallback: 'No detailed error was returned',
     checkForUpdates: 'Check for updates',
     checkOnGitHub: 'View on GitHub',
     installAndRestart: 'Install & restart',

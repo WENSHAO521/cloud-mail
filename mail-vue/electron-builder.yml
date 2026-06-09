@@ -6,6 +6,8 @@ directories:
   output: dist-electron
   buildResources: build
 
+artifactName: PSG-Mail-${version}-${os}-${arch}.${ext}
+
 # What to bundle
 files:
   - dist/**

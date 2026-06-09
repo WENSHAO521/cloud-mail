@@ -19,6 +19,7 @@ const zh = {
     downloading: '下载中',
     readyToInstall: '下载完毕，待安装',
     updateError: '检查失败',
+    updateErrorDetailFallback: '未返回具体错误信息',
     checkForUpdates: '检查更新',
     checkOnGitHub: '前往 GitHub 查看',
     installAndRestart: '安装并重启',

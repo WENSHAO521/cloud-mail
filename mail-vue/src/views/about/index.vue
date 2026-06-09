@@ -35,6 +35,10 @@
               :show-text="false"
             />
 
+            <div v-if="stage === 'error' && errorMessage" class="update-error-detail">
+              {{ errorMessage }}
+            </div>
+
             <div class="about-actions">
               <el-button
                 v-if="stage !== 'ready'"
@@ -106,6 +110,7 @@ const isElectron = !!window.electronAPI
 const stage    = ref('idle')
 const progress = ref(0)
 const newVersion = ref('')
+const errorMessage = ref('')
 let autoCheckTimer = null
 
 const stageCls = computed(() => ({
@@ -131,6 +136,7 @@ const stageLabel = computed(() => {
 
 function checkUpdate() {
   stage.value = 'checking'
+  errorMessage.value = ''
   window.electronAPI?.checkForUpdates()
 }
 
@@ -143,6 +149,7 @@ onMounted(() => {
 
   window.electronAPI.onUpdateAvailable((info) => {
     newVersion.value = info.version
+    errorMessage.value = ''
     stage.value = 'downloading'
     progress.value = 0
   })
@@ -158,10 +165,12 @@ onMounted(() => {
   })
 
   window.electronAPI.onUpdateNotAvailable?.(() => {
+    errorMessage.value = ''
     stage.value = 'up-to-date'
   })
 
-  window.electronAPI.onUpdateError?.(() => {
+  window.electronAPI.onUpdateError?.((msg) => {
+    errorMessage.value = msg || t('updateErrorDetailFallback')
     stage.value = 'error'
   })
 
@@ -336,6 +345,18 @@ onUnmounted(() => {
     border-radius: 0;
     background: #bc0000;
   }
+}
+
+.update-error-detail {
+  margin: 0 20px 12px;
+  padding: 8px 10px;
+  border: 1px solid rgba(220, 38, 38, .35);
+  background: rgba(220, 38, 38, .08);
+  color: #dc2626;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  word-break: break-word;
 }
 
 /* ── Actions ──────────────────────────────────────── */
