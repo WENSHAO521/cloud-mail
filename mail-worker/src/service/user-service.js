@@ -30,18 +30,26 @@ const userService = {
 			throw new BizError(t('authExpired'), 401);
 		}
 
-		const [account, roleRow, permKeys] = await Promise.all([
+		let [accountRow, roleRow, permKeys] = await Promise.all([
 			accountService.selectByEmailIncludeDel(c, userRow.email),
 			roleService.selectById(c, userRow.type),
 			userRow.email === c.env.admin ? Promise.resolve(['*']) : permService.userPermKeys(c, userId)
 		]);
 
+		if (!accountRow) {
+			accountRow = await accountService.insert(c, {
+				userId,
+				email: userRow.email,
+				name: emailUtils.getName(userRow.email)
+			});
+		}
+
 		const user = {};
 		user.userId = userRow.userId;
 		user.sendCount = userRow.sendCount;
 		user.email = userRow.email;
-		user.account = account;
-		user.name = account.name;
+		user.account = accountRow;
+		user.name = accountRow.name;
 		user.permKeys = permKeys;
 		user.role = roleRow;
 		user.type = userRow.type;
