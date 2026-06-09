@@ -317,7 +317,7 @@ const accountService = {
 	async physicsDelete(c, params) {
 		const { accountId } = params
 		await emailService.physicsDeleteByAccountId(c, accountId)
-		await orm(c).delete(account).where(eq(account.accountId)).run();
+		await orm(c).delete(account).where(eq(account.accountId, accountId)).run();
 	},
 
 	async setAllReceive(c, params, userId) {
