@@ -40,31 +40,60 @@ app.on('second-instance', () => {
 })
 
 // ── Icon ─────────────────────────────────────────────────────
+function iconResourcePath(fileName) {
+  return isDev
+    ? path.join(__dirname, '..', 'build', fileName)
+    : path.join(process.resourcesPath, 'build', fileName)
+}
+
+function themedIconBase() {
+  return nativeTheme.shouldUseDarkColors ? 'desktop-icon' : 'icon'
+}
+
+function themedIconPath(extension) {
+  return iconResourcePath(`${themedIconBase()}.${extension}`)
+}
+
 function getIcon() {
+  const iconBase = themedIconBase()
   if (isMac) {
-    const icnsPath = isDev
-      ? path.join(__dirname, '..', 'build', 'icon.icns')
-      : path.join(process.resourcesPath, 'build', 'icon.icns')
-    const pngPath = isDev
+    const pngPath = iconResourcePath(`${iconBase}.png`)
+    const png = nativeImage.createFromPath(pngPath)
+    if (!png.isEmpty()) return png
+
+    const icnsPath = iconResourcePath('icon.icns')
+    const icns = nativeImage.createFromPath(icnsPath)
+    if (!icns.isEmpty()) return icns
+
+    const fallbackPngPath = isDev
       ? path.join(__dirname, '..', 'public', 'pwa-512.png')
       : path.join(__dirname, '..', 'dist', 'pwa-512.png')
-    const img = nativeImage.createFromPath(icnsPath)
-    return img.isEmpty() ? nativeImage.createFromPath(pngPath) : img
+    return nativeImage.createFromPath(fallbackPngPath)
   }
   if (isWin) {
-    // build/icon.ico is bundled in both dev and packaged app (see files in electron-builder.yml)
-    const icoPath = path.join(__dirname, '..', 'build', 'icon.ico')
+    const icoPath = themedIconPath('ico')
     const ico = nativeImage.createFromPath(icoPath)
     if (!ico.isEmpty()) return ico
-    // fallback: original PNG (dev only, before first build)
-    const pngPath = path.join(__dirname, '..', 'public', 'image', 'psg-logo.png')
-    return nativeImage.createFromPath(pngPath)
+
+    const pngPath = themedIconPath('png')
+    const png = nativeImage.createFromPath(pngPath)
+    if (!png.isEmpty()) return png
+
+    return nativeImage.createFromPath(iconResourcePath('icon.ico'))
   }
-  // Linux
-  const p = isDev
-    ? path.join(__dirname, '..', 'public', 'pwa-192.png')
-    : path.join(__dirname, '..', 'dist', 'pwa-192.png')
-  return nativeImage.createFromPath(p)
+
+  const png = nativeImage.createFromPath(themedIconPath('png'))
+  return png.isEmpty() ? nativeImage.createFromPath(iconResourcePath('icon.png')) : png
+}
+
+function refreshThemeIcons() {
+  appIcon = getIcon()
+  if (win && !win.isDestroyed()) {
+    if (typeof win.setIcon === 'function') win.setIcon(appIcon)
+    win.setBackgroundColor(nativeTheme.shouldUseDarkColors ? '#141418' : '#ffffff')
+  }
+  if (tray) tray.setImage(appIcon)
+  if (isMac && app.dock) app.dock.setIcon(appIcon)
 }
 
 // ── macOS Application Menu ────────────────────────────────────
@@ -299,6 +328,8 @@ function createWindow() {
   win.on('closed', () => { win = null })
 }
 
+nativeTheme.on('updated', refreshThemeIcons)
+
 // ── Auto-updater ──────────────────────────────────────────────
 autoUpdater.autoDownload = true
 autoUpdater.autoInstallOnAppQuit = true
@@ -359,18 +390,11 @@ function showNativeNotification(title, body) {
   }
   // Windows needs a proper icon path (not nativeImage) for Toast
   if (isWin) {
-    const icoPath = isDev
-      ? path.join(__dirname, '..', 'build', 'icon.ico')
-      : path.join(process.resourcesPath, 'build', 'icon.ico')
-    opts.icon = icoPath
+    opts.icon = themedIconPath('ico')
   } else if (isMac) {
     // macOS: icon from app bundle, no need to set it
   } else {
-    // Linux: must be a real file path, not inside asar
-    const pngPath = isDev
-      ? path.join(__dirname, '..', 'public', 'pwa-192.png')
-      : path.join(process.resourcesPath, 'build', 'icon.png')
-    opts.icon = pngPath
+    opts.icon = themedIconPath('png')
   }
 
   const n = new Notification(opts)
