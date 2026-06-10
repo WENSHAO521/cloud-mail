@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Release version, for example 2.4.2'
+        description: 'Release version, for example 2.4.3'
         required: true
-        default: '2.4.2'
+        default: '2.4.3'
 
 permissions:
   contents: write
@@ -120,8 +120,66 @@ jobs:
             mail-vue/dist-electron/latest*.yml
             mail-vue/dist-electron/*.blockmap
 
+  build-android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Normalize release version
+        shell: bash
+        run: |
+          version="${RELEASE_VERSION#v}"
+          echo "RELEASE_VERSION=$version" >> "$GITHUB_ENV"
+          echo "RELEASE_TAG=v$version" >> "$GITHUB_ENV"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: mail-vue/package-lock.json
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Install Android SDK packages
+        shell: bash
+        run: |
+          yes | sdkmanager --licenses > /dev/null || true
+          sdkmanager "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Install dependencies
+        working-directory: mail-vue
+        run: npm ci --legacy-peer-deps
+
+      - name: Sync Android project
+        working-directory: mail-vue
+        run: npm run android:sync
+
+      - name: Build Android APK
+        working-directory: mail-vue/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Rename Android APK
+        shell: bash
+        run: |
+          mkdir -p release-assets
+          cp mail-vue/android/app/build/outputs/apk/debug/app-debug.apk "release-assets/PSG-Mail-${RELEASE_VERSION}-android.apk"
+
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          if-no-files-found: error
+          path: release-assets/*.apk
+
   publish-release:
-    needs: build
+    needs: [build, build-android]
     runs-on: ubuntu-latest
     steps:
       - name: Normalize release version
