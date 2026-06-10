@@ -57,7 +57,7 @@ jobs:
         if: matrix.platform == 'linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libarchive-tools
+          sudo apt-get install -y libarchive-tools libopenjp2-tools rpm fakeroot
 
       - name: Install dependencies
         working-directory: mail-vue
