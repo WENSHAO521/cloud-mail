@@ -7,5 +7,15 @@
   },
   "android": {
     "backgroundColor": "#000000"
+  },
+  "plugins": {
+    "LocalNotifications": {
+      "presentationOptions": [
+        "badge",
+        "sound",
+        "banner",
+        "list"
+      ]
+    }
   }
 }

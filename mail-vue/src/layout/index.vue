@@ -109,7 +109,10 @@ import { useUiStore } from '@/store/ui.js'
 import { useNotificationStore } from '@/store/notification.js'
 import { useEmailStore } from '@/store/email.js'
 import { useSettingStore } from '@/store/setting.js'
-import { emailArchive } from '@/request/email.js'
+import { useAccountStore } from '@/store/account.js'
+import { emailArchive, emailLatest, emailList } from '@/request/email.js'
+import { sleep } from '@/utils/time-utils.js'
+import { checkAndDownloadAndroidUpdate } from '@/utils/android-update-service.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -117,12 +120,16 @@ const uiStore = useUiStore()
 const notificationStore = useNotificationStore()
 const emailStore = useEmailStore()
 const settingStore = useSettingStore()
+const accountStore = useAccountStore()
 const writerRef = ref({})
 const cmdPaletteRef = ref(null)
 const showShortcuts = ref(false)
 const platform = window.electronAPI?.platform ?? 'web'
 let elNotification = null
 let noticeStyle = null
+let globalNotifyRunning = false
+let notificationCursor = 0
+let notificationScope = ''
 
 const actionsShortcuts = [
   { key: 'C',      label: 'shortcutCompose'  },
@@ -259,15 +266,88 @@ function installUpdate() {
   window.electronAPI?.installUpdate()
 }
 
+async function checkAndroidUpdates() {
+  try {
+    await checkAndDownloadAndroidUpdate()
+  } catch (error) {
+    console.warn('Android update check failed', error)
+  }
+}
+
+function currentNotificationScope() {
+  const accountId = Number(accountStore.currentAccountId || 0)
+  const allReceive = Number(accountStore.currentAccount?.allReceive || 0)
+  return accountId > 0 ? `${accountId}:${allReceive}` : ''
+}
+
+function resetNotificationCursor() {
+  notificationCursor = 0
+  notificationScope = ''
+}
+
+async function ensureNotificationCursor(accountId, allReceive, scope) {
+  if (notificationCursor > 0 && notificationScope === scope) return
+
+  const data = await emailList(accountId, allReceive, 0, 0, 1, 0)
+  notificationCursor = Number(data?.latestEmail?.emailId || data?.list?.[0]?.emailId || 0)
+  notificationScope = scope
+}
+
+async function runGlobalMailNotifications() {
+  if (globalNotifyRunning) return
+  globalNotifyRunning = true
+
+  while (globalNotifyRunning) {
+    const autoRefresh = Number(settingStore.settings.autoRefresh || 0)
+    await sleep(autoRefresh > 1 ? autoRefresh * 1000 : 30000)
+    if (!globalNotifyRunning) break
+    if (!localStorage.getItem('token')) continue
+
+    const accountId = Number(accountStore.currentAccountId || 0)
+    if (!accountId) continue
+
+    const allReceive = Number(accountStore.currentAccount?.allReceive || 0)
+    const scope = currentNotificationScope()
+    if (!scope) continue
+
+    try {
+      await ensureNotificationCursor(accountId, allReceive, scope)
+      const list = await emailLatest(notificationCursor, accountId, allReceive)
+      if (!Array.isArray(list) || list.length === 0) continue
+
+      const newestId = Math.max(...list.map(email => Number(email.emailId || 0)))
+      for (const email of [...list].reverse()) {
+        await notificationStore.notifyEmail(email)
+      }
+      if (Number.isFinite(newestId) && newestId > notificationCursor) {
+        notificationCursor = newestId
+      }
+    } catch (error) {
+      if (error?.code === 401 || error?.code === 403) {
+        settingStore.settings.autoRefresh = 0
+      }
+      console.error(error)
+    }
+  }
+}
+
+watch([
+  () => accountStore.currentAccountId,
+  () => accountStore.currentAccount?.allReceive,
+], resetNotificationCursor)
+
 onMounted(() => {
   uiStore.writerRef = writerRef
   window.addEventListener('resize', handleResize)
   window.addEventListener('keydown', handleKeydown)
   handleResize()
   notificationStore.requestPermission()
+  runGlobalMailNotifications()
+  setTimeout(checkAndroidUpdates, 8000)
 })
 
 onBeforeUnmount(() => {
+  globalNotifyRunning = false
   window.removeEventListener('resize', handleResize)
   window.removeEventListener('keydown', handleKeydown)
   clearTimeout(pendingGTimer)

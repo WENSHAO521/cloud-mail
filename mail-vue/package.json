@@ -24,7 +24,9 @@
   },
   "dependencies": {
     "@capacitor/android": "^8.4.0",
+    "@capacitor/browser": "^8.0.3",
     "@capacitor/core": "^8.4.0",
+    "@capacitor/local-notifications": "^8.2.0",
     "@fontsource/ibm-plex-mono": "^5.2.7",
     "@fontsource/ibm-plex-sans": "^5.2.8",
     "@fontsource/jetbrains-mono": "^5.2.8",

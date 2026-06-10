@@ -138,27 +138,7 @@ async function latest() {
                   emailRead,
                 })
 
-                // push to notification store
-                notificationStore.push(email)
-
-                // native notification: Electron always fires; browser only when hidden
-                if (window.electronAPI) {
-                  window.electronAPI.sendNotification(
-                    email.name || email.sendEmail || 'PSG Mail',
-                    email.subject || ''
-                  )
-                } else if (
-                  document.visibilityState === 'hidden' &&
-                  typeof Notification !== 'undefined' &&
-                  Notification.permission === 'granted'
-                ) {
-                  new Notification(email.name || email.sendEmail || 'PSG Mail', {
-                    body: email.subject || '',
-                    icon: '/pwa-192.png',
-                    tag: `psg-mail-${email.emailId}`,
-                    renotify: true,
-                  })
-                }
+                notificationStore.notifyEmail(email)
 
                 await sleep(50)
               }

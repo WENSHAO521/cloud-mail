@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
+import { requestNotificationPermission, showMailNotification } from '@/utils/notification-service.js'
 
 export const useNotificationStore = defineStore('notification', {
   state: () => ({
     items: [],               // { emailId, name, subject, time, read }
-    permission: typeof Notification !== 'undefined'
+    permission: typeof window !== 'undefined' && typeof Notification !== 'undefined'
       ? Notification.permission
       : 'denied',
   }),
@@ -21,6 +22,13 @@ export const useNotificationStore = defineStore('notification', {
         read: false,
       })
       if (this.items.length > 100) this.items.length = 100
+      return true
+    },
+    async notifyEmail(email) {
+      const added = this.push(email)
+      if (!added) return false
+      await showMailNotification(email)
+      return true
     },
     markAllRead() {
       this.items.forEach(n => { n.read = true })
@@ -29,9 +37,9 @@ export const useNotificationStore = defineStore('notification', {
       this.items = []
     },
     async requestPermission() {
-      if (!('Notification' in window)) return
-      const result = await Notification.requestPermission()
+      const result = await requestNotificationPermission()
       this.permission = result
+      return result
     },
   },
 })
