@@ -270,6 +270,7 @@ let scrollTop = 0
 const latestEmail = ref(null)
 const scrollbarRef = ref(null)
 let reqLock = false
+let viewportWidth = ref(innerWidth)
 let isMobile = ref(innerWidth < 1367)
 let skeletonRows = 0
 const keyCount = ref(0);
@@ -298,7 +299,10 @@ onActivated(() => {
   })
 })
 
-const onResize = () => { isMobile.value = innerWidth < 1367 }
+const onResize = () => {
+  viewportWidth.value = innerWidth
+  isMobile.value = innerWidth < 1367
+}
 const onWheel = () => { if (dropdownShow.value) dropdownRef.value.handleClose() }
 
 onMounted(() => {
@@ -336,6 +340,7 @@ const list = computed(() => {
 })
 
 const itemHeight = computed(() => {
+  if (viewportWidth.value <= 768) return props.type === 'all-email' ? 106 : 96;
   if (props.type === 'all-email') return isMobile.value ? 60 : 56;
   return isMobile.value ? 52 : 44;
 })
@@ -749,6 +754,178 @@ function loadData() { getEmailList() }
     &.icon-danger:hover {
       border-color: #bc0000;
       color: #bc0000;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .email-container {
+    background: linear-gradient(180deg, #f6f5f3 0%, #eeeeeb 100%);
+  }
+
+  .dark .email-container {
+    background: linear-gradient(180deg, #151519 0%, #101014 100%);
+  }
+
+  .mail-toolbar {
+    height: 58px;
+    padding: 8px 12px;
+    border-bottom: none;
+    background: transparent;
+
+    .toolbar-left {
+      gap: 8px;
+      border-radius: 18px;
+      padding: 0 8px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+    }
+
+    .mail-count {
+      display: none;
+    }
+  }
+
+  .dark .mail-toolbar .toolbar-left {
+    background: rgba(28,28,33,0.86);
+    border-color: rgba(255,255,255,0.08);
+  }
+
+  .toolbar-search {
+    max-width: none;
+    height: 42px;
+    padding: 0 6px;
+
+    .search-input-inline {
+      font-size: 14px;
+      font-weight: 600;
+    }
+  }
+
+  .icon-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 13px;
+  }
+
+  :deep(.el-checkbox) {
+    --el-checkbox-input-width: 18px;
+    --el-checkbox-input-height: 18px;
+  }
+
+  .scroll {
+    padding: 0 12px 14px;
+    background: transparent;
+  }
+
+  :deep(.mail-row-wrap) {
+    padding: 6px 0;
+  }
+
+  :deep(.mail-row) {
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+    grid-template-rows: 24px 28px 24px;
+    gap: 2px 10px;
+    min-height: 84px;
+    padding: 12px 12px 10px 8px;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    border-radius: 20px;
+    background: rgba(255,255,255,0.88);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+    align-items: center;
+
+    &.is-unread {
+      border-color: rgba(188,0,0,0.24);
+      box-shadow: 0 12px 28px rgba(188,0,0,0.10);
+    }
+
+    &.all-email {
+      min-height: 94px;
+    }
+  }
+
+  .dark :deep(.mail-row) {
+    background: rgba(28,28,33,0.90);
+    border-color: rgba(255,255,255,0.08);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.24);
+  }
+
+  :deep(.row-check) {
+    grid-column: 1;
+    grid-row: 1 / 4;
+    align-self: center;
+    padding-left: 0;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+
+    .unread-indicator {
+      width: 8px;
+      height: 8px;
+    }
+  }
+
+  :deep(.row-sender) {
+    grid-column: 2;
+    grid-row: 1;
+    padding-top: 0;
+
+    .mail-name {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--el-text-color-primary);
+    }
+  }
+
+  :deep(.row-meta) {
+    grid-column: 3;
+    grid-row: 1;
+    align-items: flex-end;
+    padding-top: 0;
+
+    .mail-time {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted, #7e7576);
+    }
+
+    .mail-actions {
+      display: none;
+    }
+  }
+
+  :deep(.row-subject-cell) {
+    grid-column: 2 / 4;
+    grid-row: 2 / 4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    padding-bottom: 0;
+
+    .subject-text {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.35;
+      color: var(--regular-text-color);
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .mail-preview-inline {
+      display: block !important;
+      margin-top: 2px;
+      font-size: 12px;
+      line-height: 1.35;
+      color: var(--muted, #7e7576);
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      max-width: 100%;
     }
   }
 }

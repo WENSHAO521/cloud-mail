@@ -821,6 +821,156 @@ function handleDelete() {
 .icon-btn--active {
   color: #bc0000 !important;
 }
+
+@media (max-width: 768px) {
+  .email-detail {
+    background: linear-gradient(180deg, #f7f6f3 0%, #efeeeb 100%);
+  }
+
+  .detail-header {
+    min-height: 64px;
+    padding: 8px 10px;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    background: rgba(255,255,255,0.92);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+    backdrop-filter: blur(18px);
+  }
+
+  .header-left,
+  .header-right {
+    gap: 4px;
+  }
+
+  .header-left {
+    min-width: 0;
+  }
+
+  .header-right {
+    overflow-x: auto;
+    justify-content: flex-end;
+    max-width: calc(100vw - 58px);
+  }
+
+  .icon-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    color: var(--regular-text-color);
+
+    &:active {
+      background: rgba(188,0,0,0.10);
+      color: #bc0000;
+    }
+  }
+
+  .page-counter {
+    display: none;
+  }
+
+  .detail-scroll {
+    background: transparent;
+  }
+
+  .detail-content {
+    padding: 18px 14px 34px;
+  }
+
+  .email-title {
+    font-size: 22px;
+    line-height: 1.25;
+    margin: 2px 2px 16px;
+    letter-spacing: 0;
+  }
+
+  .meta-card {
+    border: 1px solid rgba(0,0,0,0.08);
+    border-left: none;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.86);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.07);
+    padding: 14px;
+  }
+
+  .meta-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 16px;
+  }
+
+  .meta-sender-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .meta-sender-name {
+    font-size: 15px;
+  }
+
+  .meta-date,
+  .meta-sender-email,
+  .meta-field-label {
+    letter-spacing: 0;
+  }
+
+  .meta-fields {
+    border-top-color: rgba(0,0,0,0.08);
+  }
+
+  .meta-field {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .body-divider {
+    margin: 18px 4px;
+    background: rgba(0,0,0,0.08);
+  }
+
+  .email-body {
+    padding: 0 2px;
+    font-size: 16px;
+    line-height: 1.72;
+  }
+
+  .email-text {
+    font-size: 15px;
+    line-height: 1.68;
+  }
+
+  .att-container,
+  .translate-panel {
+    border-radius: 20px;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-left: 1px solid rgba(0,0,0,0.08);
+    background: rgba(255,255,255,0.84);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+  }
+
+  .att-container {
+    padding: 14px;
+    margin-top: 28px;
+  }
+
+  .att-item {
+    border-radius: 14px;
+    border-color: rgba(0,0,0,0.08);
+  }
+
+  .dark .email-detail {
+    background: linear-gradient(180deg, #151519 0%, #101014 100%);
+  }
+
+  .dark .detail-header,
+  .dark .meta-card,
+  .dark .att-container,
+  .dark .translate-panel {
+    background: rgba(28,28,33,0.90);
+    border-color: rgba(255,255,255,0.08);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.26);
+  }
+}
 </style>
 
 /* Global: blockquote inside shadow-html */

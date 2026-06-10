@@ -501,8 +501,8 @@ onBeforeUnmount(() => {
 
 @media (max-width: 1024px) {
   .app-shell {
-    --m-header-h: 56px;
-    --m-tabbar-h: calc(56px + env(safe-area-inset-bottom, 0px));
+    --m-header-h: 64px;
+    --m-tabbar-h: calc(74px + env(safe-area-inset-bottom, 0px));
   }
 
   .mobile-chrome--top {

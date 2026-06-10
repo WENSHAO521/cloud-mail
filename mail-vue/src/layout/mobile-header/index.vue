@@ -6,10 +6,16 @@
         <Icon icon="solar:hamburger-menu-linear" width="24" height="24"/>
       </button>
       <div class="m-brand">
-        <span class="m-brand-name">PSG</span>
-        <span class="m-title">{{ title }}</span>
+        <div class="m-title-block">
+          <span class="m-brand-name">PSG Mail</span>
+          <span class="m-title">{{ title }}</span>
+        </div>
       </div>
     </div>
+
+    <button class="m-search-btn" :aria-label="$t('search')" @click="openSearch">
+      <Icon icon="solar:magnifer-linear" width="20" height="20"/>
+    </button>
 
   </header>
 </template>
@@ -33,6 +39,10 @@ const title = computed(() => {
 function openDrawer() {
   uiStore.asideShow = true
 }
+
+function openSearch() {
+  uiStore.commandPaletteShow = true
+}
 </script>
 
 <style scoped lang="scss">
@@ -41,22 +51,27 @@ function openDrawer() {
   width: 100%;
   align-items: center;
   justify-content: space-between;
-  height: 56px;
-  padding: 0 6px 0 4px;
-  background: #ffffff;
-  border-bottom: 1px solid #000000;
-  gap: 8px;
+  height: 64px;
+  padding: 8px 12px 8px 8px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,248,248,0.96));
+  border-bottom: 1px solid rgba(0,0,0,0.10);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+  gap: 10px;
+  backdrop-filter: blur(18px);
 
   :global(.dark) & {
-    background: #141414;
-    border-bottom-color: #2e2e2e;
+    background:
+      linear-gradient(180deg, rgba(20,20,24,0.96), rgba(16,16,20,0.96));
+    border-bottom-color: rgba(255,255,255,0.08);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.28);
   }
 }
 
 .m-left {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
   min-width: 0;
   flex: 1;
 }
@@ -64,26 +79,28 @@ function openDrawer() {
 .m-brand {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 10px;
   min-width: 0;
+}
+
+.m-title-block {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 1px;
 }
 
 .m-brand-name {
   flex-shrink: 0;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 800;
   color: #bc0000;
+  line-height: 1.1;
 }
 
 .m-title {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  font-family: 'JetBrains Mono', monospace;
   color: var(--el-text-color-primary);
   white-space: nowrap;
   overflow: hidden;
@@ -93,8 +110,8 @@ function openDrawer() {
 
 /* 44px touch targets */
 .m-icon-btn {
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -104,7 +121,31 @@ function openDrawer() {
   color: var(--muted, #666666);
   transition: background 0.12s, color 0.12s;
   flex-shrink: 0;
+  border-radius: 14px;
 
   &:active { background: rgba(0, 0, 0, 0.08); }
+}
+
+.m-search-btn {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 14px;
+  background: #111;
+  color: #fff;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.16);
+
+  &:active {
+    transform: translateY(1px);
+    background: #bc0000;
+  }
+
+  :global(.dark) & {
+    background: #f2f2f2;
+    color: #111;
+  }
 }
 </style>

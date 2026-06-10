@@ -59,17 +59,22 @@ function openSearch() {
 <style scoped lang="scss">
 .m-tabbar {
   display: flex;
-  width: 100%;
+  width: calc(100% - 24px);
   align-items: stretch;
   justify-content: space-around;
-  height: calc(56px + env(safe-area-inset-bottom, 0px));
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-  background: #ffffff;
-  border-top: 1px solid #000000;
+  height: calc(62px + env(safe-area-inset-bottom, 0px));
+  margin: 0 12px 10px;
+  padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px));
+  background: rgba(255,255,255,0.94);
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 22px;
+  box-shadow: 0 18px 42px rgba(0,0,0,0.18);
+  backdrop-filter: blur(18px);
 
   :global(.dark) & {
-    background: #141414;
-    border-top-color: #2e2e2e;
+    background: rgba(22,22,26,0.94);
+    border-color: rgba(255,255,255,0.10);
+    box-shadow: 0 18px 42px rgba(0,0,0,0.46);
   }
 }
 
@@ -80,18 +85,17 @@ function openSearch() {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: 4px;
   border: none;
   background: transparent;
   cursor: pointer;
   color: var(--muted, #666666);
-  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
-  font-size: 9.5px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 6px 2px;
-  transition: color 0.12s;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0;
+  padding: 5px 2px;
+  border-radius: 16px;
+  transition: color 0.12s, background 0.12s;
 
   span {
     white-space: nowrap;
@@ -104,28 +108,30 @@ function openSearch() {
 
   &.active {
     color: #bc0000;
+    background: rgba(188,0,0,0.07);
     :global(.dark) & { color: #e03333; }
   }
 }
 
-/* Center compose — brutalist square action */
 .m-tab-compose {
-  flex: 0 0 64px;
-  justify-content: flex-start;
-  padding-top: 6px;
+  flex: 0 0 58px;
+  padding: 0 4px;
 }
 
 .m-compose-fab {
-  width: 44px;
-  height: 36px;
-  background: #bc0000;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(180deg, #e31946 0%, #bc0000 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.14s;
+  border-radius: 17px;
+  box-shadow: 0 12px 24px rgba(188,0,0,0.30);
+  transition: transform 0.14s, background 0.14s;
 
   .m-tab-compose:active & {
+    transform: scale(0.96);
     background: #000000;
   }
 }

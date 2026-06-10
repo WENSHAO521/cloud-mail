@@ -14,9 +14,17 @@
     "eo": "vite build --mode eo",
     "preview": "vite preview",
     "electron:dev": "cross-env NODE_ENV=development node electron/launcher.cjs",
-    "electron:build": "vite build --mode electron && node scripts/generate-desktop-icons.cjs && electron-builder"
+    "generate:icons": "node scripts/generate-psg-app-icons.cjs",
+    "build:android": "vite build --mode android && node scripts/generate-psg-app-icons.cjs",
+    "android:sync": "npm run build:android && npx cap sync android",
+    "android:apk": "npm run android:sync && cd android && gradlew.bat assembleDebug",
+    "android:apk:release": "npm run android:sync && cd android && gradlew.bat assembleRelease",
+    "electron:build": "vite build --mode electron && node scripts/generate-psg-app-icons.cjs && electron-builder",
+    "build:native": "npm run generate:icons && npm run electron:build && npm run android:apk"
   },
   "dependencies": {
+    "@capacitor/android": "^8.4.0",
+    "@capacitor/core": "^8.4.0",
     "@fontsource/ibm-plex-mono": "^5.2.7",
     "@fontsource/ibm-plex-sans": "^5.2.8",
     "@fontsource/jetbrains-mono": "^5.2.8",
@@ -42,6 +50,7 @@
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.4.0",
     "@vitejs/plugin-vue": "^5.2.1",
     "cross-env": "^7.0.3",
     "electron": "^34.5.8",
