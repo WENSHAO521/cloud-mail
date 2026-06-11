@@ -22,6 +22,39 @@ import domainUtils from '../utils/domain-uitls';
 import account from "../entity/account";
 import { att } from '../entity/att';
 import telegramService from './telegram-service';
+import kvCache from '../cache/kv-cache';
+
+// ── Per-request helpers ────────────────────────────────────────────────────
+
+// Cache shared account IDs on Hono context — avoids the same DB query being
+// executed 9+ times per request in email list/delete/spam/latest operations.
+async function getSharedAccountIds(c, userId) {
+	const ctxKey = '__shared_' + userId
+	const cached = c.get(ctxKey)
+	if (cached !== undefined) return cached
+	let ids = []
+	try {
+		const { results } = await c.env.db
+			.prepare('SELECT account_id FROM account_share WHERE user_id = ?')
+			.bind(userId).all()
+		ids = results.map(r => r.account_id)
+	} catch {}
+	c.set(ctxKey, ids)
+	return ids
+}
+
+// Module-level schema detection cache — probing a column on every list request
+// adds 2 extra D1 queries. Cache the result for the Worker's lifetime.
+const SCHEMA_TTL = 3600
+async function columnExists(c, table, col) {
+	const key = 'schema:' + table + ':' + col
+	const hit = kvCache.get(key)
+	if (hit !== null) return hit
+	let exists = false
+	try { await c.env.db.prepare(`SELECT ${col} FROM ${table} LIMIT 0`).run(); exists = true } catch {}
+	kvCache.set(key, exists, SCHEMA_TTL)
+	return exists
+}
 
 const emailService = {
 
@@ -54,32 +87,13 @@ const emailService = {
 			allReceive = accountRow.allReceive;
 		}
 
-		// fetch shared accountIds — safe even if account_share doesn't exist yet
-		let sharedEmailAccountIds = [];
-		try {
-			const { results } = await c.env.db
-				.prepare('SELECT account_id FROM account_share WHERE user_id = ?')
-				.bind(userId).all();
-			sharedEmailAccountIds = results.map(r => r.account_id);
-		} catch {}
-
+		const sharedEmailAccountIds = await getSharedAccountIds(c, userId)
 		const accessCond = sharedEmailAccountIds.length > 0
 			? or(eq(email.userId, userId), inArray(email.accountId, sharedEmailAccountIds))
 			: eq(email.userId, userId);
 
-		// check if is_spam column exists; if so, exclude spam from inbox
-		let spamFilter = null;
-		try {
-			await c.env.db.prepare('SELECT is_spam FROM email LIMIT 0').run();
-			spamFilter = sql`COALESCE(email.is_spam, 0) = 0`;
-		} catch {}
-
-		// check if is_archive column exists; if so, exclude archived from inbox
-		let archiveFilter = null;
-		try {
-			await c.env.db.prepare('SELECT is_archive FROM email LIMIT 0').run();
-			archiveFilter = sql`COALESCE(email.is_archive, 0) = 0`;
-		} catch {}
+		const spamFilter   = await columnExists(c, 'email', 'is_spam')    ? sql`COALESCE(email.is_spam, 0) = 0`    : null
+		const archiveFilter = await columnExists(c, 'email', 'is_archive') ? sql`COALESCE(email.is_archive, 0) = 0` : null
 
 		const query = orm(c)
 			.select({
@@ -169,8 +183,7 @@ const emailService = {
 		const emailIdList = String(params.emailIds).split(',').map(Number).filter(Boolean);
 		if (!emailIdList.length) return;
 		try { await c.env.db.prepare(`ALTER TABLE email ADD COLUMN is_archive INTEGER NOT NULL DEFAULT 0;`).run(); } catch {}
-		let sharedIds = [];
-		try { const { results } = await c.env.db.prepare('SELECT account_id FROM account_share WHERE user_id = ?').bind(userId).all(); sharedIds = results.map(r => r.account_id); } catch {}
+		const sharedIds = await getSharedAccountIds(c, userId)
 		const placeholders = emailIdList.map(() => '?').join(',');
 		const cond = sharedIds.length > 0 ? `(user_id = ? OR account_id IN (${sharedIds.map(() => '?').join(',')}))` : 'user_id = ?';
 		await c.env.db.prepare(`UPDATE email SET is_archive = 1 WHERE email_id IN (${placeholders}) AND ${cond}`).bind(...emailIdList, userId, ...sharedIds).run();
@@ -179,8 +192,7 @@ const emailService = {
 	async unarchiveEmail(c, params, userId) {
 		const emailIdList = String(params.emailIds).split(',').map(Number).filter(Boolean);
 		if (!emailIdList.length) return;
-		let sharedIds = [];
-		try { const { results } = await c.env.db.prepare('SELECT account_id FROM account_share WHERE user_id = ?').bind(userId).all(); sharedIds = results.map(r => r.account_id); } catch {}
+		const sharedIds = await getSharedAccountIds(c, userId)
 		const placeholders = emailIdList.map(() => '?').join(',');
 		const cond = sharedIds.length > 0 ? `(user_id = ? OR account_id IN (${sharedIds.map(() => '?').join(',')}))` : 'user_id = ?';
 		try { await c.env.db.prepare(`UPDATE email SET is_archive = 0 WHERE email_id IN (${placeholders}) AND ${cond}`).bind(...emailIdList, userId, ...sharedIds).run(); } catch {}
@@ -192,8 +204,7 @@ const emailService = {
 		accountId = Number(accountId);
 		size      = Math.min(Number(size) || 20, 50);
 		allReceive= Number(allReceive);
-		let sharedIds = [];
-		try { const { results } = await c.env.db.prepare('SELECT account_id FROM account_share WHERE user_id = ?').bind(userId).all(); sharedIds = results.map(r => r.account_id); } catch {}
+		const sharedIds = await getSharedAccountIds(c, userId)
 		const accountCond = allReceive ? '' : 'AND e.account_id = ?';
 		const accessBinds = sharedIds.length > 0 ? [userId, ...sharedIds] : [userId];
 		const accessCond  = sharedIds.length > 0 ? `(e.user_id = ? OR e.account_id IN (${sharedIds.map(() => '?').join(',')}))` : 'e.user_id = ?';
@@ -218,11 +229,7 @@ const emailService = {
 		try {
 			await c.env.db.prepare(`ALTER TABLE email ADD COLUMN is_spam INTEGER NOT NULL DEFAULT 0;`).run();
 		} catch {}
-		let spamShared = [];
-		try {
-			const { results } = await c.env.db.prepare('SELECT account_id FROM account_share WHERE user_id = ?').bind(userId).all();
-			spamShared = results.map(r => r.account_id);
-		} catch {}
+		const spamShared = await getSharedAccountIds(c, userId)
 		const placeholders = emailIdList.map(() => '?').join(',');
 		const spamCond = spamShared.length > 0
 			? `(user_id = ? OR account_id IN (${spamShared.map(() => '?').join(',')}))`
@@ -235,11 +242,7 @@ const emailService = {
 	async unmarkSpam(c, params, userId) {
 		const emailIdList = String(params.emailIds).split(',').map(Number).filter(Boolean);
 		if (!emailIdList.length) return;
-		let unspamShared = [];
-		try {
-			const { results } = await c.env.db.prepare('SELECT account_id FROM account_share WHERE user_id = ?').bind(userId).all();
-			unspamShared = results.map(r => r.account_id);
-		} catch {}
+		const unspamShared = await getSharedAccountIds(c, userId)
 		const placeholders = emailIdList.map(() => '?').join(',');
 		const unspamCond = unspamShared.length > 0
 			? `(user_id = ? OR account_id IN (${unspamShared.map(() => '?').join(',')}))`
@@ -261,14 +264,7 @@ const emailService = {
 		try {
 			const accountCond = allReceive ? '' : 'AND e.account_id = ?';
 
-			// get shared accountIds safely
-			let spamSharedIds = [];
-			try {
-				const { results: shareRows } = await c.env.db
-					.prepare('SELECT account_id FROM account_share WHERE user_id = ?')
-					.bind(userId).all();
-				spamSharedIds = shareRows.map(r => r.account_id);
-			} catch {}
+			const spamSharedIds = await getSharedAccountIds(c, userId)
 
 			const spamAccountCond = spamSharedIds.length > 0
 				? `(e.user_id = ? OR e.account_id IN (${spamSharedIds.map(() => '?').join(',')}))`
@@ -303,11 +299,7 @@ const emailService = {
 	async delete(c, params, userId) {
 		const { emailIds } = params;
 		const emailIdList = emailIds.split(',').map(Number);
-		let sharedIds = [];
-		try {
-			const { results } = await c.env.db.prepare('SELECT account_id FROM account_share WHERE user_id = ?').bind(userId).all();
-			sharedIds = results.map(r => r.account_id);
-		} catch {}
+		const sharedIds = await getSharedAccountIds(c, userId)
 		const ownerCond = eq(email.userId, userId);
 		const accessCond = sharedIds.length > 0
 			? or(ownerCond, inArray(email.accountId, sharedIds))
@@ -918,11 +910,7 @@ const emailService = {
 			allReceive = accountRow.allReceive;
 		}
 
-		let sharedLatestIds = [];
-		try {
-			const { results } = await c.env.db.prepare('SELECT account_id FROM account_share WHERE user_id = ?').bind(userId).all();
-			sharedLatestIds = results.map(r => r.account_id);
-		} catch {}
+		const sharedLatestIds = await getSharedAccountIds(c, userId)
 		const latestAccessCond = sharedLatestIds.length > 0
 			? or(eq(email.userId, userId), inArray(email.accountId, sharedLatestIds))
 			: eq(email.userId, userId);
@@ -1127,9 +1115,15 @@ const emailService = {
 
 			const attList = await attService.selectByEmailIds(c, emailIds);
 
+			// Build Map for O(n) lookup instead of O(n²) repeated filter
+			const attByEmailId = new Map()
+			for (const att of attList) {
+				const arr = attByEmailId.get(att.emailId)
+				if (arr) arr.push(att)
+				else attByEmailId.set(att.emailId, [att])
+			}
 			list.forEach(emailRow => {
-				const atts = attList.filter(attRow => attRow.emailId === emailRow.emailId);
-				emailRow.attList = atts;
+				emailRow.attList = attByEmailId.get(emailRow.emailId) || [];
 			});
 		}
 	},
@@ -1203,11 +1197,7 @@ const emailService = {
 
 	async read(c, params, userId) {
 		const { emailIds } = params;
-		let sharedReadIds = [];
-		try {
-			const { results } = await c.env.db.prepare('SELECT account_id FROM account_share WHERE user_id = ?').bind(userId).all();
-			sharedReadIds = results.map(r => r.account_id);
-		} catch {}
+		const sharedReadIds = await getSharedAccountIds(c, userId)
 		const readAccessCond = sharedReadIds.length > 0
 			? or(eq(email.userId, userId), inArray(email.accountId, sharedReadIds))
 			: eq(email.userId, userId);

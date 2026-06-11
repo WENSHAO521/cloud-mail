@@ -366,6 +366,8 @@ const userService = {
 			.where(eq(user.userId, userId))
 			.run();
 
+		kvCache.del('perm:' + userId);  // force fresh perm check on next request
+
 	},
 
 	async incrUserSendCount(c, quantity, userId) {

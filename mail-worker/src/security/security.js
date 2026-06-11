@@ -146,7 +146,12 @@ app.use('*', async (c, next) => {
 
 	if (permIndex > -1) {
 
-		const permKeys = await permService.userPermKeys(c, authInfo.user.userId);
+		const permCacheKey = 'perm:' + userId
+		let permKeys = kvCache.get(permCacheKey)
+		if (!permKeys) {
+			permKeys = await permService.userPermKeys(c, authInfo.user.userId)
+			kvCache.set(permCacheKey, permKeys, TTL.PERM)
+		}
 
 		const userPaths = permKeyToPaths(permKeys);
 

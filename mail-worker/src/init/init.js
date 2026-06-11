@@ -340,7 +340,12 @@ const dbInit = {
 			`ALTER TABLE setting ADD COLUMN notice INTEGER NOT NULL DEFAULT 0;`,
 			`ALTER TABLE setting ADD COLUMN no_recipient INTEGER NOT NULL DEFAULT 1;`,
 			`UPDATE role SET avail_domain = '' WHERE role.avail_domain LIKE '@%';`,
-			`CREATE INDEX IF NOT EXISTS idx_email_user_id_account_id ON email(user_id, account_id);`
+			`CREATE INDEX IF NOT EXISTS idx_email_user_id_account_id ON email(user_id, account_id);`,
+			`CREATE INDEX IF NOT EXISTS idx_email_type ON email(type);`,
+			`CREATE INDEX IF NOT EXISTS idx_email_status ON email(status);`,
+			`CREATE INDEX IF NOT EXISTS idx_email_is_del ON email(is_del);`,
+			`CREATE INDEX IF NOT EXISTS idx_att_email_id ON att(email_id);`,
+			`CREATE INDEX IF NOT EXISTS idx_account_share_user_id ON account_share(user_id);`
 		];
 
 		const promises = ADD_COLUMN_SQL_LIST.map(async (sql) => {

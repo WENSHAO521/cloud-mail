@@ -14,22 +14,17 @@ const attService = {
 
 	async addAtt(c, attachments) {
 
-		for (let attachment of attachments) {
-
-			let metadate = {
-				contentType: attachment.mimeType,
-			}
-
+		// Upload all attachments in parallel instead of sequentially
+		await Promise.all(attachments.map(attachment => {
+			const metadate = { contentType: attachment.mimeType }
 			if (!attachment.contentId) {
 				metadate.contentDisposition = `attachment;filename=${attachment.filename}`
 			} else {
 				metadate.contentDisposition = `inline;filename=${attachment.filename}`
 				metadate.cacheControl = `max-age=259200`
 			}
-
-			await r2Service.putObj(c, attachment.key, attachment.content, metadate);
-
-		}
+			return r2Service.putObj(c, attachment.key, attachment.content, metadate)
+		}))
 
 		await orm(c).insert(att).values(attachments).run();
 	},
