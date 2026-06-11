@@ -1,9 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
-  <title id="title">PSG Mail icon logo</title>
-  <desc id="desc">Black rounded-square icon with a white downward form, light arc stroke, and red crest.</desc>
-  <rect x="102" y="102" width="820" height="820" rx="205" fill="#000000"/>
-  <path d="M205 512 Q512 307 820 512" fill="none" stroke="#FFFFFF" stroke-width="41" stroke-linecap="round" opacity="0.9"/>
-  <path d="M307 563 L512 717 L717 563" fill="none" stroke="#FFFFFF" stroke-width="51" stroke-linecap="round" stroke-linejoin="round"/>
-  <line x1="512" y1="717" x2="512" y2="461" stroke="#FFFFFF" stroke-width="51" stroke-linecap="round"/>
-  <path d="M384 384 Q461 307 538 384" fill="none" stroke="#E11D48" stroke-width="31" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="PSG Mail">
+  <!-- Black rounded square -->
+  <rect x="62" y="62" width="900" height="900" rx="195" fill="#0d0d0d"/>
+  <!-- White envelope body -->
+  <rect x="143" y="348" width="738" height="461" rx="20" fill="#ffffff"/>
+  <!-- Dark V-flap at top of envelope -->
+  <path d="M143 348 L512 543 L881 348 Z" fill="#0d0d0d"/>
+  <!-- Red wax seal at the V point -->
+  <circle cx="512" cy="548" r="67" fill="#bc0000"/>
 </svg>

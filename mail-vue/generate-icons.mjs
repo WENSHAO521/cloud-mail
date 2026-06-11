@@ -6,11 +6,10 @@ import { Resvg } from '@resvg/resvg-js'
 import { writeFileSync } from 'fs'
 
 const SVG = `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-  <rect x="20" y="20" width="160" height="160" rx="40" fill="#000000" />
-  <path d="M40 100 Q100 60 160 100" stroke="#FFFFFF" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.9" />
-  <path d="M60 110 L100 140 L140 110" stroke="#FFFFFF" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round" />
-  <line x1="100" y1="140" x2="100" y2="90" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" />
-  <path d="M75 75 Q90 60 105 75" stroke="#E11D48" stroke-width="6" fill="none" stroke-linecap="round" />
+  <rect x="12" y="12" width="176" height="176" rx="38" fill="#0d0d0d"/>
+  <rect x="28" y="68" width="144" height="90" rx="4" fill="#ffffff"/>
+  <path d="M28 68 L100 106 L172 68 Z" fill="#0d0d0d"/>
+  <circle cx="100" cy="107" r="13" fill="#bc0000"/>
 </svg>`
 
 function renderPng(size) {
