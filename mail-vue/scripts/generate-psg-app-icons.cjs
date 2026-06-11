@@ -125,7 +125,7 @@ function renderIcon(size, scale = 1, offset = 0) {
   const w = n => n * s
 
   strokeQuad(pixels, size, p(204, 512), p(512, 327), p(820, 512), w(42), [230, 230, 230])
-  strokeQuad(pixels, size, p(383, 386), p(470, 310), p(551, 386), w(32), [240, 24, 75])
+  strokeQuad(pixels, size, p(384, 384), p(461, 307), p(538, 384), w(32), [240, 24, 75])
   strokePolyline(pixels, size, [p(307, 563), p(512, 718), p(717, 563)], w(52), [255, 255, 255])
   strokePolyline(pixels, size, [p(512, 461), p(512, 718)], w(52), [255, 255, 255])
 

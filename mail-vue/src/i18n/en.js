@@ -595,6 +595,18 @@ const en = {
     shortcutGoSent: 'Go to Sent',
     shortcutGoDrafts: 'Go to Drafts',
     shortcutGoStarred: 'Go to Starred',
+    download: 'Downloads',
+    dlHeroSub: 'Download PSG Mail for desktop or mobile and stay connected anywhere',
+    dlDownload: 'Download',
+    dlWindowsDesc: 'PSG Mail desktop client for Windows with system notifications and background sync',
+    dlMacDesc: 'PSG Mail desktop client for macOS — Apple Silicon and Intel',
+    dlAndroidDesc: 'PSG Mail mobile client for Android with push notifications',
+    dlLinuxDesc: 'PSG Mail desktop client for Linux — .deb and .AppImage',
+    dlWeb: 'Web',
+    dlWebDesc: 'Access PSG Mail directly in your browser — no installation needed',
+    dlWebMeta: 'Modern browsers · PWA installable',
+    dlWebCurrent: 'You are here',
+    dlAllReleases: 'All releases on GitHub',
 }
 
 export default en

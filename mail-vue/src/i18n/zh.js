@@ -595,5 +595,17 @@ const zh = {
     shortcutGoSent: '跳转到已发送',
     shortcutGoDrafts: '跳转到草稿箱',
     shortcutGoStarred: '跳转到星标',
+    download: '客户端下载',
+    dlHeroSub: '下载 PSG Mail 桌面端或移动端，随时随地高效收发邮件',
+    dlDownload: '下载',
+    dlWindowsDesc: 'PSG Mail Windows 桌面客户端，支持系统通知与后台运行',
+    dlMacDesc: 'PSG Mail macOS 桌面客户端，支持 Apple Silicon 与 Intel',
+    dlAndroidDesc: 'PSG Mail Android 移动客户端，支持推送通知',
+    dlLinuxDesc: 'PSG Mail Linux 桌面客户端，提供 .deb 与 .AppImage',
+    dlWeb: 'Web 版',
+    dlWebDesc: '无需安装，直接通过浏览器访问 PSG Mail',
+    dlWebMeta: '现代浏览器 · 支持 PWA 安装',
+    dlWebCurrent: '当前使用',
+    dlAllReleases: '所有历史版本',
 }
 export default zh

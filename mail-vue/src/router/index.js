@@ -97,6 +97,12 @@ const routes = [
                 component: () => import('@/views/draft/index.vue'),
                 meta: { title: 'drafts', name: 'draft', menu: true }
             },
+            {
+                path: '/download',
+                name: 'download',
+                component: () => import('@/views/download/index.vue'),
+                meta: { title: 'download', name: 'download', menu: true }
+            },
         ]
 
     },

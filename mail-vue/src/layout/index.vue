@@ -314,7 +314,8 @@ async function runGlobalMailNotifications() {
       if (!notificationCursor) { await sleep(3000); continue }
 
       const list = await emailLatest(notificationCursor, accountId, allReceive)
-      if (!Array.isArray(list) || list.length === 0) continue
+      if (!Array.isArray(list)) { await sleep(2000); continue }
+      if (list.length === 0) continue
 
       const newestId = Math.max(...list.map(email => Number(email.emailId || 0)))
       for (const email of [...list].reverse()) {
