@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
   <title id="title">PSG Mail icon logo</title>
-  <desc id="desc">Black square icon with a white downward form, light gray horizon stroke, and red crest.</desc>
-  <rect width="1024" height="1024" fill="#000"/>
-  <path d="M204 512C398 386 628 362 820 512" fill="none" stroke="#e6e6e6" stroke-width="42" stroke-linecap="round"/>
-  <path d="M383 386C433 335 511 325 551 386" fill="none" stroke="#f0184b" stroke-width="32" stroke-linecap="round"/>
-  <path d="M307 563 512 718 717 563" fill="none" stroke="#fff" stroke-width="52" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M512 461V718" fill="none" stroke="#fff" stroke-width="52" stroke-linecap="round"/>
+  <desc id="desc">Black rounded-square icon with a white downward form, light arc stroke, and red crest.</desc>
+  <rect x="102" y="102" width="820" height="820" rx="205" fill="#000000"/>
+  <path d="M205 512 Q512 307 820 512" fill="none" stroke="#FFFFFF" stroke-width="41" stroke-linecap="round" opacity="0.9"/>
+  <path d="M307 563 L512 717 L717 563" fill="none" stroke="#FFFFFF" stroke-width="51" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="512" y1="717" x2="512" y2="461" stroke="#FFFFFF" stroke-width="51" stroke-linecap="round"/>
+  <path d="M384 384 Q461 307 538 384" fill="none" stroke="#E11D48" stroke-width="31" stroke-linecap="round"/>
 </svg>
