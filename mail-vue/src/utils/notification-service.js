@@ -82,10 +82,10 @@ async function requestBrowserPermission() {
 }
 
 async function showBrowserNotification(email) {
-  if (document.visibilityState !== 'hidden') return false
   const permission = await requestBrowserPermission()
   if (permission !== 'granted') return false
 
+  const title = notificationTitle(email)
   const options = {
     body: notificationBody(email),
     icon: '/pwa-192.png',
@@ -96,9 +96,9 @@ async function showBrowserNotification(email) {
 
   const registration = await navigator.serviceWorker?.getRegistration?.()
   if (registration?.showNotification) {
-    await registration.showNotification(notificationTitle(email), options)
+    await registration.showNotification(title, options)
   } else {
-    new Notification(notificationTitle(email), options)
+    new Notification(title, options)
   }
 
   return true

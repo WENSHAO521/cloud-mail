@@ -1,173 +1,65 @@
 /**
- * Generates PWA + apple-touch-icon PNG files from the PSG favicon design.
- * Uses only Node.js built-ins (zlib, fs) — no external dependencies.
+ * Generates all app icons from the PSG Mail SVG source.
  * Run: node generate-icons.mjs
  */
-import { deflateSync } from 'zlib';
-import { writeFileSync } from 'fs';
+import { Resvg } from '@resvg/resvg-js'
+import { writeFileSync } from 'fs'
 
-// ─── CRC32 ───────────────────────────────────────────────────────────────────
-const CRC_TABLE = (() => {
-  const t = new Uint32Array(256);
-  for (let n = 0; n < 256; n++) {
-    let c = n;
-    for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
-    t[n] = c;
-  }
-  return t;
-})();
+const SVG = `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="20" width="160" height="160" rx="40" fill="#000000" />
+  <path d="M40 100 Q100 60 160 100" stroke="#FFFFFF" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.9" />
+  <path d="M60 110 L100 140 L140 110" stroke="#FFFFFF" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+  <line x1="100" y1="140" x2="100" y2="90" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" />
+  <path d="M75 75 Q90 60 105 75" stroke="#E11D48" stroke-width="6" fill="none" stroke-linecap="round" />
+</svg>`
 
-function crc32(buf) {
-  let crc = 0xFFFFFFFF;
-  for (let i = 0; i < buf.length; i++) crc = CRC_TABLE[(crc ^ buf[i]) & 0xFF] ^ (crc >>> 8);
-  return (crc ^ 0xFFFFFFFF) >>> 0;
+function renderPng(size) {
+  const resvg = new Resvg(SVG, { fitTo: { mode: 'width', value: size } })
+  return Buffer.from(resvg.render().asPng())
 }
 
-// ─── PNG encoder ─────────────────────────────────────────────────────────────
-function makePNG(pixels, w, h) {
-  const sig = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
-
-  const ihdr = Buffer.alloc(13);
-  ihdr.writeUInt32BE(w, 0);
-  ihdr.writeUInt32BE(h, 4);
-  ihdr[8] = 8; ihdr[9] = 2; // 8-bit RGB
-
-  // filter byte 0 (None) + RGB scanlines
-  const raw = Buffer.alloc(h * (1 + w * 3));
-  for (let y = 0; y < h; y++) {
-    raw[y * (1 + w * 3)] = 0;
-    for (let x = 0; x < w; x++) {
-      const pi = (y * w + x) * 3;
-      const si = y * (1 + w * 3) + 1 + x * 3;
-      raw[si] = pixels[pi]; raw[si + 1] = pixels[pi + 1]; raw[si + 2] = pixels[pi + 2];
-    }
-  }
-
-  function chunk(type, data) {
-    const t = Buffer.from(type, 'ascii');
-    const l = Buffer.alloc(4); l.writeUInt32BE(data.length);
-    const c = Buffer.alloc(4); c.writeUInt32BE(crc32(Buffer.concat([t, data])));
-    return Buffer.concat([l, t, data, c]);
-  }
-
-  return Buffer.concat([sig, chunk('IHDR', ihdr), chunk('IDAT', deflateSync(raw)), chunk('IEND', Buffer.alloc(0))]);
+// ICO container: embeds multiple PNGs (standard Windows ICO with PNG payloads)
+function makeIco(sizes) {
+  const pngs = sizes.map(size => ({ size, data: renderPng(size) }))
+  const count = pngs.length
+  let offset = 6 + count * 16
+  const header = Buffer.alloc(6)
+  header.writeUInt16LE(0, 0)
+  header.writeUInt16LE(1, 2)
+  header.writeUInt16LE(count, 4)
+  const dir = Buffer.alloc(count * 16)
+  pngs.forEach(({ size, data }, i) => {
+    const o = i * 16
+    dir[o]     = size >= 256 ? 0 : size
+    dir[o + 1] = size >= 256 ? 0 : size
+    dir[o + 2] = 0; dir[o + 3] = 0
+    dir.writeUInt16LE(1, o + 4)
+    dir.writeUInt16LE(32, o + 6)
+    dir.writeUInt32LE(data.length, o + 8)
+    dir.writeUInt32LE(offset, o + 12)
+    offset += data.length
+  })
+  return Buffer.concat([header, dir, ...pngs.map(p => p.data)])
 }
 
-// ─── Draw helpers ────────────────────────────────────────────────────────────
-function fill(px, w, h, x1, y1, x2, y2, r, g, b) {
-  for (let y = Math.max(0, y1); y < Math.min(h, y2); y++)
-    for (let x = Math.max(0, x1); x < Math.min(w, x2); x++) {
-      const i = (y * w + x) * 3;
-      px[i] = r; px[i + 1] = g; px[i + 2] = b;
-    }
+// ── Public / PWA icons ────────────────────────────────────
+writeFileSync('./public/pwa-192.png',          renderPng(192)); console.log('✓ pwa-192.png')
+writeFileSync('./public/pwa-512.png',          renderPng(512)); console.log('✓ pwa-512.png')
+writeFileSync('./public/pwa-maskable-512.png', renderPng(512)); console.log('✓ pwa-maskable-512.png')
+writeFileSync('./public/apple-touch-icon.png', renderPng(180)); console.log('✓ apple-touch-icon.png')
+writeFileSync('./public/mail-pwa.png',         renderPng(512)); console.log('✓ mail-pwa.png')
+writeFileSync('./public/mail.png',             renderPng(128)); console.log('✓ mail.png')
+
+// ── Electron build icons (light + dark theme share the same source) ────────
+for (const name of ['icon', 'desktop-icon']) {
+  writeFileSync(`./build/${name}.png`, renderPng(512))
+  console.log(`✓ build/${name}.png`)
+  writeFileSync(`./build/${name}.ico`, makeIco([16, 32, 48, 64, 128, 256]))
+  console.log(`✓ build/${name}.ico`)
 }
 
-// Filled semi-circle bowl (right half of a circle) via per-pixel test
-function fillBowl(px, w, h, cx, cy, rx, ry, r, g, b) {
-  const x1 = Math.round(cx - rx), x2 = Math.round(cx + rx);
-  const y1 = Math.round(cy - ry), y2 = Math.round(cy + ry);
-  for (let y = Math.max(0, y1); y < Math.min(h, y2); y++)
-    for (let x = Math.max(0, x1); x < Math.min(w, x2); x++) {
-      const dx = (x - cx) / rx, dy = (y - cy) / ry;
-      if (dx * dx + dy * dy <= 1) {
-        const i = (y * w + x) * 3;
-        px[i] = r; px[i + 1] = g; px[i + 2] = b;
-      }
-    }
-}
+// ── SVG favicon (verbatim source) ─────────────────────────
+writeFileSync('./public/favicon.svg', SVG)
+console.log('✓ favicon.svg')
 
-// ─── Icon renderer ───────────────────────────────────────────────────────────
-// Design is based on the 32×32 favicon geometry, scaled to any size.
-// offsetX / offsetY shift the design (used for maskable safe-zone centering).
-function renderPSG(size, offsetX = 0, offsetY = 0, designScale = 1) {
-  const px = new Uint8Array(size * size * 3);
-  const s = (size / 32) * designScale; // pixels per favicon unit
-
-  const bg = [0x11, 0x11, 0x11];
-  const red = [0xCC, 0x00, 0x00];
-  const white = [0xFF, 0xFF, 0xFF];
-
-  // background
-  fill(px, size, size, 0, 0, size, size, ...bg);
-
-  // red left bar (0..5 in 32px coords)
-  fill(px, size, size, offsetX, 0, Math.round(offsetX + 5 * s), size, ...red);
-
-  // P stem (x=10..13.5, y=7..27)
-  fill(px, size, size,
-    Math.round(offsetX + 10 * s), Math.round(offsetY + 7 * s),
-    Math.round(offsetX + 13.5 * s), Math.round(offsetY + 27 * s),
-    ...white);
-
-  // P bowl — D-shape: right half of an ellipse + rectangle on left
-  // Outer filled area (x=13.5..24.5, y=7..16.6)
-  const bx1 = Math.round(offsetX + 13.5 * s);
-  const by1 = Math.round(offsetY + 7 * s);
-  const by2 = Math.round(offsetY + 16.6 * s);
-  const bowlCX = offsetX + 14 * s;       // center of ellipse x
-  const bowlCY = offsetY + 11.8 * s;     // center of ellipse y
-  const bowlRX = 10.5 * s;               // horizontal radius
-  const bowlRY = 4.8 * s;                // vertical radius
-
-  // Fill right half of ellipse
-  fillBowl(px, size, size, bowlCX, bowlCY, bowlRX, bowlRY, ...white);
-  // Clip left side: anything left of the stem join is already covered by stem
-  fill(px, size, size, 0, by1, bx1, by2, ...bg);
-  fill(px, size, size, 0, by1, bx1, by2, ...bg); // belt-and-suspenders
-
-  // Restore stem over any ellipse bleed
-  fill(px, size, size,
-    Math.round(offsetX + 10 * s), Math.round(offsetY + 7 * s),
-    Math.round(offsetX + 13.5 * s), Math.round(offsetY + 27 * s),
-    ...white);
-
-  // P bowl inner cutout ellipse
-  const icX = offsetX + 14 * s;
-  const icY = offsetY + 11.8 * s;
-  const icRX = 8 * s;
-  const icRY = 2.4 * s;
-  fillBowl(px, size, size, icX, icY, icRX, icRY, ...bg);
-
-  // Re-draw stem (inner ellipse may bleed left)
-  fill(px, size, size,
-    Math.round(offsetX + 10 * s), Math.round(offsetY + 7 * s),
-    Math.round(offsetX + 13.5 * s), Math.round(offsetY + 27 * s),
-    ...white);
-
-  // Red colophon rule (x=10..24.5, y=29.5..31)
-  fill(px, size, size,
-    Math.round(offsetX + 10 * s), Math.round(offsetY + 29.5 * s),
-    Math.round(offsetX + 24.5 * s), Math.round(offsetY + 31 * s),
-    ...red);
-
-  return px;
-}
-
-// ─── Generate files ──────────────────────────────────────────────────────────
-
-// Regular icons: full-bleed design (red bar goes edge-to-edge)
-for (const size of [192, 512]) {
-  const px = renderPSG(size);
-  writeFileSync(`./public/pwa-${size}.png`, makePNG(px, size, size));
-  console.log(`✓ pwa-${size}.png`);
-}
-
-// Apple touch icon 180×180
-{
-  const px = renderPSG(180);
-  writeFileSync('./public/apple-touch-icon.png', makePNG(px, 180, 180));
-  console.log('✓ apple-touch-icon.png');
-}
-
-// Maskable 512×512: design centered in 80% safe zone (10% padding each side)
-{
-  const size = 512;
-  const pad = Math.round(size * 0.12);   // 12% padding
-  const designSize = size - pad * 2;
-  const scale = designSize / 32;
-  const px = renderPSG(size, pad, pad, designSize / 32 / (size / 32));
-  writeFileSync('./public/pwa-maskable-512.png', makePNG(px, size, size));
-  console.log('✓ pwa-maskable-512.png');
-}
-
-console.log('\nAll icons written to public/');
+console.log('\nAll icons written.')

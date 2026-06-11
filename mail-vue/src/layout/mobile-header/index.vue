@@ -13,6 +13,10 @@
       </div>
     </div>
 
+    <div class="m-notif">
+      <NotificationPanel />
+    </div>
+
     <button class="m-search-btn" :aria-label="$t('search')" @click="openSearch">
       <Icon icon="solar:magnifer-linear" width="20" height="20"/>
     </button>
@@ -26,6 +30,7 @@ import { useRoute } from 'vue-router'
 import { Icon } from '@iconify/vue'
 import { useI18n } from 'vue-i18n'
 import { useUiStore } from '@/store/ui.js'
+import NotificationPanel from '@/components/notification-panel/index.vue'
 
 const route = useRoute()
 const uiStore = useUiStore()
@@ -122,6 +127,21 @@ function openSearch() {
   transition: background 0.12s, color 0.12s;
   flex-shrink: 0;
   border-radius: 14px;
+
+  &:active { background: rgba(0, 0, 0, 0.08); }
+}
+
+.m-notif :deep(.icon-btn) {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--muted, #666666);
+  border-radius: 14px;
+  transition: background 0.12s, color 0.12s;
+  flex-shrink: 0;
 
   &:active { background: rgba(0, 0, 0, 0.08); }
 }

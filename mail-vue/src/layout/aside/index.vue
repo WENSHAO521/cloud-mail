@@ -99,6 +99,11 @@
           <span>{{ $t('compose') }}</span>
         </button>
 
+        <!-- Notification bell -->
+        <div class="notif-trigger-wrap">
+          <NotificationPanel />
+        </div>
+
         <!-- ··· dropdown -->
         <el-dropdown placement="top-end" trigger="click">
           <button class="sidebar-more-button">
@@ -140,6 +145,7 @@ import { hasPerm } from "@/perm/perm.js";
 import { logout } from "@/request/login.js";
 import { computed, ref, onUnmounted } from "vue";
 import { avatarBg, avatarLetter } from "@/utils/avatar.js";
+import NotificationPanel from '@/components/notification-panel/index.vue'
 
 const route  = useRoute();
 const uiStore = useUiStore();
@@ -375,6 +381,26 @@ function clickLogout() {
   align-items: center;
   gap: 2px;
   flex-shrink: 0;
+}
+
+/* ── Notification bell wrapper (matches icon-button sizing) ── */
+.notif-trigger-wrap :deep(.icon-btn) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  color: var(--muted, #7e7576);
+  transition: background 0.12s, color 0.12s;
+  flex-shrink: 0;
+
+  @media (hover: hover) {
+    &:hover {
+      background: var(--email-hover-background, #eeeeee);
+      color: var(--el-text-color-primary);
+    }
+  }
 }
 
 /* ── Icon button ─────────────────────────────────────────── */

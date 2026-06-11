@@ -297,21 +297,22 @@ async function runGlobalMailNotifications() {
   if (globalNotifyRunning) return
   globalNotifyRunning = true
 
+  // emailLatest is a long-poll (waits up to 35s for new mail on the server).
+  // We must NOT sleep before calling it — the long-poll IS the wait.
+  // Only sleep briefly when the account isn't ready or on error.
   while (globalNotifyRunning) {
-    const autoRefresh = Number(settingStore.settings.autoRefresh || 0)
-    await sleep(autoRefresh > 1 ? autoRefresh * 1000 : 30000)
-    if (!globalNotifyRunning) break
-    if (!localStorage.getItem('token')) continue
+    if (!localStorage.getItem('token')) { await sleep(5000); continue }
 
     const accountId = Number(accountStore.currentAccountId || 0)
-    if (!accountId) continue
+    const scope = currentNotificationScope()
+    if (!accountId || !scope) { await sleep(3000); continue }
 
     const allReceive = Number(accountStore.currentAccount?.allReceive || 0)
-    const scope = currentNotificationScope()
-    if (!scope) continue
 
     try {
       await ensureNotificationCursor(accountId, allReceive, scope)
+      if (!notificationCursor) { await sleep(3000); continue }
+
       const list = await emailLatest(notificationCursor, accountId, allReceive)
       if (!Array.isArray(list) || list.length === 0) continue
 
@@ -326,7 +327,7 @@ async function runGlobalMailNotifications() {
       if (error?.code === 401 || error?.code === 403) {
         settingStore.settings.autoRefresh = 0
       }
-      console.error(error)
+      await sleep(5000)
     }
   }
 }
@@ -336,12 +337,24 @@ watch([
   () => accountStore.currentAccount?.allReceive,
 ], resetNotificationCursor)
 
-onMounted(() => {
+onMounted(async () => {
   uiStore.writerRef = writerRef
   window.addEventListener('resize', handleResize)
   window.addEventListener('keydown', handleKeydown)
   handleResize()
   notificationStore.requestPermission()
+
+  // Initialize cursor immediately so the first polling cycle detects new emails
+  // (without this, first real check is delayed 60s: 30s sleep + cursor init + 30s sleep)
+  if (localStorage.getItem('token')) {
+    const scope = currentNotificationScope()
+    if (scope) {
+      const accountId = Number(accountStore.currentAccountId || 0)
+      const allReceive = Number(accountStore.currentAccount?.allReceive || 0)
+      try { await ensureNotificationCursor(accountId, allReceive, scope) } catch (e) {}
+    }
+  }
+
   runGlobalMailNotifications()
   setTimeout(checkAndroidUpdates, 8000)
 })
