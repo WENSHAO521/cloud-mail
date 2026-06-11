@@ -2,6 +2,7 @@ import BizError from '../error/biz-error';
 import constant from '../const/constant';
 import jwtUtils from '../utils/jwt-utils';
 import KvConst from '../const/kv-const';
+import kvCache, { TTL } from '../cache/kv-cache';
 import dayjs from 'dayjs';
 import userService from '../service/user-service';
 import permService from '../service/perm-service';
@@ -124,7 +125,12 @@ app.use('*', async (c, next) => {
 	}
 
 	const { userId, token } = result;
-	const authInfo = await c.env.kv.get(KvConst.AUTH_INFO + userId, { type: 'json' });
+	const authKey = KvConst.AUTH_INFO + userId;
+	let authInfo = kvCache.get(authKey);
+	if (!authInfo) {
+		authInfo = await c.env.kv.get(authKey, { type: 'json' });
+		if (authInfo) kvCache.set(authKey, authInfo, TTL.AUTH);
+	}
 
 	if (!authInfo) {
 		throw new BizError(t('authExpired'), 401);
@@ -160,7 +166,8 @@ app.use('*', async (c, next) => {
 	if (!nowTime.isSame(refreshTime)) {
 		authInfo.refreshTime = dayjs().toISOString();
 		await userService.updateUserInfo(c, authInfo.user.userId);
-		await c.env.kv.put(KvConst.AUTH_INFO + userId, JSON.stringify(authInfo), { expirationTtl: constant.TOKEN_EXPIRE });
+		await c.env.kv.put(authKey, JSON.stringify(authInfo), { expirationTtl: constant.TOKEN_EXPIRE });
+		kvCache.set(authKey, authInfo, TTL.AUTH);  // keep cache in sync
 	}
 
 	c.set('user',authInfo.user)

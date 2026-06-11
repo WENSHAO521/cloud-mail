@@ -5,6 +5,7 @@ import { isDel, settingConst, userConst } from '../const/entity-const';
 import JwtUtils from '../utils/jwt-utils';
 import { v4 as uuidv4 } from 'uuid';
 import KvConst from '../const/kv-const';
+import kvCache, { TTL } from '../cache/kv-cache';
 import constant from '../const/constant';
 import userContext from '../security/user-context';
 import verifyUtils from '../utils/verify-utils';
@@ -252,16 +253,21 @@ const loginService = {
 
 		await userService.updateUserInfo(c, userRow.userId);
 
-		await c.env.kv.put(KvConst.AUTH_INFO + userRow.userId, JSON.stringify(authInfo), { expirationTtl: constant.TOKEN_EXPIRE });
+		const loginKey = KvConst.AUTH_INFO + userRow.userId;
+		await c.env.kv.put(loginKey, JSON.stringify(authInfo), { expirationTtl: constant.TOKEN_EXPIRE });
+		kvCache.set(loginKey, authInfo, TTL.AUTH);  // warm cache immediately after login
 		return jwt;
 	},
 
 	async logout(c, userId) {
-		const token =userContext.getToken(c);
-		const authInfo = await c.env.kv.get(KvConst.AUTH_INFO + userId, { type: 'json' });
+		const token = userContext.getToken(c);
+		const logoutKey = KvConst.AUTH_INFO + userId;
+		// Read from KV directly on logout to ensure accuracy
+		const authInfo = await c.env.kv.get(logoutKey, { type: 'json' });
 		const index = authInfo.tokens.findIndex(item => item === token);
 		authInfo.tokens.splice(index, 1);
-		await c.env.kv.put(KvConst.AUTH_INFO + userId, JSON.stringify(authInfo));
+		await c.env.kv.put(logoutKey, JSON.stringify(authInfo));
+		kvCache.set(logoutKey, authInfo, TTL.AUTH);  // update cache so revocation is immediate
 	}
 
 };

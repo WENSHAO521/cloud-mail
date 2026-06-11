@@ -1,4 +1,5 @@
 import KvConst from '../const/kv-const';
+import kvCache, { TTL } from '../cache/kv-cache';
 import setting from '../entity/setting';
 import orm from '../entity/orm';
 import {verifyRecordType} from '../const/entity-const';
@@ -17,6 +18,7 @@ const settingService = {
 		settingRow.resendTokens = JSON.parse(settingRow.resendTokens);
 		c.set('setting', settingRow);
 		await c.env.kv.put(KvConst.SETTING, JSON.stringify(settingRow));
+		kvCache.del(KvConst.SETTING);  // bust in-memory cache after update
 	},
 
 	async query(c) {
@@ -25,7 +27,11 @@ const settingService = {
 			return c.get('setting')
 		}
 
-		const setting = await c.env.kv.get(KvConst.SETTING, { type: 'json' });
+		let setting = kvCache.get(KvConst.SETTING);
+		if (!setting) {
+			setting = await c.env.kv.get(KvConst.SETTING, { type: 'json' });
+			if (setting) kvCache.set(KvConst.SETTING, setting, TTL.SETTING);
+		}
 
 		if (!setting) {
 			throw new BizError('数据库未初始化 Database not initialized.');
