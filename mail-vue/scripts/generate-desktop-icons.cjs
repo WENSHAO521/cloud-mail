@@ -188,10 +188,11 @@ function writeIco(width, height, pixels, icoPath) {
   fs.writeFileSync(icoPath, Buffer.concat([header, ...entries, ...pngs]))
 }
 
+// The icon uses a dark background that works for both light and dark system themes,
+// so desktop-icon is identical to icon (no white conversion needed).
 const source = fs.readFileSync(sourcePng)
 const { width, height, pixels } = decodeRgbaPng(source)
-const whitePixels = makeWhiteIcon(pixels)
-fs.writeFileSync(desktopPng, encodeRgbaPng(width, height, whitePixels))
-writeIco(width, height, whitePixels, desktopIco)
+fs.writeFileSync(desktopPng, encodeRgbaPng(width, height, pixels))
+writeIco(width, height, pixels, desktopIco)
 
 console.log(`Generated ${path.relative(root, desktopPng)} and ${path.relative(root, desktopIco)}`)
