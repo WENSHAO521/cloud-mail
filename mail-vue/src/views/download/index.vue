@@ -23,7 +23,7 @@
               <div class="dl-card-desc">{{ $t('dlWindowsDesc') }}</div>
               <div class="dl-card-meta">Windows 10 / 11 · x64</div>
             </div>
-            <a class="dl-btn" :href="releaseUrl('win')" target="_blank" rel="noopener">
+            <a class="dl-btn" :class="{ 'dl-btn--loading': dlLoading }" :href="dlUrl('win')" target="_blank" rel="noopener">
               <Icon icon="solar:download-minimalistic-bold" width="16" height="16" />
               {{ $t('dlDownload') }} .exe
             </a>
@@ -39,7 +39,7 @@
               <div class="dl-card-desc">{{ $t('dlMacDesc') }}</div>
               <div class="dl-card-meta">macOS 12+ · Intel & Apple Silicon</div>
             </div>
-            <a class="dl-btn" :href="releaseUrl('mac')" target="_blank" rel="noopener">
+            <a class="dl-btn" :class="{ 'dl-btn--loading': dlLoading }" :href="dlUrl('mac')" target="_blank" rel="noopener">
               <Icon icon="solar:download-minimalistic-bold" width="16" height="16" />
               {{ $t('dlDownload') }} .dmg
             </a>
@@ -55,7 +55,7 @@
               <div class="dl-card-desc">{{ $t('dlAndroidDesc') }}</div>
               <div class="dl-card-meta">Android 8.0+</div>
             </div>
-            <a class="dl-btn" :href="releaseUrl('android')" target="_blank" rel="noopener">
+            <a class="dl-btn" :class="{ 'dl-btn--loading': dlLoading }" :href="dlUrl('android')" target="_blank" rel="noopener">
               <Icon icon="solar:download-minimalistic-bold" width="16" height="16" />
               {{ $t('dlDownload') }} .apk
             </a>
@@ -71,7 +71,7 @@
               <div class="dl-card-desc">{{ $t('dlLinuxDesc') }}</div>
               <div class="dl-card-meta">Ubuntu 22.04+ · .deb / .AppImage</div>
             </div>
-            <a class="dl-btn" :href="releaseUrl('linux')" target="_blank" rel="noopener">
+            <a class="dl-btn" :class="{ 'dl-btn--loading': dlLoading }" :href="dlUrl('linux')" target="_blank" rel="noopener">
               <Icon icon="solar:download-minimalistic-bold" width="16" height="16" />
               {{ $t('dlDownload') }} .deb
             </a>
@@ -110,19 +110,40 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
 import { Icon } from '@iconify/vue'
 
 const appVersion = __APP_VERSION__
 
 const RELEASES_URL = 'https://github.com/WENSHAO521/cloud-mail/releases'
+const GITHUB_API   = 'https://api.github.com/repos/WENSHAO521/cloud-mail/releases/latest'
 
-function releaseUrl(platform) {
-  const base = `${RELEASES_URL}/latest/download`
-  if (platform === 'win')     return `${base}/PSG-Mail-${appVersion}-win-Setup.exe`
-  if (platform === 'mac')     return `${base}/PSG-Mail-${appVersion}-mac.dmg`
-  if (platform === 'android') return `${base}/PSG-Mail-${appVersion}-android.apk`
-  if (platform === 'linux')   return `${base}/PSG-Mail-${appVersion}-linux.deb`
-  return RELEASES_URL
+const dlUrls   = ref({})   // platform → direct download URL
+const dlLoading = ref(true)
+
+onMounted(async () => {
+  try {
+    const res  = await fetch(GITHUB_API)
+    const data = await res.json()
+    const map  = {}
+    for (const asset of data.assets || []) {
+      const n = asset.name.toLowerCase()
+      const url = asset.browser_download_url
+      if (n.endsWith('.exe'))                          map.win     = url
+      else if (n.endsWith('.dmg'))                     map.mac     = url
+      else if (n.endsWith('.deb'))                     map.linux   = url
+      else if (n.endsWith('.apk'))                     map.android = url
+    }
+    dlUrls.value = map
+  } catch {
+    // fall back to releases page on any error
+  } finally {
+    dlLoading.value = false
+  }
+})
+
+function dlUrl(platform) {
+  return dlUrls.value[platform] || RELEASES_URL
 }
 </script>
 
@@ -276,6 +297,17 @@ function releaseUrl(platform) {
       &:hover { background: var(--el-bg-color-page, #f5f5f5); }
     }
   }
+
+  &--loading {
+    opacity: 0.55;
+    pointer-events: none;
+    animation: dl-pulse 1.2s ease-in-out infinite;
+  }
+}
+
+@keyframes dl-pulse {
+  0%, 100% { opacity: 0.55; }
+  50%       { opacity: 0.30; }
 }
 
 :global(.dark) .dl-btn {
