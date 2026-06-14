@@ -611,7 +611,7 @@ const zh = {
     vpnHeroSub: '内部网络连接工具，支持 Windows、macOS、Linux 和 Android',
     vpnLoadError: '加载失败',
     vpnViewOnGitHub: '前往 GitHub 查看',
-    vpnNotice: '如需申请网络访问权限，请联系系统管理员：',
+    vpnNotice: '使用本工具需要自行购买 VPS 服务，如需咨询或协助，请联系系统管理员：',
     vpnAllReleases: '所有历史版本',
     vpnVersions: '个版本',
     vpnWindowsDesc: 'PSG Connect Windows 客户端',
