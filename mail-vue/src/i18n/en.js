@@ -611,7 +611,7 @@ const en = {
     vpnHeroSub: 'Internal network connectivity tool — available for Windows, macOS, Linux and Android',
     vpnLoadError: 'Failed to load',
     vpnViewOnGitHub: 'View on GitHub',
-    vpnNotice: 'This tool requires a VPS subscription. You may purchase one independently or consult the system administrator for assistance:',
+    vpnNotice: 'PSG Connect requires a dedicated VPS server. You may provision your own server or contact the Group IT Administrator for guidance:',
     vpnAllReleases: 'All releases on GitHub',
     vpnVersions: 'versions',
     vpnWindowsDesc: 'PSG Connect desktop client for Windows',
