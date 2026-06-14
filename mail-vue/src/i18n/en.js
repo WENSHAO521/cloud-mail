@@ -611,6 +611,7 @@ const en = {
     vpnHeroSub: 'Internal network connectivity tool — available for Windows, macOS, Linux and Android',
     vpnLoadError: 'Failed to load',
     vpnViewOnGitHub: 'View on GitHub',
+    vpnNotice: 'To request network access, please contact your system administrator:',
     vpnAllReleases: 'All releases on GitHub',
     vpnVersions: 'versions',
     vpnWindowsDesc: 'PSG Connect desktop client for Windows',

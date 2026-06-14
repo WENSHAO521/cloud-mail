@@ -10,6 +10,13 @@
           <div class="hero-sub">{{ $t('vpnHeroSub') }}</div>
         </div>
 
+        <!-- ── Notice ── -->
+        <div class="dl-notice">
+          <Icon icon="solar:letter-linear" width="15" />
+          {{ $t('vpnNotice') }}
+          <a href="mailto:admin@panorama-sg.de" class="dl-notice-link">admin@panorama-sg.de</a>
+        </div>
+
         <!-- ── Loading skeleton ── -->
         <div v-if="loading" class="dl-grid">
           <div v-for="i in 4" :key="i" class="dl-card dl-card--skeleton" />
@@ -267,6 +274,38 @@ function formatDate(iso) {
   margin-top: 6px;
   font-size: 13px;
   color: var(--muted, #7e7576);
+}
+
+/* ── Notice ── */
+.dl-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  margin-bottom: 24px;
+  background: var(--el-bg-color, #fff);
+  border: 1px solid var(--light-border-color, #e0d8d9);
+  border-left: 3px solid #bc0000;
+  font-size: 12px;
+  color: var(--el-text-color-regular);
+  flex-wrap: wrap;
+}
+
+:global(.dark) .dl-notice {
+  background: var(--el-bg-color, #1c1c20);
+  border-color: rgba(255,255,255,0.1);
+  border-left-color: #bc0000;
+}
+
+.dl-notice-link {
+  color: #bc0000;
+  text-decoration: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+
+  @media (hover: hover) {
+    &:hover { text-decoration: underline; }
+  }
 }
 
 /* ── Version meta ── */
