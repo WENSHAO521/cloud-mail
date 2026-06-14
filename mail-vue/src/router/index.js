@@ -103,6 +103,12 @@ const routes = [
                 component: () => import('@/views/download/index.vue'),
                 meta: { title: 'download', name: 'download', menu: true }
             },
+            {
+                path: '/vpn',
+                name: 'vpn',
+                component: () => import('@/views/vpn/index.vue'),
+                meta: { title: 'vpn', name: 'vpn', menu: true }
+            },
         ]
 
     },

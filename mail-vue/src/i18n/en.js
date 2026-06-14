@@ -607,6 +607,13 @@ const en = {
     dlWebMeta: 'Modern browsers · PWA installable',
     dlWebCurrent: 'You are here',
     dlAllReleases: 'All releases on GitHub',
+    vpn: 'PSG VPS',
+    vpnHeroSub: 'Internal network tool — available for Windows, macOS, Linux and Android',
+    vpnLoadError: 'Failed to load release list',
+    vpnViewOnGitHub: 'View on GitHub',
+    vpnAllReleases: 'All releases on GitHub',
+    vpnVersions: 'versions',
+    vpnNoAssets: 'No files available for this release',
 }
 
 export default en

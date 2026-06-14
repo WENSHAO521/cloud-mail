@@ -607,5 +607,12 @@ const zh = {
     dlWebMeta: '现代浏览器 · 支持 PWA 安装',
     dlWebCurrent: '当前使用',
     dlAllReleases: '所有历史版本',
+    vpn: 'PSG VPS',
+    vpnHeroSub: '内部上网工具，支持 Windows、macOS、Linux 和 Android',
+    vpnLoadError: '版本列表加载失败',
+    vpnViewOnGitHub: '前往 GitHub 查看',
+    vpnAllReleases: '所有历史版本',
+    vpnVersions: '个版本',
+    vpnNoAssets: '该版本暂无下载文件',
 }
 export default zh

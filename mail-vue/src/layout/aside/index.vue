@@ -182,6 +182,7 @@ const navItems = [
   { name: 'groups',    labelKey: 'contactGroups', icon: 'psg:group' },
 { name: 'setting',   labelKey: 'settings',      icon: 'psg:settings' },
   { name: 'download',  labelKey: 'download',      icon: 'solar:download-minimalistic-linear' },
+  { name: 'vpn',       labelKey: 'vpn',           icon: 'solar:shield-network-linear' },
   { name: 'about',     labelKey: 'about',         icon: 'solar:info-circle-linear' },
 ];
 
