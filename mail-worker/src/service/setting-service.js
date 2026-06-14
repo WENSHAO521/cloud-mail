@@ -33,6 +33,9 @@ const settingService = {
 			if (setting) kvCache.set(KvConst.SETTING, setting, TTL.SETTING);
 		}
 
+		// Shallow-clone so mutations below don't corrupt the cached reference
+		setting = { ...setting };
+
 		if (!setting) {
 			throw new BizError('数据库未初始化 Database not initialized.');
 		}
@@ -80,7 +83,10 @@ const settingService = {
 		setting.linuxdoCallbackUrl = c.env.linuxdo_callback_url;
 		setting.linuxdoSwitch = linuxdoSwitch;
 
-		setting.emailPrefixFilter = setting.emailPrefixFilter.split(",").filter(Boolean);
+		const rawFilter = setting.emailPrefixFilter
+		setting.emailPrefixFilter = Array.isArray(rawFilter)
+			? rawFilter
+			: (rawFilter || '').split(',').filter(Boolean);
 
 		c.set?.('setting', setting);
 		return setting;
