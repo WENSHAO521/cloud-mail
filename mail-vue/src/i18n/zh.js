@@ -612,7 +612,6 @@ const zh = {
     vpnLoadError: '加载失败',
     vpnViewOnGitHub: '前往 GitHub 查看',
     vpnAllReleases: '所有历史版本',
-    vpnVersion: '选择版本',
     vpnVersions: '个版本',
     vpnWindowsDesc: 'PSG Connect Windows 客户端',
     vpnMacDesc: 'PSG Connect macOS 客户端，支持 Apple Silicon 与 Intel',

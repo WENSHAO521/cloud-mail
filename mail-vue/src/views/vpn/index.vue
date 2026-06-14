@@ -24,106 +24,122 @@
           </a>
         </div>
 
-        <template v-else>
+        <template v-else-if="latest">
 
-          <!-- ── Version picker ── -->
-          <div class="version-bar">
-            <div class="version-bar-label">{{ $t('vpnVersion') }}</div>
-            <div class="version-list">
-              <button
-                v-for="(r, idx) in releases"
-                :key="r.id"
-                class="version-btn"
-                :class="{ 'version-btn--active': selected?.id === r.id }"
-                @click="selected = r"
-              >
-                {{ r.tag_name }}
-                <span v-if="idx === 0" class="badge-latest">LATEST</span>
-              </button>
-            </div>
+          <!-- ── Version meta ── -->
+          <div class="dl-section-meta">
+            <span class="section-tag">{{ latest.tag_name }}</span>
+            <span class="section-date">{{ formatDate(latest.published_at) }}</span>
           </div>
 
-          <!-- ── Platform cards for selected version ── -->
-          <template v-if="selected">
-            <div class="dl-section-meta">
-              <span class="section-tag">{{ selected.tag_name }}</span>
-              <span class="section-date">{{ formatDate(selected.published_at) }}</span>
+          <!-- ── Platform cards ── -->
+          <div class="dl-grid">
+
+            <!-- Windows -->
+            <div class="dl-card" v-if="assets('win').length">
+              <div class="dl-card-icon">
+                <Icon icon="simple-icons:windows11" width="40" height="40" />
+              </div>
+              <div class="dl-card-info">
+                <div class="dl-card-platform">Windows</div>
+                <div class="dl-card-desc">{{ $t('vpnWindowsDesc') }}</div>
+                <div class="dl-card-meta">Windows 10 / 11</div>
+              </div>
+              <div class="dl-btn-group">
+                <a
+                  v-for="a in assets('win')"
+                  :key="a.name"
+                  class="dl-btn"
+                  :href="a.browser_download_url"
+                  target="_blank"
+                  rel="noopener"
+                  :title="a.name"
+                >
+                  <Icon icon="solar:download-minimalistic-bold" width="14" height="14" />
+                  {{ archLabel(a.name) }}
+                </a>
+              </div>
             </div>
 
-            <div class="dl-grid">
-
-              <!-- Windows -->
-              <div class="dl-card" v-if="getUrl(selected, 'win')">
-                <div class="dl-card-icon">
-                  <Icon icon="simple-icons:windows11" width="40" height="40" />
-                </div>
-                <div class="dl-card-info">
-                  <div class="dl-card-platform">Windows</div>
-                  <div class="dl-card-desc">{{ $t('vpnWindowsDesc') }}</div>
-                  <div class="dl-card-meta">Windows 10 / 11 · x64</div>
-                </div>
-                <a class="dl-btn" :href="getUrl(selected, 'win')" target="_blank" rel="noopener">
-                  <Icon icon="solar:download-minimalistic-bold" width="16" height="16" />
-                  {{ $t('dlDownload') }} .exe
+            <!-- macOS -->
+            <div class="dl-card" v-if="assets('mac').length">
+              <div class="dl-card-icon">
+                <Icon icon="simple-icons:apple" width="40" height="40" />
+              </div>
+              <div class="dl-card-info">
+                <div class="dl-card-platform">macOS</div>
+                <div class="dl-card-desc">{{ $t('vpnMacDesc') }}</div>
+                <div class="dl-card-meta">macOS 12+</div>
+              </div>
+              <div class="dl-btn-group">
+                <a
+                  v-for="a in assets('mac')"
+                  :key="a.name"
+                  class="dl-btn"
+                  :href="a.browser_download_url"
+                  target="_blank"
+                  rel="noopener"
+                  :title="a.name"
+                >
+                  <Icon icon="solar:download-minimalistic-bold" width="14" height="14" />
+                  {{ archLabel(a.name) }}
                 </a>
               </div>
-
-              <!-- macOS -->
-              <div class="dl-card" v-if="getUrl(selected, 'mac')">
-                <div class="dl-card-icon">
-                  <Icon icon="simple-icons:apple" width="40" height="40" />
-                </div>
-                <div class="dl-card-info">
-                  <div class="dl-card-platform">macOS</div>
-                  <div class="dl-card-desc">{{ $t('vpnMacDesc') }}</div>
-                  <div class="dl-card-meta">macOS 12+ · Intel & Apple Silicon</div>
-                </div>
-                <a class="dl-btn" :href="getUrl(selected, 'mac')" target="_blank" rel="noopener">
-                  <Icon icon="solar:download-minimalistic-bold" width="16" height="16" />
-                  {{ $t('dlDownload') }} .dmg
-                </a>
-              </div>
-
-              <!-- Android -->
-              <div class="dl-card" v-if="getUrl(selected, 'android')">
-                <div class="dl-card-icon">
-                  <Icon icon="simple-icons:android" width="40" height="40" />
-                </div>
-                <div class="dl-card-info">
-                  <div class="dl-card-platform">Android</div>
-                  <div class="dl-card-desc">{{ $t('vpnAndroidDesc') }}</div>
-                  <div class="dl-card-meta">Android 5.0+</div>
-                </div>
-                <a class="dl-btn" :href="getUrl(selected, 'android')" target="_blank" rel="noopener">
-                  <Icon icon="solar:download-minimalistic-bold" width="16" height="16" />
-                  {{ $t('dlDownload') }} .apk
-                </a>
-              </div>
-
-              <!-- Linux -->
-              <div class="dl-card" v-if="getUrl(selected, 'linux')">
-                <div class="dl-card-icon">
-                  <Icon icon="simple-icons:linux" width="40" height="40" />
-                </div>
-                <div class="dl-card-info">
-                  <div class="dl-card-platform">Linux</div>
-                  <div class="dl-card-desc">{{ $t('vpnLinuxDesc') }}</div>
-                  <div class="dl-card-meta">Ubuntu 22.04+ · .deb / .AppImage</div>
-                </div>
-                <a class="dl-btn" :href="getUrl(selected, 'linux')" target="_blank" rel="noopener">
-                  <Icon icon="solar:download-minimalistic-bold" width="16" height="16" />
-                  {{ $t('dlDownload') }} .deb
-                </a>
-              </div>
-
-              <!-- No assets fallback -->
-              <div v-if="!hasAnyPlatform(selected)" class="dl-card dl-card--empty">
-                <Icon icon="solar:danger-triangle-linear" width="28" style="opacity:0.4" />
-                <span>{{ $t('vpnNoAssets') }}</span>
-              </div>
-
             </div>
-          </template>
+
+            <!-- Android -->
+            <div class="dl-card" v-if="assets('android').length">
+              <div class="dl-card-icon">
+                <Icon icon="simple-icons:android" width="40" height="40" />
+              </div>
+              <div class="dl-card-info">
+                <div class="dl-card-platform">Android</div>
+                <div class="dl-card-desc">{{ $t('vpnAndroidDesc') }}</div>
+                <div class="dl-card-meta">Android 5.0+</div>
+              </div>
+              <div class="dl-btn-group">
+                <a
+                  v-for="a in assets('android')"
+                  :key="a.name"
+                  class="dl-btn"
+                  :href="a.browser_download_url"
+                  target="_blank"
+                  rel="noopener"
+                  :title="a.name"
+                >
+                  <Icon icon="solar:download-minimalistic-bold" width="14" height="14" />
+                  {{ archLabel(a.name) }}
+                </a>
+              </div>
+            </div>
+
+            <!-- Linux -->
+            <div class="dl-card" v-if="assets('linux').length">
+              <div class="dl-card-icon">
+                <Icon icon="simple-icons:linux" width="40" height="40" />
+              </div>
+              <div class="dl-card-info">
+                <div class="dl-card-platform">Linux</div>
+                <div class="dl-card-desc">{{ $t('vpnLinuxDesc') }}</div>
+                <div class="dl-card-meta">Ubuntu 22.04+</div>
+              </div>
+              <div class="dl-btn-group">
+                <a
+                  v-for="a in assets('linux')"
+                  :key="a.name"
+                  class="dl-btn"
+                  :href="a.browser_download_url"
+                  target="_blank"
+                  rel="noopener"
+                  :title="a.name"
+                >
+                  <Icon icon="solar:download-minimalistic-bold" width="14" height="14" />
+                  {{ archLabel(a.name) }}
+                </a>
+              </div>
+            </div>
+
+          </div>
 
           <!-- ── Footer ── -->
           <div class="dl-footer">
@@ -131,7 +147,7 @@
               <Icon icon="simple-icons:github" width="14" height="14" />
               {{ $t('vpnAllReleases') }}
             </a>
-            <span class="dl-version">{{ releases.length }} {{ $t('vpnVersions') }}</span>
+            <span class="dl-version">{{ latest.tag_name }}</span>
           </div>
 
         </template>
@@ -142,24 +158,21 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { Icon } from '@iconify/vue'
 
 const RELEASES_URL = 'https://github.com/WENSHAO521/FlClash-/releases'
-const GITHUB_API   = 'https://api.github.com/repos/WENSHAO521/FlClash-/releases?per_page=50'
+const GITHUB_API   = 'https://api.github.com/repos/WENSHAO521/FlClash-/releases/latest'
 
-const releases = ref([])
-const selected = ref(null)
-const loading  = ref(true)
-const error    = ref(false)
+const latest  = ref(null)
+const loading = ref(true)
+const error   = ref(false)
 
 onMounted(async () => {
   try {
     const res = await fetch(GITHUB_API)
     if (!res.ok) throw new Error(res.status)
-    const data = (await res.json()).filter(r => !r.draft)
-    releases.value = data
-    selected.value = data[0] || null
+    latest.value = await res.json()
   } catch {
     error.value = true
   } finally {
@@ -167,19 +180,42 @@ onMounted(async () => {
   }
 })
 
-function getUrl(release, platform) {
-  for (const a of release.assets || []) {
+// Return all assets for a given platform, excluding metadata files
+function assets(platform) {
+  if (!latest.value) return []
+  return (latest.value.assets || []).filter(a => {
     const n = a.name.toLowerCase()
-    if (platform === 'win'     && (n.endsWith('.exe') || n.endsWith('.msix'))) return a.browser_download_url
-    if (platform === 'mac'     && (n.endsWith('.dmg') || n.endsWith('.pkg') || n.includes('macos') || n.includes('darwin'))) return a.browser_download_url
-    if (platform === 'android' && (n.endsWith('.apk') || n.endsWith('.aab'))) return a.browser_download_url
-    if (platform === 'linux'   && (n.endsWith('.deb') || n.endsWith('.appimage') || n.endsWith('.rpm'))) return a.browser_download_url
-  }
-  return null
+    if (n.endsWith('.blockmap') || n.endsWith('.yml') || n.endsWith('.yaml') || n.endsWith('.json')) return false
+    if (platform === 'win')     return n.includes('windows') || n.endsWith('.exe') || n.endsWith('.msix')
+    if (platform === 'mac')     return n.endsWith('.dmg') || n.endsWith('.pkg') || n.includes('macos') || n.includes('darwin')
+    if (platform === 'android') return n.endsWith('.apk') || n.endsWith('.aab')
+    if (platform === 'linux')   return n.endsWith('.deb') || n.endsWith('.rpm') || n.endsWith('.appimage') || (n.includes('linux') && (n.endsWith('.zip') || n.endsWith('.tar.gz')))
+    return false
+  })
 }
 
-function hasAnyPlatform(release) {
-  return ['win', 'mac', 'android', 'linux'].some(p => getUrl(release, p))
+// Extract a human-readable architecture / variant label from filename
+function archLabel(name) {
+  const n = name.toLowerCase()
+  // Android specific
+  if (n.includes('arm64-v8a'))   return 'ARM64-v8a'
+  if (n.includes('armeabi-v7a')) return 'ARMv7'
+  if (n.includes('x86_64'))      return 'x86_64'
+  if (n.includes('universal'))   return 'Universal'
+  // Generic arch
+  if (n.includes('arm64'))       return 'ARM64'
+  if (n.includes('aarch64'))     return 'ARM64'
+  if (n.includes('amd64'))       return 'x64'
+  if (n.includes('-x64'))        return 'x64'
+  if (n.includes('_x64'))        return 'x64'
+  if (n.includes('x86'))         return 'x86'
+  if (n.includes('arm'))         return 'ARM'
+  // macOS
+  if (n.includes('apple') || n.includes('silicon') || n.includes('m1') || n.includes('m2')) return 'Apple Silicon'
+  if (n.includes('intel'))       return 'Intel'
+  // Fall back to file extension
+  const ext = name.match(/\.([a-zA-Z0-9]+)$/)
+  return ext ? ext[1].toUpperCase() : name
 }
 
 function formatDate(iso) {
@@ -232,92 +268,12 @@ function formatDate(iso) {
   color: var(--muted, #7e7576);
 }
 
-/* ── Version picker ── */
-.version-bar {
-  margin-bottom: 20px;
-}
-
-.version-bar-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted, #7e7576);
-  margin-bottom: 8px;
-}
-
-.version-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.version-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  color: var(--el-text-color-regular);
-  background: var(--el-bg-color, #fff);
-  border: 1px solid var(--light-border-color, #ddd);
-  cursor: pointer;
-  transition: border-color 0.12s, color 0.12s, background 0.12s;
-
-  @media (hover: hover) {
-    &:hover {
-      border-color: #bc0000;
-      color: #bc0000;
-    }
-  }
-
-  &--active {
-    background: #111;
-    color: #fff;
-    border-color: #111;
-  }
-}
-
-:global(.dark) .version-btn {
-  background: var(--el-bg-color, #1c1c20);
-  border-color: rgba(255,255,255,0.15);
-  color: rgba(255,255,255,0.6);
-
-  &--active {
-    background: rgba(255,255,255,0.9);
-    color: #111;
-    border-color: transparent;
-  }
-
-  @media (hover: hover) {
-    &:not(.version-btn--active):hover {
-      border-color: #bc0000;
-      color: #bc0000;
-    }
-  }
-}
-
-.badge-latest {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  padding: 1px 4px;
-  background: #bc0000;
-  color: #fff;
-  vertical-align: middle;
-}
-
 /* ── Version meta ── */
 .dl-section-meta {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
   font-family: 'JetBrains Mono', monospace;
 }
 
@@ -356,19 +312,9 @@ function formatDate(iso) {
   }
 
   &--skeleton {
-    height: 160px;
+    height: 180px;
     opacity: 0.35;
     animation: dl-pulse 1.2s ease-in-out infinite;
-  }
-
-  &--empty {
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-    padding: 20px;
-    color: var(--muted, #7e7576);
-    font-size: 13px;
-    grid-column: 1 / -1;
   }
 }
 
@@ -408,13 +354,19 @@ function formatDate(iso) {
   letter-spacing: 0.04em;
 }
 
-/* ── Download button ── */
+/* ── Button group (multiple arch variants) ── */
+.dl-btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
 .dl-btn {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  height: 34px;
-  padding: 0 14px;
+  height: 32px;
+  padding: 0 12px;
   background: #111111;
   color: #ffffff;
   font-family: 'JetBrains Mono', monospace;
@@ -426,6 +378,9 @@ function formatDate(iso) {
   cursor: pointer;
   border: none;
   transition: background 0.12s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   @media (hover: hover) {
     &:hover { background: #bc0000; }
