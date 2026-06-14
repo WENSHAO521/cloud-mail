@@ -186,10 +186,11 @@ function assets(platform) {
   return (latest.value.assets || []).filter(a => {
     const n = a.name.toLowerCase()
     if (n.endsWith('.blockmap') || n.endsWith('.yml') || n.endsWith('.yaml') || n.endsWith('.json')) return false
-    if (platform === 'win')     return n.includes('windows') || n.endsWith('.exe') || n.endsWith('.msix')
-    if (platform === 'mac')     return n.endsWith('.dmg') || n.endsWith('.pkg') || n.includes('macos') || n.includes('darwin')
+    if (n.endsWith('.zip') || n.endsWith('.tar.gz') || n.endsWith('.tgz')) return false
+    if (platform === 'win')     return n.endsWith('.exe') || n.endsWith('.msix')
+    if (platform === 'mac')     return n.endsWith('.dmg') || n.endsWith('.pkg')
     if (platform === 'android') return n.endsWith('.apk') || n.endsWith('.aab')
-    if (platform === 'linux')   return n.endsWith('.deb') || n.endsWith('.rpm') || n.endsWith('.appimage') || (n.includes('linux') && (n.endsWith('.zip') || n.endsWith('.tar.gz')))
+    if (platform === 'linux')   return n.endsWith('.deb') || n.endsWith('.rpm') || n.endsWith('.appimage')
     return false
   })
 }
