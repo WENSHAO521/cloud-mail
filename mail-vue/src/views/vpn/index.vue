@@ -1,67 +1,107 @@
 <template>
-  <div class="vpn-view">
+  <div class="download-view">
     <el-scrollbar>
-      <div class="vpn-body">
+      <div class="dl-body">
 
         <!-- ── Hero ── -->
-        <div class="vpn-hero">
+        <div class="dl-hero">
           <div class="hero-publisher">PANORAMA SCHOLARLY GROUP</div>
           <div class="hero-product">PSG CONNECT</div>
           <div class="hero-sub">{{ $t('vpnHeroSub') }}</div>
         </div>
 
-        <!-- ── Loading ── -->
-        <div v-if="loading" class="vpn-state">
-          <div class="vpn-spinner" />
+        <!-- ── Loading skeleton ── -->
+        <div v-if="loading" class="dl-grid">
+          <div v-for="i in 4" :key="i" class="dl-card dl-card--skeleton" />
         </div>
 
         <!-- ── Error ── -->
-        <div v-else-if="error" class="vpn-state vpn-state--error">
-          <Icon icon="solar:danger-triangle-linear" width="22" />
-          <span>{{ $t('vpnLoadError') }}</span>
-          <a :href="RELEASES_URL" class="footer-link" target="_blank" rel="noopener">
+        <div v-else-if="error" class="dl-error">
+          <Icon icon="solar:danger-triangle-linear" width="20" />
+          {{ $t('vpnLoadError') }}
+          <a :href="RELEASES_URL" target="_blank" rel="noopener" class="dl-releases-link">
             {{ $t('vpnViewOnGitHub') }}
           </a>
         </div>
 
-        <!-- ── Releases ── -->
-        <template v-else>
-          <div v-for="(release, idx) in releases" :key="release.id" class="vpn-release">
-            <div class="release-head">
-              <div class="release-left">
-                <span class="release-version">{{ release.tag_name }}</span>
-                <span v-if="idx === 0" class="badge-latest">LATEST</span>
+        <!-- ── Platform cards ── -->
+        <template v-else-if="latest">
+
+          <!-- Windows -->
+          <div class="dl-grid">
+            <div class="dl-card" v-if="getUrl(latest, 'win')">
+              <div class="dl-card-icon">
+                <Icon icon="simple-icons:windows11" width="40" height="40" />
               </div>
-              <div class="release-date">{{ formatDate(release.published_at) }}</div>
+              <div class="dl-card-info">
+                <div class="dl-card-platform">Windows</div>
+                <div class="dl-card-desc">{{ $t('vpnWindowsDesc') }}</div>
+                <div class="dl-card-meta">Windows 10 / 11 · x64</div>
+              </div>
+              <a class="dl-btn" :href="getUrl(latest, 'win')" target="_blank" rel="noopener">
+                <Icon icon="solar:download-minimalistic-bold" width="16" height="16" />
+                {{ $t('dlDownload') }} .exe
+              </a>
             </div>
 
-            <div class="release-files">
-              <a
-                v-for="asset in release.assets"
-                :key="asset.id"
-                class="file-row"
-                :href="asset.browser_download_url"
-                target="_blank"
-                rel="noopener"
-              >
-                <Icon :icon="platformIcon(asset.name)" width="15" class="file-platform-icon" />
-                <span class="file-name">{{ asset.name }}</span>
-                <span class="file-size">{{ formatSize(asset.size) }}</span>
-                <Icon icon="solar:download-minimalistic-bold" width="13" class="dl-icon" />
-              </a>
-              <div v-if="!release.assets.length" class="no-files">
-                {{ $t('vpnNoAssets') }}
+            <!-- macOS -->
+            <div class="dl-card" v-if="getUrl(latest, 'mac')">
+              <div class="dl-card-icon">
+                <Icon icon="simple-icons:apple" width="40" height="40" />
               </div>
+              <div class="dl-card-info">
+                <div class="dl-card-platform">macOS</div>
+                <div class="dl-card-desc">{{ $t('vpnMacDesc') }}</div>
+                <div class="dl-card-meta">macOS 12+ · Intel & Apple Silicon</div>
+              </div>
+              <a class="dl-btn" :href="getUrl(latest, 'mac')" target="_blank" rel="noopener">
+                <Icon icon="solar:download-minimalistic-bold" width="16" height="16" />
+                {{ $t('dlDownload') }} .dmg
+              </a>
+            </div>
+
+            <!-- Android -->
+            <div class="dl-card" v-if="getUrl(latest, 'android')">
+              <div class="dl-card-icon">
+                <Icon icon="simple-icons:android" width="40" height="40" />
+              </div>
+              <div class="dl-card-info">
+                <div class="dl-card-platform">Android</div>
+                <div class="dl-card-desc">{{ $t('vpnAndroidDesc') }}</div>
+                <div class="dl-card-meta">Android 5.0+</div>
+              </div>
+              <a class="dl-btn" :href="getUrl(latest, 'android')" target="_blank" rel="noopener">
+                <Icon icon="solar:download-minimalistic-bold" width="16" height="16" />
+                {{ $t('dlDownload') }} .apk
+              </a>
+            </div>
+
+            <!-- Linux -->
+            <div class="dl-card" v-if="getUrl(latest, 'linux')">
+              <div class="dl-card-icon">
+                <Icon icon="simple-icons:linux" width="40" height="40" />
+              </div>
+              <div class="dl-card-info">
+                <div class="dl-card-platform">Linux</div>
+                <div class="dl-card-desc">{{ $t('vpnLinuxDesc') }}</div>
+                <div class="dl-card-meta">Ubuntu 22.04+ · .deb / .AppImage</div>
+              </div>
+              <a class="dl-btn" :href="getUrl(latest, 'linux')" target="_blank" rel="noopener">
+                <Icon icon="solar:download-minimalistic-bold" width="16" height="16" />
+                {{ $t('dlDownload') }} .deb
+              </a>
             </div>
           </div>
 
-          <div class="vpn-footer">
-            <a :href="RELEASES_URL" class="footer-link" target="_blank" rel="noopener">
-              <Icon icon="simple-icons:github" width="13" />
+          <!-- ── Footer ── -->
+          <div class="dl-footer">
+            <a class="dl-releases-link" :href="RELEASES_URL" target="_blank" rel="noopener">
+              <Icon icon="simple-icons:github" width="14" height="14" />
               {{ $t('vpnAllReleases') }}
             </a>
-            <span class="footer-count">{{ releases.length }} {{ $t('vpnVersions') }}</span>
+            <span class="dl-version">{{ latest.tag_name }}</span>
           </div>
+
         </template>
 
       </div>
@@ -70,22 +110,21 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { Icon } from '@iconify/vue'
 
 const RELEASES_URL = 'https://github.com/WENSHAO521/FlClash-/releases'
-const GITHUB_API   = 'https://api.github.com/repos/WENSHAO521/FlClash-/releases?per_page=30'
+const GITHUB_API   = 'https://api.github.com/repos/WENSHAO521/FlClash-/releases/latest'
 
-const releases = ref([])
-const loading  = ref(true)
-const error    = ref(false)
+const latest  = ref(null)
+const loading = ref(true)
+const error   = ref(false)
 
 onMounted(async () => {
   try {
-    const res  = await fetch(GITHUB_API)
+    const res = await fetch(GITHUB_API)
     if (!res.ok) throw new Error(res.status)
-    const data = await res.json()
-    releases.value = data.filter(r => !r.draft)
+    latest.value = await res.json()
   } catch {
     error.value = true
   } finally {
@@ -93,44 +132,33 @@ onMounted(async () => {
   }
 })
 
-function platformIcon(name) {
-  const n = name.toLowerCase()
-  if (n.includes('windows') || n.endsWith('.exe') || n.endsWith('.msix')) return 'simple-icons:windows11'
-  if (n.includes('macos') || n.includes('darwin') || n.endsWith('.dmg') || n.endsWith('.pkg')) return 'simple-icons:apple'
-  if (n.includes('android') || n.endsWith('.apk') || n.endsWith('.aab')) return 'simple-icons:android'
-  if (n.endsWith('.deb') || n.endsWith('.rpm') || n.endsWith('.appimage') || n.includes('linux')) return 'simple-icons:linux'
-  if (n.endsWith('.zip') || n.endsWith('.tar.gz') || n.endsWith('.tgz')) return 'solar:file-download-linear'
-  return 'solar:file-linear'
-}
-
-function formatSize(bytes) {
-  if (!bytes) return ''
-  if (bytes >= 1024 * 1024) return (bytes / (1024 * 1024)).toFixed(1) + ' MB'
-  if (bytes >= 1024) return Math.round(bytes / 1024) + ' KB'
-  return bytes + ' B'
-}
-
-function formatDate(iso) {
-  if (!iso) return ''
-  return new Date(iso).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
+function getUrl(release, platform) {
+  for (const a of release.assets || []) {
+    const n = a.name.toLowerCase()
+    if (platform === 'win'     && (n.endsWith('.exe') || n.endsWith('.msix'))) return a.browser_download_url
+    if (platform === 'mac'     && (n.endsWith('.dmg') || n.endsWith('.pkg') || n.includes('macos') || n.includes('darwin'))) return a.browser_download_url
+    if (platform === 'android' && (n.endsWith('.apk') || n.endsWith('.aab'))) return a.browser_download_url
+    if (platform === 'linux'   && (n.endsWith('.deb') || n.endsWith('.appimage') || n.endsWith('.rpm'))) return a.browser_download_url
+  }
+  return null
 }
 </script>
 
 <style lang="scss" scoped>
-.vpn-view {
+.download-view {
   height: 100%;
   background: var(--el-bg-color-page, #f5f5f5);
 }
 
-.vpn-body {
+.dl-body {
   max-width: 760px;
   margin: 0 auto;
   padding: 40px 24px 60px;
 }
 
 /* ── Hero ── */
-.vpn-hero {
-  margin-bottom: 32px;
+.dl-hero {
+  margin-bottom: 36px;
   border-left: 4px solid #bc0000;
   padding-left: 18px;
 }
@@ -160,183 +188,148 @@ function formatDate(iso) {
   color: var(--muted, #7e7576);
 }
 
-/* ── State (loading / error) ── */
-.vpn-state {
+/* ── Grid ── */
+.dl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+/* ── Card ── */
+.dl-card {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 12px;
-  padding: 60px 0;
-  color: var(--muted, #7e7576);
-  font-size: 13px;
-
-  &--error {
-    color: #bc0000;
-  }
-}
-
-.vpn-spinner {
-  width: 24px;
-  height: 24px;
-  border: 2px solid var(--light-border-color, #cfc4c5);
-  border-top-color: #bc0000;
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ── Release block ── */
-.vpn-release {
-  margin-bottom: 20px;
-  border: 1px solid var(--light-border, #e0d8d9);
-  border-top: 3px solid var(--light-border, #000);
-  background: var(--el-bg-color, #fff);
-
-  &:first-of-type {
-    border-top-color: #bc0000;
-  }
-}
-
-:global(.dark) .vpn-release {
-  background: var(--el-bg-color, #1c1c20);
-  border-color: rgba(255,255,255,0.12);
-  border-top-color: rgba(255,255,255,0.25);
-
-  &:first-of-type {
-    border-top-color: #bc0000;
-  }
-}
-
-.release-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--light-border-color, #e8e0e1);
-}
-
-:global(.dark) .release-head {
-  border-bottom-color: rgba(255,255,255,0.08);
-}
-
-.release-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.release-version {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--el-text-color-primary);
-  letter-spacing: 0.03em;
-}
-
-.badge-latest {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  padding: 2px 6px;
-  background: #bc0000;
-  color: #fff;
-}
-
-.release-date {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--muted, #7e7576);
-}
-
-/* ── File rows ── */
-.release-files {
-  padding: 4px 0;
-}
-
-.file-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 16px;
-  text-decoration: none;
-  color: var(--el-text-color-regular);
-  transition: background 0.1s;
+  padding: 22px 20px 18px;
+  background: var(--el-bg-color, #ffffff);
+  border: 1px solid var(--light-border, #000000);
+  border-top: 3px solid var(--light-border, #000000);
+  transition: border-top-color 0.12s;
 
   @media (hover: hover) {
-    &:hover {
-      background: var(--el-fill-color-light, rgba(0,0,0,0.04));
+    &:hover { border-top-color: #bc0000; }
+  }
 
-      .dl-icon { opacity: 1; color: #bc0000; }
-    }
+  &--skeleton {
+    height: 160px;
+    opacity: 0.35;
+    animation: dl-pulse 1.2s ease-in-out infinite;
   }
 }
 
-.file-platform-icon {
-  flex-shrink: 0;
-  color: var(--muted, #7e7576);
+:global(.dark) .dl-card {
+  background: var(--el-bg-color, #1c1c20);
+  border-color: rgba(255, 255, 255, 0.15);
+  border-top-color: rgba(255, 255, 255, 0.3);
 }
 
-.file-name {
-  flex: 1;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+.dl-card-icon {
   color: var(--el-text-color-primary);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  opacity: 0.75;
 }
 
-.file-size {
+.dl-card-info { flex: 1; }
+
+.dl-card-platform {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--el-text-color-primary);
+  margin-bottom: 4px;
+}
+
+.dl-card-desc {
+  font-size: 12px;
+  color: var(--muted, #7e7576);
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+
+.dl-card-meta {
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
   color: var(--muted, #7e7576);
-  flex-shrink: 0;
-  width: 56px;
-  text-align: right;
+  letter-spacing: 0.04em;
 }
 
-.dl-icon {
-  flex-shrink: 0;
-  opacity: 0.3;
-  transition: opacity 0.1s, color 0.1s;
+/* ── Button ── */
+.dl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 34px;
+  padding: 0 14px;
+  background: #111111;
+  color: #ffffff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: background 0.12s;
+
+  @media (hover: hover) {
+    &:hover { background: #bc0000; }
+  }
+  &:active { background: #7a0000; }
 }
 
-.no-files {
-  padding: 12px 16px;
-  font-size: 12px;
-  color: var(--muted, #7e7576);
+:global(.dark) .dl-btn {
+  background: rgba(255,255,255,0.88);
+  color: #111;
+
+  @media (hover: hover) {
+    &:hover { background: #bc0000; color: #fff; }
+  }
+}
+
+/* ── Error ── */
+.dl-error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 24px 0;
+  font-size: 13px;
+  color: #bc0000;
 }
 
 /* ── Footer ── */
-.vpn-footer {
+.dl-footer {
   display: flex;
   align-items: center;
   gap: 16px;
   padding-top: 20px;
   border-top: 1px solid var(--light-border-color, #cfc4c5);
-  margin-top: 4px;
 }
 
-.footer-link {
+.dl-releases-link {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   font-size: 12px;
-  font-family: 'JetBrains Mono', monospace;
   color: var(--muted, #7e7576);
   text-decoration: none;
+  font-family: 'JetBrains Mono', monospace;
 
   @media (hover: hover) {
     &:hover { color: var(--el-text-color-primary); }
   }
 }
 
-.footer-count {
-  margin-left: auto;
+.dl-version {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
   color: var(--muted, #7e7576);
+  margin-left: auto;
+}
+
+@keyframes dl-pulse {
+  0%, 100% { opacity: 0.35; }
+  50%       { opacity: 0.15; }
 }
 </style>

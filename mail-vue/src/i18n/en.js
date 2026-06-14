@@ -609,11 +609,14 @@ const en = {
     dlAllReleases: 'All releases on GitHub',
     vpn: 'PSG Connect',
     vpnHeroSub: 'Internal network connectivity tool — available for Windows, macOS, Linux and Android',
-    vpnLoadError: 'Failed to load release list',
+    vpnLoadError: 'Failed to load',
     vpnViewOnGitHub: 'View on GitHub',
     vpnAllReleases: 'All releases on GitHub',
     vpnVersions: 'versions',
-    vpnNoAssets: 'No files available for this release',
+    vpnWindowsDesc: 'PSG Connect desktop client for Windows',
+    vpnMacDesc: 'PSG Connect desktop client for macOS — Apple Silicon and Intel',
+    vpnAndroidDesc: 'PSG Connect mobile client for Android',
+    vpnLinuxDesc: 'PSG Connect desktop client for Linux — .deb and .AppImage',
 }
 
 export default en

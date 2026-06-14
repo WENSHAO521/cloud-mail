@@ -609,10 +609,13 @@ const zh = {
     dlAllReleases: '所有历史版本',
     vpn: 'PSG Connect',
     vpnHeroSub: '内部网络连接工具，支持 Windows、macOS、Linux 和 Android',
-    vpnLoadError: '版本列表加载失败',
+    vpnLoadError: '加载失败',
     vpnViewOnGitHub: '前往 GitHub 查看',
     vpnAllReleases: '所有历史版本',
     vpnVersions: '个版本',
-    vpnNoAssets: '该版本暂无下载文件',
+    vpnWindowsDesc: 'PSG Connect Windows 客户端',
+    vpnMacDesc: 'PSG Connect macOS 客户端，支持 Apple Silicon 与 Intel',
+    vpnAndroidDesc: 'PSG Connect Android 移动客户端',
+    vpnLinuxDesc: 'PSG Connect Linux 客户端，提供 .deb 与 .AppImage',
 }
 export default zh
