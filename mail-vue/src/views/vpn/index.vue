@@ -6,7 +6,7 @@
         <!-- ── Hero ── -->
         <div class="vpn-hero">
           <div class="hero-publisher">PANORAMA SCHOLARLY GROUP</div>
-          <div class="hero-product">PSG VPS</div>
+          <div class="hero-product">PSG CONNECT</div>
           <div class="hero-sub">{{ $t('vpnHeroSub') }}</div>
         </div>
 
