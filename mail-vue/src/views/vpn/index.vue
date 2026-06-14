@@ -24,74 +24,106 @@
           </a>
         </div>
 
-        <!-- ── Platform cards ── -->
-        <template v-else-if="latest">
+        <template v-else>
 
-          <!-- Windows -->
-          <div class="dl-grid">
-            <div class="dl-card" v-if="getUrl(latest, 'win')">
-              <div class="dl-card-icon">
-                <Icon icon="simple-icons:windows11" width="40" height="40" />
-              </div>
-              <div class="dl-card-info">
-                <div class="dl-card-platform">Windows</div>
-                <div class="dl-card-desc">{{ $t('vpnWindowsDesc') }}</div>
-                <div class="dl-card-meta">Windows 10 / 11 · x64</div>
-              </div>
-              <a class="dl-btn" :href="getUrl(latest, 'win')" target="_blank" rel="noopener">
-                <Icon icon="solar:download-minimalistic-bold" width="16" height="16" />
-                {{ $t('dlDownload') }} .exe
-              </a>
-            </div>
-
-            <!-- macOS -->
-            <div class="dl-card" v-if="getUrl(latest, 'mac')">
-              <div class="dl-card-icon">
-                <Icon icon="simple-icons:apple" width="40" height="40" />
-              </div>
-              <div class="dl-card-info">
-                <div class="dl-card-platform">macOS</div>
-                <div class="dl-card-desc">{{ $t('vpnMacDesc') }}</div>
-                <div class="dl-card-meta">macOS 12+ · Intel & Apple Silicon</div>
-              </div>
-              <a class="dl-btn" :href="getUrl(latest, 'mac')" target="_blank" rel="noopener">
-                <Icon icon="solar:download-minimalistic-bold" width="16" height="16" />
-                {{ $t('dlDownload') }} .dmg
-              </a>
-            </div>
-
-            <!-- Android -->
-            <div class="dl-card" v-if="getUrl(latest, 'android')">
-              <div class="dl-card-icon">
-                <Icon icon="simple-icons:android" width="40" height="40" />
-              </div>
-              <div class="dl-card-info">
-                <div class="dl-card-platform">Android</div>
-                <div class="dl-card-desc">{{ $t('vpnAndroidDesc') }}</div>
-                <div class="dl-card-meta">Android 5.0+</div>
-              </div>
-              <a class="dl-btn" :href="getUrl(latest, 'android')" target="_blank" rel="noopener">
-                <Icon icon="solar:download-minimalistic-bold" width="16" height="16" />
-                {{ $t('dlDownload') }} .apk
-              </a>
-            </div>
-
-            <!-- Linux -->
-            <div class="dl-card" v-if="getUrl(latest, 'linux')">
-              <div class="dl-card-icon">
-                <Icon icon="simple-icons:linux" width="40" height="40" />
-              </div>
-              <div class="dl-card-info">
-                <div class="dl-card-platform">Linux</div>
-                <div class="dl-card-desc">{{ $t('vpnLinuxDesc') }}</div>
-                <div class="dl-card-meta">Ubuntu 22.04+ · .deb / .AppImage</div>
-              </div>
-              <a class="dl-btn" :href="getUrl(latest, 'linux')" target="_blank" rel="noopener">
-                <Icon icon="solar:download-minimalistic-bold" width="16" height="16" />
-                {{ $t('dlDownload') }} .deb
-              </a>
+          <!-- ── Version picker ── -->
+          <div class="version-bar">
+            <div class="version-bar-label">{{ $t('vpnVersion') }}</div>
+            <div class="version-list">
+              <button
+                v-for="(r, idx) in releases"
+                :key="r.id"
+                class="version-btn"
+                :class="{ 'version-btn--active': selected?.id === r.id }"
+                @click="selected = r"
+              >
+                {{ r.tag_name }}
+                <span v-if="idx === 0" class="badge-latest">LATEST</span>
+              </button>
             </div>
           </div>
+
+          <!-- ── Platform cards for selected version ── -->
+          <template v-if="selected">
+            <div class="dl-section-meta">
+              <span class="section-tag">{{ selected.tag_name }}</span>
+              <span class="section-date">{{ formatDate(selected.published_at) }}</span>
+            </div>
+
+            <div class="dl-grid">
+
+              <!-- Windows -->
+              <div class="dl-card" v-if="getUrl(selected, 'win')">
+                <div class="dl-card-icon">
+                  <Icon icon="simple-icons:windows11" width="40" height="40" />
+                </div>
+                <div class="dl-card-info">
+                  <div class="dl-card-platform">Windows</div>
+                  <div class="dl-card-desc">{{ $t('vpnWindowsDesc') }}</div>
+                  <div class="dl-card-meta">Windows 10 / 11 · x64</div>
+                </div>
+                <a class="dl-btn" :href="getUrl(selected, 'win')" target="_blank" rel="noopener">
+                  <Icon icon="solar:download-minimalistic-bold" width="16" height="16" />
+                  {{ $t('dlDownload') }} .exe
+                </a>
+              </div>
+
+              <!-- macOS -->
+              <div class="dl-card" v-if="getUrl(selected, 'mac')">
+                <div class="dl-card-icon">
+                  <Icon icon="simple-icons:apple" width="40" height="40" />
+                </div>
+                <div class="dl-card-info">
+                  <div class="dl-card-platform">macOS</div>
+                  <div class="dl-card-desc">{{ $t('vpnMacDesc') }}</div>
+                  <div class="dl-card-meta">macOS 12+ · Intel & Apple Silicon</div>
+                </div>
+                <a class="dl-btn" :href="getUrl(selected, 'mac')" target="_blank" rel="noopener">
+                  <Icon icon="solar:download-minimalistic-bold" width="16" height="16" />
+                  {{ $t('dlDownload') }} .dmg
+                </a>
+              </div>
+
+              <!-- Android -->
+              <div class="dl-card" v-if="getUrl(selected, 'android')">
+                <div class="dl-card-icon">
+                  <Icon icon="simple-icons:android" width="40" height="40" />
+                </div>
+                <div class="dl-card-info">
+                  <div class="dl-card-platform">Android</div>
+                  <div class="dl-card-desc">{{ $t('vpnAndroidDesc') }}</div>
+                  <div class="dl-card-meta">Android 5.0+</div>
+                </div>
+                <a class="dl-btn" :href="getUrl(selected, 'android')" target="_blank" rel="noopener">
+                  <Icon icon="solar:download-minimalistic-bold" width="16" height="16" />
+                  {{ $t('dlDownload') }} .apk
+                </a>
+              </div>
+
+              <!-- Linux -->
+              <div class="dl-card" v-if="getUrl(selected, 'linux')">
+                <div class="dl-card-icon">
+                  <Icon icon="simple-icons:linux" width="40" height="40" />
+                </div>
+                <div class="dl-card-info">
+                  <div class="dl-card-platform">Linux</div>
+                  <div class="dl-card-desc">{{ $t('vpnLinuxDesc') }}</div>
+                  <div class="dl-card-meta">Ubuntu 22.04+ · .deb / .AppImage</div>
+                </div>
+                <a class="dl-btn" :href="getUrl(selected, 'linux')" target="_blank" rel="noopener">
+                  <Icon icon="solar:download-minimalistic-bold" width="16" height="16" />
+                  {{ $t('dlDownload') }} .deb
+                </a>
+              </div>
+
+              <!-- No assets fallback -->
+              <div v-if="!hasAnyPlatform(selected)" class="dl-card dl-card--empty">
+                <Icon icon="solar:danger-triangle-linear" width="28" style="opacity:0.4" />
+                <span>{{ $t('vpnNoAssets') }}</span>
+              </div>
+
+            </div>
+          </template>
 
           <!-- ── Footer ── -->
           <div class="dl-footer">
@@ -99,7 +131,7 @@
               <Icon icon="simple-icons:github" width="14" height="14" />
               {{ $t('vpnAllReleases') }}
             </a>
-            <span class="dl-version">{{ latest.tag_name }}</span>
+            <span class="dl-version">{{ releases.length }} {{ $t('vpnVersions') }}</span>
           </div>
 
         </template>
@@ -110,21 +142,24 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { Icon } from '@iconify/vue'
 
 const RELEASES_URL = 'https://github.com/WENSHAO521/FlClash-/releases'
-const GITHUB_API   = 'https://api.github.com/repos/WENSHAO521/FlClash-/releases/latest'
+const GITHUB_API   = 'https://api.github.com/repos/WENSHAO521/FlClash-/releases?per_page=50'
 
-const latest  = ref(null)
-const loading = ref(true)
-const error   = ref(false)
+const releases = ref([])
+const selected = ref(null)
+const loading  = ref(true)
+const error    = ref(false)
 
 onMounted(async () => {
   try {
     const res = await fetch(GITHUB_API)
     if (!res.ok) throw new Error(res.status)
-    latest.value = await res.json()
+    const data = (await res.json()).filter(r => !r.draft)
+    releases.value = data
+    selected.value = data[0] || null
   } catch {
     error.value = true
   } finally {
@@ -142,6 +177,15 @@ function getUrl(release, platform) {
   }
   return null
 }
+
+function hasAnyPlatform(release) {
+  return ['win', 'mac', 'android', 'linux'].some(p => getUrl(release, p))
+}
+
+function formatDate(iso) {
+  if (!iso) return ''
+  return new Date(iso).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -158,7 +202,7 @@ function getUrl(release, platform) {
 
 /* ── Hero ── */
 .dl-hero {
-  margin-bottom: 36px;
+  margin-bottom: 32px;
   border-left: 4px solid #bc0000;
   padding-left: 18px;
 }
@@ -185,6 +229,106 @@ function getUrl(release, platform) {
 .hero-sub {
   margin-top: 6px;
   font-size: 13px;
+  color: var(--muted, #7e7576);
+}
+
+/* ── Version picker ── */
+.version-bar {
+  margin-bottom: 20px;
+}
+
+.version-bar-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted, #7e7576);
+  margin-bottom: 8px;
+}
+
+.version-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.version-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--el-text-color-regular);
+  background: var(--el-bg-color, #fff);
+  border: 1px solid var(--light-border-color, #ddd);
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s, background 0.12s;
+
+  @media (hover: hover) {
+    &:hover {
+      border-color: #bc0000;
+      color: #bc0000;
+    }
+  }
+
+  &--active {
+    background: #111;
+    color: #fff;
+    border-color: #111;
+  }
+}
+
+:global(.dark) .version-btn {
+  background: var(--el-bg-color, #1c1c20);
+  border-color: rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.6);
+
+  &--active {
+    background: rgba(255,255,255,0.9);
+    color: #111;
+    border-color: transparent;
+  }
+
+  @media (hover: hover) {
+    &:not(.version-btn--active):hover {
+      border-color: #bc0000;
+      color: #bc0000;
+    }
+  }
+}
+
+.badge-latest {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 1px 4px;
+  background: #bc0000;
+  color: #fff;
+  vertical-align: middle;
+}
+
+/* ── Version meta ── */
+.dl-section-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.section-tag {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--el-text-color-primary);
+}
+
+.section-date {
+  font-size: 11px;
   color: var(--muted, #7e7576);
 }
 
@@ -215,6 +359,16 @@ function getUrl(release, platform) {
     height: 160px;
     opacity: 0.35;
     animation: dl-pulse 1.2s ease-in-out infinite;
+  }
+
+  &--empty {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    color: var(--muted, #7e7576);
+    font-size: 13px;
+    grid-column: 1 / -1;
   }
 }
 
@@ -254,7 +408,7 @@ function getUrl(release, platform) {
   letter-spacing: 0.04em;
 }
 
-/* ── Button ── */
+/* ── Download button ── */
 .dl-btn {
   display: inline-flex;
   align-items: center;

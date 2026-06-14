@@ -612,6 +612,7 @@ const en = {
     vpnLoadError: 'Failed to load',
     vpnViewOnGitHub: 'View on GitHub',
     vpnAllReleases: 'All releases on GitHub',
+    vpnVersion: 'Select version',
     vpnVersions: 'versions',
     vpnWindowsDesc: 'PSG Connect desktop client for Windows',
     vpnMacDesc: 'PSG Connect desktop client for macOS — Apple Silicon and Intel',
