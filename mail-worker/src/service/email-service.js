@@ -902,6 +902,10 @@ const emailService = {
 	},
 
 	async latest(c, params, userId) {
+		const rateLimitKey = 'rate:latest:' + userId
+		if (kvCache.get(rateLimitKey)) return []
+		kvCache.set(rateLimitKey, 1, 10)
+
 		let { emailId, accountId, allReceive } = params;
 		allReceive = Number(allReceive);
 

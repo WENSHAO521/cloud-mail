@@ -297,9 +297,8 @@ async function runGlobalMailNotifications() {
   if (globalNotifyRunning) return
   globalNotifyRunning = true
 
-  // emailLatest is a long-poll (waits up to 35s for new mail on the server).
-  // We must NOT sleep before calling it — the long-poll IS the wait.
-  // Only sleep briefly when the account isn't ready or on error.
+  // Poll for new mail every 30s (sleep is after each response, not before).
+  // Sleep briefly when the account isn't ready or on error.
   while (globalNotifyRunning) {
     if (!localStorage.getItem('token')) { await sleep(5000); continue }
 
@@ -315,7 +314,7 @@ async function runGlobalMailNotifications() {
 
       const list = await emailLatest(notificationCursor, accountId, allReceive)
       if (!Array.isArray(list)) { await sleep(2000); continue }
-      if (list.length === 0) continue
+      if (list.length === 0) { await sleep(30000); continue }
 
       const newestId = Math.max(...list.map(email => Number(email.emailId || 0)))
       for (const email of [...list].reverse()) {
