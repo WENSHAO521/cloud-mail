@@ -356,7 +356,7 @@ autoUpdater.on('error', (err) => {
 
 ipcMain.on('install-update', () => {
   app.isQuitting = true
-  autoUpdater.quitAndInstall()
+  autoUpdater.quitAndInstall(true, true)
 })
 
 ipcMain.on('check-for-updates', () => {
