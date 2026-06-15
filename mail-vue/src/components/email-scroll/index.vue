@@ -46,7 +46,16 @@
     </div>
 
     <!-- ── Email list ── -->
-    <div ref="scroll" class="scroll">
+    <div ref="scroll" class="scroll"
+      @touchstart.passive="ptrTouchStart"
+      @touchmove.passive="ptrTouchMove"
+      @touchend.passive="ptrTouchEnd"
+    >
+      <div class="ptr-bar" :style="ptrBarStyle">
+        <Icon icon="solar:refresh-linear" width="20"
+          :class="{ 'ptr-spin': ptrSpinning }"
+          :style="{ transform: ptrSpinning ? '' : `rotate(${ptrAngle}deg)`, opacity: ptrOpacity }" />
+      </div>
       <UseVirtualList
         ref="scrollbarRef"
         @scroll="onScroll"
@@ -60,12 +69,23 @@
         <template #default="{ data: item }">
 
           <!-- ── Mail row (Brutalist table layout) ── -->
-          <div class="mail-row-wrap" v-if="!item.expand">
+          <div class="mail-row-wrap" v-if="!item.expand"
+            @touchstart.passive="swipeTouchStart($event, item)"
+            @touchmove="swipeTouchMove($event, item)"
+            @touchend.passive="swipeTouchEnd($event, item)"
+          >
+            <div class="swipe-bg swipe-bg--delete" :style="{ opacity: swipeDeleteOpacity(item) }">
+              <Icon icon="solar:trash-bin-trash-linear" width="18" /><span>{{ $t('delete') }}</span>
+            </div>
+            <div v-if="showStar" class="swipe-bg swipe-bg--star" :style="{ opacity: swipeStarOpacity(item) }">
+              <Icon icon="solar:star-bold" width="18" /><span>{{ $t('star') }}</span>
+            </div>
             <div
               class="mail-row"
+              :style="rowSwipeStyle(item)"
               :class="[props.type, { 'is-unread': item.unread === EmailUnreadEnum.UNREAD && showUnread }]"
               :data-active="item.rightChecked || undefined"
-              @click="jumpDetails(item)"
+              @click="onRowClick($event, item)"
               @contextmenu="handleContextmenu($event, item)"
             >
               <!-- Col 1: Checkbox + unread dot -->
@@ -615,6 +635,100 @@ function refreshList() {
 }
 
 function loadData() { getEmailList() }
+
+// ── Pull-to-refresh ─────────────────────────────────────────────────────────
+const ptrOffset   = ref(0)
+const ptrSpinning = ref(false)
+let _ptrStartY = 0
+
+const ptrBarStyle = computed(() => ({ height: `${Math.min(ptrOffset.value, 52)}px` }))
+const ptrOpacity  = computed(() => Math.min(ptrOffset.value / 52, 1))
+const ptrAngle    = computed(() => ptrOffset.value * 4)
+
+function ptrTouchStart(e) { _ptrStartY = e.touches[0].clientY }
+
+function ptrTouchMove(e) {
+  if (scrollTop > 4) { ptrOffset.value = 0; return }
+  const dy = e.touches[0].clientY - _ptrStartY
+  ptrOffset.value = dy > 0 ? Math.min(dy * 0.55, 64) : 0
+}
+
+function ptrTouchEnd() {
+  if (ptrOffset.value >= 52) {
+    ptrSpinning.value = true
+    vibrate(30)
+    refresh()
+    setTimeout(() => { ptrSpinning.value = false; ptrOffset.value = 0 }, 1200)
+  } else {
+    ptrOffset.value = 0
+  }
+}
+
+// ── Swipe-to-delete / swipe-to-star ────────────────────────────────────────
+const swipeOffsets = reactive(new Map())
+const swipeTouch   = ref(null)
+
+function swipeTouchStart(e, item) {
+  swipeTouch.value = { id: item.emailId, sx: e.touches[0].clientX, sy: e.touches[0].clientY, dir: null }
+}
+
+function swipeTouchMove(e, item) {
+  const st = swipeTouch.value
+  if (!st || st.id !== item.emailId) return
+  const dx = e.touches[0].clientX - st.sx
+  const dy = e.touches[0].clientY - st.sy
+  if (!st.dir) {
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 8) st.dir = 'h'
+    else if (Math.abs(dy) > 8) st.dir = 'v'
+    else return
+  }
+  if (st.dir !== 'h') return
+  e.preventDefault()
+  swipeOffsets.set(item.emailId, Math.max(-120, Math.min(90, dx)))
+}
+
+function swipeTouchEnd(e, item) {
+  const st = swipeTouch.value
+  if (!st || st.id !== item.emailId) return
+  const offset = swipeOffsets.get(item.emailId) || 0
+  swipeTouch.value = null
+  if (offset < -70 && props.emailDelete) {
+    vibrate(40)
+    swipeOffsets.set(item.emailId, 0)
+    rightDeleteItem(item)
+  } else if (offset > 60 && props.showStar && props.allowStar) {
+    vibrate(20)
+    swipeOffsets.set(item.emailId, 0)
+    starChange(item)
+  } else {
+    swipeOffsets.set(item.emailId, 0)
+  }
+}
+
+function rowSwipeStyle(item) {
+  const offset = swipeOffsets.get(item.emailId) || 0
+  const dragging = swipeTouch.value?.id === item.emailId && swipeTouch.value?.dir === 'h'
+  if (offset === 0 && !dragging) return {}
+  return { transform: `translateX(${offset}px)`, transition: dragging ? 'none' : 'transform 0.25s ease' }
+}
+
+function swipeDeleteOpacity(item) {
+  const o = swipeOffsets.get(item.emailId) || 0
+  return o < 0 ? Math.min(1, Math.abs(o) / 60) : 0
+}
+
+function swipeStarOpacity(item) {
+  const o = swipeOffsets.get(item.emailId) || 0
+  return o > 0 ? Math.min(1, o / 50) : 0
+}
+
+function onRowClick(e, item) {
+  if (Math.abs(swipeOffsets.get(item.emailId) || 0) > 5) { swipeOffsets.set(item.emailId, 0); return }
+  jumpDetails(item)
+}
+
+// ── Haptic feedback (Web Vibration API — no plugin needed) ──────────────────
+function vibrate(ms) { try { navigator.vibrate?.(ms) } catch {} }
 </script>
 
 <style lang="scss" scoped>
@@ -961,6 +1075,9 @@ function loadData() { getEmailList() }
 /* ── Mail row wrapper ─────────────────────────────────────── */
 :deep(.mail-row-wrap) {
   padding: 0;
+  position: relative;
+  overflow: hidden;
+  touch-action: pan-y;
 }
 
 /* ── Mail row: Brutalist table layout (Stitch) ────────────── */
@@ -975,7 +1092,7 @@ function loadData() { getEmailList() }
   background: var(--surface, #ffffff);
   cursor: pointer;
   align-items: center;
-  transition: background 100ms ease;
+  transition: background 100ms ease, transform 0.25s ease;
 
   &.all-email {
     grid-template-columns: 52px 180px 1fr 110px;
@@ -1227,4 +1344,40 @@ function loadData() { getEmailList() }
 :deep(.el-dropdown-menu__item:last-child) { padding-bottom: 8px; }
 :deep(.el-dropdown-menu__item:first-child) { padding-top: 8px; }
 :deep(.el-dropdown-menu__item) { padding: 6px 14px; }
+
+/* ── Pull-to-refresh bar ─────────────────────────────────── */
+.ptr-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--extra-light-fill, #f9f9f9);
+  color: var(--muted, #7e7576);
+  will-change: height;
+}
+
+:deep(.ptr-spin) { animation: ptr-rotate 0.7s linear infinite !important; }
+
+@keyframes ptr-rotate { to { transform: rotate(360deg) !important; } }
+
+/* ── Swipe action background layers ─────────────────────── */
+.swipe-bg {
+  position: absolute;
+  top: 0; bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 20px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  pointer-events: none;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: opacity 0.05s;
+
+  &--delete { right: 0; background: #bc0000; }
+  &--star   { left: 0;  background: #c48c00; }
+}
 </style>
