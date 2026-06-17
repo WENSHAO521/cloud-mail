@@ -361,19 +361,22 @@ onMounted(async () => {
 })
 
 // ── Android / mobile back gesture via popstate ─────────────────────────────
-// When the detail pane opens, push a synthetic history entry so the system
-// back button / edge-swipe gesture fires popstate instead of exiting the app.
 watch(() => uiStore.mobileDetailOpen, (open) => {
-  if (open) {
+  if (open && isMobile.value) {
     window.history.pushState({ psgMailDetail: true }, '')
   }
 })
 
 function handlePopState(e) {
-  if (uiStore.mobileDetailOpen) {
-    uiStore.mobileDetailOpen = false
-    e.preventDefault?.()
-  } else if (uiStore.asideShow) {
+  // Only intercept entries we explicitly created — Vue Router entries won't
+  // carry { psgMailDetail: true } so they pass through untouched.
+  if (e.state?.psgMailDetail) {
+    if (uiStore.mobileDetailOpen) uiStore.mobileDetailOpen = false
+    // Clear our marker so a second back press isn't intercepted again
+    window.history.replaceState(null, '')
+    return
+  }
+  if (uiStore.asideShow) {
     uiStore.asideShow = false
     window.history.pushState(null, '')
   }
