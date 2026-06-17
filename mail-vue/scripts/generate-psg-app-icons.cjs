@@ -7,12 +7,20 @@ const root      = path.resolve(__dirname, '..')
 const publicDir = path.join(root, 'public')
 const buildDir  = path.join(root, 'build')
 
-// ── Icon SVG (200×200 canvas, filled shapes for crisp rendering at any size) ─
+// ── Full icon (legacy ic_launcher.png / ic_launcher_round.png) ───────────────
 const SVG = `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
   <rect x="12" y="12" width="176" height="176" rx="38" fill="#0d0d0d"/>
   <rect x="28" y="68" width="144" height="90" rx="4" fill="#ffffff"/>
   <path d="M28 68 L100 106 L172 68 Z" fill="#0d0d0d"/>
   <circle cx="100" cy="107" r="13" fill="#bc0000"/>
+</svg>`
+
+// ── Adaptive icon foreground (artwork inset to 72dp safe zone of 108dp canvas) ─
+// No background fill — background comes from ic_launcher_background color (#0d0d0d)
+const FOREGROUND_SVG = `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <rect x="36" y="72" width="128" height="78" rx="5" fill="#ffffff"/>
+  <path d="M36 72 L100 107 L164 72 Z" fill="#dddddd"/>
+  <circle cx="100" cy="107" r="11" fill="#bc0000"/>
 </svg>`
 
 function renderPng(size) {
@@ -95,9 +103,11 @@ if (fs.existsSync(androidResDir)) {
     const densityDir = path.join(androidResDir, dir)
     fs.mkdirSync(densityDir, { recursive: true })
     const png = renderPng(size)
-    for (const name of ['ic_launcher.png', 'ic_launcher_round.png', 'ic_launcher_foreground.png']) {
-      fs.writeFileSync(path.join(densityDir, name), png)
-    }
+    const fgResvg = new Resvg(FOREGROUND_SVG, { fitTo: { mode: 'width', value: size } })
+    const fgPng   = Buffer.from(fgResvg.render().asPng())
+    fs.writeFileSync(path.join(densityDir, 'ic_launcher.png'),            png)
+    fs.writeFileSync(path.join(densityDir, 'ic_launcher_round.png'),      png)
+    fs.writeFileSync(path.join(densityDir, 'ic_launcher_foreground.png'), fgPng)
     console.log(`Generated android/app/src/main/res/${dir}/ic_launcher*.png`)
   }
 }

@@ -341,6 +341,7 @@ onMounted(async () => {
   uiStore.writerRef = writerRef
   window.addEventListener('resize', handleResize)
   window.addEventListener('keydown', handleKeydown)
+  window.addEventListener('popstate', handlePopState)
   handleResize()
   notificationStore.requestPermission()
 
@@ -359,10 +360,30 @@ onMounted(async () => {
   setTimeout(checkAndroidUpdates, 8000)
 })
 
+// ── Android / mobile back gesture via popstate ─────────────────────────────
+// When the detail pane opens, push a synthetic history entry so the system
+// back button / edge-swipe gesture fires popstate instead of exiting the app.
+watch(() => uiStore.mobileDetailOpen, (open) => {
+  if (open) {
+    window.history.pushState({ psgMailDetail: true }, '')
+  }
+})
+
+function handlePopState(e) {
+  if (uiStore.mobileDetailOpen) {
+    uiStore.mobileDetailOpen = false
+    e.preventDefault?.()
+  } else if (uiStore.asideShow) {
+    uiStore.asideShow = false
+    window.history.pushState(null, '')
+  }
+}
+
 onBeforeUnmount(() => {
   globalNotifyRunning = false
   window.removeEventListener('resize', handleResize)
   window.removeEventListener('keydown', handleKeydown)
+  window.removeEventListener('popstate', handlePopState)
   clearTimeout(pendingGTimer)
 })
 </script>
