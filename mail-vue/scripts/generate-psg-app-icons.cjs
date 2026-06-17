@@ -16,11 +16,12 @@ const SVG = `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
 </svg>`
 
 // ── Adaptive icon foreground (artwork inset to 72dp safe zone of 108dp canvas) ─
-// No background fill — background comes from ic_launcher_background color (#0d0d0d)
+// Envelope centered at (100,100) in 200×200 viewport. No background fill —
+// background comes from ic_launcher_background color (#0d0d0d).
 const FOREGROUND_SVG = `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-  <rect x="36" y="72" width="128" height="78" rx="5" fill="#ffffff"/>
-  <path d="M36 72 L100 107 L164 72 Z" fill="#dddddd"/>
-  <circle cx="100" cy="107" r="11" fill="#bc0000"/>
+  <rect x="40" y="63" width="120" height="74" rx="6" fill="#ffffff"/>
+  <path d="M40 63 L100 97 L160 63 Z" fill="#d0d0d0"/>
+  <circle cx="100" cy="106" r="12" fill="#bc0000"/>
 </svg>`
 
 function renderPng(size) {

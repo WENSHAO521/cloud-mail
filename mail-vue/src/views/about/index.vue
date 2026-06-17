@@ -62,6 +62,41 @@
             </div>
           </template>
 
+          <!-- Android: native update check -->
+          <template v-else-if="isAndroid">
+            <div class="about-row">
+              <span class="about-label">{{ $t('updateStatus') }}</span>
+              <span class="about-status-badge" :class="androidStageCls">
+                <span class="status-dot" />
+                {{ androidStageLabel }}
+              </span>
+            </div>
+            <div v-if="androidStage === 'error' && androidError" class="update-error-detail">
+              {{ androidError }}
+            </div>
+            <div class="about-actions">
+              <el-button
+                v-if="androidStage !== 'downloading'"
+                :loading="androidStage === 'checking'"
+                class="about-btn"
+                :class="{ 'about-btn--install': androidStage === 'available' }"
+                @click="androidStage === 'available' ? reDownloadAndroid() : checkAndroidUpdate()"
+              >
+                <Icon v-if="androidStage !== 'checking'"
+                      :icon="androidStage === 'available' ? 'solar:download-minimalistic-linear' : 'solar:refresh-linear'"
+                      width="15" height="15" />
+                {{ androidStage === 'available'
+                    ? `${$t('downloadUpdate')} (v${androidNewVersion})`
+                    : (androidStage === 'checking' ? $t('checking') : $t('checkForUpdates')) }}
+              </el-button>
+              <el-button v-else class="about-btn" disabled>
+                <Icon icon="solar:download-minimalistic-linear" width="15" height="15" />
+                {{ $t('downloadingUpdate') }} v{{ androidNewVersion }}
+              </el-button>
+            </div>
+          </template>
+
+          <!-- Web/other: GitHub link -->
           <div v-else class="about-row">
             <span class="about-label">{{ $t('updateStatus') }}</span>
             <a class="about-link" href="https://github.com/WENSHAO521/cloud-mail/releases" target="_blank">
@@ -98,6 +133,8 @@
 import { ref, computed, onMounted, onUnmounted, defineOptions } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Icon } from '@iconify/vue'
+import { Capacitor } from '@capacitor/core'
+import { checkAndDownloadAndroidUpdate } from '@/utils/android-update-service.js'
 
 defineOptions({ name: 'about' })
 
@@ -105,6 +142,7 @@ const { t } = useI18n()
 
 const appVersion = __APP_VERSION__
 const isElectron = !!window.electronAPI
+const isAndroid  = Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'android'
 
 // stage: idle | checking | up-to-date | downloading | ready | error
 const stage    = ref('idle')
@@ -142,6 +180,61 @@ function checkUpdate() {
 
 function doInstall() {
   window.electronAPI?.installUpdate()
+}
+
+// ── Android update ────────────────────────────────────────────
+const androidStage      = ref('idle')
+const androidNewVersion = ref('')
+const androidDownloadUrl = ref('')
+const androidError      = ref('')
+
+const androidStageCls = computed(() => ({
+  'status--idle':      androidStage.value === 'idle',
+  'status--checking':  androidStage.value === 'checking',
+  'status--ok':        androidStage.value === 'up-to-date',
+  'status--available': androidStage.value === 'available',
+  'status--available': androidStage.value === 'downloading',
+  'status--error':     androidStage.value === 'error',
+}))
+
+const androidStageLabel = computed(() => {
+  switch (androidStage.value) {
+    case 'idle':        return t('notChecked')
+    case 'checking':    return t('checking')
+    case 'up-to-date':  return t('upToDate')
+    case 'available':   return t('updateAvailable')
+    case 'downloading': return t('downloadingUpdate')
+    case 'error':       return t('updateError')
+    default:            return ''
+  }
+})
+
+async function checkAndroidUpdate() {
+  androidStage.value = 'checking'
+  androidError.value = ''
+  try {
+    const result = await checkAndDownloadAndroidUpdate()
+    if (!result) { androidStage.value = 'idle'; return }
+    androidNewVersion.value  = result.remoteVersion || ''
+    androidDownloadUrl.value = result.url || ''
+    if (result.status === 'current')           androidStage.value = 'up-to-date'
+    else if (result.status === 'download-started') androidStage.value = 'downloading'
+    else if (result.status === 'already-started')  androidStage.value = 'available'
+    else { androidStage.value = 'error'; androidError.value = t('updateErrorDetailFallback') }
+  } catch (e) {
+    androidStage.value = 'error'
+    androidError.value = e?.message || t('updateErrorDetailFallback')
+  }
+}
+
+async function reDownloadAndroid() {
+  if (!androidDownloadUrl.value) return
+  try {
+    const { Browser } = await import('@capacitor/browser')
+    await Browser.open({ url: androidDownloadUrl.value })
+  } catch {
+    window.location.href = androidDownloadUrl.value
+  }
 }
 
 onMounted(() => {
