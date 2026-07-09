@@ -8,20 +8,22 @@ const publicDir = path.join(root, 'public')
 const buildDir  = path.join(root, 'build')
 
 // ── Full icon (legacy ic_launcher.png / ic_launcher_round.png) ───────────────
+// Brutalist "Z"-block mark (light) with punched accent square, on dark ground.
+const MARK = `<g transform="translate(100 100) scale(1.6) translate(-50 -50)">
+    <path d="M20 20 H80 V40 H40 V60 H80 V80 H20 V20 Z" fill="#f4f4f4"/>
+    <path d="M45 45 H55 V55 H45 Z" fill="#0d0d0d"/>
+  </g>`
+
 const SVG = `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
   <rect x="12" y="12" width="176" height="176" rx="38" fill="#0d0d0d"/>
-  <rect x="28" y="68" width="144" height="90" rx="4" fill="#ffffff"/>
-  <path d="M28 68 L100 106 L172 68 Z" fill="#0d0d0d"/>
-  <circle cx="100" cy="107" r="13" fill="#bc0000"/>
+  ${MARK}
 </svg>`
 
-// ── Adaptive icon foreground (artwork inset to 72dp safe zone of 108dp canvas) ─
-// Envelope centered at (100,100) in 200×200 viewport. No background fill —
+// ── Adaptive icon foreground (artwork inset to safe zone of 108dp canvas) ─────
+// Mark centered at (100,100) in 200×200 viewport. No background fill —
 // background comes from ic_launcher_background color (#0d0d0d).
 const FOREGROUND_SVG = `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-  <rect x="40" y="63" width="120" height="74" rx="6" fill="#ffffff"/>
-  <path d="M40 63 L100 97 L160 63 Z" fill="#d0d0d0"/>
-  <circle cx="100" cy="106" r="12" fill="#bc0000"/>
+  ${MARK}
 </svg>`
 
 function renderPng(size) {

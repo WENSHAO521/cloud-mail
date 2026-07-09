@@ -251,7 +251,7 @@ function clickLogout() {
   padding: 18px 20px 14px;
   flex-shrink: 0;
   border-bottom: 1px solid var(--light-border, #000000);
-  border-left: 3px solid #bc0000;
+  border-left: 3px solid var(--red-accent);
   -webkit-app-region: drag;
 
   /* macOS hiddenInset: trafficLightPosition y=18, button h≈14px → bottom≈32px.
@@ -290,7 +290,7 @@ function clickLogout() {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #bc0000;
+  color: var(--red-accent);
   white-space: nowrap;
 }
 
@@ -299,6 +299,10 @@ function clickLogout() {
   width: 36px;
   height: 36px;
   object-fit: contain;
+}
+
+:global(html.dark) .brand-abbr {
+  filter: invert(1);
 }
 
 /* ── Header ──────────────────────────────────────────────── */
@@ -355,7 +359,7 @@ function clickLogout() {
   gap: 2px;
 
   @media (hover: hover) {
-    &:hover .acct-name { color: #bc0000; }
+    &:hover .acct-name { color: var(--red-accent); }
   }
 }
 
@@ -475,9 +479,9 @@ function clickLogout() {
   }
 
   &.active {
-    border-left-color: #bc0000;
-    background: rgba(188, 0, 0, 0.06);
-    color: #bc0000;
+    border-left-color: var(--red-accent);
+    background: rgba(var(--red-accent-rgb), 0.06);
+    color: var(--red-accent);
     font-weight: 700;
   }
 }
@@ -505,7 +509,7 @@ function clickLogout() {
     font-size: 10px;
     font-family: 'JetBrains Mono', monospace;
     font-weight: 700;
-    background: #bc0000;
+    background: var(--red-accent);
     border: none;
     border-radius: 0;
     padding: 0 4px;
@@ -556,8 +560,8 @@ function clickLogout() {
   gap: 8px;
   height: 36px;
   border: none;
-  background: #bc0000;
-  color: #ffffff;
+  background: var(--red-accent);
+  color: var(--on-accent);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -567,9 +571,9 @@ function clickLogout() {
   transition: background 0.14s ease;
 
   @media (hover: hover) {
-    &:hover { background: #000000; }
+    &:hover { background: var(--red-accent-dark); }
   }
-  &:active { background: #7a0000; }
+  &:active { background: var(--red-accent-dark); }
 }
 
 .sidebar-more-button {
@@ -608,11 +612,11 @@ function clickLogout() {
   width: 36px;
   height: 36px;
   border: none;
-  background: #bc0000;
-  color: #ffffff;
+  background: var(--red-accent);
+  color: var(--on-accent);
 
   @media (hover: hover) {
-    &:hover { background: #000000; }
+    &:hover { background: var(--red-accent-dark); }
   }
 }
 
@@ -624,7 +628,7 @@ function clickLogout() {
 }
 
 :deep(.logout-item) {
-  color: #bc0000 !important;
+  color: var(--red-accent) !important;
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -642,7 +646,7 @@ function clickLogout() {
     }
 
     &.active {
-      background: rgba(188, 0, 0, 0.16);
+      background: rgba(var(--red-accent-rgb), 0.16);
       color: rgba(255, 255, 255, 0.95);
     }
   }
@@ -706,7 +710,7 @@ function clickLogout() {
 
     &.active {
       border-left: none;
-      border-bottom: 2px solid #bc0000;
+      border-bottom: 2px solid var(--red-accent);
     }
   }
 

@@ -1,31 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 34" fill="none">
-  <!-- Left: favicon icon block — black square, red spine, white P letterform -->
-  <rect width="34" height="34" rx="3" fill="#111111"/>
-  <rect width="5" height="34" fill="#CC0000"/>
-  <!-- P stem -->
-  <rect x="10" y="7" width="3.5" height="20" fill="#FFFFFF"/>
-  <!-- P bowl filled -->
-  <path d="M 13.5 7 H 19.5 C 22.5 7 24.5 9 24.5 11.8 C 24.5 14.6 22.5 16.6 19.5 16.6 H 13.5 Z" fill="#FFFFFF"/>
-  <!-- P bowl cutout -->
-  <path d="M 13.5 9.6 H 19 C 21 9.6 22 10.5 22 11.8 C 22 13.1 21 14 19 14 H 13.5 Z" fill="#111111"/>
-  <!-- Red colophon rule -->
-  <rect x="10" y="29.5" width="14.5" height="1.5" fill="#CC0000"/>
-
-  <!-- Separator -->
-  <line x1="44" y1="7" x2="44" y2="27" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
-
-  <!-- PSG primary text -->
-  <text x="52" y="23"
-        font-family="'IBM Plex Mono','Courier New',monospace"
-        font-size="18" font-weight="700"
-        fill="#FFFFFF" letter-spacing="1">PSG</text>
-
-  <!-- Red rule -->
-  <rect x="52" y="25" width="54" height="1.2" fill="#CC0000"/>
-
-  <!-- MAIL subtext -->
-  <text x="53" y="32"
-        font-family="'IBM Plex Mono','Courier New',monospace"
-        font-size="6.5" font-weight="500"
-        fill="rgba(255,255,255,0.35)" letter-spacing="4.5">MAIL</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" fill="none" />
+  <path d="M20 20 H80 V40 H40 V60 H80 V80 H20 V20 Z" fill="#121212" />
+  <path d="M45 45 H55 V55 H45 Z" fill="#f9f9f9" />
+  <text x="50" y="95" font-family="Hanken Grotesk, sans-serif" font-weight="bold" font-size="12" text-anchor="middle" fill="#121212">PSG MAIL</text>
 </svg>
