@@ -324,9 +324,9 @@ defineExpose({ open, close })
   font-family: inherit;
 
   &.active, &:hover {
-    background: rgba(188,0,0,0.07);
+    background: rgba(var(--red-accent-rgb), 0.07);
   }
-  &.active .result-icon { color: #bc0000; }
+  &.active .result-icon { color: var(--red-accent); }
 }
 
 .result-icon {

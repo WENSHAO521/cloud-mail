@@ -99,7 +99,7 @@ function openSearch() {
   flex-shrink: 0;
   font-size: 13px;
   font-weight: 800;
-  color: #bc0000;
+  color: var(--red-accent);
   line-height: 1.1;
 }
 
@@ -160,12 +160,16 @@ function openSearch() {
 
   &:active {
     transform: translateY(1px);
-    background: #bc0000;
+    filter: brightness(1.4);
   }
 
   :global(.dark) & {
     background: #f2f2f2;
     color: #111;
+
+    &:active {
+      filter: brightness(0.9);
+    }
   }
 }
 </style>

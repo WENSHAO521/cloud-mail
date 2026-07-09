@@ -767,7 +767,7 @@ path[fill="#ffdda1"] {
     }
 
     .action-active {
-      color: #bc0000;
+      color: var(--red-accent);
     }
   }
 
@@ -780,9 +780,9 @@ path[fill="#ffdda1"] {
   /* ── Selected — flat red wash + left indicator ── */
   .item-choose {
     border-color: transparent !important;
-    border-left: 2px solid #bc0000 !important;
+    border-left: 2px solid var(--red-accent) !important;
     box-shadow: none !important;
-    background: rgba(188, 0, 0, 0.06) !important;
+    background: rgba(var(--red-accent-rgb), 0.06) !important;
 
     .item-name {
       font-weight: 700;
@@ -818,7 +818,7 @@ path[fill="#ffdda1"] {
 
   /* Focus: turn all visible borders red */
   .el-input__wrapper.is-focus {
-    border-color: #bc0000 !important;
+    border-color: var(--red-accent) !important;
     box-shadow: none !important;
   }
 
@@ -842,9 +842,9 @@ path[fill="#ffdda1"] {
 /* Focus-within: red border on append too */
 :deep(.el-input.el-input-group:focus-within) {
   .el-input-group__append {
-    border-top-color:    #bc0000 !important;
-    border-right-color:  #bc0000 !important;
-    border-bottom-color: #bc0000 !important;
+    border-top-color:    var(--red-accent) !important;
+    border-right-color:  var(--red-accent) !important;
+    border-bottom-color: var(--red-accent) !important;
   }
 }
 
@@ -881,7 +881,7 @@ path[fill="#ffdda1"] {
       transition: border-color 0.15s !important;
     }
     .el-input__wrapper.is-focus {
-      border-color: #bc0000 !important;
+      border-color: var(--red-accent) !important;
       box-shadow: none !important;
     }
   }

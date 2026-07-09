@@ -247,7 +247,7 @@ function formatDate(iso) {
 /* ── Hero ── */
 .dl-hero {
   margin-bottom: 32px;
-  border-left: 4px solid #bc0000;
+  border-left: 4px solid var(--red-accent);
   padding-left: 18px;
 }
 
@@ -285,7 +285,7 @@ function formatDate(iso) {
   margin-bottom: 24px;
   background: var(--el-bg-color, #fff);
   border: 1px solid var(--light-border-color, #e0d8d9);
-  border-left: 3px solid #bc0000;
+  border-left: 3px solid var(--red-accent);
   font-size: 12px;
   color: var(--el-text-color-regular);
   flex-wrap: wrap;
@@ -294,11 +294,11 @@ function formatDate(iso) {
 :global(.dark) .dl-notice {
   background: var(--el-bg-color, #1c1c20);
   border-color: rgba(255,255,255,0.1);
-  border-left-color: #bc0000;
+  border-left-color: var(--red-accent);
 }
 
 .dl-notice-link {
-  color: #bc0000;
+  color: var(--red-accent);
   text-decoration: none;
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
@@ -348,7 +348,7 @@ function formatDate(iso) {
   transition: border-top-color 0.12s;
 
   @media (hover: hover) {
-    &:hover { border-top-color: #bc0000; }
+    &:hover { border-top-color: var(--red-accent); }
   }
 
   &--skeleton {
@@ -423,9 +423,9 @@ function formatDate(iso) {
   text-overflow: ellipsis;
 
   @media (hover: hover) {
-    &:hover { background: #bc0000; }
+    &:hover { background: var(--red-accent); }
   }
-  &:active { background: #7a0000; }
+  &:active { background: var(--red-accent-dark); }
 }
 
 :global(.dark) .dl-btn {
@@ -433,7 +433,7 @@ function formatDate(iso) {
   color: #111;
 
   @media (hover: hover) {
-    &:hover { background: #bc0000; color: #fff; }
+    &:hover { background: var(--red-accent); color: var(--on-accent); }
   }
 }
 
@@ -444,7 +444,7 @@ function formatDate(iso) {
   gap: 10px;
   padding: 24px 0;
   font-size: 13px;
-  color: #bc0000;
+  color: var(--red-accent);
 }
 
 /* ── Footer ── */

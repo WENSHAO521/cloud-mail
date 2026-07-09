@@ -1182,8 +1182,8 @@ function adjustWidth() {
         color: #000000;
       }
       &.icon-danger:hover {
-        border-color: #bc0000;
-        color: #bc0000;
+        border-color: var(--red-accent);
+        color: var(--red-accent);
       }
     }
   }
@@ -1193,7 +1193,7 @@ function adjustWidth() {
   .icon {
     @media (hover: hover) {
       &:hover { border-color: #ffffff; color: #ffffff; }
-      &.icon-danger:hover { border-color: #bc0000; color: #bc0000; }
+      &.icon-danger:hover { border-color: var(--red-accent); color: var(--red-accent); }
     }
   }
   :deep(.el-input__wrapper) {

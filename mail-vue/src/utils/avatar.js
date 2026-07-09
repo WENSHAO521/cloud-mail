@@ -1,7 +1,7 @@
-// Deterministic dark/red palette — stays on-brand without being uniform
+// Deterministic grayscale palette — stays on-brand without being uniform
 const PALETTE = [
-  '#CC0000', '#8B0000', '#1a1a1a', '#333333',
-  '#555555', '#6B2020', '#444444', '#7a0000'
+  '#121212', '#2b2b2b', '#1a1a1a', '#333333',
+  '#555555', '#707070', '#444444', '#000000'
 ]
 
 export function avatarBg(seed) {

@@ -499,7 +499,7 @@ function handleDelete() {
 
   @media (hover: hover) {
     &:hover { background: rgba(0,0,0,0.07); color: var(--el-text-color-primary); }
-    &.icon-danger:hover { background: rgba(188,0,0,0.08); color: #bc0000; }
+    &.icon-danger:hover { background: rgba(var(--red-accent-rgb), 0.08); color: var(--red-accent); }
   }
 }
 
@@ -746,7 +746,7 @@ function handleDelete() {
 .translate-panel {
   margin: 16px 0 8px;
   border: 1px solid var(--light-border-color, #cfc4c5);
-  border-left: 3px solid #bc0000;
+  border-left: 3px solid var(--red-accent);
   background: var(--surface-secondary, #f3f3f3);
 }
 
@@ -771,8 +771,8 @@ function handleDelete() {
 }
 
 .translate-lang-tag {
-  background: #bc0000;
-  color: #fff;
+  background: var(--red-accent);
+  color: var(--on-accent);
   font-size: 9px;
   padding: 1px 5px;
   letter-spacing: 0.05em;
@@ -790,13 +790,13 @@ function handleDelete() {
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #bc0000;
-  border: 1px solid #bc0000;
+  color: var(--red-accent);
+  border: 1px solid var(--red-accent);
   background: transparent;
   padding: 2px 8px;
   cursor: pointer;
   transition: background 0.12s, color 0.12s;
-  &:hover { background: #bc0000; color: #fff; }
+  &:hover { background: var(--red-accent); color: var(--on-accent); }
 }
 
 .translate-loading {
@@ -819,7 +819,7 @@ function handleDelete() {
 }
 
 .icon-btn--active {
-  color: #bc0000 !important;
+  color: var(--red-accent) !important;
 }
 
 @media (max-width: 768px) {
@@ -858,8 +858,8 @@ function handleDelete() {
     color: var(--regular-text-color);
 
     &:active {
-      background: rgba(188,0,0,0.10);
-      color: #bc0000;
+      background: rgba(var(--red-accent-rgb), 0.10);
+      color: var(--red-accent);
     }
   }
 
@@ -978,7 +978,7 @@ function handleDelete() {
 .psg-shadow-blockquote,
 .shadow-html-host blockquote,
 blockquote {
-  border-left: 3px solid #bc0000 !important;
+  border-left: 3px solid var(--red-accent) !important;
   padding-left: 16px !important;
   margin: 16px 0 !important;
   color: #666666 !important;

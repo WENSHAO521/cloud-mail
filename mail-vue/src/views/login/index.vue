@@ -20,7 +20,7 @@
           <path d="M40 40 H70 M40 40 V70" fill="none"/>
           <path d="M560 760 H530 M560 760 V730" fill="none"/>
         </g>
-        <rect x="500" y="160" width="14" height="14" fill="#bc0000"/>
+        <rect x="500" y="160" width="14" height="14" fill="var(--red-accent)"/>
         <circle cx="80" cy="640" r="6" fill="none" stroke="var(--brand-grid-mark, #111111)" stroke-width="1"/>
       </svg>
 
@@ -232,7 +232,7 @@
 
 <script setup>
 import router from "@/router";
-import {computed, nextTick, reactive, ref} from "vue";
+import {computed, nextTick, reactive, ref, onMounted, onUnmounted} from "vue";
 import {login} from "@/request/login.js";
 import {register} from "@/request/login.js";
 import {websiteConfig} from "@/request/setting.js";
@@ -249,6 +249,19 @@ import {useI18n} from "vue-i18n";
 import {oauthBindUser, oauthLinuxDoLogin} from "@/request/ouath.js";
 
 const {t} = useI18n();
+
+// This page is a fixed light "editorial" surface by design (see style block
+// below) regardless of the app's own dark-mode toggle. Element Plus popper
+// components (dropdowns, selects) teleport to <body>, outside #login-box, so
+// scoping a CSS override to #login-box alone can't reach them — pin the
+// light-mode Element Plus + accent tokens on <html> for the lifetime of this
+// page instead, overriding .dark's redefinitions via class specificity.
+onMounted(() => {
+  document.documentElement.classList.add('login-light-lock')
+})
+onUnmounted(() => {
+  document.documentElement.classList.remove('login-light-lock')
+})
 const accountStore = useAccountStore();
 const userStore = useUserStore();
 const uiStore = useUiStore();
@@ -794,7 +807,7 @@ function submitRegister() {
 .brand-divider {
   width: 48px;
   height: 3px;
-  background: #bc0000;
+  background: var(--red-accent);
   margin: 30px 0 22px;
 }
 
@@ -838,7 +851,7 @@ function submitRegister() {
   max-width: 408px;
   background: #FFFFFF;
   border: 1px solid #000000;
-  border-top: 3px solid #bc0000;
+  border-top: 3px solid var(--red-accent);
   border-radius: 0;
   box-shadow: none;
   padding: 40px 36px 26px;
@@ -892,7 +905,7 @@ function submitRegister() {
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #bc0000;
+  color: var(--red-accent);
   margin-bottom: 12px;
 }
 
@@ -938,7 +951,7 @@ function submitRegister() {
   box-shadow: 0 0 0 1px #666666 !important;
 }
 :deep(.el-input__wrapper.is-focus) {
-  box-shadow: 0 0 0 1px #bc0000, 0 0 0 3px rgba(188, 0, 0, 0.10) !important;
+  box-shadow: 0 0 0 1px var(--red-accent), 0 0 0 3px rgba(var(--red-accent-rgb), 0.10) !important;
 }
 :deep(.el-input__inner) {
   font-size: 14px !important;
@@ -958,7 +971,7 @@ function submitRegister() {
   transition: border-color 0.15s !important;
 }
 .email-input :deep(.el-input__wrapper.is-focus) {
-  border-color: #bc0000 !important;
+  border-color: var(--red-accent) !important;
   box-shadow: none !important;
 }
 .email-input :deep(.el-input-group__append) {
@@ -977,9 +990,9 @@ function submitRegister() {
   color: #555555 !important;
 }
 .email-input:focus-within :deep(.el-input-group__append) {
-  border-top-color:    #bc0000 !important;
-  border-right-color:  #bc0000 !important;
-  border-bottom-color: #bc0000 !important;
+  border-top-color:    var(--red-accent) !important;
+  border-right-color:  var(--red-accent) !important;
+  border-bottom-color: var(--red-accent) !important;
 }
 
 /* ── Options row ────────────────────────────────────────────── */
@@ -997,11 +1010,11 @@ function submitRegister() {
 .text-link {
   font-size: 13px;
   font-weight: 500;
-  color: #bc0000;
+  color: var(--red-accent);
   cursor: pointer;
   transition: color 0.12s;
 }
-.text-link:hover { color: #8A0000; text-decoration: underline; }
+.text-link:hover { color: var(--red-accent-dark); text-decoration: underline; }
 
 /* ── Buttons ────────────────────────────────────────────────── */
 .btn {
@@ -1015,16 +1028,16 @@ function submitRegister() {
 .btn-oauth { margin-top: 12px; }
 
 :deep(.el-button--primary) {
-  background: #bc0000 !important;
-  border-color: #bc0000 !important;
-  color: #FFFFFF !important;
+  background: var(--red-accent) !important;
+  border-color: var(--red-accent) !important;
+  color: var(--on-accent) !important;
   font-weight: 600 !important;
   border-radius: 0 !important;
   letter-spacing: 0.02em !important;
 
   &:hover, &:focus {
-    background: #8A0000 !important;
-    border-color: #8A0000 !important;
+    background: var(--red-accent-dark) !important;
+    border-color: var(--red-accent-dark) !important;
   }
   &.is-loading { opacity: 0.75; }
 }
@@ -1049,7 +1062,7 @@ function submitRegister() {
   color: #111111;
   transition: border-color 0.15s, background 0.15s;
 
-  svg { color: #bc0000; }
+  svg { color: var(--red-accent); }
 
   &:hover { border-color: #111111; background: #FAFAFA; }
 }
@@ -1063,7 +1076,7 @@ function submitRegister() {
   cursor: pointer;
 
   span {
-    color: #bc0000;
+    color: var(--red-accent);
     cursor: pointer;
     font-weight: 600;
   }
@@ -1147,7 +1160,7 @@ function submitRegister() {
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #bc0000;
+    color: var(--red-accent);
     text-decoration: none;
   }
 }
@@ -1198,8 +1211,8 @@ function submitRegister() {
   color: #999999;
 
   &.active {
-    border-color: #bc0000;
-    color: #bc0000;
+    border-color: var(--red-accent);
+    color: var(--red-accent);
   }
 }
 </style>

@@ -297,7 +297,7 @@ onUnmounted(() => {
 
 /* ── Hero ─────────────────────────────────────────── */
 .about-hero {
-  border-left: 3px solid #bc0000;
+  border-left: 3px solid var(--red-accent);
   padding: 20px 24px;
   background: var(--el-bg-color, #ffffff);
   border-bottom: 1px solid var(--light-border-color, #e0e0e0);
@@ -331,8 +331,8 @@ onUnmounted(() => {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
   font-weight: 600;
-  color: #bc0000;
-  border: 1px solid #bc0000;
+  color: var(--red-accent);
+  border: 1px solid var(--red-accent);
   padding: 2px 8px;
   letter-spacing: 0.06em;
   align-self: flex-start;
@@ -390,12 +390,12 @@ onUnmounted(() => {
 .about-link {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
-  color: #bc0000;
+  color: var(--red-accent);
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: border-color 0.12s;
 
-  &:hover { border-bottom-color: #bc0000; }
+  &:hover { border-bottom-color: var(--red-accent); }
 }
 
 /* ── Status badge ─────────────────────────────────── */
@@ -421,7 +421,7 @@ onUnmounted(() => {
   &.status--checking   { color: #d97706; }
   &.status--ok         { color: #16a34a; }
   &.status--available,
-  &.status--ready      { color: #bc0000; }
+  &.status--ready      { color: var(--red-accent); }
   &.status--error      { color: #dc2626; }
 }
 
@@ -436,7 +436,7 @@ onUnmounted(() => {
 
   :deep(.el-progress-bar__inner) {
     border-radius: 0;
-    background: #bc0000;
+    background: var(--red-accent);
   }
 }
 
@@ -472,11 +472,11 @@ onUnmounted(() => {
   gap: 6px;
 
   &--install {
-    background: #bc0000;
-    border-color: #bc0000;
-    color: #fff;
+    background: var(--red-accent);
+    border-color: var(--red-accent);
+    color: var(--on-accent);
 
-    &:hover { background: #000; border-color: #000; }
+    &:hover { background: var(--red-accent-dark); border-color: var(--red-accent-dark); }
   }
 }
 

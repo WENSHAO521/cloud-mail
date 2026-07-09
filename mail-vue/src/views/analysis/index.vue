@@ -179,7 +179,11 @@ const topic = computed(() => ({
   axisColor: uiStore.dark ? '#A3A6AD' : '#909399',
   splitLineColor: uiStore.dark ? '#58585B' : '#D4D7DE',
   gaugeSplitLine: uiStore.dark ? '#CFD3DC' : '#606266',
-  containerBackground: uiStore.dark ? '#6C6E72' : '#E6EBF8'
+  containerBackground: uiStore.dark ? '#6C6E72' : '#E6EBF8',
+  // Brand accent for echarts (canvas-rendered — cannot resolve CSS var(),
+  // so mirror style.css's --red-accent light/dark values here directly)
+  accent: uiStore.dark ? '#f4f4f4' : '#121212',
+  accentRgb: uiStore.dark ? '244, 244, 244' : '18, 18, 18'
 }))
 let daySendTotal = 0
 let leaveWidth = 0
@@ -361,7 +365,7 @@ function createSenderPie() {
         labelLine: {
           show: true
         },
-        color: ['#bc0000', '#8B0000', '#E57373', '#333333', '#666666', '#A0A0A0']
+        color: [topic.value.accent, '#8B0000', '#E57373', '#333333', '#666666', '#A0A0A0']
       }
     ]
   }
@@ -488,22 +492,22 @@ function createIncreaseLine() {
         smooth: 0.1,
         symbol: 'none',
         lineStyle: {
-          color: '#bc0000',
+          color: topic.value.accent,
           width: 2
         },
         areaStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
             {
               offset: 0,
-              color: 'rgba(188, 0, 0, 0.18)'
+              color: `rgba(${topic.value.accentRgb}, 0.18)`
             },
             {
               offset: 1,
-              color: 'rgba(188, 0, 0, 0.02)'
+              color: `rgba(${topic.value.accentRgb}, 0.02)`
             }
           ])
         },
-        color: ['#bc0000'],
+        color: [topic.value.accent],
       }
     ]
   };
@@ -611,7 +615,7 @@ function createEmailColumnChart() {
         },
         data: emailColumnData.receiveData,
         itemStyle: {
-          color: '#bc0000',
+          color: topic.value.accent,
         }
       },
       {
@@ -656,12 +660,12 @@ function createSendGauge() {
         show: true,
         roundCap: true,
         itemStyle: {
-          color: '#bc0000'
+          color: topic.value.accent
         }
       },
       pointer: {
         itemStyle: {
-          color: '#bc0000'
+          color: topic.value.accent
         }
       },
       axisLabel: {
@@ -700,7 +704,7 @@ function createSendGauge() {
         }
       }]
     }],
-    color: ['#bc0000']
+    color: [topic.value.accent]
   };
   sendGauge.setOption(option);
 }

@@ -1100,7 +1100,9 @@ function close() {
   background: #111111;
   height: 52px;
   flex-shrink: 0;
-  border-bottom: 2px solid #bc0000;
+  /* .wh is a fixed dark bar in both themes, so its accent must stay the
+     dark-surface (light) tone regardless of --red-accent's current theme value */
+  border-bottom: 2px solid #f4f4f4;
 }
 
 .wh-left {
@@ -1116,7 +1118,7 @@ function close() {
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #bc0000;
+  color: #f4f4f4; /* .wh is always a dark bar — see note above */
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -1160,9 +1162,9 @@ function close() {
   width: 28px;
   height: 28px;
   border-radius: 0;
-  background: rgba(188,0,0,0.10);
-  border: 1px solid rgba(188,0,0,0.20);
-  color: #bc0000;
+  background: rgba(var(--red-accent-rgb),0.10);
+  border: 1px solid rgba(var(--red-accent-rgb),0.20);
+  color: var(--red-accent);
   font-size: 11px;
   font-weight: 800;
   display: flex;
@@ -1207,20 +1209,20 @@ function close() {
 }
 
 .sender-opt-check {
-  color: #bc0000;
+  color: var(--red-accent);
   flex-shrink: 0;
 }
 
 :deep(.is-active-sender) {
-  background: rgba(188,0,0,0.05) !important;
+  background: rgba(var(--red-accent-rgb),0.05) !important;
 }
 
 .wh-avatar {
   width: 28px;
   height: 28px;
   border-radius: 0;
-  background: #bc0000;
-  color: #fff;
+  background: var(--red-accent);
+  color: var(--on-accent);
   font-size: 12px;
   font-weight: 700;
   display: flex;
@@ -1408,7 +1410,7 @@ function close() {
   @media (hover: hover) {
     &:hover {
       background: var(--base-fill);
-      color: #bc0000;
+      color: var(--red-accent);
     }
   }
 }
@@ -1438,7 +1440,7 @@ function close() {
     padding: 0 8px;
     background: var(--el-bg-color);
     border: 1px solid var(--light-border-color);
-    border-left: 2px solid #bc0000;
+    border-left: 2px solid var(--red-accent);
     border-radius: 0;
     white-space: nowrap;
     flex-shrink: 0;
@@ -1618,7 +1620,7 @@ function close() {
 
     &:active {
       background: rgba(0,0,0,0.08);
-      color: #bc0000;
+      color: var(--red-accent);
     }
   }
 

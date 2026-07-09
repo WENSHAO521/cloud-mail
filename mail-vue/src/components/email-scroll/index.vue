@@ -852,8 +852,8 @@ function vibrate(ms) { try { navigator.vibrate?.(ms) } catch {} }
     }
 
     &.icon-danger:hover {
-      border-color: #bc0000;
-      color: #bc0000;
+      border-color: var(--red-accent);
+      color: var(--red-accent);
     }
   }
 }
@@ -866,8 +866,8 @@ function vibrate(ms) { try { navigator.vibrate?.(ms) } catch {} }
       color: #ffffff;
     }
     &.icon-danger:hover {
-      border-color: #bc0000;
-      color: #bc0000;
+      border-color: var(--red-accent);
+      color: var(--red-accent);
     }
   }
 }
@@ -951,8 +951,8 @@ function vibrate(ms) { try { navigator.vibrate?.(ms) } catch {} }
     align-items: center;
 
     &.is-unread {
-      border-color: rgba(188,0,0,0.24);
-      box-shadow: 0 12px 28px rgba(188,0,0,0.10);
+      border-color: rgba(var(--red-accent-rgb),0.24);
+      box-shadow: 0 12px 28px rgba(var(--red-accent-rgb),0.10);
     }
 
     &.all-email {
@@ -1185,7 +1185,7 @@ function vibrate(ms) { try { navigator.vibrate?.(ms) } catch {} }
     flex-shrink: 0;
     transition: background 0.1s;
 
-    &.visible { background: #bc0000; }
+    &.visible { background: var(--red-accent); }
   }
 }
 
@@ -1249,11 +1249,11 @@ function vibrate(ms) { try { navigator.vibrate?.(ms) } catch {} }
   .code-tag {
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
-    color: #bc0000;
+    color: var(--red-accent);
     cursor: pointer;
     white-space: nowrap;
     flex-shrink: 0;
-    border: 1px solid #bc0000;
+    border: 1px solid var(--red-accent);
     padding: 0 4px;
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -1338,7 +1338,7 @@ function vibrate(ms) { try { navigator.vibrate?.(ms) } catch {} }
   align-items: center;
   gap: 10px;
 
-  &.danger { color: #bc0000; }
+  &.danger { color: var(--red-accent); }
 }
 
 :deep(.el-dropdown-menu__item:last-child) { padding-bottom: 8px; }
@@ -1377,7 +1377,7 @@ function vibrate(ms) { try { navigator.vibrate?.(ms) } catch {} }
   text-transform: uppercase;
   transition: opacity 0.05s;
 
-  &--delete { right: 0; background: #bc0000; }
+  &--delete { right: 0; background: var(--red-accent); color: var(--on-accent); }
   &--star   { left: 0;  background: #c48c00; }
 }
 </style>

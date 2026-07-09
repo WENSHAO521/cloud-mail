@@ -162,7 +162,7 @@ function dlUrl(platform) {
 /* ── Hero ── */
 .dl-hero {
   margin-bottom: 36px;
-  border-left: 4px solid #bc0000;
+  border-left: 4px solid var(--red-accent);
   padding-left: 18px;
 }
 
@@ -211,7 +211,7 @@ function dlUrl(platform) {
   transition: border-top-color 0.12s;
 
   @media (hover: hover) {
-    &:hover { border-top-color: #bc0000; }
+    &:hover { border-top-color: var(--red-accent); }
   }
 
   &--web {
@@ -282,10 +282,10 @@ function dlUrl(platform) {
   transition: background 0.12s;
 
   @media (hover: hover) {
-    &:hover { background: #bc0000; }
+    &:hover { background: var(--red-accent); }
   }
 
-  &:active { background: #7a0000; }
+  &:active { background: var(--red-accent-dark); }
 
   &--current {
     background: var(--el-bg-color-page, #f5f5f5);
@@ -315,7 +315,7 @@ function dlUrl(platform) {
   color: #111;
 
   @media (hover: hover) {
-    &:hover { background: #bc0000; color: #fff; }
+    &:hover { background: var(--red-accent); color: var(--on-accent); }
   }
 
   &--current {

@@ -369,7 +369,7 @@ function formatName(email) {
     margin-top: 3px;
     font-family: 'IBM Plex Mono', monospace;
     @media (hover: hover) {
-      &:hover { color: #bc0000; }
+      &:hover { color: var(--red-accent); }
     }
   }
 

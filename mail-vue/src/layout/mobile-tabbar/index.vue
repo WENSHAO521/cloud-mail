@@ -107,9 +107,9 @@ function openSearch() {
   &:active { color: #000000; }
 
   &.active {
-    color: #bc0000;
-    background: rgba(188,0,0,0.07);
-    :global(.dark) & { color: #e03333; }
+    color: var(--red-accent);
+    background: rgba(var(--red-accent-rgb),0.07);
+    :global(.dark) & { color: var(--red-accent); }
   }
 }
 
@@ -121,18 +121,18 @@ function openSearch() {
 .m-compose-fab {
   width: 48px;
   height: 48px;
-  background: linear-gradient(180deg, #e31946 0%, #bc0000 100%);
-  color: #ffffff;
+  background: linear-gradient(180deg, var(--red-accent) 0%, var(--red-accent-dark) 100%);
+  color: var(--on-accent);
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 17px;
-  box-shadow: 0 12px 24px rgba(188,0,0,0.30);
+  box-shadow: 0 12px 24px rgba(var(--red-accent-rgb),0.30);
   transition: transform 0.14s, background 0.14s;
 
   .m-tab-compose:active & {
     transform: scale(0.96);
-    background: #000000;
+    background: var(--red-accent-dark);
   }
 }
 </style>

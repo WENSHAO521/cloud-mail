@@ -78,7 +78,8 @@ const notifStore = useNotificationStore()
   justify-content: center;
 
   :deep(.el-badge__content) {
-    background: #bc0000;
+    background: var(--red-accent);
+    color: var(--on-accent);
     border-color: transparent;
     font-size: 10px;
     height: 16px;
@@ -117,7 +118,7 @@ const notifStore = useNotificationStore()
     font-size: 11.5px;
     color: var(--regular-text-color);
     padding: 0;
-    &:hover { color: #bc0000; }
+    &:hover { color: var(--red-accent); }
   }
 }
 

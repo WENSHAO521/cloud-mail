@@ -148,21 +148,21 @@ button, input, select, textarea {
     margin: 1px !important;
 }
 
-/* Active/enabled state — red */
+/* Active/enabled state — ink accent */
 .tox .tox-tbtn--enabled,
 .tox .tox-tbtn--enabled:hover {
-    background: rgba(188, 0, 0, 0.12) !important;
+    background: rgba(var(--red-accent-rgb), 0.12) !important;
 }
 .tox .tox-tbtn--enabled svg,
 .tox .tox-tbtn--enabled:hover svg {
-    fill: #bc0000 !important;
+    fill: var(--red-accent) !important;
 }
 
-/* Focus ring — red instead of blue */
+/* Focus ring — ink accent instead of blue */
 .tox .tox-tbtn:focus,
 .tox .tox-tbtn--select:focus,
 .tox .tox-split-button:focus {
-    box-shadow: 0 0 0 2px rgba(188, 0, 0, 0.30) !important;
+    box-shadow: 0 0 0 2px rgba(var(--red-accent-rgb), 0.30) !important;
     outline: none !important;
 }
 
@@ -172,7 +172,7 @@ button, input, select, textarea {
     min-width: 80px !important;
 }
 .tox .tox-tbtn--bespoke:focus {
-    box-shadow: 0 0 0 2px rgba(188, 0, 0, 0.30) !important;
+    box-shadow: 0 0 0 2px rgba(var(--red-accent-rgb), 0.30) !important;
     outline: none !important;
 }
 .tox .tox-tbtn--bespoke .tox-tbtn__select-label {
@@ -185,21 +185,23 @@ button, input, select, textarea {
        because Vite strips !important from custom properties during minification */
     --el-font-family: 'IBM Plex Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei UI', 'Microsoft YaHei', sans-serif;
 
-    /* PSG — Black / White / Deep Red — German scholarly publisher */
-    --el-color-primary: #bc0000;
-    --el-color-primary-dark-2: #8f0000;
-    --el-color-primary-light-3: #c93333;
-    --el-color-primary-light-5: #d46666;
-    --el-color-primary-light-7: #e09999;
-    --el-color-primary-light-9: #f5dddd;
+    /* PSG — Black / White / Graphite — matches the industrial logo mark (#121212 / #f9f9f9) */
+    --el-color-primary: #121212;
+    --el-color-primary-dark-2: #000000;
+    --el-color-primary-light-3: #3d3d3d;
+    --el-color-primary-light-5: #6e6e6e;
+    --el-color-primary-light-7: #a3a3a3;
+    --el-color-primary-light-9: #ececec;
 
-    --red-accent: #bc0000;
-    --red-accent-dark: #8f0000;
-    --red-accent-subtle: rgba(188, 0, 0, 0.07);
+    --red-accent: #121212;
+    --red-accent-dark: #000000;
+    --red-accent-rgb: 18, 18, 18;
+    --red-accent-subtle: rgba(18, 18, 18, 0.07);
+    --on-accent: #ffffff;   /* text/icon color for content placed on top of --red-accent fills */
 
     /* PSG explicit brand tokens */
-    --psg-red: #bc0000;
-    --psg-red-hover: #8f0000;
+    --psg-red: #121212;
+    --psg-red-hover: #000000;
     --psg-black: #000000;
     --psg-white: #ffffff;
     --psg-bg: #f9f9f9;
@@ -231,7 +233,7 @@ button, input, select, textarea {
     --email-hover-background: #eeeeee;
     --login-border: 1px solid #000000;
     --form-desc-color: #4c4546;
-    --login-switch-color: #bc0000;
+    --login-switch-color: #121212;
     --scrollbar-track-color: #c0c0c0;
     --base-border-color: #cfc4c5;
     --secondary-text-color: #4c4546;
@@ -246,12 +248,12 @@ button, input, select, textarea {
     --card-shadow-hover: 0 2px 8px rgba(0, 0, 0, 0.09), 0 1px 3px rgba(0, 0, 0, 0.05);
     --compose-shadow: 0 8px 40px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(0, 0, 0, 0.08);
 
-    /* PSG Gradients — Black/White/Red palette only */
-    --psg-gradient-red:        #bc0000;
+    /* PSG Gradients — Black/White/Graphite palette only */
+    --psg-gradient-red:        #121212;
     --psg-gradient-red-h:      #000000;
     --psg-gradient-dark:       linear-gradient(180deg, #1c1c1c 0%, #0a0a0a 100%);
     --psg-gradient-sidebar:    linear-gradient(180deg, #f9f9f9 0%, #f3f3f3 100%);
-    --psg-gradient-card-top:   linear-gradient(90deg, #bc0000 0%, #7a0000 100%);
+    --psg-gradient-card-top:   linear-gradient(90deg, #121212 0%, #000000 100%);
     --psg-gradient-header-bar: linear-gradient(90deg, #000000 0%, #000000 100%);
     --psg-gradient-surface:    linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
 
@@ -277,10 +279,19 @@ button, input, select, textarea {
     --separator: #2a2a32;           /* section dividers           */
     --muted: #78788a;
 
-    /* ── Red accent (unchanged) ──────────────────────────── */
-    --red-accent: #bc0000;
-    --red-accent-dark: #8f0000;
-    --red-accent-subtle: rgba(188, 0, 0, 0.14);
+    /* ── Accent — inverted to light ink so it still pops on dark surfaces ── */
+    --el-color-primary: #f4f4f4;
+    --el-color-primary-dark-2: #ffffff;
+    --el-color-primary-light-3: #d0d0d0;
+    --el-color-primary-light-5: #8f8f8f;
+    --el-color-primary-light-7: #3a3a3a;
+    --el-color-primary-light-9: #232328;
+
+    --red-accent: #f4f4f4;
+    --red-accent-dark: #ffffff;
+    --red-accent-rgb: 244, 244, 244;
+    --red-accent-subtle: rgba(244, 244, 244, 0.14);
+    --on-accent: #000000;   /* accent is inverted to light in dark mode, so its text/icons go dark */
 
     /* ── Fill / hover / indent ───────────────────────────── */
     --extra-light-fill: #18181e;    /* inset list backgrounds     */
@@ -309,7 +320,7 @@ button, input, select, textarea {
 
     /* ── Misc ────────────────────────────────────────────── */
     --aside-backgound: #141418;
-    --login-switch-color: #d93333;
+    --login-switch-color: #f4f4f4;
     --brand-grid-line: #2a2a32;
     --brand-grid-mark: #9898aa;
 
@@ -326,6 +337,43 @@ button, input, select, textarea {
     --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.45), 0 4px 16px rgba(0, 0, 0, 0.30);
     --card-shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.55), 0 1px 4px rgba(0, 0, 0, 0.35);
     --compose-shadow: 0 8px 40px rgba(0, 0, 0, 0.60), 0 2px 8px rgba(0, 0, 0, 0.40);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Login page theme lock — src/views/login/index.vue is a fixed
+   light editorial surface by design, independent of the app's own
+   dark-mode toggle. Pins Element Plus + accent tokens back to their
+   light values (overriding .dark's !important redefinitions via
+   the two-class selector) so teleported poppers (dropdowns, selects)
+   don't bleed dark-mode colors onto the login page.
+   ══════════════════════════════════════════════════════════════ */
+html.dark.login-light-lock {
+    --el-border-color: #DADADA !important;
+    --el-bg-color: #ffffff !important;
+    --el-bg-color-overlay: #ffffff !important;
+    --el-bg-color-page: #F7F7F7 !important;
+    --el-fill-color-blank: #ffffff !important;
+    --el-fill-color: #F5F5F5 !important;
+    --el-fill-color-light: #FAFAFA !important;
+    --el-text-color-primary: #111111;
+    --el-text-color-regular: #444444;
+    --el-text-color-secondary: #666666;
+    --el-text-color-placeholder: #999999;
+    --el-border-color-light: #DADADA;
+    --el-border-color-lighter: #EEEEEE;
+
+    --el-color-primary: #121212;
+    --el-color-primary-dark-2: #000000;
+    --el-color-primary-light-3: #3d3d3d;
+    --el-color-primary-light-5: #6e6e6e;
+    --el-color-primary-light-7: #a3a3a3;
+    --el-color-primary-light-9: #ececec;
+
+    --red-accent: #121212;
+    --red-accent-dark: #000000;
+    --red-accent-rgb: 18, 18, 18;
+    --red-accent-subtle: rgba(18, 18, 18, 0.07);
+    --on-accent: #ffffff;
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -365,7 +413,7 @@ button, input, select, textarea {
     &[data-active="true"] {
         background: transparent;
         color: var(--el-text-color-primary);
-        border-bottom-color: #bc0000;
+        border-bottom-color: var(--red-accent);
     }
 }
 
@@ -442,15 +490,15 @@ button, input, select, textarea {
     transition: background 0.15s ease, border-color 0.15s, color 0.15s !important;
 }
 .el-button--primary {
-    background: #bc0000 !important;
-    border-color: #bc0000 !important;
-    color: #ffffff !important;
+    background: var(--red-accent) !important;
+    border-color: var(--red-accent) !important;
+    color: var(--on-accent) !important;
     font-weight: 500 !important;
 }
 .el-button--primary:hover,
 .el-button--primary:focus {
-    background: #000000 !important;
-    border-color: #000000 !important;
+    background: var(--red-accent-dark) !important;
+    border-color: var(--red-accent-dark) !important;
     box-shadow: none !important;
 }
 .el-button--default {
@@ -458,8 +506,8 @@ button, input, select, textarea {
     color: #000000 !important;
 }
 .el-button--default:hover {
-    border-color: #bc0000 !important;
-    color: #bc0000 !important;
+    border-color: var(--red-accent) !important;
+    color: var(--red-accent) !important;
     background: transparent !important;
 }
 .dark .el-button--default {
@@ -467,8 +515,8 @@ button, input, select, textarea {
     color: #d8d8e4 !important;          /* was #ffffff */
 }
 .dark .el-button--default:hover {
-    border-color: #bc0000 !important;
-    color: #bc0000 !important;
+    border-color: var(--red-accent) !important;
+    color: var(--red-accent) !important;
     background: transparent !important;
 }
 .el-button--danger {
@@ -485,19 +533,19 @@ button, input, select, textarea {
     transition: box-shadow 0.15s ease !important;
 }
 .el-input__wrapper:hover {
-    box-shadow: 0 0 0 1px #bc0000 !important;
+    box-shadow: 0 0 0 1px var(--red-accent) !important;
 }
 .el-input__wrapper.is-focus {
-    box-shadow: 0 0 0 2px #bc0000 !important;
+    box-shadow: 0 0 0 2px var(--red-accent) !important;
 }
 .dark .el-input__wrapper {
     box-shadow: 0 0 0 1px #38383e !important;  /* was #555555 — slightly darker */
 }
 .dark .el-input__wrapper:hover {
-    box-shadow: 0 0 0 1px #bc0000 !important;
+    box-shadow: 0 0 0 1px var(--red-accent) !important;
 }
 .dark .el-input__wrapper.is-focus {
-    box-shadow: 0 0 0 2px rgba(188, 0, 0, 0.70) !important;
+    box-shadow: 0 0 0 2px rgba(var(--red-accent-rgb), 0.70) !important;
 }
 .el-input-group__append,
 .el-input-group__prepend {
@@ -554,7 +602,7 @@ button, input, select, textarea {
     border: 1px solid #000000 !important;
     box-shadow: none !important;
     overflow: hidden !important;
-    border-top: 3px solid #bc0000 !important;
+    border-top: 3px solid var(--red-accent) !important;
 }
 .el-dialog__header {
     border-bottom: 1px solid #000000 !important;
@@ -589,20 +637,20 @@ button, input, select, textarea {
 }
 .el-tag--primary {
     background: transparent !important;
-    border-color: #bc0000 !important;
-    color: #bc0000 !important;
+    border-color: var(--red-accent) !important;
+    color: var(--red-accent) !important;
 }
 .dark .el-tag--primary {
     background: transparent !important;
-    border-color: #bc0000 !important;
-    color: #bc0000 !important;
+    border-color: var(--red-accent) !important;
+    color: var(--red-accent) !important;
 }
 
 /* Pagination — Brutalist Academic */
 .el-pagination .el-pager li.is-active {
-    background: #bc0000 !important;
+    background: var(--red-accent) !important;
     border-radius: 0 !important;
-    color: #fff !important;
+    color: var(--on-accent) !important;
     font-weight: 700 !important;
 }
 .el-pagination button,
@@ -621,8 +669,8 @@ button, input, select, textarea {
     border-color: #000000 !important;
 }
 .el-radio__input.is-checked .el-radio__inner {
-    border-color: #bc0000 !important;
-    background: #bc0000 !important;
+    border-color: var(--red-accent) !important;
+    background: var(--red-accent) !important;
 }
 .dark .el-checkbox__inner {
     border-color: #888888 !important;
@@ -634,7 +682,7 @@ button, input, select, textarea {
 
 /* Select */
 .el-select .el-input__wrapper.is-focus {
-    box-shadow: 0 0 0 2px rgba(188, 0, 0, 0.15), 0 0 0 1px #bc0000 !important;
+    box-shadow: 0 0 0 2px rgba(var(--red-accent-rgb), 0.15), 0 0 0 1px var(--red-accent) !important;
 }
 
 /* Dropdown */
@@ -678,7 +726,7 @@ button, input, select, textarea {
     border-color: #2c2c36 !important;
 }
 .el-select-dropdown__item.is-selected {
-    color: #bc0000 !important;
+    color: var(--red-accent) !important;
     font-weight: 700 !important;
 }
 .el-select-dropdown__item.is-hovering {
@@ -703,9 +751,9 @@ button, input, select, textarea {
 /* Notification — Brutalist Academic */
 .el-notification {
     border-radius: 0 !important;
-    border-left: 4px solid #bc0000 !important;
+    border-left: 4px solid var(--red-accent) !important;
     border: 1px solid #000000 !important;
-    border-left: 4px solid #bc0000 !important;
+    border-left: 4px solid var(--red-accent) !important;
     box-shadow: none !important;
 }
 .el-message {
@@ -721,8 +769,8 @@ button, input, select, textarea {
 
 /* Switch */
 .el-switch.is-checked .el-switch__core {
-    background: #bc0000 !important;
-    border-color: #bc0000 !important;
+    background: var(--red-accent) !important;
+    border-color: var(--red-accent) !important;
 }
 
 /* Scrollbar — hidden but functional */

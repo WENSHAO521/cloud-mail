@@ -413,9 +413,9 @@ async function deleteTpl(templateId) {
 
 .item-icon {
   width: 32px; height: 32px; border-radius: 0;
-  background: rgba(188,0,0,0.08);
-  border: 1px solid rgba(188,0,0,0.15);
-  color: #bc0000;
+  background: rgba(var(--red-accent-rgb), 0.08);
+  border: 1px solid rgba(var(--red-accent-rgb), 0.15);
+  color: var(--red-accent);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
@@ -466,7 +466,7 @@ async function deleteTpl(templateId) {
   transition: background 0.10s, color 0.10s;
 
   &:hover { background: var(--base-fill); color: var(--el-text-color-primary); }
-  &.danger:hover { background: rgba(188,0,0,0.08); color: #bc0000; }
+  &.danger:hover { background: rgba(var(--red-accent-rgb), 0.08); color: var(--red-accent); }
 }
 
 /* ── Editor mode ── */

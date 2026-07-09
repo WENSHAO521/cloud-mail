@@ -1735,8 +1735,8 @@ function editSetting(settingForm, refreshStatus = true) {
   }
 
   &.active {
-    border-left-color: #bc0000;
-    background: rgba(188, 0, 0, 0.06);
+    border-left-color: var(--red-accent);
+    background: rgba(var(--red-accent-rgb), 0.06);
     color: var(--el-text-color-primary);
   }
 
@@ -1749,8 +1749,8 @@ function editSetting(settingForm, refreshStatus = true) {
     padding: 0 12px;
 
     &.active {
-      border-bottom-color: #bc0000;
-      background: rgba(188, 0, 0, 0.06);
+      border-bottom-color: var(--red-accent);
+      background: rgba(var(--red-accent-rgb), 0.06);
     }
   }
 }
@@ -1877,7 +1877,7 @@ function editSetting(settingForm, refreshStatus = true) {
       line-height: 1.35;
 
       &.danger-warn {
-        color: #bc0000;
+        color: var(--red-accent);
         font-weight: 600;
         margin-top: 6px;
       }

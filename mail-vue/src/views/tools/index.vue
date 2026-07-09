@@ -182,7 +182,7 @@ async function deleteGroup(groupId) {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--regular-text-color);
-  border-bottom: 2px solid #bc0000;
+  border-bottom: 2px solid var(--red-accent);
   padding-bottom: 6px;
 }
 
@@ -246,6 +246,6 @@ async function deleteGroup(groupId) {
   cursor: pointer;
   color: var(--regular-text-color);
   &:hover { color: var(--el-text-color-primary); }
-  &.remove:hover { color: #bc0000; }
+  &.remove:hover { color: var(--red-accent); }
 }
 </style>
