@@ -158,8 +158,11 @@
             <!-- ── Cloud backup section ── -->
             <div v-show="activeSection === 'backup'" class="settings-card">
               <div class="card-body backup-body">
+                <div v-if="availableProviders.length === 0" class="backup-empty-state">
+                  {{ $t('backupNotConfigured') }}
+                </div>
                 <div
-                  v-for="p in PROVIDERS"
+                  v-for="p in availableProviders"
                   :key="p.key"
                   class="backup-provider-row"
                 >
@@ -261,7 +264,7 @@ import { Icon } from "@iconify/vue"
 import tinyEditor from "@/components/tiny-editor/index.vue"
 import http from "@/axios/index.js"
 import { hasPerm } from "@/perm/perm.js"
-import { backupConnectUrl, backupStatus, backupDisconnect, backupStart } from "@/request/backup.js"
+import { backupProviders, backupConnectUrl, backupStatus, backupDisconnect, backupStart } from "@/request/backup.js"
 import dayjs from "dayjs"
 
 const { t } = useI18n()
@@ -285,11 +288,20 @@ const autoReplySaving = ref(false)
 // ── Cloud backup ──
 const backupStatusData = ref({})
 const backupLoading = ref({ google: false, microsoft: false })
+const configuredProviders = ref({ google: false, microsoft: false })
 
 const PROVIDERS = [
   { key: 'google',    label: 'Google Drive',  icon: 'logos:google-drive' },
   { key: 'microsoft', label: 'OneDrive',       icon: 'logos:microsoft-onedrive' },
 ]
+
+// Only show providers the deployment actually has OAuth credentials for —
+// an unconfigured provider always fails to connect, so hide it instead.
+const availableProviders = computed(() => PROVIDERS.filter(p => configuredProviders.value[p.key]))
+
+function loadBackupProviders() {
+  backupProviders().then(d => { configuredProviders.value = d }).catch(() => {})
+}
 
 function loadBackupStatus() {
   backupStatus().then(d => { backupStatusData.value = d }).catch(() => {})
@@ -382,6 +394,7 @@ onMounted(() => {
     autoReplyEnabled.value = !!data.enabled
     autoReplyMessage.value = data.message || ''
   }).catch(() => {})
+  loadBackupProviders()
   loadBackupStatus()
 
   // Handle OAuth popup redirect back with ?backup_connected=provider
@@ -605,8 +618,8 @@ function submitPwd() {
   }
 
   &.active {
-    border-left-color: #bc0000;
-    background: rgba(188, 0, 0, 0.06);
+    border-left-color: var(--red-accent);
+    background: rgba(var(--red-accent-rgb), 0.06);
     color: var(--el-text-color-primary);
   }
 
@@ -619,8 +632,8 @@ function submitPwd() {
     padding: 0 12px;
 
     &.active {
-      border-bottom-color: #bc0000;
-      background: rgba(188, 0, 0, 0.06);
+      border-bottom-color: var(--red-accent);
+      background: rgba(var(--red-accent-rgb), 0.06);
     }
   }
 }
@@ -684,9 +697,9 @@ function submitPwd() {
   gap: 8px;
   margin: 16px 20px 0;
   padding: 10px 14px;
-  background: rgba(188, 0, 0, 0.06);
-  border-left: 3px solid #bc0000;
-  color: #bc0000;
+  background: rgba(var(--red-accent-rgb), 0.06);
+  border-left: 3px solid var(--red-accent);
+  color: var(--red-accent);
   font-size: 13px;
   font-weight: 600;
   line-height: 1.4;
@@ -696,6 +709,12 @@ function submitPwd() {
 .backup-body {
   gap: 0;
   padding: 0;
+}
+
+.backup-empty-state {
+  padding: 24px;
+  font-size: 13px;
+  color: var(--text-secondary, #888);
 }
 
 .backup-provider-row {
@@ -845,8 +864,8 @@ function submitPwd() {
   display: inline-flex; align-items: center;
   font-size: 9px; font-weight: 900;
   letter-spacing: 0.14em; text-transform: uppercase;
-  color: #bc0000; background: rgba(188,0,0,0.07);
-  border: 1px solid rgba(188,0,0,0.18);
+  color: var(--red-accent); background: rgba(var(--red-accent-rgb),0.07);
+  border: 1px solid rgba(var(--red-accent-rgb),0.18);
   padding: 2px 6px; border-radius: 0;
   width: fit-content; margin-top: 4px;
 }
@@ -903,7 +922,7 @@ function submitPwd() {
 .link-btn {
   background: transparent; border: none; cursor: pointer;
   font-size: 12px; font-weight: 700;
-  color: #bc0000; padding: 0;
+  color: var(--red-accent); padding: 0;
   transition: opacity 0.12s; user-select: none; font-family: inherit;
   &:hover { opacity: 0.65; }
   &.dim { color: var(--secondary-text-color); font-weight: 600; }

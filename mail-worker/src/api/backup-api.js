@@ -4,6 +4,12 @@ import backupService from '../service/backup-service';
 import userContext from '../security/user-context';
 import BizError from '../error/biz-error';
 
+// Which providers have OAuth credentials configured on this deployment
+app.get('/backup/providers', async (c) => {
+	const providers = backupService.getConfiguredProviders(c);
+	return c.json(result.ok(providers));
+});
+
 // Get OAuth URL for a provider — frontend opens it in a popup
 app.get('/backup/connect/:provider', async (c) => {
 	const provider = c.req.param('provider');

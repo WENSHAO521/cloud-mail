@@ -1,7 +1,7 @@
 import orm from '../entity/orm';
 import { cloudBackup } from '../entity/cloud-backup';
 import { email } from '../entity/email';
-import { and, eq, asc } from 'drizzle-orm';
+import { and, eq, asc, gt } from 'drizzle-orm';
 import BizError from '../error/biz-error';
 import { t } from '../i18n/i18n';
 import dayjs from 'dayjs';
@@ -190,6 +190,14 @@ const backupService = {
 		return newTokens.accessToken;
 	},
 
+	// ── Which providers have OAuth credentials configured on this deployment ──
+	getConfiguredProviders(c) {
+		return {
+			google: !!c.env.google_client_id,
+			microsoft: !!c.env.microsoft_client_id,
+		};
+	},
+
 	// ── Status ───────────────────────────────────────────────────
 	async getStatus(c, userId) {
 		const db = orm(c);
@@ -213,16 +221,14 @@ const backupService = {
 	},
 
 	// ── Backup execution ─────────────────────────────────────────
+	// Pages through all of the user's emails via keyset pagination (emailId
+	// cursor) so accounts with more than one page of mail are fully backed
+	// up, instead of silently capping at the first PAGE_SIZE rows.
 	async startBackup(c, userId, provider) {
 		const token = await this.getValidToken(c, userId, provider);
 		if (!token) throw new BizError('Provider not connected or token expired — please reconnect');
 
 		const db = orm(c);
-		const emails = await db.select().from(email)
-			.where(and(eq(email.userId, userId), eq(email.isDel, 0)))
-			.orderBy(asc(email.emailId))
-			.limit(500)
-			.all();
 
 		const record = await db.select().from(cloudBackup)
 			.where(and(eq(cloudBackup.userId, userId), eq(cloudBackup.provider, provider)))
@@ -238,27 +244,46 @@ const backupService = {
 				.where(and(eq(cloudBackup.userId, userId), eq(cloudBackup.provider, provider)));
 		}
 
+		const PAGE_SIZE = 500;
 		let count = 0;
-		for (const em of emails) {
-			try {
-				const filename = this._safeFilename(em);
-				const eml = this._toEml(em);
-				if (provider === 'google') {
-					await this._uploadToGoogle(token, folderId, filename, eml);
-				} else {
-					await this._uploadToMicrosoft(token, folderId, filename, eml);
+		let total = 0;
+		let cursor = 0;
+
+		while (true) {
+			const emails = await db.select().from(email)
+				.where(and(eq(email.userId, userId), eq(email.isDel, 0), gt(email.emailId, cursor)))
+				.orderBy(asc(email.emailId))
+				.limit(PAGE_SIZE)
+				.all();
+
+			if (emails.length === 0) break;
+
+			for (const em of emails) {
+				try {
+					const filename = this._safeFilename(em);
+					const eml = this._toEml(em);
+					if (provider === 'google') {
+						await this._uploadToGoogle(token, folderId, filename, eml);
+					} else {
+						await this._uploadToMicrosoft(token, folderId, filename, eml);
+					}
+					count++;
+				} catch (e) {
+					console.error(`backup upload failed for email ${em.emailId}:`, e);
 				}
-				count++;
-			} catch (e) {
-				console.error(`backup upload failed for email ${em.emailId}:`, e);
 			}
+
+			total += emails.length;
+			cursor = emails[emails.length - 1].emailId;
+
+			if (emails.length < PAGE_SIZE) break;
 		}
 
 		await db.update(cloudBackup)
 			.set({ lastBackupAt: Date.now(), backupCount: count })
 			.where(and(eq(cloudBackup.userId, userId), eq(cloudBackup.provider, provider)));
 
-		return { count, total: emails.length };
+		return { count, total };
 	},
 
 	// ── .eml generation ─────────────────────────────────────────
