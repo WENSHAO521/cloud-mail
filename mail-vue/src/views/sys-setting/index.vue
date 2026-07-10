@@ -1718,11 +1718,11 @@ function editSetting(settingForm, refreshStatus = true) {
   border-radius: var(--radius-sm);
   border-left: 3px solid transparent;
   color: var(--psg-text-secondary, #666666);
-  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
-  font-size: 12px;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  font-size: 13.5px;
   font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
   cursor: pointer;
   transition: background 160ms var(--ease-out, ease), color 160ms var(--ease-out, ease);
 

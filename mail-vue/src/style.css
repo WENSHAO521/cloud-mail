@@ -218,20 +218,20 @@ button, input, select, textarea {
     /* Light-mode surfaces */
     --extra-light-fill: #f9f9f9;
     --light-ill: #eeeeee;
-    --light-border: #000000;
-    --header-actions-border: inset 0 -1px 0 0 #000000;
+    --light-border: #e2e2e6;
+    --header-actions-border: inset 0 -1px 0 0 #e2e2e6;
     --aside-backgound: #f9f9f9;
     --loadding-background: rgba(255, 255, 255, 0.88);
     --dark-border: #000000;
     --base-fill: #f3f3f3;
     --regular-text-color: #4c4546;
-    --light-border-color: #cfc4c5;
-    --aside-right-border: 1px 0 0 #000000;
+    --light-border-color: #dcdcdc;
+    --aside-right-border: 1px 0 0 #e2e2e6;
     --choose-account-background: #fdf2f2;
     --el-text-color-regular: var(--el-text-color-primary);
     --email-scroll-content-color: #4c4546;
     --email-hover-background: #eeeeee;
-    --login-border: 1px solid #000000;
+    --login-border: 1px solid #e2e2e6;
     --form-desc-color: #4c4546;
     --login-switch-color: #121212;
     --scrollbar-track-color: #c0c0c0;
@@ -490,12 +490,12 @@ html.dark.login-light-lock {
 /* Buttons */
 .el-button {
     border-radius: var(--radius-sm) !important;
-    font-weight: 500 !important;
-    letter-spacing: 0.05em !important;
-    text-transform: uppercase !important;
-    font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace !important;
-    font-size: 12px !important;
-    transition: background 0.15s ease, border-color 0.15s, color 0.15s !important;
+    font-weight: 600 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif !important;
+    font-size: 13.5px !important;
+    transition: background 0.15s ease, border-color 0.15s, color 0.15s, box-shadow 0.15s ease !important;
 }
 .el-button--primary {
     background: var(--red-accent) !important;
@@ -510,8 +510,8 @@ html.dark.login-light-lock {
     box-shadow: none !important;
 }
 .el-button--default {
-    border-color: #000000 !important;
-    color: #000000 !important;
+    border-color: var(--light-border-color, #d4d4d8) !important;
+    color: #1a1a1a !important;
 }
 .el-button--default:hover {
     border-color: var(--red-accent) !important;
@@ -537,7 +537,7 @@ html.dark.login-light-lock {
 /* Inputs */
 .el-input__wrapper {
     border-radius: var(--radius-sm) !important;
-    box-shadow: 0 0 0 1px #000000 !important;
+    box-shadow: 0 0 0 1px var(--light-border-color, #d4d4d8) !important;
     transition: box-shadow 0.15s ease !important;
 }
 .el-input__wrapper:hover {
@@ -565,13 +565,13 @@ html.dark.login-light-lock {
 
 /* Tables */
 .el-table th.el-table__cell {
-    background: #F5F5F5 !important;
-    color: #333333 !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.05em !important;
-    font-size: 11px !important;
-    text-transform: uppercase !important;
-    border-bottom: 2px solid #222222 !important;
+    background: #F7F7F8 !important;
+    color: #55555c !important;
+    font-weight: 600 !important;
+    letter-spacing: 0 !important;
+    font-size: 12.5px !important;
+    text-transform: none !important;
+    border-bottom: 1px solid #e5e5e9 !important;
 }
 .dark .el-table th.el-table__cell {
     background: #1c1c21 !important;
@@ -594,7 +594,7 @@ html.dark.login-light-lock {
 /* Cards */
 .el-card {
     border-radius: var(--radius-md) !important;
-    border: 1px solid #000000 !important;
+    border: 1px solid var(--light-border-color, #e5e5e9) !important;
     box-shadow: var(--card-shadow) !important;
 }
 .dark .el-card {
@@ -607,15 +607,15 @@ html.dark.login-light-lock {
 }
 .el-dialog {
     border-radius: var(--radius-md) !important;
-    border: 1px solid #000000 !important;
+    border: 1px solid var(--light-border-color, #e5e5e9) !important;
     box-shadow: var(--card-shadow-hover) !important;
     overflow: hidden !important;
     border-top: 3px solid var(--red-accent) !important;
 }
 .el-dialog__header {
-    border-bottom: 1px solid #000000 !important;
+    border-bottom: 1px solid var(--light-border-color, #eeeeee) !important;
     padding: 16px 24px 14px !important;
-    background: #f3f3f3 !important;
+    background: #f7f7f8 !important;
 }
 .dark .el-dialog__header {
     border-bottom-color: #2a2a32 !important;
@@ -623,11 +623,11 @@ html.dark.login-light-lock {
 }
 .el-dialog__title {
     font-weight: 700 !important;
-    letter-spacing: 0.06em !important;
-    font-size: 13px !important;
-    text-transform: uppercase !important;
-    font-family: 'JetBrains Mono', monospace !important;
-    color: #000000 !important;
+    letter-spacing: 0 !important;
+    font-size: 16px !important;
+    text-transform: none !important;
+    font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif !important;
+    color: #1a1a1a !important;
 }
 .dark .el-dialog__title {
     color: #d8d8e8 !important;
@@ -635,13 +635,13 @@ html.dark.login-light-lock {
 
 /* Tags */
 .el-tag {
-    border-radius: var(--radius-xs) !important;
-    font-weight: 500 !important;
-    letter-spacing: 0.06em !important;
-    font-size: 10px !important;
-    text-transform: uppercase !important;
-    font-family: 'JetBrains Mono', monospace !important;
-    padding: 0 6px !important;
+    border-radius: var(--radius-full) !important;
+    font-weight: 600 !important;
+    letter-spacing: 0 !important;
+    font-size: 11.5px !important;
+    text-transform: none !important;
+    font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif !important;
+    padding: 0 9px !important;
 }
 .el-tag--primary {
     background: transparent !important;
@@ -674,7 +674,7 @@ html.dark.login-light-lock {
 }
 .el-checkbox__inner {
     border-radius: 4px !important;
-    border-color: #000000 !important;
+    border-color: #a3a3a8 !important;
 }
 .el-radio__input.is-checked .el-radio__inner {
     border-color: var(--red-accent) !important;
@@ -746,27 +746,27 @@ html.dark.login-light-lock {
 
 /* Tooltip */
 .el-tooltip__popper {
-    background: #000000 !important;
-    border: 1px solid #000000 !important;
+    background: #262626 !important;
+    border: 1px solid #262626 !important;
     border-radius: var(--radius-xs) !important;
     color: #ffffff !important;
-    font-size: 11px !important;
-    letter-spacing: 0.04em !important;
-    text-transform: uppercase !important;
-    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 12px !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif !important;
 }
 
 /* Notification */
 .el-notification {
     border-radius: var(--radius-md) !important;
     border-left: 4px solid var(--red-accent) !important;
-    border: 1px solid #000000 !important;
+    border: 1px solid var(--light-border-color, #e5e5e9) !important;
     border-left: 4px solid var(--red-accent) !important;
     box-shadow: var(--card-shadow-hover) !important;
 }
 .el-message {
     border-radius: var(--radius-sm) !important;
-    border: 1px solid #000000 !important;
+    border: 1px solid var(--light-border-color, #e5e5e9) !important;
     box-shadow: var(--card-shadow) !important;
 }
 .dark .el-notification,

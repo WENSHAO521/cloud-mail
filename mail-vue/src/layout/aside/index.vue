@@ -462,11 +462,11 @@ function clickLogout() {
   height: 44px;
   margin: 0 10px;
   padding: 0 10px 0 14px;
-  font-size: 11px;
+  font-size: 13.5px;
   font-weight: 500;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+  letter-spacing: 0;
+  text-transform: none;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
   cursor: pointer;
   color: var(--psg-text-secondary, #4c4546);
   border-left: 3px solid transparent;
@@ -530,14 +530,14 @@ function clickLogout() {
 }
 
 .sidebar-section-title {
-  font-size: 9.5px;
+  font-size: 10.5px;
   font-weight: 700;
   color: var(--muted, #7e7576);
   padding: 0 20px;
   margin-bottom: 4px;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.08em;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
 }
 
 /* ── Footer ──────────────────────────────────────────────── */
@@ -566,11 +566,11 @@ function clickLogout() {
   border-radius: var(--radius-sm);
   background: var(--red-accent);
   color: var(--on-accent);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  font-family: 'JetBrains Mono', monospace;
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
   cursor: pointer;
   transition: background 0.14s ease;
 
