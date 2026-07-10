@@ -488,6 +488,7 @@ const zh = {
     autoDeleteDaysDesc: '邮件删除后会先进入"已删除邮件"，超过N天后从回收站彻底清除；设置为0则使用默认的30天（每日定时执行）',
     autoDeleteDaysWarn: '⚠ 已删除邮件将在 {n} 天后彻底清除，不可恢复；恢复邮件请在到期前操作。',
     autoDeleteDaysUserWarn: '"已删除邮件"里的邮件会在 {n} 天后彻底清除，请及时恢复需要保留的邮件。',
+    trashRetentionHint: '{n} 天后自动清除',
     cloudBackup: '云端备份',
     cloudBackupDesc: '将邮件备份到 Google Drive 或 OneDrive',
     backupConnectGoogle: '连接 Google Drive',

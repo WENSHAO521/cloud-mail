@@ -488,6 +488,7 @@ const en = {
     autoDeleteDaysDesc: 'Deleted emails go to "Deleted Mail" first, then are permanently purged after N days. Set to 0 to use the default of 30 days. (Runs daily via cron)',
     autoDeleteDaysWarn: '⚠ Deleted emails are permanently purged after {n} day(s). Restore anything you need before then.',
     autoDeleteDaysUserWarn: 'Emails in "Deleted Mail" are permanently purged after {n} day(s). Restore anything you need to keep.',
+    trashRetentionHint: 'Auto-purges after {n} day(s)',
     cloudBackup: 'Cloud Backup',
     cloudBackupDesc: 'Back up your emails to Google Drive or OneDrive',
     backupConnectGoogle: 'Connect Google Drive',
