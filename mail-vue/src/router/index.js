@@ -64,6 +64,12 @@ const routes = [
                 meta: { title: 'spam', name: 'spam', menu: true }
             },
             {
+                path: '/trash',
+                name: 'trash',
+                component: () => import('@/views/trash/index.vue'),
+                meta: { title: 'deletedMail', name: 'trash', menu: true }
+            },
+            {
                 path: '/templates',
                 name: 'templates',
                 component: () => import('@/views/templates/index.vue'),

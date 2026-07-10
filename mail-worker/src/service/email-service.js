@@ -304,9 +304,83 @@ const emailService = {
 		const accessCond = sharedIds.length > 0
 			? or(ownerCond, inArray(email.accountId, sharedIds))
 			: ownerCond;
+		try { await c.env.db.prepare(`ALTER TABLE email ADD COLUMN delete_time TEXT;`).run(); } catch {}
 		await orm(c).update(email).set({ isDel: isDel.DELETE }).where(
 			and(accessCond, inArray(email.emailId, emailIdList)))
 			.run();
+		try {
+			await c.env.db.prepare(
+				`UPDATE email SET delete_time = CURRENT_TIMESTAMP WHERE email_id IN (${emailIdList.map(() => '?').join(',')})`
+			).bind(...emailIdList).run();
+		} catch {}
+	},
+
+	async restore(c, params, userId) {
+		const emailIdList = String(params.emailIds).split(',').map(Number).filter(Boolean);
+		if (!emailIdList.length) return;
+		const sharedIds = await getSharedAccountIds(c, userId)
+		const placeholders = emailIdList.map(() => '?').join(',');
+		const cond = sharedIds.length > 0 ? `(user_id = ? OR account_id IN (${sharedIds.map(() => '?').join(',')}))` : 'user_id = ?';
+		await c.env.db.prepare(
+			`UPDATE email SET is_del = 0, delete_time = NULL WHERE email_id IN (${placeholders}) AND is_del = 1 AND ${cond}`
+		).bind(...emailIdList, userId, ...sharedIds).run();
+	},
+
+	async trashList(c, params, userId) {
+		let { emailId, accountId, size, allReceive } = params;
+		emailId   = Number(emailId) || 9999999999;
+		accountId = Number(accountId);
+		size      = Math.min(Number(size) || 20, 50);
+		allReceive= Number(allReceive);
+		try {
+			const accountCond = allReceive ? '' : 'AND e.account_id = ?';
+			const sharedIds = await getSharedAccountIds(c, userId)
+			const accessCond  = sharedIds.length > 0 ? `(e.user_id = ? OR e.account_id IN (${sharedIds.map(() => '?').join(',')}))` : 'e.user_id = ?';
+			const accessBinds = sharedIds.length > 0 ? [userId, ...sharedIds] : [userId];
+			const { results } = await c.env.db.prepare(`
+				SELECT e.*, s.star_id FROM email e
+				LEFT JOIN star s ON s.email_id = e.email_id AND s.user_id = ?
+				WHERE ${accessCond} AND e.is_del = 1
+				${accountCond} AND e.email_id < ?
+				ORDER BY e.email_id DESC LIMIT ?
+			`).bind(userId, ...accessBinds, ...(allReceive ? [] : [accountId]), emailId, size).all();
+			const list = results.map(item => ({ ...item, isStar: item.star_id != null ? 1 : 0 }));
+			await this.emailAddAtt(c, list);
+			return { list, total: list.length, latestEmail: list[0] || { emailId: 0, accountId, userId } };
+		} catch { return { list: [], total: 0, latestEmail: { emailId: 0, accountId, userId } }; }
+	},
+
+	async permanentDelete(c, params, userId) {
+		const emailIdList = String(params.emailIds).split(',').map(Number).filter(Boolean);
+		if (!emailIdList.length) return;
+		const sharedIds = await getSharedAccountIds(c, userId)
+		const placeholders = emailIdList.map(() => '?').join(',');
+		const cond = sharedIds.length > 0 ? `(user_id = ? OR account_id IN (${sharedIds.map(() => '?').join(',')}))` : 'user_id = ?';
+		const { results } = await c.env.db.prepare(
+			`SELECT email_id FROM email WHERE email_id IN (${placeholders}) AND is_del = 1 AND ${cond}`
+		).bind(...emailIdList, userId, ...sharedIds).all();
+		const idsToDelete = results.map(r => r.email_id);
+		if (!idsToDelete.length) return;
+		await attService.removeByEmailIds(c, idsToDelete);
+		await c.env.db.prepare(
+			`DELETE FROM email WHERE email_id IN (${idsToDelete.map(() => '?').join(',')})`
+		).bind(...idsToDelete).run();
+	},
+
+	async purgeExpiredTrash(c) {
+		const cutoff = dayjs().subtract(30, 'day').format('YYYY-MM-DD HH:mm:ss');
+		let idsToDelete;
+		try {
+			const { results } = await c.env.db.prepare(
+				`SELECT email_id FROM email WHERE is_del = 1 AND delete_time IS NOT NULL AND delete_time < ?`
+			).bind(cutoff).all();
+			idsToDelete = results.map(r => r.email_id);
+		} catch { return; }
+		if (!idsToDelete.length) return;
+		await attService.removeByEmailIds(c, idsToDelete);
+		await c.env.db.prepare(
+			`DELETE FROM email WHERE email_id IN (${idsToDelete.map(() => '?').join(',')})`
+		).bind(...idsToDelete).run();
 	},
 
 	receive(c, params, cidAttList, r2domain) {

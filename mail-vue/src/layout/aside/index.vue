@@ -178,6 +178,7 @@ const navItems = [
   { name: 'star',      labelKey: 'starred',       icon: 'psg:bookmark' },
   { name: 'archive',   labelKey: 'archiveFolder', icon: 'psg:archive' },
   { name: 'spam',      labelKey: 'spam',          icon: 'psg:spam' },
+  { name: 'trash',     labelKey: 'deletedMail',   icon: 'solar:trash-bin-minimalistic-linear' },
   { name: 'templates', labelKey: 'templates',     icon: 'psg:template' },
   { name: 'groups',    labelKey: 'contactGroups', icon: 'psg:group' },
 { name: 'setting',   labelKey: 'settings',      icon: 'psg:settings' },

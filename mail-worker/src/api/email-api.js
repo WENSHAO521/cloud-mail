@@ -64,3 +64,18 @@ app.get('/email/spam/list', async (c) => {
 	return c.json(result.ok(data));
 })
 
+app.put('/email/restore', async (c) => {
+	await emailService.restore(c, await c.req.json(), userContext.getUserId(c));
+	return c.json(result.ok());
+})
+
+app.get('/email/trash/list', async (c) => {
+	const data = await emailService.trashList(c, c.req.query(), userContext.getUserId(c));
+	return c.json(result.ok(data));
+})
+
+app.delete('/email/permanent-delete', async (c) => {
+	await emailService.permanentDelete(c, c.req.query(), userContext.getUserId(c));
+	return c.json(result.ok());
+})
+

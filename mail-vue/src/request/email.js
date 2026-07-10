@@ -44,6 +44,18 @@ export function emailUnread(emailIds) {
     return http.put('/email/unread', {emailIds})
 }
 
+export function emailRestore(emailIds) {
+    return http.put('/email/restore', {emailIds: emailIds.join(',')})
+}
+
+export function emailTrashList(accountId, allReceive, emailId, size) {
+    return http.get('/email/trash/list', {params: {accountId, allReceive, emailId, size}})
+}
+
+export function emailPermanentDelete(emailIds) {
+    return http.delete('/email/permanent-delete?emailIds=' + emailIds)
+}
+
 export function emailSend(form,progress) {
     return http.post('/email/send', form,{
         onUploadProgress: (e) => {

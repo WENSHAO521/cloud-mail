@@ -140,6 +140,10 @@
                           @click.stop="archiveEmail(item.emailId)">
                     <Icon icon="solar:archive-linear" width="14" height="14" />
                   </button>
+                  <button v-if="restoreEmail" class="icon-btn" :title="$t('restore')"
+                          @click.stop="restoreEmail(item.emailId)">
+                    <Icon icon="solar:inbox-out-linear" width="14" height="14" />
+                  </button>
                   <button v-if="showStar" class="icon-btn" :title="$t('star')"
                           @click.stop="starChange(item)">
                     <Icon :icon="item.isStar ? 'fluent-color:star-16' : 'solar:star-line-duotone'"
@@ -223,6 +227,9 @@
           <el-dropdown-item v-if="props.type === 'archive'" @click="unarchiveAction(rightClickEmail.emailId)">
             <div class="ctx-item"><Icon icon="solar:inbox-out-linear" width="18" height="18" /><span>{{ t('unarchive') }}</span></div>
           </el-dropdown-item>
+          <el-dropdown-item v-if="props.type === 'trash'" @click="restoreAction(rightClickEmail.emailId)">
+            <div class="ctx-item"><Icon icon="solar:inbox-out-linear" width="18" height="18" /><span>{{ t('restore') }}</span></div>
+          </el-dropdown-item>
           <el-dropdown-item v-if="props.type === 'email'" @click="markSpamAction(rightClickEmail.emailId)">
             <div class="ctx-item"><Icon icon="solar:danger-triangle-linear" width="18" height="18" /><span>{{ t('markAsSpam') }}</span></div>
           </el-dropdown-item>
@@ -277,6 +284,7 @@ const props = defineProps({
   unspamEmail: { type: Function, default: null },
   archiveEmail: { type: Function, default: null },
   unarchiveEmail: { type: Function, default: null },
+  restoreEmail: { type: Function, default: null },
   hideInlineSearch: { type: Boolean, default: false },
 })
 
@@ -514,11 +522,17 @@ function rightDelete(emailId) {
       .then(doDelete)
     return
   }
+  if (props.type === 'trash') {
+    ElMessageBox.confirm(t('permanentDeleteConfirm'), { confirmButtonText: t('confirm'), cancelButtonText: t('cancel'), type: 'warning' })
+      .then(doDelete)
+    return
+  }
   doDelete()
 }
 
 function archiveAction(emailId) { if (props.archiveEmail) props.archiveEmail(emailId) }
 function unarchiveAction(emailId) { if (props.unarchiveEmail) props.unarchiveEmail(emailId) }
+function restoreAction(emailId) { if (props.restoreEmail) props.restoreEmail(emailId) }
 function markSpamAction(emailId) { if (props.spamEmail) props.spamEmail(emailId) }
 function unmarkSpamAction(emailId) { if (props.unspamEmail) props.unspamEmail(emailId) }
 function handleSearch(type, value) { emit('right-search', type, value); }
@@ -533,7 +547,8 @@ async function copyCode(code) {
 }
 
 function handleDelete() {
-  ElMessageBox.confirm(t('delEmailsConfirm'), { confirmButtonText: t('confirm'), cancelButtonText: t('cancel'), type: 'warning' })
+  const confirmText = props.type === 'trash' ? t('permanentDeleteConfirm') : t('delEmailsConfirm')
+  ElMessageBox.confirm(confirmText, { confirmButtonText: t('confirm'), cancelButtonText: t('cancel'), type: 'warning' })
     .then(() => {
       if (props.type === 'draft') { emit('delete-draft', getSelectedDraftsIds()); return; }
       const emailIds = getSelectedMailsIds()
