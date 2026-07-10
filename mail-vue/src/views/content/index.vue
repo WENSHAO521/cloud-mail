@@ -585,7 +585,7 @@ function handleDelete() {
   gap: 14px;
   padding: 14px 16px;
   border: 1px solid var(--light-border-color, #dcdcdc);
-  border-left: 3px solid var(--light-border, #e2e2e6);
+  border-radius: var(--radius-md);
   margin-bottom: 0;
   background: var(--surface-secondary, #f9f9f9);
 
