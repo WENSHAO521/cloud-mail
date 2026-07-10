@@ -605,6 +605,7 @@ function handleDelete() {
   position: relative;
   overflow: hidden;
   margin-top: 2px;
+  border-radius: var(--radius-full);
 
   .meta-initial { color: #fff; font-size: 15px; font-weight: 700; line-height: 1; }
   .meta-avatar-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -919,7 +920,6 @@ function handleDelete() {
   .meta-avatar {
     width: 44px;
     height: 44px;
-    border-radius: 16px;
   }
 
   .meta-sender-row {
