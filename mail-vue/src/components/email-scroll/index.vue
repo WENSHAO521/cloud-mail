@@ -22,6 +22,10 @@
           <Icon v-if="searchQuery" icon="solar:close-circle-linear" width="15" height="15"
                 class="search-clear-inline" @click="searchQuery = ''" />
         </div>
+        <div class="unread-filter" v-if="showUnread">
+          <button class="filter-pill" :class="{ active: !unreadOnly }" @click="unreadOnly = false">{{ $t('all') }}</button>
+          <button class="filter-pill" :class="{ active: unreadOnly }" @click="unreadOnly = true">{{ $t('unreadOnly') }}</button>
+        </div>
         <slot name="first"></slot>
         <button class="icon-btn" @click="refresh">
           <Icon icon="solar:refresh-linear" width="17" height="17" />
@@ -96,6 +100,11 @@
 
               <!-- Col 2: Sender -->
               <div class="row-sender">
+                <div class="sender-avatar" :style="{ background: senderBg(item) }">
+                  <span class="sender-avatar-letter">{{ senderLetter(item) }}</span>
+                  <img v-if="senderImg(item)" :src="senderImg(item)" class="sender-avatar-img"
+                       @error="e => { e.target.style.display = 'none'; markGravatarMiss(item.sendEmail) }" />
+                </div>
                 <div class="email-status-inline" v-if="showStatus">
                   <el-tooltip effect="dark" :content="item.statusIcon?.content">
                     <Icon :icon="item.statusIcon?.icon" :style="`color: ${item.statusIcon?.color}`"
@@ -299,6 +308,7 @@ const dropdownCloseLock = ref(false);
 const dropdownShow = ref(false);
 const rightClickEmail = ref({});
 const searchQuery = ref('');
+const unreadOnly = ref(false);
 const searchInputRef = ref(null);
 const checkedEmailCount = ref(0);
 let timer = null
@@ -356,13 +366,16 @@ const list = computed(() => {
     const q = searchQuery.value.toLowerCase()
     return emailList.filter(e => e.name?.toLowerCase().includes(q) || e.subject?.toLowerCase().includes(q))
   }
+  if (unreadOnly.value) {
+    return emailList.filter(e => e.unread === EmailUnreadEnum.UNREAD)
+  }
   return [...emailList, ...expandList]
 })
 
 const itemHeight = computed(() => {
-  if (viewportWidth.value <= 768) return props.type === 'all-email' ? 106 : 96;
-  if (props.type === 'all-email') return isMobile.value ? 60 : 56;
-  return isMobile.value ? 52 : 44;
+  if (viewportWidth.value <= 768) return props.type === 'all-email' ? 112 : 104;
+  if (props.type === 'all-email') return isMobile.value ? 72 : 68;
+  return isMobile.value ? 64 : 60;
 })
 
 watch(itemHeight, () => { keyCount.value++ })
@@ -753,7 +766,7 @@ function vibrate(ms) { try { navigator.vibrate?.(ms) } catch {} }
   display: flex;
   align-items: center;
   padding: 0 0 0 10px;
-  border-bottom: 1px solid var(--light-border, #000000);
+  border-bottom: 1px solid var(--light-border, #e2e2e6);
   background: var(--surface, #ffffff);
   flex-shrink: 0;
 
@@ -771,11 +784,11 @@ function vibrate(ms) { try { navigator.vibrate?.(ms) } catch {} }
   .mail-count {
     margin-left: auto;
     flex-shrink: 0;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
+    font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+    font-size: 12.5px;
     font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    text-transform: none;
+    letter-spacing: 0;
     color: var(--secondary-text-color, #7e7576);
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
@@ -829,7 +842,45 @@ function vibrate(ms) { try { navigator.vibrate?.(ms) } catch {} }
   }
 }
 
-/* ── Icon button (brutalist square) ──────────────────────── */
+/* ── ALL / UNREAD segmented filter ────────────────────────── */
+.unread-filter {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  margin-left: 4px;
+  flex-shrink: 0;
+  background: var(--base-fill, #f3f3f3);
+  border-radius: var(--radius-full);
+}
+
+.filter-pill {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  height: 26px;
+  padding: 0 14px;
+  font-size: 12.5px;
+  font-weight: 500;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  color: var(--secondary-text-color, #7e7576);
+  border-radius: var(--radius-full);
+  transition: background 0.14s ease, color 0.14s ease, box-shadow 0.14s ease;
+  white-space: nowrap;
+
+  &.active {
+    background: var(--surface, #ffffff);
+    color: var(--el-text-color-primary);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
+    font-weight: 600;
+  }
+}
+
+.dark .filter-pill.active {
+  background: var(--surface-secondary, #25252b);
+}
+
+/* ── Icon button ──────────────────────────────────────────── */
 .icon-btn {
   display: inline-flex;
   align-items: center;
@@ -847,12 +898,12 @@ function vibrate(ms) { try { navigator.vibrate?.(ms) } catch {} }
 
   @media (hover: hover) {
     &:hover {
-      border-color: #000000;
-      color: #000000;
+      background: var(--email-hover-background, #eeeeee);
+      color: #1a1a1a;
     }
 
     &.icon-danger:hover {
-      border-color: var(--red-accent);
+      background: rgba(var(--red-accent-rgb), 0.08);
       color: var(--red-accent);
     }
   }
@@ -862,11 +913,11 @@ function vibrate(ms) { try { navigator.vibrate?.(ms) } catch {} }
   color: #555555;
   @media (hover: hover) {
     &:hover {
-      border-color: #ffffff;
-      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      color: #e8e8e8;
     }
     &.icon-danger:hover {
-      border-color: var(--red-accent);
+      background: rgba(var(--red-accent-rgb), 0.16);
       color: var(--red-accent);
     }
   }
@@ -897,6 +948,10 @@ function vibrate(ms) { try { navigator.vibrate?.(ms) } catch {} }
     }
 
     .mail-count {
+      display: none;
+    }
+
+    .unread-filter {
       display: none;
     }
   }
@@ -1064,10 +1119,10 @@ function vibrate(ms) { try { navigator.vibrate?.(ms) } catch {} }
     justify-content: center;
     align-items: center;
     padding: 12px 0;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+    font-size: 12px;
+    text-transform: none;
+    letter-spacing: 0;
     color: var(--muted, #7e7576);
   }
 }
@@ -1082,21 +1137,35 @@ function vibrate(ms) { try { navigator.vibrate?.(ms) } catch {} }
 
 /* ── Mail row: Brutalist table layout (Stitch) ────────────── */
 :deep(.mail-row) {
+  position: relative;
   display: grid;
   grid-template-columns: 52px 180px 1fr 110px;
   gap: 8px;
-  min-height: 44px;
-  padding: 8px 16px 8px 8px;
-  border-radius: var(--radius-sm);
-  border-bottom: 1px solid var(--light-border-color, #cfc4c5);
+  min-height: 60px;
+  padding: 10px 18px 10px 14px;
+  border-radius: var(--radius-md);
+  border-bottom: 1px solid var(--light-border-color, #dcdcdc);
   background: var(--surface, #ffffff);
   cursor: pointer;
   align-items: center;
-  transition: background 100ms ease, transform 0.25s ease;
+  transition: background 120ms ease, transform 0.25s ease, box-shadow 120ms ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10%;
+    bottom: 10%;
+    width: 3px;
+    border-radius: var(--radius-full);
+    background: var(--red-accent);
+    opacity: 0;
+    transition: opacity 120ms ease;
+  }
 
   &.all-email {
     grid-template-columns: 52px 180px 1fr 110px;
-    min-height: 56px;
+    min-height: 68px;
   }
 
   @media (max-width: 1280px) {
@@ -1108,11 +1177,11 @@ function vibrate(ms) { try { navigator.vibrate?.(ms) } catch {} }
     grid-template-columns: 36px 1fr auto;
     grid-template-rows: auto auto;
     gap: 0 8px;
-    min-height: 56px;
-    padding: 8px 12px 8px 4px;
+    min-height: 64px;
+    padding: 10px 14px 10px 8px;
     align-items: start;
 
-    &.all-email { min-height: 64px; }
+    &.all-email { min-height: 72px; }
   }
 
   @media (hover: hover) {
@@ -1122,7 +1191,9 @@ function vibrate(ms) { try { navigator.vibrate?.(ms) } catch {} }
   }
 
   &[data-active] {
-    background: var(--email-hover-background, #eeeeee);
+    background: rgba(var(--red-accent-rgb), 0.06);
+
+    &::before { opacity: 1; }
   }
 }
 
@@ -1166,7 +1237,7 @@ function vibrate(ms) { try { navigator.vibrate?.(ms) } catch {} }
   border-bottom-color: var(--light-border-color);
 
   &:hover { background: var(--email-hover-background); }
-  &[data-active] { background: var(--base-fill); }
+  &[data-active] { background: rgba(var(--red-accent-rgb), 0.14); }
 }
 
 /* ── Col 1: Checkbox + unread indicator ───────────────────── */
@@ -1193,9 +1264,37 @@ function vibrate(ms) { try { navigator.vibrate?.(ms) } catch {} }
 :deep(.row-sender) {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   min-width: 0;
   overflow: hidden;
+
+  .sender-avatar {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    .sender-avatar-letter {
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1;
+      font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+    }
+
+    .sender-avatar-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
 
   .mail-name {
     font-size: 14px;
@@ -1368,13 +1467,13 @@ function vibrate(ms) { try { navigator.vibrate?.(ms) } catch {} }
   align-items: center;
   gap: 8px;
   padding: 0 20px;
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 600;
   color: #fff;
   pointer-events: none;
-  font-family: 'JetBrains Mono', monospace;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
   transition: opacity 0.05s;
 
   &--delete { right: 0; background: var(--red-accent); color: var(--on-accent); }

@@ -193,6 +193,7 @@ const zh = {
     roleName: '名字',
     role: '权限身份',
     all: '全部',
+    unreadOnly: '未读',
     normal: '正常',
     banned: '封禁',
     reset: '重置',

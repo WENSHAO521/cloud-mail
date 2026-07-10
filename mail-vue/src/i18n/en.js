@@ -193,6 +193,7 @@ const en = {
     roleName: 'Name',
     role: 'Name',
     all: 'All',
+    unreadOnly: 'Unread',
     normal: 'Normal',
     banned: 'Banned',
     reset: 'Reset',

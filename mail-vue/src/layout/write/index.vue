@@ -1077,13 +1077,13 @@ function close() {
   display: grid;
   grid-template-rows: auto 1fr;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.40), 0 4px 16px rgba(0,0,0,0.18);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-lg);
   overflow: hidden;
 
   @media (max-width: 767px) {
     width: 100%;
     height: 100%;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-lg);
   }
 
   @media (min-width: 768px) {
@@ -1113,11 +1113,11 @@ function close() {
 }
 
 .wh-badge {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
   color: #f4f4f4; /* .wh is always a dark bar — see note above */
   white-space: nowrap;
   flex-shrink: 0;
@@ -1304,10 +1304,10 @@ function close() {
 .field-label {
   flex-shrink: 0;
   width: 62px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--secondary-text-color);
 }
 
@@ -1467,10 +1467,10 @@ function close() {
 .send-btn {
   height: 34px !important;
   padding: 0 20px !important;
-  font-size: 12.5px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.05em !important;
-  text-transform: uppercase !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
   border-radius: var(--radius-sm) !important;
   display: inline-flex !important;
   align-items: center !important;

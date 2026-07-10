@@ -438,16 +438,28 @@ function handleDelete() {
   align-items: center;
   justify-content: center;
   gap: 12px;
+  height: calc(100% - 24px);
+  margin: 12px;
+  border-radius: var(--radius-lg);
   background: var(--surface, #ffffff);
-  border: 1px solid var(--light-border-color, #cfc4c5);
+  border: 1px solid var(--light-border-color, #dcdcdc);
+  box-shadow: var(--card-shadow);
+
+  @media (max-width: 1024px) {
+    height: 100%;
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+  }
 
   .empty-icon { color: var(--muted, #666666); opacity: 0.5; }
 
   .empty-text {
-    font-size: 13px;
-    font-family: 'JetBrains Mono', monospace;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+    font-size: 14px;
+    font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--muted, #666666);
   }
 }
@@ -457,11 +469,19 @@ function handleDelete() {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  height: calc(100% - 24px);
+  margin: 12px;
+  border-radius: var(--radius-lg);
   background: var(--surface, #ffffff);
-  border: 1px solid var(--light-border-color, #cfc4c5);
+  border: 1px solid var(--light-border-color, #dcdcdc);
+  box-shadow: var(--card-shadow-hover);
 
   @media (max-width: 1024px) {
+    height: 100%;
+    margin: 0;
+    border-radius: 0;
     border: none;
+    box-shadow: none;
   }
 }
 
@@ -472,7 +492,7 @@ function handleDelete() {
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
-  border-bottom: 1px solid var(--light-border-color, #cfc4c5);
+  border-bottom: 1px solid var(--light-border-color, #dcdcdc);
   flex-shrink: 0;
 }
 
@@ -564,8 +584,8 @@ function handleDelete() {
   align-items: flex-start;
   gap: 14px;
   padding: 14px 16px;
-  border: 1px solid var(--light-border-color, #cfc4c5);
-  border-left: 3px solid var(--light-border, #000000);
+  border: 1px solid var(--light-border-color, #dcdcdc);
+  border-left: 3px solid var(--light-border, #e2e2e6);
   margin-bottom: 0;
   background: var(--surface-secondary, #f9f9f9);
 
@@ -646,7 +666,7 @@ function handleDelete() {
   gap: 2px;
   margin-top: 6px;
   padding-top: 6px;
-  border-top: 1px solid var(--light-border-color, #cfc4c5);
+  border-top: 1px solid var(--light-border-color, #dcdcdc);
 }
 
 .meta-field {
@@ -658,11 +678,11 @@ function handleDelete() {
 }
 
 .meta-field-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  font-size: 11.5px;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--muted, #7e7576);
   flex-shrink: 0;
   min-width: 28px;
@@ -683,7 +703,7 @@ function handleDelete() {
 /* ── Divider between meta and body ───────────────────────── */
 .body-divider {
   height: 1px;
-  background: var(--light-border-color, #cfc4c5);
+  background: var(--light-border-color, #dcdcdc);
   margin: 24px 0;
 
   @media (max-width: 767px) { margin: 16px 0; }
@@ -711,24 +731,25 @@ function handleDelete() {
 /* ── Attachments ─────────────────────────────────────────── */
 .att-container {
   margin-top: 40px; max-width: min(100%, 560px);
-  border: 1px solid var(--light-border, #000000); padding: 16px;
+  border: 1px solid var(--light-border-color, #dcdcdc); border-radius: var(--radius-md); padding: 16px;
 }
 .att-header {
   display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
 }
 .att-title-text {
-  font-size: 11px; font-weight: 700; color: var(--el-text-color-primary);
-  font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em;
+  font-size: 13px; font-weight: 700; color: var(--el-text-color-primary);
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif; text-transform: none; letter-spacing: 0;
 }
 .att-count {
-  font-size: 11px; color: var(--muted, #666666);
-  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px; color: var(--muted, #666666);
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
 }
 .att-list { display: flex; flex-direction: column; gap: 4px; }
 
 .att-item {
   display: flex; align-items: center; gap: 10px;
-  border: 1px solid var(--light-border-color, #cfc4c5);
+  border: 1px solid var(--light-border-color, #dcdcdc);
+  border-radius: var(--radius-sm);
   background: var(--surface-secondary, #f3f3f3);
   padding: 8px 12px; cursor: pointer; transition: background 0.12s ease;
 
@@ -745,8 +766,10 @@ function handleDelete() {
 /* ── Translation panel ─────────────────────────────── */
 .translate-panel {
   margin: 16px 0 8px;
-  border: 1px solid var(--light-border-color, #cfc4c5);
+  border: 1px solid var(--light-border-color, #dcdcdc);
   border-left: 3px solid var(--red-accent);
+  border-radius: var(--radius-md);
+  overflow: hidden;
   background: var(--surface-secondary, #f3f3f3);
 }
 
@@ -762,20 +785,22 @@ function handleDelete() {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  font-size: 13px;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--muted, #666666);
 }
 
 .translate-lang-tag {
   background: var(--red-accent);
   color: var(--on-accent);
-  font-size: 9px;
-  padding: 1px 5px;
-  letter-spacing: 0.05em;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  letter-spacing: 0;
 }
 
 .translate-panel-actions {
@@ -785,15 +810,16 @@ function handleDelete() {
 }
 
 .translate-switch-btn {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--red-accent);
   border: 1px solid var(--red-accent);
+  border-radius: var(--radius-full);
   background: transparent;
-  padding: 2px 8px;
+  padding: 3px 10px;
   cursor: pointer;
   transition: background 0.12s, color 0.12s;
   &:hover { background: var(--red-accent); color: var(--on-accent); }
