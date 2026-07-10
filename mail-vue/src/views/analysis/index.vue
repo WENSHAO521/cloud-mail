@@ -756,14 +756,14 @@ function createSendGauge() {
 
 .stat-card {
   background: var(--surface, #fff);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--light-border, #e2e2e6);
-  box-shadow: var(--card-shadow);
-  padding: 20px;
-  transition: box-shadow 0.16s ease;
+  border-radius: 0;
+  border: 1px solid #c9ccd6;
+  box-shadow: none;
+  padding: 24px;
+  transition: background 0.16s ease;
 
   @media (hover: hover) {
-    &:hover { box-shadow: var(--card-shadow-hover); }
+    &:hover { background: var(--base-fill, #f7f7f9); }
   }
 
   .stat-body {
@@ -781,8 +781,11 @@ function createSendGauge() {
   }
 
   .stat-label {
-    font-size: 13px;
+    font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+    font-size: 11px;
     font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
     color: var(--muted, #666666);
   }
 
@@ -817,6 +820,13 @@ function createSendGauge() {
   .bd-del { color: var(--muted, #666666); }
 }
 
+.dark .stat-card {
+  border-color: #34363f;
+  @media (hover: hover) {
+    &:hover { background: #1c1c21; }
+  }
+}
+
 /* ── Chart cards ── */
 .chart-grid {
   display: grid;
@@ -827,16 +837,18 @@ function createSendGauge() {
 
 .chart-card {
   background: var(--surface, #fff);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--light-border, #e2e2e6);
-  box-shadow: var(--card-shadow);
+  border-radius: 0;
+  border: 1px solid #c9ccd6;
+  box-shadow: none;
   padding: 20px;
 
   .chart-title {
     font-size: 14px;
     font-weight: 600;
     color: var(--el-text-color-primary);
-    margin: 0 0 12px;
+    margin: 0 0 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #c9ccd6;
   }
 
   .chart-area {
@@ -844,6 +856,12 @@ function createSendGauge() {
     @media (max-width: 640px) { height: 220px; }
     @media (max-width: 420px) { height: 180px; }
   }
+}
+
+.dark .chart-card {
+  border-color: #34363f;
+
+  .chart-title { border-bottom-color: #34363f; }
 }
 </style>
 
