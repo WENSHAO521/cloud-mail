@@ -120,8 +120,8 @@
                 <div>
                   <span>{{ $t('autoDeleteDays') }}</span>
                   <p>{{ $t('autoDeleteDaysDesc') }}</p>
-                  <p v-if="setting.autoDeleteDays > 0" class="danger-warn">
-                    {{ $t('autoDeleteDaysWarn', { n: setting.autoDeleteDays }) }}
+                  <p class="danger-warn">
+                    {{ $t('autoDeleteDaysWarn', { n: setting.autoDeleteDays > 0 ? setting.autoDeleteDays : 30 }) }}
                   </p>
                 </div>
                 <div>

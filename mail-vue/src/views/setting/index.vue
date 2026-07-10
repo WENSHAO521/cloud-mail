@@ -146,9 +146,9 @@
 
             <!-- ── Mail management section ── -->
             <div v-show="activeSection === 'mail'" class="settings-card">
-              <div v-if="settingStore.settings.autoDeleteDays > 0" class="auto-delete-notice">
+              <div class="auto-delete-notice">
                 <Icon icon="solar:danger-triangle-bold" width="15" height="15" style="flex-shrink:0"/>
-                {{ $t('autoDeleteDaysUserWarn', { n: settingStore.settings.autoDeleteDays }) }}
+                {{ $t('autoDeleteDaysUserWarn', { n: settingStore.settings.autoDeleteDays > 0 ? settingStore.settings.autoDeleteDays : 30 }) }}
               </div>
               <div class="card-body mail-body">
                 <Account />

@@ -368,7 +368,9 @@ const emailService = {
 	},
 
 	async purgeExpiredTrash(c) {
-		const cutoff = dayjs().subtract(30, 'day').format('YYYY-MM-DD HH:mm:ss');
+		const setting = await settingService.query(c);
+		const days = Number(setting.autoDeleteDays) || 30;
+		const cutoff = dayjs().subtract(days, 'day').format('YYYY-MM-DD HH:mm:ss');
 		let idsToDelete;
 		try {
 			const { results } = await c.env.db.prepare(
@@ -1285,16 +1287,6 @@ const emailService = {
 			.run();
 	},
 
-	async deleteOldEmails(c) {
-		const setting = await settingService.query(c);
-		const days = Number(setting.autoDeleteDays);
-		if (!days || days <= 0) return;
-		const cutoff = dayjs().subtract(days, 'day').format('YYYY-MM-DD HH:mm:ss');
-		await orm(c)
-			.delete(email)
-			.where(lt(email.createTime, cutoff))
-			.run();
-	}
 };
 
 export default emailService;
