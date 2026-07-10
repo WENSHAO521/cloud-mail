@@ -307,20 +307,20 @@ onUnmounted(() => {
 }
 
 .hero-publisher {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  font-size: 10.5px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted, #888);
 }
 
 .hero-product {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 22px;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  font-size: 24px;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--el-text-color-primary);
   line-height: 1.2;
 }
@@ -342,15 +342,17 @@ onUnmounted(() => {
 .about-card {
   background: var(--el-bg-color, #ffffff);
   border: 1px solid var(--light-border-color, #e0e0e0);
+  border-radius: var(--radius-md);
+  box-shadow: var(--card-shadow);
   padding: 0;
   overflow: hidden;
 }
 
 .about-card-title {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--muted, #888);
   padding: 12px 20px 10px;
@@ -388,8 +390,8 @@ onUnmounted(() => {
 }
 
 .about-link {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  font-size: 13px;
   color: var(--red-accent);
   text-decoration: none;
   border-bottom: 1px solid transparent;
@@ -403,10 +405,11 @@ onUnmounted(() => {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  font-size: 12.5px;
   font-weight: 600;
   padding: 3px 10px;
+  border-radius: var(--radius-full);
   border: 1px solid currentColor;
 
   .status-dot {
@@ -460,11 +463,11 @@ onUnmounted(() => {
 }
 
 .about-btn {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
   border-radius: var(--radius-sm);
   border-color: var(--light-border-color, #ccc);
   display: flex;

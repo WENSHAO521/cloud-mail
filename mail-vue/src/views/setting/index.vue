@@ -569,9 +569,9 @@ function submitPwd() {
 .settings-sidebar,
 .settings-panel {
   background: var(--surface, #ffffff);
-  border: 1px solid var(--light-border, #000000);
-  border-radius: var(--radius-sm);
-  box-shadow: none;
+  border: 1px solid var(--light-border, #e2e2e6);
+  border-radius: var(--radius-md);
+  box-shadow: var(--card-shadow);
   overflow: hidden;
 }
 
@@ -602,13 +602,14 @@ function submitPwd() {
   gap: 12px;
   border: none;
   border-left: 3px solid transparent;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   background: transparent;
   color: var(--psg-text-secondary, #666666);
-  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
-  font-size: 12px;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  font-size: 13.5px;
   font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
   cursor: pointer;
   transition: background 160ms ease, color 160ms ease;
 

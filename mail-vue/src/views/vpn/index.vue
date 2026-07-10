@@ -252,20 +252,20 @@ function formatDate(iso) {
 }
 
 .hero-publisher {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  font-size: 10.5px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted, #7e7576);
   margin-bottom: 4px;
 }
 
 .hero-product {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
   font-size: 28px;
   font-weight: 800;
-  letter-spacing: 0.04em;
+  letter-spacing: 0;
   color: var(--el-text-color-primary);
   line-height: 1.1;
 }
@@ -300,8 +300,9 @@ function formatDate(iso) {
 .dl-notice-link {
   color: var(--red-accent);
   text-decoration: none;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
 
   @media (hover: hover) {
     &:hover { text-decoration: underline; }
@@ -314,17 +315,18 @@ function formatDate(iso) {
   align-items: center;
   gap: 10px;
   margin-bottom: 16px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
 }
 
 .section-tag {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--el-text-color-primary);
 }
 
 .section-date {
-  font-size: 11px;
+  font-size: 12px;
+  font-family: 'IBM Plex Mono', monospace;
   color: var(--muted, #7e7576);
 }
 
@@ -342,10 +344,12 @@ function formatDate(iso) {
   flex-direction: column;
   gap: 12px;
   padding: 22px 20px 18px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--card-shadow);
   background: var(--el-bg-color, #ffffff);
-  border: 1px solid var(--light-border, #000000);
-  border-top: 3px solid var(--light-border, #000000);
-  transition: border-top-color 0.12s;
+  border: 1px solid var(--light-border, #e2e2e6);
+  border-top: 3px solid var(--light-border, #e2e2e6);
+  transition: border-top-color 0.12s, box-shadow 0.12s;
 
   @media (hover: hover) {
     &:hover { border-top-color: var(--red-accent); }
@@ -372,10 +376,10 @@ function formatDate(iso) {
 .dl-card-info { flex: 1; }
 
 .dl-card-platform {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
   font-size: 16px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0;
   color: var(--el-text-color-primary);
   margin-bottom: 4px;
 }
@@ -406,14 +410,15 @@ function formatDate(iso) {
   align-items: center;
   gap: 7px;
   height: 32px;
-  padding: 0 12px;
+  padding: 0 14px;
+  border-radius: var(--radius-sm);
   background: #111111;
   color: #ffffff;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
   text-decoration: none;
   cursor: pointer;
   border: none;
@@ -453,17 +458,18 @@ function formatDate(iso) {
   align-items: center;
   gap: 16px;
   padding-top: 20px;
-  border-top: 1px solid var(--light-border-color, #cfc4c5);
+  border-top: 1px solid var(--light-border-color, #dcdcdc);
 }
 
 .dl-releases-link {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
+  font-size: 12.5px;
+  font-weight: 500;
   color: var(--muted, #7e7576);
   text-decoration: none;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
 
   @media (hover: hover) {
     &:hover { color: var(--el-text-color-primary); }

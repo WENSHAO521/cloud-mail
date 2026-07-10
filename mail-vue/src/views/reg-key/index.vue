@@ -413,7 +413,7 @@ function openAdd() {
   align-items: center;
   background: var(--surface, #fff);
   border-radius: var(--radius-md);
-  border: 1px solid var(--light-border, #000000);
+  border: 1px solid var(--light-border, #e2e2e6);
   box-shadow: var(--card-shadow);
 
   :deep(.el-input__wrapper) {
@@ -485,7 +485,7 @@ function openAdd() {
     .code-item {
       background: var(--surface, #fff);
       border-radius: var(--radius-md);
-      border: 1px solid var(--light-border, #000000);
+      border: 1px solid var(--light-border, #e2e2e6);
       box-shadow: var(--card-shadow);
       padding: 16px;
       transition: box-shadow 0.16s ease;

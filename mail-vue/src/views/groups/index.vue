@@ -217,9 +217,9 @@ async function deleteGroup(groupId) {
   align-items: center;
   padding: 10px 16px;
   background: var(--surface, #fff);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--light-border, #000000);
-  box-shadow: none;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--light-border, #e2e2e6);
+  box-shadow: var(--card-shadow);
   min-height: 52px;
 }
 
@@ -277,9 +277,9 @@ async function deleteGroup(groupId) {
 /* Group list */
 .group-list {
   background: var(--surface, #fff);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--light-border, #000000);
-  box-shadow: none;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--light-border, #e2e2e6);
+  box-shadow: var(--card-shadow);
   overflow: hidden;
 }
 

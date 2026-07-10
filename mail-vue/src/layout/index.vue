@@ -428,10 +428,10 @@ onBeforeUnmount(() => {
 
 .shortcuts-body { display: flex; flex-direction: column; gap: 0; }
 .sc-section-title {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.10em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--muted, #7e7576);
   margin-bottom: 10px;
@@ -546,7 +546,7 @@ onBeforeUnmount(() => {
 .mail-list-pane {
   min-height: 0;
   overflow: hidden;
-  border-right: 1px solid var(--light-border, #000000);
+  border-right: 1px solid var(--light-border, #e2e2e6);
   background: var(--extra-light-fill, #f9f9f9);
 
   /* Mobile: sit between the fixed header and the bottom tab bar */

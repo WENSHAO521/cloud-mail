@@ -642,11 +642,11 @@ path[fill="#ffdda1"] {
       justify-content: center;
       align-items: center;
       padding: 14px 0;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.08em;
+      font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0;
       color: var(--dark-border);
-      text-transform: uppercase;
+      text-transform: none;
     }
   }
 
@@ -693,10 +693,10 @@ path[fill="#ffdda1"] {
     flex-shrink: 0;
     width: 32px;
     height: 32px;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-full);
     background: #1a1a1a;
     color: rgba(255,255,255,0.85);
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
     font-weight: 700;
     font-size: 13px;
     display: flex;

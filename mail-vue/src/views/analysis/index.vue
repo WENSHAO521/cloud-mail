@@ -757,7 +757,7 @@ function createSendGauge() {
 .stat-card {
   background: var(--surface, #fff);
   border-radius: var(--radius-md);
-  border: 1px solid var(--light-border, #000000);
+  border: 1px solid var(--light-border, #e2e2e6);
   box-shadow: var(--card-shadow);
   padding: 20px;
   transition: box-shadow 0.16s ease;
@@ -828,7 +828,7 @@ function createSendGauge() {
 .chart-card {
   background: var(--surface, #fff);
   border-radius: var(--radius-md);
-  border: 1px solid var(--light-border, #000000);
+  border: 1px solid var(--light-border, #e2e2e6);
   box-shadow: var(--card-shadow);
   padding: 20px;
 

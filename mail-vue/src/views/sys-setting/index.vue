@@ -1684,7 +1684,7 @@ function editSetting(settingForm, refreshStatus = true) {
 .settings-sidebar,
 .settings-panel {
   background: var(--surface, #ffffff);
-  border: 1px solid var(--light-border, #000000);
+  border: 1px solid var(--light-border, #e2e2e6);
   border-radius: var(--radius-md);
   box-shadow: var(--card-shadow);
   overflow: hidden;
@@ -1966,7 +1966,7 @@ function editSetting(settingForm, refreshStatus = true) {
 
 .cropper {
   border-radius: var(--radius-sm);
-  border: 1px solid var(--light-border, #000000);
+  border: 1px solid var(--light-border, #e2e2e6);
   height: 397px;
   width: 705px;
   @media (max-width: 767px) {
@@ -2241,11 +2241,11 @@ function editSetting(settingForm, refreshStatus = true) {
 }
 
 .about-label {
-  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--psg-text-secondary, #666666);
   white-space: nowrap;
 }

@@ -433,7 +433,7 @@ onUnmounted(() => { window.removeEventListener('resize', adjustWidth) })
   overflow: hidden;
   background: var(--surface, #fff);
   border-radius: var(--radius-md);
-  border: 1px solid var(--light-border, #000000);
+  border: 1px solid var(--light-border, #e2e2e6);
   box-shadow: var(--card-shadow);
 }
 
@@ -458,7 +458,7 @@ onUnmounted(() => { window.removeEventListener('resize', adjustWidth) })
   gap: 4px;
   background: var(--surface, #fff);
   border-radius: var(--radius-md);
-  border: 1px solid var(--light-border, #000000);
+  border: 1px solid var(--light-border, #e2e2e6);
   box-shadow: var(--card-shadow);
   flex-shrink: 0;
 

@@ -492,15 +492,16 @@ async function latest() {
   width: 28px;
   height: 28px;
   border: 1px solid transparent;
+  border-radius: var(--radius-sm);
   background: transparent;
   cursor: pointer;
   flex-shrink: 0;
   color: var(--muted, #7e7576);
-  transition: border-color 0.10s, color 0.10s;
+  transition: background 0.10s, color 0.10s;
 
   @media (hover: hover) {
-    &:hover { border-color: #000000; color: #000000; }
-    &.icon-danger:hover { border-color: var(--red-accent); color: var(--red-accent); }
+    &:hover { background: var(--email-hover-background, #eeeeee); color: #1a1a1a; }
+    &.icon-danger:hover { background: rgba(var(--red-accent-rgb), 0.08); color: var(--red-accent); }
   }
 }
 

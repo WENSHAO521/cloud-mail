@@ -1143,7 +1143,7 @@ function adjustWidth() {
   align-items: center;
   background: var(--surface, #fff);
   border-radius: var(--radius-md);
-  border: 1px solid var(--light-border, #000000);
+  border: 1px solid var(--light-border, #e2e2e6);
   box-shadow: var(--card-shadow);
   flex-shrink: 0;
 
@@ -1225,7 +1225,7 @@ function adjustWidth() {
   width: 100%;
   background: var(--surface, #fff);
   border-radius: var(--radius-md);
-  border: 1px solid var(--light-border, #000000);
+  border: 1px solid var(--light-border, #e2e2e6);
   box-shadow: var(--card-shadow);
   overflow: hidden;
 }

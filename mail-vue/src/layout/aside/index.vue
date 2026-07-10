@@ -228,7 +228,7 @@ function clickLogout() {
   height: 100%;
   width: 260px;
   background: var(--aside-backgound, #f9f9f9);
-  border-right: 1px solid var(--light-border, #000000);
+  border-right: 1px solid var(--light-border, #e2e2e6);
   overflow: hidden;
   transition: width 0.22s cubic-bezier(0.22, 1, 0.36, 1);
 
@@ -250,7 +250,7 @@ function clickLogout() {
   align-items: flex-start;
   padding: 18px 20px 14px;
   flex-shrink: 0;
-  border-bottom: 1px solid var(--light-border, #000000);
+  border-bottom: 1px solid var(--light-border, #e2e2e6);
   border-left: 3px solid var(--red-accent);
   -webkit-app-region: drag;
 
@@ -271,10 +271,10 @@ function clickLogout() {
 }
 
 .brand-name {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   color: #111111;
   white-space: nowrap;
@@ -285,10 +285,10 @@ function clickLogout() {
 }
 
 .brand-sub {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  font-size: 10px;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--red-accent);
   white-space: nowrap;
@@ -587,7 +587,7 @@ function clickLogout() {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--light-border, #000000);
+  border: 1px solid var(--light-border, #e2e2e6);
   border-radius: var(--radius-sm);
   background: transparent;
   cursor: pointer;
