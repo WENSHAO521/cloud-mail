@@ -756,10 +756,15 @@ function createSendGauge() {
 
 .stat-card {
   background: var(--surface, #fff);
-  border-radius: 0;
+  border-radius: var(--radius-md);
   border: 1px solid var(--light-border, #000000);
-  box-shadow: none;
+  box-shadow: var(--card-shadow);
   padding: 20px;
+  transition: box-shadow 0.16s ease;
+
+  @media (hover: hover) {
+    &:hover { box-shadow: var(--card-shadow-hover); }
+  }
 
   .stat-body {
     display: flex;
@@ -793,7 +798,7 @@ function createSendGauge() {
   .stat-icon {
     width: 48px;
     height: 48px;
-    border-radius: 0;
+    border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -822,9 +827,9 @@ function createSendGauge() {
 
 .chart-card {
   background: var(--surface, #fff);
-  border-radius: 0;
+  border-radius: var(--radius-md);
   border: 1px solid var(--light-border, #000000);
-  box-shadow: none;
+  box-shadow: var(--card-shadow);
   padding: 20px;
 
   .chart-title {

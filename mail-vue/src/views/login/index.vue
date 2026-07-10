@@ -852,7 +852,7 @@ function submitRegister() {
   background: #FFFFFF;
   border: 1px solid #000000;
   border-top: 3px solid var(--red-accent);
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   box-shadow: none;
   padding: 40px 36px 26px;
   display: flex;
@@ -941,7 +941,7 @@ function submitRegister() {
 }
 
 :deep(.el-input__wrapper) {
-  border-radius: 0 !important;
+  border-radius: var(--radius-sm) !important;
   height: 46px;
   background: #FFFFFF !important;
   box-shadow: 0 0 0 1px #DADADA !important;
@@ -965,7 +965,7 @@ function submitRegister() {
   border-bottom: 1px solid #DADADA !important;
   border-left:   1px solid #DADADA !important;
   border-right:  none !important;
-  border-radius: 0 !important;
+  border-radius: var(--radius-sm) !important;
   background: #FFFFFF !important;
   height: 46px;
   transition: border-color 0.15s !important;
@@ -980,7 +980,7 @@ function submitRegister() {
   border-right:  1px solid #DADADA !important;
   border-bottom: 1px solid #DADADA !important;
   border-left:   1px solid #EBEBEB !important;
-  border-radius: 0 !important;
+  border-radius: var(--radius-sm) !important;
   background: #F5F5F5 !important;
   padding: 0 12px !important;
   height: 46px;
@@ -1020,7 +1020,7 @@ function submitRegister() {
 .btn {
   height: 46px;
   width: 100%;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   font-weight: 600;
   letter-spacing: 0.02em;
   font-size: 14px;
@@ -1032,7 +1032,7 @@ function submitRegister() {
   border-color: var(--red-accent) !important;
   color: var(--on-accent) !important;
   font-weight: 600 !important;
-  border-radius: 0 !important;
+  border-radius: var(--radius-sm) !important;
   letter-spacing: 0.02em !important;
 
   &:hover, &:focus {
@@ -1053,7 +1053,7 @@ function submitRegister() {
   gap: 8px;
   background: #FFFFFF;
   border: 1px solid #DADADA;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-family: inherit;
   font-size: 13px;

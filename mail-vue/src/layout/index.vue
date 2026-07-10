@@ -454,7 +454,7 @@ onBeforeUnmount(() => {
   background: var(--base-fill, #f5f5f5);
   border: 1px solid var(--light-border-color, #ccc);
   padding: 3px 10px;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   min-width: 72px;
   text-align: center;
   color: var(--el-text-color-primary);

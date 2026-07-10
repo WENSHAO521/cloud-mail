@@ -1077,13 +1077,13 @@ function close() {
   display: grid;
   grid-template-rows: auto 1fr;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.40), 0 4px 16px rgba(0,0,0,0.18);
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   overflow: hidden;
 
   @media (max-width: 767px) {
     width: 100%;
     height: 100%;
-    border-radius: 0;
+    border-radius: var(--radius-sm);
   }
 
   @media (min-width: 768px) {
@@ -1130,7 +1130,7 @@ function close() {
   min-width: 0;
   padding-left: 14px;
   border-left: 1px solid rgba(255,255,255,0.10);
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   padding: 4px 8px 4px 14px;
   transition: background 0.14s;
   outline: none;
@@ -1161,7 +1161,7 @@ function close() {
 .sender-opt-avatar {
   width: 28px;
   height: 28px;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   background: rgba(var(--red-accent-rgb),0.10);
   border: 1px solid rgba(var(--red-accent-rgb),0.20);
   color: var(--red-accent);
@@ -1179,7 +1179,7 @@ function close() {
   height: 28px;
   object-fit: cover;
   display: block;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
 }
 
 .sender-opt-info {
@@ -1220,7 +1220,7 @@ function close() {
 .wh-avatar {
   width: 28px;
   height: 28px;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   background: var(--red-accent);
   color: var(--on-accent);
   font-size: 12px;
@@ -1266,7 +1266,7 @@ function close() {
 .wh-close {
   width: 32px;
   height: 32px;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1332,7 +1332,7 @@ function close() {
   letter-spacing: 0.03em;
   user-select: none;
   padding: 3px 6px;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   transition: background 0.12s, color 0.12s;
 
   @media (hover: hover) {
@@ -1346,7 +1346,7 @@ function close() {
 .icon-btn-sm {
   width: 26px;
   height: 26px;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1398,7 +1398,7 @@ function close() {
 .tb-btn {
   height: 30px;
   min-width: 30px;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1441,7 +1441,7 @@ function close() {
     background: var(--el-bg-color);
     border: 1px solid var(--light-border-color);
     border-left: 2px solid var(--red-accent);
-    border-radius: 0;
+    border-radius: var(--radius-sm);
     white-space: nowrap;
     flex-shrink: 0;
     max-width: 200px;
@@ -1471,7 +1471,7 @@ function close() {
   font-weight: 700 !important;
   letter-spacing: 0.05em !important;
   text-transform: uppercase !important;
-  border-radius: 0 !important;
+  border-radius: var(--radius-sm) !important;
   display: inline-flex !important;
   align-items: center !important;
 }
@@ -1480,7 +1480,7 @@ function close() {
   height: 34px !important;
   width: 34px !important;
   padding: 0 !important;
-  border-radius: 0 !important;
+  border-radius: var(--radius-sm) !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -1489,13 +1489,13 @@ function close() {
 
 .schedule-picker {
   width: 200px !important;
-  :deep(.el-input__wrapper) { border-radius: 0 !important; }
+  :deep(.el-input__wrapper) { border-radius: var(--radius-sm) !important; }
 }
 
 .schedule-confirm-btn,
 .schedule-cancel-btn {
   height: 28px !important;
-  border-radius: 0 !important;
+  border-radius: var(--radius-sm) !important;
   font-size: 12px !important;
   font-weight: 600 !important;
 }
@@ -1503,7 +1503,7 @@ function close() {
 /* El overrides — flat field inputs */
 :deep(.field-tag .el-input-tag),
 :deep(.field-tag .el-input__wrapper) {
-  border-radius: 0 !important;
+  border-radius: var(--radius-sm) !important;
   box-shadow: none !important;
   border: none !important;
   background: transparent !important;
@@ -1511,7 +1511,7 @@ function close() {
 }
 
 :deep(.subject-input .el-input__wrapper) {
-  border-radius: 0 !important;
+  border-radius: var(--radius-sm) !important;
   box-shadow: none !important;
   border: none !important;
   background: transparent !important;

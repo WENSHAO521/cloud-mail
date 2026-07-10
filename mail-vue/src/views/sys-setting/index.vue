@@ -1685,8 +1685,8 @@ function editSetting(settingForm, refreshStatus = true) {
 .settings-panel {
   background: var(--surface, #ffffff);
   border: 1px solid var(--light-border, #000000);
-  border-radius: 0;
-  box-shadow: none;
+  border-radius: var(--radius-md);
+  box-shadow: var(--card-shadow);
   overflow: hidden;
 }
 
@@ -1704,7 +1704,7 @@ function editSetting(settingForm, refreshStatus = true) {
     min-height: 0;
     flex-direction: row;
     overflow-x: auto;
-    border-radius: 0;
+    border-radius: var(--radius-sm);
   }
 }
 
@@ -1715,7 +1715,7 @@ function editSetting(settingForm, refreshStatus = true) {
   display: flex;
   align-items: center;
   gap: 12px;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   border-left: 3px solid transparent;
   color: var(--psg-text-secondary, #666666);
   font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
@@ -1799,7 +1799,7 @@ function editSetting(settingForm, refreshStatus = true) {
   flex: 0 0 auto;
   min-width: 68px;
   height: 42px !important;
-  border-radius: 0 !important;
+  border-radius: var(--radius-sm) !important;
   margin: 0 !important;
 }
 
@@ -1810,7 +1810,7 @@ function editSetting(settingForm, refreshStatus = true) {
 .background {
   width: 249px;
   height: 140px;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--light-border);
   @media (max-width: 500px) {
     width: 160px;
@@ -1831,7 +1831,7 @@ function editSetting(settingForm, refreshStatus = true) {
 .settings-card {
   background: transparent;
   border: 0;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   box-shadow: none;
 }
 
@@ -1965,7 +1965,7 @@ function editSetting(settingForm, refreshStatus = true) {
 }
 
 .cropper {
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--light-border, #000000);
   height: 397px;
   width: 705px;

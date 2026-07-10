@@ -430,12 +430,12 @@ onUnmounted(() => {
   padding: 0 20px 12px;
 
   :deep(.el-progress-bar__outer) {
-    border-radius: 0;
+    border-radius: var(--radius-sm);
     background: var(--light-border-color, #e0e0e0);
   }
 
   :deep(.el-progress-bar__inner) {
-    border-radius: 0;
+    border-radius: var(--radius-sm);
     background: var(--red-accent);
   }
 }
@@ -465,7 +465,7 @@ onUnmounted(() => {
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   border-color: var(--light-border-color, #ccc);
   display: flex;
   align-items: center;

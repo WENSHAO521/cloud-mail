@@ -608,7 +608,7 @@ path[fill="#ffdda1"] {
       cursor: pointer;
       width: 28px;
       height: 28px;
-      border-radius: 0;
+      border-radius: var(--radius-sm);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -662,7 +662,7 @@ path[fill="#ffdda1"] {
     gap: 10px;
     padding: 10px 10px 10px 10px;
     margin: 3px 6px;
-    border-radius: 0;
+    border-radius: var(--radius-sm);
     cursor: pointer;
     background: transparent;
     border-left: 3px solid transparent;
@@ -693,7 +693,7 @@ path[fill="#ffdda1"] {
     flex-shrink: 0;
     width: 32px;
     height: 32px;
-    border-radius: 0;
+    border-radius: var(--radius-sm);
     background: #1a1a1a;
     color: rgba(255,255,255,0.85);
     font-family: 'IBM Plex Mono', monospace;
@@ -755,7 +755,7 @@ path[fill="#ffdda1"] {
       justify-content: center;
       width: 24px;
       height: 24px;
-      border-radius: 0;
+      border-radius: var(--radius-sm);
       transition: color 0.12s, background 0.12s;
 
       @media (hover: hover) {
@@ -810,7 +810,7 @@ path[fill="#ffdda1"] {
     border-bottom: 1px solid var(--base-border-color) !important;
     border-left:   1px solid var(--base-border-color) !important;
     border-right:  none !important;
-    border-radius: 0 !important;
+    border-radius: var(--radius-sm) !important;
     box-shadow: none !important;
     background: var(--el-bg-color) !important;
     transition: border-color 0.15s !important;
@@ -828,7 +828,7 @@ path[fill="#ffdda1"] {
     border-right:  1px solid var(--base-border-color) !important;
     border-bottom: 1px solid var(--base-border-color) !important;
     border-left:   1px solid var(--light-border-color) !important;
-    border-radius: 0 !important;
+    border-radius: var(--radius-sm) !important;
     box-shadow: none !important;
     background: var(--extra-light-fill) !important;
     padding: 0 12px !important;
@@ -850,7 +850,7 @@ path[fill="#ffdda1"] {
 
 :deep(.el-dialog) {
   width: 400px !important;
-  border-radius: 0 !important;
+  border-radius: var(--radius-sm) !important;
 
   @media (max-width: 440px) {
     width: calc(100% - 40px) !important;
@@ -875,7 +875,7 @@ path[fill="#ffdda1"] {
   :deep(.el-input:not(.el-input-group)) {
     .el-input__wrapper {
       border: 1px solid var(--base-border-color) !important;
-      border-radius: 0 !important;
+      border-radius: var(--radius-sm) !important;
       box-shadow: none !important;
       background: var(--el-bg-color) !important;
       transition: border-color 0.15s !important;

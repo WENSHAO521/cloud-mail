@@ -274,7 +274,7 @@ async function deleteTpl(templateId) {
   gap: 12px;
   padding: 10px 16px;
   background: var(--surface, #fff);
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--light-border, #000000);
   box-shadow: none;
   min-height: 52px;
@@ -327,7 +327,7 @@ async function deleteTpl(templateId) {
   padding: 3px 10px;
   background: transparent;
   border: 1px solid transparent;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 12px;
   font-weight: 600;
@@ -367,7 +367,7 @@ async function deleteTpl(templateId) {
 .add-btn {
   font-size: 13px; font-weight: 600;
   height: 34px; padding: 0 14px;
-  border-radius: 0 !important;
+  border-radius: var(--radius-sm) !important;
   flex-shrink: 0;
 
   :deep(svg) { margin-right: 6px; }
@@ -386,7 +386,7 @@ async function deleteTpl(templateId) {
 /* Item list */
 .item-list {
   background: var(--surface, #fff);
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--light-border, #000000);
   box-shadow: none;
   overflow: hidden;
@@ -412,7 +412,7 @@ async function deleteTpl(templateId) {
 }
 
 .item-icon {
-  width: 32px; height: 32px; border-radius: 0;
+  width: 32px; height: 32px; border-radius: var(--radius-sm);
   background: rgba(var(--red-accent-rgb), 0.08);
   border: 1px solid rgba(var(--red-accent-rgb), 0.15);
   color: var(--red-accent);
@@ -461,7 +461,7 @@ async function deleteTpl(templateId) {
   display: flex; align-items: center; justify-content: center;
   width: 28px; height: 28px;
   border: none; background: transparent;
-  border-radius: 0; cursor: pointer;
+  border-radius: var(--radius-sm); cursor: pointer;
   color: var(--secondary-text-color);
   transition: background 0.10s, color 0.10s;
 
@@ -490,7 +490,7 @@ async function deleteTpl(templateId) {
   flex: 1; font-size: 14px; font-weight: 700; color: var(--el-text-color-primary);
 }
 
-.save-btn { border-radius: 0 !important; font-weight: 700 !important; }
+.save-btn { border-radius: var(--radius-sm) !important; font-weight: 700 !important; }
 
 .editor-fields { display: flex; flex-direction: column; gap: 16px; }
 
@@ -517,12 +517,12 @@ async function deleteTpl(templateId) {
 
 .cat-select {
   width: 100%;
-  :deep(.el-select__wrapper) { border-radius: 0 !important; }
+  :deep(.el-select__wrapper) { border-radius: var(--radius-sm) !important; }
 }
 
 .editor-frame {
   height: 320px;
   border: 1px solid var(--light-border-color);
-  border-radius: 0; overflow: hidden;
+  border-radius: var(--radius-sm); overflow: hidden;
 }
 </style>

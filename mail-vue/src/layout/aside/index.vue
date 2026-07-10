@@ -333,6 +333,7 @@ function clickLogout() {
   justify-content: center;
   position: relative;
   overflow: hidden;
+  border-radius: var(--radius-full);
 
   .acct-fallback {
     color: #fff;
@@ -417,6 +418,7 @@ function clickLogout() {
   width: 44px;
   height: 44px;
   border: none;
+  border-radius: var(--radius-sm);
   background: transparent;
   cursor: pointer;
   color: var(--muted, #7e7576);
@@ -468,6 +470,7 @@ function clickLogout() {
   cursor: pointer;
   color: var(--psg-text-secondary, #4c4546);
   border-left: 3px solid transparent;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   transition: background 0.10s ease, color 0.10s ease, border-color 0.10s ease;
   user-select: none;
 
@@ -511,7 +514,7 @@ function clickLogout() {
     font-weight: 700;
     background: var(--red-accent);
     border: none;
-    border-radius: 0;
+    border-radius: var(--radius-full);
     padding: 0 4px;
     min-width: 18px;
     height: 16px;
@@ -560,6 +563,7 @@ function clickLogout() {
   gap: 8px;
   height: 36px;
   border: none;
+  border-radius: var(--radius-sm);
   background: var(--red-accent);
   color: var(--on-accent);
   font-size: 11px;
@@ -584,6 +588,7 @@ function clickLogout() {
   align-items: center;
   justify-content: center;
   border: 1px solid var(--light-border, #000000);
+  border-radius: var(--radius-sm);
   background: transparent;
   cursor: pointer;
   transition: background 0.12s;
@@ -612,6 +617,7 @@ function clickLogout() {
   width: 36px;
   height: 36px;
   border: none;
+  border-radius: var(--radius-sm);
   background: var(--red-accent);
   color: var(--on-accent);
 
@@ -707,6 +713,7 @@ function clickLogout() {
     margin-inline: 8px;
     padding-inline: 0;
     border-left: none;
+    border-radius: var(--radius-sm);
 
     &.active {
       border-left: none;

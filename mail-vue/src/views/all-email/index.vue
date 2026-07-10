@@ -474,7 +474,7 @@ async function latest() {
   box-shadow: none !important;
   border: none;
   border-left: 1px solid var(--light-border, #d0d0d0);
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   background: var(--base-fill, #f5f5f5);
 }
 

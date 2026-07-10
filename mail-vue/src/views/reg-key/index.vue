@@ -412,15 +412,15 @@ function openAdd() {
   flex-wrap: nowrap;
   align-items: center;
   background: var(--surface, #fff);
-  border-radius: 0;
+  border-radius: var(--radius-md);
   border: 1px solid var(--light-border, #000000);
-  box-shadow: none;
+  box-shadow: var(--card-shadow);
 
   :deep(.el-input__wrapper) {
     height: 30px;
     box-shadow: none !important;
     border: 1px solid var(--light-border, #d0d0d0);
-    border-radius: 0;
+    border-radius: var(--radius-sm);
     transition: border-color 0.12s;
     &:hover { border-color: var(--el-border-color-hover); }
   }
@@ -441,17 +441,19 @@ function openAdd() {
     width: 30px;
     height: 30px;
     border: 1px solid transparent;
-    border-radius: 0;
+    border-radius: var(--radius-sm);
     flex-shrink: 0;
     transition: border-color 0.10s, color 0.10s;
 
     @media (hover: hover) {
       &:hover {
-        border-color: #000000;
+        border-color: transparent;
+        background: var(--email-hover-background, #eeeeee);
         color: #000000;
       }
       &.icon-danger:hover {
-        border-color: var(--red-accent);
+        border-color: transparent;
+        background: rgba(var(--red-accent-rgb), 0.08);
         color: var(--red-accent);
       }
     }
@@ -461,8 +463,8 @@ function openAdd() {
 .dark .header-actions {
   .icon {
     @media (hover: hover) {
-      &:hover { border-color: #ffffff; color: #ffffff; }
-      &.icon-danger:hover { border-color: var(--red-accent); color: var(--red-accent); }
+      &:hover { border-color: transparent; background: rgba(255,255,255,0.08); color: #ffffff; }
+      &.icon-danger:hover { border-color: transparent; background: rgba(var(--red-accent-rgb), 0.16); color: var(--red-accent); }
     }
   }
   :deep(.el-input__wrapper) {
@@ -482,10 +484,15 @@ function openAdd() {
 
     .code-item {
       background: var(--surface, #fff);
-      border-radius: 0;
+      border-radius: var(--radius-md);
       border: 1px solid var(--light-border, #000000);
-      box-shadow: none;
+      box-shadow: var(--card-shadow);
       padding: 16px;
+      transition: box-shadow 0.16s ease;
+
+      @media (hover: hover) {
+        &:hover { box-shadow: var(--card-shadow-hover); }
+      }
 
       .code-info {
         display: flex;

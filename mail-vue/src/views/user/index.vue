@@ -1142,16 +1142,16 @@ function adjustWidth() {
   flex-wrap: nowrap;
   align-items: center;
   background: var(--surface, #fff);
-  border-radius: 0;
+  border-radius: var(--radius-md);
   border: 1px solid var(--light-border, #000000);
-  box-shadow: none;
+  box-shadow: var(--card-shadow);
   flex-shrink: 0;
 
   :deep(.el-input__wrapper) {
     height: 30px;
     box-shadow: none !important;
     border: 1px solid var(--light-border, #d0d0d0);
-    border-radius: 0;
+    border-radius: var(--radius-sm);
     transition: border-color 0.12s;
     &:hover { border-color: var(--el-border-color-hover); }
   }
@@ -1172,17 +1172,19 @@ function adjustWidth() {
     width: 30px;
     height: 30px;
     border: 1px solid transparent;
-    border-radius: 0;
+    border-radius: var(--radius-sm);
     flex-shrink: 0;
     transition: border-color 0.10s, color 0.10s;
 
     @media (hover: hover) {
       &:hover {
-        border-color: #000000;
+        border-color: transparent;
+        background: var(--email-hover-background, #eeeeee);
         color: #000000;
       }
       &.icon-danger:hover {
-        border-color: var(--red-accent);
+        border-color: transparent;
+        background: rgba(var(--red-accent-rgb), 0.08);
         color: var(--red-accent);
       }
     }
@@ -1192,8 +1194,8 @@ function adjustWidth() {
 .dark .header-actions {
   .icon {
     @media (hover: hover) {
-      &:hover { border-color: #ffffff; color: #ffffff; }
-      &.icon-danger:hover { border-color: var(--red-accent); color: var(--red-accent); }
+      &:hover { border-color: transparent; background: rgba(255,255,255,0.08); color: #ffffff; }
+      &.icon-danger:hover { border-color: transparent; background: rgba(var(--red-accent-rgb), 0.16); color: var(--red-accent); }
     }
   }
   :deep(.el-input__wrapper) {
@@ -1222,9 +1224,9 @@ function adjustWidth() {
   position: relative;
   width: 100%;
   background: var(--surface, #fff);
-  border-radius: 0;
+  border-radius: var(--radius-md);
   border: 1px solid var(--light-border, #000000);
-  box-shadow: none;
+  box-shadow: var(--card-shadow);
   overflow: hidden;
 }
 
@@ -1289,7 +1291,7 @@ function adjustWidth() {
   min-height: 30px;
   box-shadow: none !important;
   border: 1px solid var(--light-border, #d0d0d0);
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   transition: border-color 0.12s;
   &:hover { border-color: var(--el-border-color-hover); }
   &.is-focused { border-color: var(--el-color-primary); }

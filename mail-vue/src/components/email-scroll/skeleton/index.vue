@@ -62,7 +62,7 @@ defineProps({
   gap: 12px;
   min-height: 96px;
   padding: 14px;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   background: transparent;
   pointer-events: none;
 }
@@ -70,7 +70,7 @@ defineProps({
 .skel-avatar {
   width: 56px;
   height: 56px;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   background: var(--separator, #e5e5e5);
   flex-shrink: 0;
   align-self: flex-start;
@@ -90,7 +90,7 @@ defineProps({
     height: 16px;
     width: 120px;
     background: var(--separator, #e5e5e5);
-    border-radius: 0;
+    border-radius: var(--radius-sm);
     opacity: 0.7;
   }
 }
@@ -107,5 +107,5 @@ defineProps({
 
 .skel-time { width: 44px !important; height: 12px !important; }
 
-:deep(.el-skeleton__item) { border-radius: 0 !important; }
+:deep(.el-skeleton__item) { border-radius: var(--radius-sm) !important; }
 </style>

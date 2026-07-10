@@ -677,7 +677,7 @@ function handleDelete() {
 
 .email-status-alert {
   margin-top: 10px;
-  :deep(.el-alert) { border-radius: 0 !important; }
+  :deep(.el-alert) { border-radius: var(--radius-sm) !important; }
 }
 
 /* ── Divider between meta and body ───────────────────────── */

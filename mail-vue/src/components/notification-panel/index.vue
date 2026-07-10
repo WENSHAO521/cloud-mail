@@ -62,7 +62,7 @@ const notifStore = useNotificationStore()
 <style>
 .notif-popper {
   padding: 0 !important;
-  border-radius: 0 !important;
+  border-radius: var(--radius-sm) !important;
   overflow: hidden;
 }
 </style>

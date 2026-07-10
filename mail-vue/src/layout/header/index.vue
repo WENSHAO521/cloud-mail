@@ -269,6 +269,7 @@ function formatName(email) {
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   color: var(--muted, #666666);
   transition: background 0.12s, color 0.12s;
@@ -288,6 +289,7 @@ function formatName(email) {
   align-items: center;
   cursor: pointer;
   padding: 3px 6px 3px 3px;
+  border-radius: var(--radius-sm);
   transition: background 0.12s;
   gap: 4px;
 
@@ -309,6 +311,7 @@ function formatName(email) {
   flex-shrink: 0;
   user-select: none;
   overflow: hidden;
+  border-radius: var(--radius-full);
 }
 
 .chevron {
@@ -342,6 +345,7 @@ function formatName(email) {
     justify-content: center;
     flex-shrink: 0;
     overflow: hidden;
+    border-radius: var(--radius-full);
   }
 
   .details-info {
@@ -422,7 +426,7 @@ function formatName(email) {
 
 :deep(.el-popper.is-pure) {
   overflow: hidden;
-  border-radius: 0 !important;
+  border-radius: var(--radius-sm) !important;
   box-shadow: 0 8px 24px rgba(0,0,0,0.10), 0 1px 3px rgba(0,0,0,0.06) !important;
   border: 1px solid var(--separator, #e5e5e5) !important;
 }

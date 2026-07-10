@@ -839,7 +839,7 @@ function vibrate(ms) { try { navigator.vibrate?.(ms) } catch {} }
   height: 32px;
   border: 1px solid transparent;
   background: transparent;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   color: #7e7576;
   transition: background 0.10s ease, color 0.10s ease, border-color 0.10s;
@@ -1087,7 +1087,7 @@ function vibrate(ms) { try { navigator.vibrate?.(ms) } catch {} }
   gap: 8px;
   min-height: 44px;
   padding: 8px 16px 8px 8px;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   border-bottom: 1px solid var(--light-border-color, #cfc4c5);
   background: var(--surface, #ffffff);
   cursor: pointer;

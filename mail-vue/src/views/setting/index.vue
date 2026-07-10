@@ -570,7 +570,7 @@ function submitPwd() {
 .settings-panel {
   background: var(--surface, #ffffff);
   border: 1px solid var(--light-border, #000000);
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   box-shadow: none;
   overflow: hidden;
 }
@@ -682,7 +682,7 @@ function submitPwd() {
   flex: 0 0 auto;
   min-width: 68px;
   height: 42px !important;
-  border-radius: 0 !important;
+  border-radius: var(--radius-sm) !important;
   margin: 0 !important;
 }
 
@@ -818,7 +818,7 @@ function submitPwd() {
 .avatar-wrap {
   position: relative;
   width: 76px; height: 76px;
-  border-radius: 0; overflow: hidden;
+  border-radius: var(--radius-sm); overflow: hidden;
   cursor: pointer; flex-shrink: 0;
   background: #111;
   &:hover .avatar-lens { opacity: 1; }
@@ -866,7 +866,7 @@ function submitPwd() {
   letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--red-accent); background: rgba(var(--red-accent-rgb),0.07);
   border: 1px solid rgba(var(--red-accent-rgb),0.18);
-  padding: 2px 6px; border-radius: 0;
+  padding: 2px 6px; border-radius: var(--radius-sm);
   width: fit-content; margin-top: 4px;
 }
 
@@ -931,7 +931,7 @@ function submitPwd() {
 /* ── Editor shell ── */
 .editor-shell {
   border: 1px solid var(--light-border-color);
-  border-radius: 0; overflow: hidden;
+  border-radius: var(--radius-sm); overflow: hidden;
   height: 200px;
 }
 

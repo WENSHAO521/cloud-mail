@@ -432,9 +432,9 @@ onUnmounted(() => { window.removeEventListener('resize', adjustWidth) })
   width: 100%;
   overflow: hidden;
   background: var(--surface, #fff);
-  border-radius: 0;
+  border-radius: var(--radius-md);
   border: 1px solid var(--light-border, #000000);
-  box-shadow: none;
+  box-shadow: var(--card-shadow);
 }
 
 .send-num {
@@ -457,9 +457,9 @@ onUnmounted(() => { window.removeEventListener('resize', adjustWidth) })
   align-items: center;
   gap: 4px;
   background: var(--surface, #fff);
-  border-radius: 0;
+  border-radius: var(--radius-md);
   border: 1px solid var(--light-border, #000000);
-  box-shadow: none;
+  box-shadow: var(--card-shadow);
   flex-shrink: 0;
 
   .icon {
@@ -471,13 +471,14 @@ onUnmounted(() => { window.removeEventListener('resize', adjustWidth) })
     width: 30px;
     height: 30px;
     border: 1px solid transparent;
-    border-radius: 0;
+    border-radius: var(--radius-sm);
     flex-shrink: 0;
-    transition: border-color 0.10s, color 0.10s;
+    transition: border-color 0.10s, color 0.10s, background 0.10s;
 
     @media (hover: hover) {
       &:hover {
-        border-color: #000000;
+        border-color: transparent;
+        background: var(--email-hover-background, #eeeeee);
         color: #000000;
       }
     }
@@ -486,7 +487,7 @@ onUnmounted(() => { window.removeEventListener('resize', adjustWidth) })
 
 .dark .header-actions .icon {
   @media (hover: hover) {
-    &:hover { border-color: #ffffff; color: #ffffff; }
+    &:hover { border-color: transparent; background: rgba(255,255,255,0.08); color: #ffffff; }
   }
 }
 
@@ -542,7 +543,7 @@ onUnmounted(() => { window.removeEventListener('resize', adjustWidth) })
 
 
 :deep(.el-segmented--small .el-segmented__item) {
-  border-radius: 0 !important;
+  border-radius: var(--radius-sm) !important;
   overflow: hidden;
 }
 
