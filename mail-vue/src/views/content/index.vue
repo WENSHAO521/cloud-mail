@@ -767,7 +767,6 @@ function handleDelete() {
 .translate-panel {
   margin: 16px 0 8px;
   border: 1px solid var(--light-border-color, #dcdcdc);
-  border-left: 3px solid var(--red-accent);
   border-radius: var(--radius-md);
   overflow: hidden;
   background: var(--surface-secondary, #f3f3f3);

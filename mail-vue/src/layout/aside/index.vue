@@ -461,7 +461,7 @@ function clickLogout() {
   align-items: center;
   height: 44px;
   margin: 0 10px;
-  padding: 0 10px 0 14px;
+  padding: 0 14px;
   font-size: 13.5px;
   font-weight: 500;
   letter-spacing: 0;
@@ -469,9 +469,8 @@ function clickLogout() {
   font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
   cursor: pointer;
   color: var(--psg-text-secondary, #4c4546);
-  border-left: 3px solid transparent;
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  transition: background 0.10s ease, color 0.10s ease, border-color 0.10s ease;
+  border-radius: var(--radius-sm);
+  transition: background 0.10s ease, color 0.10s ease;
   user-select: none;
 
   @media (hover: hover) {
@@ -482,8 +481,7 @@ function clickLogout() {
   }
 
   &.active {
-    border-left-color: var(--red-accent);
-    background: rgba(var(--red-accent-rgb), 0.06);
+    background: rgba(var(--red-accent-rgb), 0.08);
     color: var(--red-accent);
     font-weight: 700;
   }
@@ -712,13 +710,7 @@ function clickLogout() {
     justify-content: center;
     margin-inline: 8px;
     padding-inline: 0;
-    border-left: none;
     border-radius: var(--radius-sm);
-
-    &.active {
-      border-left: none;
-      border-bottom: 2px solid var(--red-accent);
-    }
   }
 
   .sidebar-nav-content {

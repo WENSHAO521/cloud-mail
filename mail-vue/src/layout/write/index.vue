@@ -1440,7 +1440,6 @@ function close() {
     padding: 0 8px;
     background: var(--el-bg-color);
     border: 1px solid var(--light-border-color);
-    border-left: 2px solid var(--red-accent);
     border-radius: var(--radius-sm);
     white-space: nowrap;
     flex-shrink: 0;

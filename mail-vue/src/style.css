@@ -759,9 +759,7 @@ html.dark.login-light-lock {
 /* Notification */
 .el-notification {
     border-radius: var(--radius-md) !important;
-    border-left: 4px solid var(--red-accent) !important;
     border: 1px solid var(--light-border-color, #e5e5e9) !important;
-    border-left: 4px solid var(--red-accent) !important;
     box-shadow: var(--card-shadow-hover) !important;
 }
 .el-message {

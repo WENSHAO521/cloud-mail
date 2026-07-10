@@ -1,8 +1,17 @@
 <template>
   <div class="page-outer">
     <div class="space-y">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">{{ $t('allUsers') }}</h1>
+        <p class="page-subtitle">{{ $t('userManagementDesc') }}</p>
+      </div>
+      <el-button type="primary" class="create-user-btn" @click="openAdd">
+        <Icon icon="solar:user-plus-linear" width="16" height="16"/>
+        {{ $t('addUser') }}
+      </el-button>
+    </div>
     <div class="header-actions">
-      <Icon class="icon" icon="solar:add-circle-linear" width="20" height="20" @click="openAdd"/>
       <div class="search">
         <el-input
             v-model="params.email"
@@ -46,7 +55,10 @@
           <el-table-column show-overflow-tooltip :tooltip-formatter="tableRowFormatter" :label="$t('tabEmailAddress')"
                            :min-width="emailWidth">
             <template #default="props">
-              <div style="display: flex;gap: 5px">
+              <div class="user-email-cell">
+                <div class="user-avatar" :style="{ background: avatarBg(props.row.email) }">
+                  {{ avatarLetter(props.row.accountName || props.row.oauthName, props.row.email) }}
+                </div>
                 <div class="email-row">{{ props.row.email }}</div>
                 <el-tag type="warning" v-if="props.row.username">L</el-tag>
               </div>
@@ -73,16 +85,22 @@
               {{ tzDayjs(props.row.createTime).format('YYYY-MM-DD HH:mm') }}
             </template>
           </el-table-column>
-          <el-table-column v-if="statusShow" min-width="60px" :label="$t('tabStatus')" prop="status">
+          <el-table-column v-if="statusShow" min-width="90px" :label="$t('tabStatus')" prop="status">
             <template #default="props">
-              <el-tag disable-transitions v-if="props.row.isDel === 1" type="info">{{ $t('deleted') }}</el-tag>
-              <el-tag disable-transitions v-else-if="props.row.status === 0" type="primary">{{ $t('active') }}</el-tag>
-              <el-tag disable-transitions v-else-if="props.row.status === 1" type="danger">{{ $t('banned') }}</el-tag>
+              <div class="status-dot-cell" v-if="props.row.isDel === 1">
+                <span class="status-dot status-dot--muted"></span>{{ $t('deleted') }}
+              </div>
+              <div class="status-dot-cell" v-else-if="props.row.status === 0">
+                <span class="status-dot status-dot--active"></span>{{ $t('active') }}
+              </div>
+              <div class="status-dot-cell" v-else-if="props.row.status === 1">
+                <span class="status-dot status-dot--danger"></span>{{ $t('banned') }}
+              </div>
             </template>
           </el-table-column>
           <el-table-column v-if="typeShow" :label="$t('tabRole')" min-width="140" prop="type">
             <template #default="props">
-              <div class="type">
+              <div class="role-pill" :class="{ 'role-pill--admin': props.row.type === 0 }">
                 {{ toRoleName(props.row.type) }}
               </div>
             </template>
@@ -406,6 +424,7 @@ import {roleSelectUse} from "@/request/role.js";
 import {Icon} from "@iconify/vue";
 import loading from "@/components/loading/index.vue";
 import {tzDayjs} from "@/utils/day.js";
+import {avatarBg, avatarLetter} from "@/utils/avatar.js";
 import {useSettingStore} from "@/store/setting.js";
 import {isEmail} from "@/utils/verify-utils.js";
 import {useRoleStore} from "@/store/role.js";
@@ -1116,6 +1135,36 @@ function adjustWidth() {
   gap: 16px;
 }
 
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--light-border-color, #dcdcdc);
+  flex-wrap: wrap;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--el-text-color-primary);
+}
+
+.page-subtitle {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--secondary-text-color, #666666);
+}
+
+.create-user-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
 :deep(.el-dialog) {
   width: 400px !important;
   @media (max-width: 440px) {
@@ -1214,6 +1263,63 @@ function adjustWidth() {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.user-email-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.user-avatar {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+}
+
+.status-dot-cell {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: var(--el-text-color-primary);
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+
+  &--active { background: var(--red-accent); }
+  &--danger { background: #c0392b; }
+  &--muted  { background: var(--muted, #999999); }
+}
+
+.role-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--secondary-text-color, #666666);
+  background: var(--base-fill, #f3f3f3);
+  white-space: nowrap;
+
+  &--admin {
+    color: var(--red-accent);
+    background: rgba(var(--red-accent-rgb), 0.08);
+  }
 }
 
 .choose-star {

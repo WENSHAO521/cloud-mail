@@ -665,7 +665,6 @@ path[fill="#ffdda1"] {
     border-radius: var(--radius-sm);
     cursor: pointer;
     background: transparent;
-    border-left: 3px solid transparent;
     border: 1px solid transparent;
     transition: background 0.15s ease, border-color 0.15s ease;
     position: relative;
@@ -777,12 +776,11 @@ path[fill="#ffdda1"] {
     transform: translateX(0);
   }
 
-  /* ── Selected — flat red wash + left indicator ── */
+  /* ── Selected — flat red wash ── */
   .item-choose {
     border-color: transparent !important;
-    border-left: 2px solid var(--red-accent) !important;
     box-shadow: none !important;
-    background: rgba(var(--red-accent-rgb), 0.06) !important;
+    background: rgba(var(--red-accent-rgb), 0.08) !important;
 
     .item-name {
       font-weight: 700;

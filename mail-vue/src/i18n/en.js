@@ -37,6 +37,7 @@ const en = {
     settings: 'Settings',
     analytics: 'Analytics',
     allUsers: 'All Users',
+    userManagementDesc: 'Manage system access, roles, and user status',
     allMail: 'All Mail',
     permissions: 'Role',
     inviteCode: 'Invite Code',

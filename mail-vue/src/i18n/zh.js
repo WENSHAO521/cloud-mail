@@ -37,6 +37,7 @@ const zh = {
     settings: '个人设置',
     analytics: '分析页',
     allUsers: '用户列表',
+    userManagementDesc: '管理系统访问权限、角色与用户状态',
     allMail: '全部邮件',
     permissions: '权限控制',
     inviteCode: '注册密钥',

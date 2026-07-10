@@ -601,8 +601,7 @@ function submitPwd() {
   align-items: center;
   gap: 12px;
   border: none;
-  border-left: 3px solid transparent;
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  border-radius: var(--radius-sm);
   background: transparent;
   color: var(--psg-text-secondary, #666666);
   font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
@@ -619,9 +618,9 @@ function submitPwd() {
   }
 
   &.active {
-    border-left-color: var(--red-accent);
-    background: rgba(var(--red-accent-rgb), 0.06);
+    background: rgba(var(--red-accent-rgb), 0.08);
     color: var(--el-text-color-primary);
+    font-weight: 700;
   }
 
   @media (max-width: 820px) {
