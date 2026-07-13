@@ -106,6 +106,7 @@ const settingService = {
 
 		settingRow.secretKey = settingRow.secretKey ? `${settingRow.secretKey.slice(0, 6)}******` : null;
 
+		settingRow.resendTokens = { ...settingRow.resendTokens };
 		Object.keys(settingRow.resendTokens).forEach(key => {
 			settingRow.resendTokens[key] = `${settingRow.resendTokens[key].slice(0, 12)}******`;
 		});
@@ -140,6 +141,7 @@ const settingService = {
 		const settingData = await this.query(c);
 		let resendTokens = { ...settingData.resendTokens, ...params.resendTokens };
 		Object.keys(resendTokens).forEach(domain => {
+			if (resendTokens[domain]) resendTokens[domain] = resendTokens[domain].trim();
 			if (!resendTokens[domain]) delete resendTokens[domain];
 		});
 
