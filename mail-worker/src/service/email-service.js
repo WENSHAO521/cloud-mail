@@ -1025,6 +1025,29 @@ const emailService = {
 		await orm(c).delete(email).where(inArray(email.emailId, emailIds)).run();
 	},
 
+	async allEmailDelete(c, params) {
+		let { emailIds } = params;
+		const emailIdList = emailIds.split(',').map(Number);
+
+		const rows = await orm(c).select({ emailId: email.emailId, isDel: email.isDel })
+			.from(email).where(inArray(email.emailId, emailIdList)).all();
+
+		const alreadyTrashedIds = rows.filter(row => row.isDel === isDel.DELETE).map(row => row.emailId);
+		const toTrashIds = rows.filter(row => row.isDel !== isDel.DELETE).map(row => row.emailId);
+
+		if (toTrashIds.length > 0) {
+			try { await c.env.db.prepare(`ALTER TABLE email ADD COLUMN delete_time TEXT;`).run(); } catch {}
+			await orm(c).update(email).set({ isDel: isDel.DELETE }).where(inArray(email.emailId, toTrashIds)).run();
+			await c.env.db.prepare(
+				`UPDATE email SET delete_time = CURRENT_TIMESTAMP WHERE email_id IN (${toTrashIds.map(() => '?').join(',')})`
+			).bind(...toTrashIds).run();
+		}
+
+		if (alreadyTrashedIds.length > 0) {
+			await this.physicsDelete(c, { emailIds: alreadyTrashedIds.join(',') });
+		}
+	},
+
 	async physicsDeleteUserIds(c, userIds) {
 		await attService.removeByUserIds(c, userIds);
 		await orm(c).delete(email).where(inArray(email.userId, userIds)).run();
@@ -1090,6 +1113,8 @@ const emailService = {
 
 		if (type === 'delete') {
 			conditions.push(eq(email.isDel, isDel.DELETE));
+		} else {
+			conditions.push(eq(email.isDel, isDel.NORMAL));
 		}
 
 		if (type === 'noone') {

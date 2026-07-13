@@ -8,8 +8,8 @@ app.get('/allEmail/list', async (c) => {
 })
 
 app.delete('/allEmail/delete', async (c) => {
-	const list = await emailService.physicsDelete(c, c.req.query());
-	return c.json(result.ok(list));
+	await emailService.allEmailDelete(c, c.req.query());
+	return c.json(result.ok());
 })
 
 app.delete('/allEmail/batchDelete', async (c) => {
